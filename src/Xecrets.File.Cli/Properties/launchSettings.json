@@ -1,0 +1,117 @@
+{
+  "profiles": {
+    "WSL": {
+      "commandName": "WSL2",
+      "distributionName": ""
+    },
+    "Platform display": {
+      "commandName": "Project",
+      "commandLineArgs": "--platform",
+      "workingDirectory": "TestCli\\win-x64"
+    },
+    "Help display": {
+      "commandName": "Project",
+      "commandLineArgs": "--text-log --help",
+      "workingDirectory": "TestCli\\win-x64"
+    },
+    "License display": {
+      "commandName": "Project",
+      "commandLineArgs": "--stdout --gpl-license",
+      "workingDirectory": "TestCli\\win-x64"
+    },
+    "Encrypt photos": {
+      "commandName": "Project",
+      "commandLineArgs": "--json-log --progress-\r\n--password a\r\n--key-pair ..\\xecrets@axantum.com-key-pair.axx\r\n--id A --encrypt-to 1.jpg 1-jpg.axx\r\n--id B --encrypt-to 2.jpg 2-jpg.axx\r\n--id C --encrypt-to 3.jpg 3-jpg.axx\r\n--id D --encrypt-to 4.jpg 4-jpg.axx\r\n--id E --encrypt-to 5.jpg 5-jpg.axx",
+      "workingDirectory": "TestCli\\win-x64\\Photos"
+    },
+    "Create Key Pair": {
+      "commandName": "Project",
+      "commandLineArgs": "--text-log\r\n--password a\r\n--public-keys-list=public-keys.txt\r\n--create-key-pair xecrets@axantum.com xecrets@axantum.com-key-pair.axx",
+      "workingDirectory": "TestCli\\win-x64"
+    },
+    "Use Key Pair and Export Public Key": {
+      "commandName": "Project",
+      "commandLineArgs": "--text-log\r\n--password a\r\n--key-pair=xecrets@axantum.com-key-pair.axx\r\n--export-public-key xecrets@axantum.com xecrets@axantum.com-public-key.txt",
+      "workingDirectory": "TestCli\\win-x64"
+    },
+    "Create 'test' Key Pair and export public key": {
+      "commandName": "Project",
+      "commandLineArgs": "-p test\r\n--c test@axantum.com test@axantum.com-key-pair.axx\r\n-x test@axantum.com test@axantum.com-public-key.txt",
+      "workingDirectory": "TestCli\\win-x64"
+    },
+    "Bad arguments": {
+      "commandName": "Project",
+      "commandLineArgs": "--json-log --bla",
+      "workingDirectory": "TestCli\\win-x64"
+    },
+    "No arguments": {
+      "commandName": "Project",
+      "workingDirectory": "TestCli\\win-x64"
+    },
+    "Decrypt thfg-mp4.axx to thfg(2).mp4": {
+      "commandName": "Project",
+      "commandLineArgs": "--json-log\r\n--password a\r\n--id 203 --encrypt-to thfg.mp4 thfg-mp4.axx\r\n--id 123 --decrypt-to thfg-mp4.axx thfg(2).mp4",
+      "workingDirectory": "TestCli\\win-x64"
+    },
+    "Decrypt thfg-mp4.axx to original name and wipe": {
+      "commandName": "Project",
+      "commandLineArgs": "--json-log\r\n--password b\r\n--password a\r\n--id 33 --decrypt thfg-mp4.axx",
+      "workingDirectory": "TestCli\\win-x64"
+    },
+    "Encrypt thfg.mp4 to thfg-mp4.axx and decrypt to thfg(2).mp4": {
+      "commandName": "Project",
+      "commandLineArgs": "--password a --progress\r\n--json-log\r\n--id 1 --encrypt-to thfg.mp4 thfg-mp4.axx\r\n--id 2 --decrypt-to thfg-mp4.axx thfg(2).mp4",
+      "workingDirectory": "TestCli\\win-x64"
+    },
+    "Overwrite": {
+      "commandName": "Project",
+      "commandLineArgs": "--overwrite",
+      "workingDirectory": "TestCli\\win-x64"
+    },
+    "Jwt Claims": {
+      "commandName": "Project",
+      "commandLineArgs": "--text-log\r\n--jwt-claims 365 \"{\\\"xflic.axantum.com\\\":\\\"cli\\\"}\" ",
+      "workingDirectory": "TestCli\\win-x64"
+    },
+    "Jwt Create Key Pair": {
+      "commandName": "Project",
+      "commandLineArgs": "--text-log\r\n--overwrite\r\n--jwt-create-key-pair private.pem public.pem",
+      "workingDirectory": "TestCli\\win-x64"
+    },
+    "Jwt Use Key Pair": {
+      "commandName": "Project",
+      "commandLineArgs": "--text-log\r\n--jwt-use-key-pair private.pem software@axantum.com ",
+      "workingDirectory": "TestCli\\win-x64"
+    },
+    "Jwt Sign Cli": {
+      "commandName": "Project",
+      "commandLineArgs": "--text-log\r\n--jwt-use-key-pair private.pem --jwt-issuer xecrets@axantum.com --jwt-claims 367 \"{\\\"xflic.axantum.com\\\":\\\"cli\\\"}\" --jwt-audience business.test@axantum.com --jwt-sign xfclisubscription.txt",
+      "workingDirectory": "TestCli\\win-x64"
+    },
+    "Jwt Verify Cli": {
+      "commandName": "Project",
+      "commandLineArgs": "--text-log\r\n--jwt-issuer xecrets@axantum.com --jwt-audience business.test@axantum.com --jwt-verify public.pem xfclisubscription.txt",
+      "workingDirectory": "TestCli\\win-x64"
+    },
+    "Jwt Sign Ez": {
+      "commandName": "Project",
+      "commandLineArgs": "--text-log\r\n--jwt-use-key-pair private.pem --jwt-issuer xecrets@axantum.com --jwt-claims 367 \"{\\\"xflic.axantum.com\\\":\\\"cli\\\"}\" --jwt-audience private.test@axantum.com --jwt-sign xfezsubscription.txt",
+      "workingDirectory": "TestCli\\win-x64"
+    },
+    "Jwt Verify Ez": {
+      "commandName": "Project",
+      "commandLineArgs": "--text-log\r\n--jwt-issuer xecrets@axantum.com --jwt-audience private.test@axantum.com --jwt-verify public.pem xfezsubscription.txt",
+      "workingDirectory": "TestCli\\win-x64"
+    },
+    "Quiet": {
+      "commandName": "Project",
+      "commandLineArgs": "--text-log --quiet --help",
+      "workingDirectory": "TestCli\\win-x64"
+    },
+    "Internal Help": {
+      "commandName": "Project",
+      "commandLineArgs": "--text-log --internal --help",
+      "workingDirectory": "TestCli\\win-x64"
+    }
+  }
+}
