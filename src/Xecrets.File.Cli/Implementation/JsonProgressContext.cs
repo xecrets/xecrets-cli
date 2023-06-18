@@ -43,9 +43,9 @@ namespace Xecrets.File.Cli.Implementation
 
         protected override void OnProgressing(ProgressEventArgs e)
         {
-            New<Splash>().Write(m => JsonConsoleOut(new JsonMessage() { OpCode = (int)XfOpCode.Splash, OpCodeName = XfOpCode.Splash.ToString(), Message = m, }));
+            New<Splash>().Write(m => JsonConsoleOut(new CliMessage() { OpCode = (int)XfOpCode.Splash, OpCodeName = XfOpCode.Splash.ToString(), Message = m, }));
 
-            var progressMessage = new JsonMessage()
+            var progressMessage = new CliMessage()
             {
                 OpCode = (int)XfOpCode.Progressing,
                 OpCodeName = XfOpCode.Progressing.ToString(),
@@ -63,9 +63,9 @@ namespace Xecrets.File.Cli.Implementation
             base.OnProgressing(e);
         }
 
-        private static void JsonConsoleOut(JsonMessage jsonMessage)
+        private static void JsonConsoleOut(CliMessage jsonMessage)
         {
-            var json = JsonSerializer.Serialize(jsonMessage, typeof(JsonMessage), SourceGenerationContext.Create());
+            var json = JsonSerializer.Serialize(jsonMessage, typeof(CliMessage), SourceGenerationContext.Create());
             New<ConsoleOut>().WriteLine(json);
         }
     }

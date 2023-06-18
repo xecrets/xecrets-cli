@@ -27,10 +27,12 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
+using Xecrets.File.Cli.Log;
+
 namespace Xecrets.File.Cli
 {
     [JsonSourceGenerationOptions(WriteIndented = false)]
-    [JsonSerializable(typeof(JsonMessage))]
+    [JsonSerializable(typeof(CliMessage))]
     [JsonSerializable(typeof(Dictionary<string, object>))]
     internal partial class SourceGenerationContext : JsonSerializerContext
     {

@@ -25,13 +25,13 @@
 
 using System.Text.Json.Serialization;
 
-namespace Xecrets.File.Cli
+namespace Xecrets.File.Cli.Log
 {
-    internal class JsonMessage
+    internal class CliMessage
     {
-        [JsonPropertyName("cliVersion")]
+        [JsonPropertyName("cliApi")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string? CliVersion { get; set; }
+        public string? CliApiVersion { get; set; }
 
         [JsonPropertyName("email")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]

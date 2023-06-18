@@ -57,7 +57,7 @@ namespace Xecrets.File.Cli.Log
                 return;
             }
 
-            var statusMessage = new JsonMessage()
+            var statusMessage = new CliMessage()
             {
                 OpCode = (int)opCode,
                 OpCodeName = opCode.ToString(),
@@ -66,7 +66,7 @@ namespace Xecrets.File.Cli.Log
                 Email = ToNullIfEmpty(status.Email),
                 File = ToNullIfEmpty(status.File),
                 To = ToNullIfEmpty(status.To),
-                CliVersion = ToNullIfEmpty(status.CliVersion),
+                CliApiVersion = ToNullIfEmpty(status.CliVersion),
                 ProgramVersion = ToNullIfEmpty(status.ProgramVersion),
                 Platform = ToNullIfEmpty(status.Platform),
                 OriginalFileName = ToNullIfEmpty(status.OriginalFileName),
@@ -80,9 +80,9 @@ namespace Xecrets.File.Cli.Log
             JsonConsoleOut(statusMessage);
         }
 
-        private static void JsonConsoleOut(JsonMessage jsonMessage)
+        private static void JsonConsoleOut(CliMessage jsonMessage)
         {
-            var json = JsonSerializer.Serialize(jsonMessage, typeof(JsonMessage), SourceGenerationContext.Create());
+            var json = JsonSerializer.Serialize(jsonMessage, typeof(CliMessage), SourceGenerationContext.Create());
             New<ConsoleOut>().WriteLine(json);
         }
 
@@ -93,7 +93,7 @@ namespace Xecrets.File.Cli.Log
 
         public void FlushPending()
         {
-            New<Splash>().Write(m => JsonConsoleOut(new JsonMessage() { OpCode = (int)XfOpCode.Splash, OpCodeName = XfOpCode.Splash.ToString(), Message = m, }));
+            New<Splash>().Write(m => JsonConsoleOut(new CliMessage() { OpCode = (int)XfOpCode.Splash, OpCodeName = XfOpCode.Splash.ToString(), Message = m, }));
         }
 
         private static string? ToNullIfEmpty(string value)
