@@ -1,7 +1,7 @@
 ﻿#region Coypright and GPL License
 
 /*
- * Xecrets File Cli - Copyright 2022, Svante Seleborg, All Rights Reserved.
+ * Xecrets File Cli - Copyright 2023, Svante Seleborg, All Rights Reserved.
  *
  * This code file is part of Xecrets File Cli, parts of which in turn are derived from AxCrypt as licensed under GPL v3 or later.
  * 
