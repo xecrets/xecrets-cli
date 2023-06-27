@@ -123,7 +123,7 @@ namespace Xecrets.File.Cli.Run
                 }
                 catch (Exception ex)
                 {
-                    status = new Status(XfStatusCode.Error, ex.Message)
+                    status = new Status(XfStatusCode.UnhandledOperationException, ex.Message)
                     {
                         Id = _factory.Parameters.TotalsTracker.Id,
                     };

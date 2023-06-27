@@ -35,7 +35,7 @@ namespace Xecrets.File.Cli
 
         public XecretsFileCliException()
         {
-            Status = new Status(XfStatusCode.Error, "An exception occurred.");
+            Status = new Status(XfStatusCode.ExceptionError, "An exception occurred.");
         }
         public XecretsFileCliException(Status status)
             : this(status.Message)
@@ -46,19 +46,19 @@ namespace Xecrets.File.Cli
         public XecretsFileCliException(string message)
             : base(message)
         {
-            Status = new Status(XfStatusCode.Error, message);
+            Status = new Status(XfStatusCode.ExceptionError, message);
         }
 
         public XecretsFileCliException(string message, Exception inner)
             : base(message, inner)
         {
-            Status = new Status(XfStatusCode.Error, message);
+            Status = new Status(XfStatusCode.ExceptionError, message);
         }
 
         protected XecretsFileCliException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            Status = new Status(XfStatusCode.Error, "An exception occurred.");
+            Status = new Status(XfStatusCode.ExceptionError, "An exception occurred.");
         }
     }
 }

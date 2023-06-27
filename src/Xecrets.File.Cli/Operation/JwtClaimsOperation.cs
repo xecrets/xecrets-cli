@@ -66,7 +66,7 @@ namespace Xecrets.File.Cli.Operation
             }
             catch (Exception ex)
             {
-                return new Status(XfStatusCode.Error, ex.Message + Environment.NewLine + ex.StackTrace);
+                return new Status(XfStatusCode.JwtDeserializeError, ex.Message + Environment.NewLine + ex.StackTrace);
             }
 
             return Status.Success;

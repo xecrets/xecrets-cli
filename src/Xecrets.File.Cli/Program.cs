@@ -116,7 +116,7 @@ try
 }
 catch (Exception ex)
 {
-    status = new Status(XfStatusCode.Error, ex.Message + Environment.NewLine + ex.StackTrace);
+    status = new Status(XfStatusCode.UnhandledRunException, ex.Message + Environment.NewLine + ex.StackTrace);
     parameters.Logger.Log(XfOpCode.Error, status);
 }
 
