@@ -22,7 +22,7 @@
     "Encrypt photos": {
       "commandName": "Project",
       "commandLineArgs": "--json-log --progress-\r\n--password a\r\n--key-pair ..\\xecrets@axantum.com-key-pair.axx\r\n--id A --encrypt-to 1.jpg 1-jpg.axx\r\n--id B --encrypt-to 2.jpg 2-jpg.axx\r\n--id C --encrypt-to 3.jpg 3-jpg.axx\r\n--id D --encrypt-to 4.jpg 4-jpg.axx\r\n--id E --encrypt-to 5.jpg 5-jpg.axx",
-      "workingDirectory": "TestCli\\win-x64\\Photos"
+      "workingDirectory": "TestCli\\Photos"
     },
     "Create Key Pair": {
       "commandName": "Project",
@@ -112,6 +112,12 @@
       "commandName": "Project",
       "commandLineArgs": "--text-log --internal --help",
       "workingDirectory": "TestCli\\win-x64"
+    },
+    "Decrypt v1 file": {
+      "commandName": "Project",
+      "commandLineArgs": "--password b --overwrite\r\n-d Hejhej-txt.axx Hejhej.txt",
+      "workingDirectory": "TestCli\\Photos",
+      "remoteDebugEnabled": true
     }
   }
 }

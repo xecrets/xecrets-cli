@@ -25,6 +25,7 @@
 
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 using AxCrypt.Abstractions;
 using AxCrypt.Abstractions.Algorithm;
@@ -53,6 +54,8 @@ using Xecrets.File.Licensing.Implementation;
 using static AxCrypt.Abstractions.TypeResolve;
 
 [assembly: InternalsVisibleTo("Xecrets.File.Cli.Test")]
+
+Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
 RuntimeEnvironment.RegisterTypeFactories();
 Resolve.RegisterTypeFactories(Path.GetTempPath(), Array.Empty<Assembly>());
