@@ -23,6 +23,8 @@
 
 #endregion Coypright and GPL License
 
+using System.Security.Cryptography.X509Certificates;
+
 using AxCrypt.Abstractions;
 using AxCrypt.Core.Crypto;
 using AxCrypt.Core.Crypto.Asymmetric;
@@ -87,6 +89,8 @@ namespace Xecrets.File.Cli.Operation
             UserPublicKey userPublicKey = new UserPublicKey(keyPair.UserEmail, keyPair.KeyPair.PublicKey);
             parameters.LoadedPublicKeys.AddOrReplace(userPublicKey);
             parameters.Logger.Log(new Status(parameters, "Loaded a public key for '{0}' from '{1}'.".Format(userPublicKey.Email, parameters.From)));
+
+            parameters.SharingEmails.Add(userPublicKey.Email);
 
             return Status.Success;
         }
