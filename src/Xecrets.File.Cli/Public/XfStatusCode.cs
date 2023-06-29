@@ -66,7 +66,7 @@ namespace Xecrets.File.Cli.Public
         NotWritable = 370,
         NotYetImplemented = 380,
         PublicKeyNotFound = 390,
-        UnhandledOperationException=400,
+        UnhandledOperationException = 400,
         UnhandledRunException = 410,
         UnknownEnvironmentVariable = 420,
         UnknownOption = 430,

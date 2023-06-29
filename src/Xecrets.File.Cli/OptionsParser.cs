@@ -130,6 +130,8 @@ namespace Xecrets.File.Cli
             }
 
             optionSet.Add("argument-markdown", XfOpCode.ArgumentMarkdown, ":?Display help texts as markdown.", (ora, op, arg) => ora.Add(arg != null ? op : XfOpCode.None));
+            optionSet.Add("cli-crash-log=", XfOpCode.CliCrashLog, "{file}:?Write crash log here (global).", (ora, op, log) => ora.Add(op, log));
+            optionSet.Add("cli-license=", XfOpCode.CliLicense, "{jwt-license}:?Use this license. Overrides any others found (global).", (ora, op, license) => ora.Add(op, license));
             optionSet.Add("cli-options-code-export", XfOpCode.CliOptionsCodeExport, ":?Display C# source code for options.", (ora, op, arg) => ora.Add(arg != null ? op : XfOpCode.None));
             optionSet.Add("cli-version", XfOpCode.CliVersion, ":?Display the CLI API version.", (ora, op, arg) => ora.Add(arg != null ? op : XfOpCode.None));
             optionSet.Add("internal", XfOpCode.Internal, ":?Display help for internal use commands and disable splash (global).", (ora, op, @internal) => Internal = @internal != null);
@@ -140,7 +142,6 @@ namespace Xecrets.File.Cli
             optionSet.Add("jwt-sign=", XfOpCode.JwtSign, "{signed-jwt}:?Sign and write JWT to file.", (ora, op, file) => ora.Add(op, file));
             optionSet.Add("jwt-private-key=", XfOpCode.JwtPrivateKey, "{private-pem}:?Use a private key PEM file for signing.", (ora, op, @private) => ora.Add(op, @private));
             optionSet.Add("jwt-verify={}", XfOpCode.JwtVerify,"{public-pem} {signed-jwt}:?Verify a signed JWT file using a public PEM file.", (ora, op, @public, token) => ora.Add(op, @public, token));
-            optionSet.Add("license=", XfOpCode.License, "{jwt-license}:?Use this license. Overrides any others found (global).", (ora, op, license) => ora.Add(op, license));
 
             return optionSet;
         }
@@ -358,7 +359,7 @@ namespace Xecrets.File.Cli
             }
             catch (OptionException oe)
             {
-                ParseStatus = new Status(XfStatusCode.InvalidOption, oe.Message);
+                ParseStatus = new Status(XfStatusCode.InvalidOption, oe.ToString());
                 return;
             }
         }

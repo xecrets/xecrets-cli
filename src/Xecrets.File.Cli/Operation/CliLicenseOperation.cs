@@ -34,7 +34,7 @@ using static AxCrypt.Abstractions.TypeResolve;
 
 namespace Xecrets.File.Cli.Operation
 {
-    internal class LicenseOperation : IExecutionPhases
+    internal class CliLicenseOperation : IExecutionPhases
     {
         public Status Dry(Parameters parameters)
         {

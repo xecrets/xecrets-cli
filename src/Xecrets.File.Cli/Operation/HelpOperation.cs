@@ -83,6 +83,7 @@ namespace Xecrets.File.Cli.Operation
 
             parameters.Logger.Log(new Status(parameters, m));
             parameters.Logger.Log(string.Empty);
+
             return Status.Success;
         }
     }

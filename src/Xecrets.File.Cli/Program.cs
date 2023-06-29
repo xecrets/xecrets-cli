@@ -119,8 +119,13 @@ try
 }
 catch (Exception ex)
 {
-    status = new Status(XfStatusCode.UnhandledRunException, ex.Message + Environment.NewLine + ex.StackTrace);
+    status = new Status(XfStatusCode.UnhandledRunException, ex.ToString());
     parameters.Logger.Log(XfOpCode.Error, status);
+}
+
+if (status != Status.Success && parameters.CrashLogFile.Length > 0)
+{
+    File.WriteAllText(parameters.CrashLogFile, $"Cli status code: '{status.StatusCode}'.{Environment.NewLine}{status.Message}");
 }
 
 await WaitForKeyPressedOrTimeoutWhenStartedWithoutArguments(args, status);

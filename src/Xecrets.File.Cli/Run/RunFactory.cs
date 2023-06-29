@@ -36,6 +36,7 @@ namespace Xecrets.File.Cli.Run
         readonly Dictionary<XfOpCode, Func<IExecutionPhases>> _operationTable = new Dictionary<XfOpCode, Func<IExecutionPhases>>()
         {
             { XfOpCode.ArgumentMarkdown, () => new ArgumentMarkdownOperation() },
+            { XfOpCode.CliCrashLog, () => new CliCrashLogOperation() },
             { XfOpCode.CliOptionsCodeExport, () => new CliOptionsCodeExportOperation() },
             { XfOpCode.CliVersion, () => new CliVersionOperation() },
             { XfOpCode.CreateKeyPair, () => new CreateKeyPairOperation() },
@@ -56,7 +57,7 @@ namespace Xecrets.File.Cli.Run
             { XfOpCode.JwtPrivateKey, () => new JwtUseKeyPairOperation() },
             { XfOpCode.JwtSign, () => new JwtSignOperation() },
             { XfOpCode.JwtVerify, () => new JwtVerifyOperation() },
-            { XfOpCode.License, () => new LicenseOperation() },
+            { XfOpCode.CliLicense, () => new CliLicenseOperation() },
             { XfOpCode.LoadPublicKey, () => new LoadPublicKeyOperation() },
             { XfOpCode.NoLog, () => new NoLogOperation() },
             { XfOpCode.None, () => new NoOperation() },
@@ -104,18 +105,18 @@ namespace Xecrets.File.Cli.Run
                 }
                 catch (XecretsFileCliException xfcex)
                 {
-                    status = xfcex.Status;
+                    status = new Status(xfcex.Status.StatusCode, xfcex.ToString());
                 }
                 catch (AxCryptException acex)
                 {
-                    status = new Status(XfStatusCode.AxCryptException, acex.Message)
+                    status = new Status(XfStatusCode.AxCryptException, acex.ToString())
                     {
                         Id = _factory.Parameters.TotalsTracker.Id,
                     };
                 }
                 catch (FileNotFoundException fnfex)
                 {
-                    status = new Status(XfStatusCode.FileUnavailable, fnfex.Message)
+                    status = new Status(XfStatusCode.FileUnavailable, fnfex.ToString())
                     {
                         Id = _factory.Parameters.TotalsTracker.Id,
                         File = fnfex.FileName ?? (_factory.Parameters.From),
@@ -123,7 +124,7 @@ namespace Xecrets.File.Cli.Run
                 }
                 catch (Exception ex)
                 {
-                    status = new Status(XfStatusCode.UnhandledOperationException, ex.Message)
+                    status = new Status(XfStatusCode.UnhandledOperationException, ex.ToString())
                     {
                         Id = _factory.Parameters.TotalsTracker.Id,
                     };
