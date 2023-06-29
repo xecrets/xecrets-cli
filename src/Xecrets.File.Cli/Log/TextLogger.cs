@@ -48,7 +48,7 @@ namespace Xecrets.File.Cli.Log
 
         public void Log(XfOpCode opCode, Status status)
         {
-            if (opCode == XfOpCode.ProgramExit)
+            if (opCode == XfOpCode.CliProgramExit)
             {
                 FlushPending();
                 return;

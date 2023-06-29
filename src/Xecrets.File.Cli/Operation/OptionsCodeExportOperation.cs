@@ -31,7 +31,7 @@ using Xecrets.File.Cli.Run;
 
 namespace Xecrets.File.Cli.Operation
 {
-    internal class CliOptionsCodeExportOperation : IExecutionPhases
+    internal class OptionsCodeExportOperation : IExecutionPhases
     {
         public Status Dry(Parameters parameters)
         {

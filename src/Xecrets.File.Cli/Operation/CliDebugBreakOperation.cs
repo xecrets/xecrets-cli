@@ -23,17 +23,29 @@
 
 #endregion Coypright and GPL License
 
-using Xecrets.File.Cli.Log;
+using System.Diagnostics;
+
+using Xecrets.File.Cli.Abstractions;
+using Xecrets.File.Cli.Public;
+using Xecrets.File.Cli.Run;
 
 namespace Xecrets.File.Cli.Operation
 {
-    internal class JsonLogOperation : LogOperationBase
+    internal class CliDebugBreakOperation : IExecutionPhases
     {
-        protected override LogStyle UpdateLogStyle(LogStyle currentLogStyle)
+        public Status Dry(Parameters parameters)
         {
-            currentLogStyle &= ~(LogStyle.Text);
-            currentLogStyle |= LogStyle.Json;
-            return currentLogStyle;
+            return Status.Success;
+        }
+
+        public Status Real(Parameters parameters)
+        {
+            if (Debugger.Launch())
+            {
+                return Status.Success;
+            }
+
+            return new Status(XfStatusCode.DebugBreakFailed, "Failed to launch and attach to a debugger.");
         }
     }
 }

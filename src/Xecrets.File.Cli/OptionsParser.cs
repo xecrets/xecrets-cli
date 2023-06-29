@@ -71,7 +71,7 @@ namespace Xecrets.File.Cli
                 {"i|id=", XfOpCode.Id,
                     ":Arbitrary id which is returned in JSON-logging.",
                     (ora, op, id) => ora.Add(op, id) },
-                {"j|json-log", XfOpCode.JsonLog,
+                {"j|json-log", XfOpCode.SdkJsonLog,
                     ":Enable JSON-based logging.",
                     (ora, op, json) => ora.Add(json != null ? op : XfOpCode.NoLog) },
                 {"k|use-key-pair=", XfOpCode.UseKeyPair,
@@ -114,7 +114,7 @@ namespace Xecrets.File.Cli
                 {"x|export-public-key=", XfOpCode.ExportPublicKey,
                     "{email} {file}:Export a public key.",
                     (ora, op, email, file) => ora.Add(op, email, file) },
-                {"platform", XfOpCode.Platform,
+                {"platform", XfOpCode.CliPlatform,
                     ":Display the platform the program is running on.",
                     (ora, op, platform) => {if (platform != null) ora.Add(op); } },
                 {"echo", XfOpCode.Echo,
@@ -125,15 +125,15 @@ namespace Xecrets.File.Cli
 
             if (New<IRuntimeEnvironment>().Platform == Platform.WindowsDesktop)
             {
-                optionSet.Add("debug-break", XfOpCode.DebugBreak, ":?Break into debugger when executing this argument.", (ora, op, dbg) => ora.Add(dbg != null ? op : XfOpCode.None));
-                optionSet.Add("debug-break-parse", XfOpCode.DebugBreakParse, ":?Break into debugger when parsing this argument.", (ora, op, dbg) => { if (dbg != null) _ = Debugger.Launch(); });
+                optionSet.Add("debug-break", XfOpCode.CliDebugBreak, ":?Break into debugger when executing this argument.", (ora, op, dbg) => ora.Add(dbg != null ? op : XfOpCode.None));
+                optionSet.Add("debug-break-parse", XfOpCode.CliDebugBreakParse, ":?Break into debugger when parsing this argument.", (ora, op, dbg) => { if (dbg != null) _ = Debugger.Launch(); });
             }
 
             optionSet.Add("argument-markdown", XfOpCode.ArgumentMarkdown, ":?Display help texts as markdown.", (ora, op, arg) => ora.Add(arg != null ? op : XfOpCode.None));
             optionSet.Add("cli-crash-log=", XfOpCode.CliCrashLog, "{file}:?Write crash log here (global).", (ora, op, log) => ora.Add(op, log));
             optionSet.Add("cli-license=", XfOpCode.CliLicense, "{jwt-license}:?Use this license. Overrides any others found (global).", (ora, op, license) => ora.Add(op, license));
-            optionSet.Add("cli-options-code-export", XfOpCode.CliOptionsCodeExport, ":?Display C# source code for options.", (ora, op, arg) => ora.Add(arg != null ? op : XfOpCode.None));
-            optionSet.Add("cli-version", XfOpCode.CliVersion, ":?Display the CLI API version.", (ora, op, arg) => ora.Add(arg != null ? op : XfOpCode.None));
+            optionSet.Add("options-code-export", XfOpCode.OptionsCodeExport, ":?Display C# source code for options.", (ora, op, arg) => ora.Add(arg != null ? op : XfOpCode.None));
+            optionSet.Add("cli-version", XfOpCode.SdkCliVersion, ":?Display the CLI API version.", (ora, op, arg) => ora.Add(arg != null ? op : XfOpCode.None));
             optionSet.Add("internal", XfOpCode.Internal, ":?Display help for internal use commands and disable splash (global).", (ora, op, @internal) => Internal = @internal != null);
             optionSet.Add("jwt-audience=", XfOpCode.JwtAudience,"{audience}:?Set audience email for JWT.", (ora, op, audience) => ora.Add(op, audience));
             optionSet.Add("jwt-claims={}", XfOpCode.JwtClaims, "{expiration} {claims}:?Set days until expiration and claims JSON.", (ora, op, days, claims) => ora.Add(op, days, claims));

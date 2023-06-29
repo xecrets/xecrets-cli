@@ -21,28 +21,19 @@
  * contributions. You may also visit https://www.axantum.com for more information about the author.
 */
 
-#endregion Coypright and GPL Licenseusing System.Text;
+#endregion Coypright and GPL License
 
-using Xecrets.File.Cli.Abstractions;
-using Xecrets.File.Cli.Public;
-using Xecrets.File.Cli.Run;
+using Xecrets.File.Cli.Log;
 
 namespace Xecrets.File.Cli.Operation
 {
-    internal class CliVersionOperation : IExecutionPhases
+    internal class SdkJsonLogOperation : LogOperationBase
     {
-        public Status Dry(Parameters parameters)
+        protected override LogStyle UpdateLogStyle(LogStyle currentLogStyle)
         {
-            return Status.Success;
-        }
-
-        public Status Real(Parameters parameters)
-        {
-            parameters.Logger.Log(new Status(parameters, XfExportVersion.CliVersion.ToString())
-            {
-                CliVersion = XfExportVersion.CliVersion.ToString(),
-            });
-            return Status.Success;
+            currentLogStyle &= ~(LogStyle.Text);
+            currentLogStyle |= LogStyle.Json;
+            return currentLogStyle;
         }
     }
 }

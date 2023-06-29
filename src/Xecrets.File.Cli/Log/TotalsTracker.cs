@@ -60,7 +60,7 @@ namespace Xecrets.File.Cli.Log
 
         public void ResetLogger(Parameters parameters)
         {
-            LogStyle = (parameters.Parser.ParsedOps.FirstOrDefault()?.OpCode ?? XfOpCode.None) == XfOpCode.JsonLog
+            LogStyle = (parameters.Parser.ParsedOps.FirstOrDefault()?.OpCode ?? XfOpCode.None) == XfOpCode.SdkJsonLog
                 ? DefaultJsonLogStyle : DefaultTextLogStyle;
             if (parameters.Parser.IsQuiet)
             {

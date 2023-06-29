@@ -115,12 +115,12 @@ try
         parameters.Logger.Log("Use --help to display valid options.");
     }
 
-    parameters.Logger.Log(XfOpCode.ProgramExit, status);
+    parameters.Logger.Log(XfOpCode.CliProgramExit, status);
 }
 catch (Exception ex)
 {
     status = new Status(XfStatusCode.UnhandledRunException, ex.ToString());
-    parameters.Logger.Log(XfOpCode.Error, status);
+    parameters.Logger.Log(XfOpCode.SdkCliError, status);
 }
 
 if (status != Status.Success && parameters.CrashLogFile.Length > 0)

@@ -21,19 +21,15 @@
  * contributions. You may also visit https://www.axantum.com for more information about the author.
 */
 
-#endregion Coypright and GPL License
-
-using AxCrypt.Abstractions;
-using AxCrypt.Core.Runtime;
+#endregion Coypright and GPL Licenseusing System.Text;
 
 using Xecrets.File.Cli.Abstractions;
+using Xecrets.File.Cli.Public;
 using Xecrets.File.Cli.Run;
-
-using static AxCrypt.Abstractions.TypeResolve;
 
 namespace Xecrets.File.Cli.Operation
 {
-    internal class PlatformOperation : IExecutionPhases
+    internal class SdkCliVersionOperation : IExecutionPhases
     {
         public Status Dry(Parameters parameters)
         {
@@ -42,12 +38,9 @@ namespace Xecrets.File.Cli.Operation
 
         public Status Real(Parameters parameters)
         {
-            string version = GetType().Assembly.GetName().Version?.ToString() ?? "0.0.0.0";
-            string platform = New<IRuntimeEnvironment>().Platform.ToString();
-            parameters.Logger.Log(new Status(parameters, "'{0}' version {1}".Format(platform, version))
+            parameters.Logger.Log(new Status(parameters, XfExportVersion.CliVersion.ToString())
             {
-                Platform = platform,
-                ProgramVersion = version,
+                CliVersion = XfExportVersion.CliVersion.ToString(),
             });
             return Status.Success;
         }

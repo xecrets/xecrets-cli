@@ -37,10 +37,10 @@ namespace Xecrets.File.Cli.Run
         {
             { XfOpCode.ArgumentMarkdown, () => new ArgumentMarkdownOperation() },
             { XfOpCode.CliCrashLog, () => new CliCrashLogOperation() },
-            { XfOpCode.CliOptionsCodeExport, () => new CliOptionsCodeExportOperation() },
-            { XfOpCode.CliVersion, () => new CliVersionOperation() },
+            { XfOpCode.OptionsCodeExport, () => new OptionsCodeExportOperation() },
+            { XfOpCode.SdkCliVersion, () => new SdkCliVersionOperation() },
             { XfOpCode.CreateKeyPair, () => new CreateKeyPairOperation() },
-            { XfOpCode.DebugBreak, () => new DebugBreakOperation() },
+            { XfOpCode.CliDebugBreak, () => new CliDebugBreakOperation() },
             { XfOpCode.DecryptTo, () => new DecryptToOperation() },
             { XfOpCode.DecryptToFolder, () => new DecryptToFolderOperation() },
             { XfOpCode.Echo, () => new EchoOperation() },
@@ -49,7 +49,7 @@ namespace Xecrets.File.Cli.Run
             { XfOpCode.GplLicense, () => new GplLicenseOperation() },
             { XfOpCode.Help, () => new HelpOperation() },
             { XfOpCode.Id, () => new IdOperation() },
-            { XfOpCode.JsonLog, () => new JsonLogOperation() },
+            { XfOpCode.SdkJsonLog, () => new SdkJsonLogOperation() },
             { XfOpCode.JwtAudience, () => new JwtAudienceOperation() },
             { XfOpCode.JwtClaims, () => new JwtClaimsOperation() },
             { XfOpCode.JwtCreateKeyPair , () => new JwtCreateKeyPairOperation() },
@@ -65,7 +65,7 @@ namespace Xecrets.File.Cli.Run
             { XfOpCode.NoProgress, () => new NoProgressOperation() },
             { XfOpCode.Overwrite, () => new OverwriteOperation() },
             { XfOpCode.Password, () => new PasswordOperation() },
-            { XfOpCode.Platform, () => new PlatformOperation() },
+            { XfOpCode.CliPlatform, () => new CliPlatformOperation() },
             { XfOpCode.ProgressLog, () => new ProgressLogOperation() },
             { XfOpCode.Stdout, () => new StdoutOperation() },
             { XfOpCode.TextLog, () => new TextLogOperation() },
@@ -143,7 +143,7 @@ namespace Xecrets.File.Cli.Run
                 return new SomeAction(this, actionFunc(), opCode);
             }
 
-            return new SomeAction(this, new ErrorOperation($"Can't create the appropriate action for {opCode}."), XfOpCode.Error);
+            return new SomeAction(this, new ErrorOperation($"Can't create the appropriate action for {opCode}."), XfOpCode.SdkCliError);
         }
     }
 }

@@ -43,7 +43,7 @@ namespace Xecrets.File.Cli.Implementation
 
         protected override void OnProgressing(ProgressEventArgs e)
         {
-            New<Splash>().Write(m => JsonConsoleOut(new CliMessage() { OpCode = (int)XfOpCode.Splash, OpCodeName = XfOpCode.Splash.ToString(), Message = m, }));
+            New<Splash>().Write(m => JsonConsoleOut(new CliMessage() { OpCode = (int)XfOpCode.SdkCliSplash, OpCodeName = XfOpCode.SdkCliSplash.ToString(), Message = m, }));
 
             var progressMessage = new CliMessage()
             {

@@ -23,15 +23,17 @@
 
 #endregion Coypright and GPL License
 
-using System.Diagnostics;
+using AxCrypt.Abstractions;
+using AxCrypt.Core.Runtime;
 
 using Xecrets.File.Cli.Abstractions;
-using Xecrets.File.Cli.Public;
 using Xecrets.File.Cli.Run;
+
+using static AxCrypt.Abstractions.TypeResolve;
 
 namespace Xecrets.File.Cli.Operation
 {
-    internal class DebugBreakOperation : IExecutionPhases
+    internal class CliPlatformOperation : IExecutionPhases
     {
         public Status Dry(Parameters parameters)
         {
@@ -40,12 +42,14 @@ namespace Xecrets.File.Cli.Operation
 
         public Status Real(Parameters parameters)
         {
-            if (Debugger.Launch())
+            string version = GetType().Assembly.GetName().Version?.ToString() ?? "0.0.0.0";
+            string platform = New<IRuntimeEnvironment>().Platform.ToString();
+            parameters.Logger.Log(new Status(parameters, "'{0}' version {1}".Format(platform, version))
             {
-                return Status.Success;
-            }
-
-            return new Status(XfStatusCode.DebugBreakFailed, "Failed to launch and attach to a debugger.");
+                Platform = platform,
+                ProgramVersion = version,
+            });
+            return Status.Success;
         }
     }
 }

@@ -52,7 +52,7 @@ namespace Xecrets.File.Cli.Log
         {
             FlushPending();
 
-            if (opCode == XfOpCode.TextMessage && status.Message.Length == 0)
+            if (opCode == XfOpCode.CliTextMessage && status.Message.Length == 0)
             {
                 return;
             }
@@ -88,12 +88,12 @@ namespace Xecrets.File.Cli.Log
 
         public void Log(string message)
         {
-            Log(XfOpCode.TextMessage, new Status(message));
+            Log(XfOpCode.CliTextMessage, new Status(message));
         }
 
         public void FlushPending()
         {
-            New<Splash>().Write(m => JsonConsoleOut(new CliMessage() { OpCode = (int)XfOpCode.Splash, OpCodeName = XfOpCode.Splash.ToString(), Message = m, }));
+            New<Splash>().Write(m => JsonConsoleOut(new CliMessage() { OpCode = (int)XfOpCode.SdkCliSplash, OpCodeName = XfOpCode.SdkCliSplash.ToString(), Message = m, }));
         }
 
         private static string? ToNullIfEmpty(string value)
