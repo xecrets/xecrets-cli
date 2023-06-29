@@ -41,14 +41,9 @@ namespace Xecrets.File.Cli.Operation
     {
         public Status Dry(Parameters parameters)
         {
-            if (!parameters.Identities.Any())
+            if (!parameters.Identities.Where(id => id.Passphrase != Passphrase.Empty).Any())
             {
                 return new Status(XfStatusCode.NoPassword, "A password must be provided to encrypt files.");
-            }
-
-            if (parameters.Identities.Where(id => id.Passphrase != Passphrase.Empty).Count() > 1)
-            {
-                return new Status(XfStatusCode.NotYetImplemented, "Encryption with multiple passwords is not yet supported.");
             }
 
             IStandardIoDataStore toStore = parameters.To.FindAvailable(parameters);
@@ -112,7 +107,7 @@ namespace Xecrets.File.Cli.Operation
             parameters.Progress.Display = parameters.From;
 
             IEnumerable<UserPublicKey> userPublicKeys = parameters.PublicKeys.Where(pk => parameters.SharingEmails.Contains(pk.Email));
-            using (var encryption = new Encryption(fromStore.OpenRead(), parameters.Identities, userPublicKeys, parameters.Progress))
+            using (var encryption = new Encryption(fromStore.OpenRead(), parameters.Identities.Where(id => id.Passphrase != Passphrase.Empty), userPublicKeys, parameters.Progress))
             {
                 encryption.EncryptTo(toStore, fromStore.Name);
             }
