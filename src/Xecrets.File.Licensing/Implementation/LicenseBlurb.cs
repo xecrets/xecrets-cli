@@ -46,32 +46,28 @@ namespace Xecrets.File.Licensing.Implementation
             _invalidBlurb = invalidBlurb;
         }
 
-        public override string ToString()
-        {
-            return GetBlurb();
-        }
+        public override string ToString() => ToString(_newLocator.New<ILicense>().Status(), _newLocator.New<ILicense>().Subscription());
 
-        private string GetBlurb()
-        {
-            LicenseStatus status = _newLocator.New<ILicense>().Status();
+        public virtual string ToString(LicenseStatus status, LicenseSubscription subscription) => GetBlurb(status, subscription);
 
+        private string GetBlurb(LicenseStatus status, LicenseSubscription subscription)
+        {
             return status switch
             {
                 LicenseStatus.Gpl or LicenseStatus.Unlicensed => _unlicensedBlurb,
 
-                LicenseStatus.Expired => FillLicenseInfo(_expiredBlurb),
+                LicenseStatus.Expired => FillLicenseInfo(subscription, _expiredBlurb),
 
-                LicenseStatus.Valid => FillLicenseInfo(_licensedBlurb),
+                LicenseStatus.Valid => FillLicenseInfo(subscription, _licensedBlurb),
 
-                LicenseStatus.Invalid => FillLicenseInfo(_invalidBlurb),
+                LicenseStatus.Invalid => FillLicenseInfo(subscription, _invalidBlurb),
 
                 _ => throw new InvalidOperationException($"Unexpected {nameof(LicenseStatus)} value '{status}'."),
             };
         }
 
-        private string FillLicenseInfo(string text)
+        private string FillLicenseInfo(LicenseSubscription subscription, string text)
         {
-            var subscription = _newLocator.New<ILicense>().Subscription();
             return text
                 .Replace("{licensee}", subscription.Licensee)
                 .Replace("{expiration}", subscription.ExpirationUtc.ToString(CultureInfo.GetCultureInfo("en-US")))
