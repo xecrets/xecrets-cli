@@ -12,7 +12,7 @@
     <Title>Xecrets File License validation</Title>
     <Authors>Axantum Software AB</Authors>
     <Description>Validate Xecrets File JWT licenses</Description>
-    <Copyright>Copyright 2023, Svante Seleborg, All Rights Reserved</Copyright>
+    <Copyright>Copyright © 2022-2023, Svante Seleborg, All Rights Reserved</Copyright>
     <PackageProjectUrl>https://www.axantum.com/</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/xecrets/xecrets-file-cli</RepositoryUrl>
