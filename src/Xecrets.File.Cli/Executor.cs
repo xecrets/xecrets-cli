@@ -46,7 +46,6 @@ namespace Xecrets.File.Cli
             {
                 New<Splash>().Clear();
             }
-            _parameters.TotalsTracker.ResetLogger(_parameters);
 
             if (!status.IsSuccess)
             {
@@ -58,7 +57,15 @@ namespace Xecrets.File.Cli
                 return new Status("A successful dry run was executed, no files were changed.");
             }
 
+            ResetParametersForRealRun();
+
             return Run(new RealRunFactory(_parameters));
+        }
+
+        private void ResetParametersForRealRun()
+        {
+            _parameters.TotalsTracker.ResetLogger(_parameters);
+            _parameters.Overwrite = false;
         }
 
         private static Status Run(RunFactory factory)

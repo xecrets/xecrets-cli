@@ -32,6 +32,7 @@ namespace Xecrets.File.Cli.Operation
     {
         public Status Dry(Parameters parameters)
         {
+            parameters.Overwrite = true;
             return Status.Success;
         }
 

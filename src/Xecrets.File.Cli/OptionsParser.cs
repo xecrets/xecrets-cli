@@ -106,7 +106,7 @@ namespace Xecrets.File.Cli
                     "{file(s)}:Load public key(s) from file(s).",
                     (ora, op, pks) => ora.AddManyRunning(op, pks) },
                 {"v|overwrite", XfOpCode.Overwrite,
-                    ":Overwrite files instead of using alternate target name (global).",
+                    ":Overwrite files instead of using alternate target name.",
                     (ora, op, ow) => ora.Add(ow != null ? XfOpCode.Overwrite : XfOpCode.NoOverwrite) },
                 {"w|wipe=", XfOpCode.Wipe,
                     "{file}:Securely wipe and delete a file.",
