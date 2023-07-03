@@ -80,17 +80,28 @@ namespace Xecrets.File.Cli.Implementation
                 return store.IsStdout;
             }
 
-            try
-            {
-                using (OpenWrite(store.FullName))
+            bool wasExisting = Exists(store.FullName);
+
+            bool CanWrite() {
+                try
                 {
-                    return true;
+                    using (OpenWrite(store.FullName))
+                    {
+                        return true;
+                    }
+                }
+                catch
+                {
+                    return false;
                 }
             }
-            catch
+            
+            bool canWrite = CanWrite();
+            if (!wasExisting && canWrite)
             {
-                return false;
+                Delete(store.FullName);
             }
+            return canWrite;
         }
 
         public bool CanWriteToFolder(IDataContainer container)

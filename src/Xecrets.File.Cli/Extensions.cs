@@ -45,7 +45,6 @@ namespace Xecrets.File.Cli
                 status = new Status(XfStatusCode.CannotWrite, "Can't write to '{0}'.".Format(store.Name));
                 return false;
             }
-            store.Delete();
 
             if (store.IsNamedStdIo)
             {
@@ -81,7 +80,7 @@ namespace Xecrets.File.Cli
                 {
                     string extension = New<IPath>().GetExtension(fullPath);
                     string pathWithoutExtension = fullPath.Substring(0, fullPath.Length - extension.Length);
-                    string alternativeAvailableFullPath = $"{pathWithoutExtension}({++i}){extension}";
+                    string alternativeAvailableFullPath = $"{pathWithoutExtension} ({++i}){extension}";
                     availableStore = New<IStandardIoDataStore>(alternativeAvailableFullPath);
                 }
                 return availableStore;
