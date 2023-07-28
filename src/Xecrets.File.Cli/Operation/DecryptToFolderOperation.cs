@@ -49,7 +49,7 @@ namespace Xecrets.File.Cli.Operation
             IStandardIoDataStore toFolderStore = New<IStandardIoDataStore>(toFolder);
             if (toFolderStore.IsStdIo)
             {
-                status = new Status(XfStatusCode.NotSupported, parameters, "Decryption to a stream is not supported when decrypting to a folder.".Format(toFolderStore.Name));
+                status = new Status(XfStatusCode.NotSupported, parameters, "Decryption to a stream {0} is not supported when decrypting to a folder.".Format(toFolderStore.Name));
                 return (status, null!);
             }
 

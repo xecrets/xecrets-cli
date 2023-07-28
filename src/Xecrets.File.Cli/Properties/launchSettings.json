@@ -21,17 +21,18 @@
     },
     "Encrypt photos": {
       "commandName": "Project",
-      "commandLineArgs": "--json-log --progress-\r\n--password a\r\n--key-pair ..\\xecrets@axantum.com-key-pair.axx\r\n--id A --encrypt-to 1.jpg 1-jpg.axx\r\n--id B --encrypt-to 2.jpg 2-jpg.axx\r\n--id C --encrypt-to 3.jpg 3-jpg.axx\r\n--id D --encrypt-to 4.jpg 4-jpg.axx\r\n--id E --encrypt-to 5.jpg 5-jpg.axx",
+      "commandLineArgs": "--json-log --progress-\r\n--password a\r\n--use-key-pair ..\\xecrets@axantum.com-key-pair.axx\r\n--id A --encrypt-to 1.jpg 1-jpg.axx\r\n--id B --encrypt-to 2.jpg 2-jpg.axx\r\n--id C --encrypt-to 3.jpg 3-jpg.axx\r\n--id D --encrypt-to 4.jpg 4-jpg.axx\r\n--id E --encrypt-to 5.jpg 5-jpg.axx",
       "workingDirectory": "TestCli\\Photos"
     },
     "Create Key Pair": {
       "commandName": "Project",
-      "commandLineArgs": "--text-log\r\n--password a\r\n--public-keys-list=public-keys.txt\r\n--create-key-pair xecrets@axantum.com xecrets@axantum.com-key-pair.axx",
-      "workingDirectory": "TestCli\\win-x64"
+      "commandLineArgs": "--text-log\r\n--password a\r\n--create-key-pair xecrets@axantum.com xecrets@axantum.com-key-pair.axx",
+      "workingDirectory": "TestCli",
+      "remoteDebugEnabled": false
     },
     "Use Key Pair and Export Public Key": {
       "commandName": "Project",
-      "commandLineArgs": "--text-log\r\n--password a\r\n--key-pair=xecrets@axantum.com-key-pair.axx\r\n--export-public-key xecrets@axantum.com xecrets@axantum.com-public-key.txt",
+      "commandLineArgs": "--text-log\r\n--password a\r\n--use-key-pair=xecrets@axantum.com-key-pair.axx\r\n--export-public-key xecrets@axantum.com xecrets@axantum.com-public-key.txt",
       "workingDirectory": "TestCli\\win-x64"
     },
     "Create 'test' Key Pair and export public key": {

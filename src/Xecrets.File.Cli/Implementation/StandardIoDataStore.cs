@@ -44,7 +44,11 @@ namespace Xecrets.File.Cli.Implementation
 
         public bool IsStdIo => IsStdin || IsStdout;
 
-        public bool IsNamedStdIo => IsStdIo && _wrapped.Name != XfNameOf.StdinAlias && _wrapped.Name != XfNameOf.StdoutAlias;
+        public bool IsNamedStdIo => IsStdIo && _aliasName.Length > 0;
+
+        private readonly string _aliasName = string.Empty;
+
+        public string AliasName => _aliasName.Length > 0 ? _aliasName : Name;
 
         public StandardIoDataStore(string path)
         {
@@ -56,22 +60,40 @@ namespace Xecrets.File.Cli.Implementation
             IsStdin = path == XfNameOf.StdinAlias || path.StartsWith(XfNameOf.StdinAlias + XfNameOf.StdIoNameSeparator);
             IsStdout = path == XfNameOf.StdoutAlias || path.StartsWith(XfNameOf.StdoutAlias + XfNameOf.StdIoNameSeparator);
 
-            if (IsStdIo)
+            string[] nameAndAlias = path.Split(XfNameOf.StdinAlias + XfNameOf.StdIoNameSeparator);
+            if (nameAndAlias.Length != 2)
             {
-                path = path.Length > 2 ? path.Substring(2) : path.Substring(0, 1);
+                nameAndAlias = path.Split(XfNameOf.StdoutAlias + XfNameOf.StdIoNameSeparator);
             }
 
-            if (Path.GetFileName(path).Any(Path.GetInvalidFileNameChars().Contains))
+            if (nameAndAlias.Length == 2)
             {
-                throw new ArgumentException("{0} is not a valid filename.".Format(Path.GetFileName(path)));
+                path = nameAndAlias[0];
+                _aliasName = nameAndAlias[1];
             }
 
-            if (path.Any(Path.GetInvalidPathChars().Contains))
+            if (IsStdIo && nameAndAlias.Length != 2)
             {
-                throw new ArgumentException("{0} is not a valid path.".Format(path));
+                path = path.Substring(0, 1);
             }
 
+            static void ValidatePath(string path)
+            {
+                if (Path.GetFileName(path).Any(Path.GetInvalidFileNameChars().Contains))
+                {
+                    throw new ArgumentException("{0} is not a valid filename.".Format(Path.GetFileName(path)));
+                }
+
+                if (path.Any(Path.GetInvalidPathChars().Contains))
+                {
+                    throw new ArgumentException("{0} is not a valid path.".Format(path));
+                }
+            }
+
+            ValidatePath(path);
             _wrapped = new DataStore(path);
+
+            ValidatePath(AliasName);
         }
 
         public bool IsWriteProtected

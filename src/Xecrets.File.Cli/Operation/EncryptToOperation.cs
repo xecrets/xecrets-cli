@@ -102,14 +102,14 @@ namespace Xecrets.File.Cli.Operation
                 return status;
             }
 
-            IDataStore fromStore = New<IStandardIoDataStore>(parameters.From);
+            IStandardIoDataStore fromStore = New<IStandardIoDataStore>(parameters.From);
 
             parameters.Progress.Display = parameters.From;
 
             IEnumerable<UserPublicKey> userPublicKeys = parameters.PublicKeys.Where(pk => parameters.SharingEmails.Contains(pk.Email));
             using (var encryption = new Encryption(fromStore.OpenRead(), parameters.Identities.Where(id => id.Passphrase != Passphrase.Empty), userPublicKeys, parameters.Progress))
             {
-                encryption.EncryptTo(toStore, fromStore.Name);
+                encryption.EncryptTo(toStore, fromStore.AliasName);
             }
 
             parameters.Logger.Log(new Status(parameters, "Encrypted '{0}' to '{1}'.".Format(parameters.From, parameters.To)));

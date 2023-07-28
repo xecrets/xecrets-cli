@@ -36,5 +36,7 @@ namespace Xecrets.File.Cli.Abstractions
         bool IsStdIo { get; }
 
         bool IsNamedStdIo { get; }
+
+        string AliasName { get; }
     }
 }
