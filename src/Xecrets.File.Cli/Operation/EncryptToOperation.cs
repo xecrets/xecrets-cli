@@ -46,8 +46,8 @@ namespace Xecrets.File.Cli.Operation
                 return new Status(XfStatusCode.NoPassword, "A password must be provided to encrypt files.");
             }
 
-            IStandardIoDataStore toStore = parameters.To.FindAvailable(parameters);
-            if (!toStore.VerifyCanWrite(parameters, out Status status))
+            IStandardIoDataStore toFreeStore = parameters.To.FindFree(parameters);
+            if (!toFreeStore.VerifyCanWrite(parameters, out Status status))
             {
                 return status;
             }
@@ -96,8 +96,8 @@ namespace Xecrets.File.Cli.Operation
 
         public Status Real(Parameters parameters)
         {
-            IStandardIoDataStore toStore = parameters.To.FindAvailable(parameters);
-            if (!toStore.VerifyCanWrite(parameters, out Status status))
+            IStandardIoDataStore toFreeStore = parameters.To.FindFree(parameters);
+            if (!toFreeStore.VerifyCanWrite(parameters, out Status status))
             {
                 return status;
             }
@@ -109,7 +109,7 @@ namespace Xecrets.File.Cli.Operation
             IEnumerable<UserPublicKey> userPublicKeys = parameters.PublicKeys.Where(pk => parameters.SharingEmails.Contains(pk.Email));
             using (var encryption = new Encryption(fromStore.OpenRead(), parameters.Identities.Where(id => id.Passphrase != Passphrase.Empty), userPublicKeys, parameters.Progress))
             {
-                encryption.EncryptTo(toStore, fromStore.AliasName);
+                encryption.EncryptTo(toFreeStore, fromStore.AliasName);
             }
 
             parameters.Logger.Log(new Status(parameters, "Encrypted '{0}' to '{1}'.".Format(parameters.From, parameters.To)));

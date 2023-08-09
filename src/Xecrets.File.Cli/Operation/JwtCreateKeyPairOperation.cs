@@ -40,8 +40,8 @@ namespace Xecrets.File.Cli.Operation
         /// <returns></returns>
         public Status Dry(Parameters parameters)
         {
-            IStandardIoDataStore privateStore = parameters.File.FindAvailable(parameters);
-            if (!privateStore.VerifyCanWrite(parameters, out Status status))
+            IStandardIoDataStore privateFreeStore = parameters.File.FindFree(parameters);
+            if (!privateFreeStore.VerifyCanWrite(parameters, out Status status))
             {
                 return status;
             }
@@ -51,8 +51,8 @@ namespace Xecrets.File.Cli.Operation
                 return Status.Success;
             }
 
-            IStandardIoDataStore publicStore = parameters.Arguments[1].FindAvailable(parameters);
-            if (!publicStore.VerifyCanWrite(parameters, out status))
+            IStandardIoDataStore publicFreeStore = parameters.Arguments[1].FindFree(parameters);
+            if (!publicFreeStore.VerifyCanWrite(parameters, out status))
             {
                 return status;
             }
@@ -62,8 +62,8 @@ namespace Xecrets.File.Cli.Operation
 
         public Status Real(Parameters parameters)
         {
-            IStandardIoDataStore privateStore = parameters.File.FindAvailable(parameters);
-            if (!privateStore.VerifyCanWrite(parameters, out Status status))
+            IStandardIoDataStore privateFreeStore = parameters.File.FindFree(parameters);
+            if (!privateFreeStore.VerifyCanWrite(parameters, out Status status))
             {
                 return status;
             }
@@ -75,7 +75,7 @@ namespace Xecrets.File.Cli.Operation
                 return new Status(Public.XfStatusCode.InternalError, "Couldn't export the PKCS8 Private Key.");
             }
 
-            using (StreamWriter writer = new(privateStore.OpenWrite()))
+            using (StreamWriter writer = new(privateFreeStore.OpenWrite()))
             {
                 writer.Write(keySpan.Slice(0, charsWritten));
             }
@@ -85,16 +85,16 @@ namespace Xecrets.File.Cli.Operation
                 return Status.Success;
             }
 
-            IStandardIoDataStore publicStore = parameters.Arguments[1].FindAvailable(parameters);
-            if (!publicStore.VerifyCanWrite(parameters, out status))
+            IStandardIoDataStore publicFreeStore = parameters.Arguments[1].FindFree(parameters);
+            if (!publicFreeStore.VerifyCanWrite(parameters, out status))
             {
                 return status;
             }
 
             string publicPem = key.ExportSubjectPublicKeyInfoPem();
-            using (StreamWriter writer = new(publicStore.OpenWrite()))
+            using (StreamWriter writer = new(publicFreeStore.OpenWrite()))
             {
-                if (privateStore.IsStdout && publicStore.IsStdout)
+                if (privateFreeStore.IsStdout && publicFreeStore.IsStdout)
                 {
                     writer.WriteLine();
                 }

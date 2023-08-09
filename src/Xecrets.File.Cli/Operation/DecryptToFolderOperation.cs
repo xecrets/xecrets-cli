@@ -54,13 +54,13 @@ namespace Xecrets.File.Cli.Operation
             }
 
             string toPath = New<IPath>().Combine(toFolder, originalFileName);
-            IStandardIoDataStore toAvailableStore = toPath.FindAvailable(parameters);
-            if (!toAvailableStore.VerifyCanWrite(parameters, out status))
+            IStandardIoDataStore toFreeStore = toPath.FindFree(parameters);
+            if (!toFreeStore.VerifyCanWrite(parameters, out status))
             {
                 return (status, null!);
             }
 
-            return (Status.Success, toAvailableStore);
+            return (Status.Success, toFreeStore);
         }
 
         private static string ToFolder(string from, string toFolder)

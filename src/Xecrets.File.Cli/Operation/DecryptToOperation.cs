@@ -32,13 +32,13 @@ namespace Xecrets.File.Cli.Operation
     {
         protected override (Status, IStandardIoDataStore) ToStore(Parameters parameters, string originalFileName)
         {
-            IStandardIoDataStore toStore = parameters.To.FindAvailable(parameters);
-            if (!toStore.VerifyCanWrite(parameters, out Status status))
+            IStandardIoDataStore toFreeStore = parameters.To.FindFree(parameters);
+            if (!toFreeStore.VerifyCanWrite(parameters, out Status status))
             {
                 return (status, null!);
             }
 
-            return (Status.Success, toStore);
+            return (Status.Success, toFreeStore);
         }
     }
 }

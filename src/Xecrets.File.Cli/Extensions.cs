@@ -24,6 +24,7 @@
 #endregion Coypright and GPL License
 
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 using AxCrypt.Abstractions;
 using AxCrypt.Core.Portable;
@@ -36,7 +37,7 @@ using static AxCrypt.Abstractions.TypeResolve;
 
 namespace Xecrets.File.Cli
 {
-    internal static class Extensions
+    internal static partial class Extensions
     {
         public static bool VerifyCanWrite(this IStandardIoDataStore store, Parameters parameters, out Status status)
         {
@@ -62,30 +63,36 @@ namespace Xecrets.File.Cli
             return true;
         }
 
-        public static IStandardIoDataStore FindAvailable(this string fullPath, Parameters parameters)
+        public static IStandardIoDataStore FindFree(this string fullPath, Parameters parameters)
         {
-            IStandardIoDataStore store = Available(fullPath, parameters);
+            IStandardIoDataStore store = Free(fullPath, parameters);
             return store;
 
-            static IStandardIoDataStore Available(string fullPath, Parameters parameters)
+            static IStandardIoDataStore Free(string fullPath, Parameters parameters)
             {
-                IStandardIoDataStore availableStore = New<IStandardIoDataStore>(fullPath);
-                if (parameters.Overwrite || availableStore.IsStdout)
+                IStandardIoDataStore candidateStore = New<IStandardIoDataStore>(fullPath);
+                if (parameters.Overwrite || candidateStore.IsStdout)
                 {
-                    return availableStore;
+                    return candidateStore;
                 }
 
                 int i = 0;
-                while (availableStore.IsAvailable)
+                while (candidateStore.IsAvailable)
                 {
-                    string extension = New<IPath>().GetExtension(fullPath);
-                    string pathWithoutExtension = fullPath.Substring(0, fullPath.Length - extension.Length);
-                    string alternativeAvailableFullPath = $"{pathWithoutExtension} ({++i}){extension}";
-                    availableStore = New<IStandardIoDataStore>(alternativeAvailableFullPath);
+                    string path = Path.GetDirectoryName(fullPath) ?? string.Empty;
+                    string fileName = Path.GetFileName(fullPath);
+                    string extension = Path.GetExtension(fileName);
+                    string fileNameWithoutExtension = fileName.Substring(0, fileName.Length - extension.Length);
+                    string fileNameWithoutExtensionAndNumber = TrailingNumberInParenthesis().Replace(fileNameWithoutExtension, string.Empty);
+                    string candidateFreeFullPath = Path.Combine(path, $"{fileNameWithoutExtensionAndNumber} ({++i}){extension}");
+                    candidateStore = New<IStandardIoDataStore>(candidateFreeFullPath);
                 }
-                return availableStore;
+                return candidateStore;
             }
         }
+
+        [GeneratedRegex(@" \([\d]+\)$")]
+        private static partial Regex TrailingNumberInParenthesis();
 
         public static string ToDisplayName(this IStandardIoDataStore store)
         {
