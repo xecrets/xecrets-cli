@@ -35,6 +35,7 @@ namespace Xecrets.File.Cli.Operation
 
         public Status Dry(Parameters parameters)
         {
+            parameters.TotalsTracker.LogStyle = parameters.Parser.IsQuiet ? LogStyle.None : UpdateLogStyle(parameters.TotalsTracker.LogStyle);
             return Status.Success;
         }
 
