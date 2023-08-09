@@ -68,11 +68,10 @@ namespace Xecrets.File.Cli.Implementation
 
             if (nameAndAlias.Length == 2)
             {
-                path = nameAndAlias[0];
                 _aliasName = nameAndAlias[1];
             }
 
-            if (IsStdIo && nameAndAlias.Length != 2)
+            if (IsStdIo)
             {
                 path = path.Substring(0, 1);
             }
