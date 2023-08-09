@@ -68,6 +68,7 @@ namespace Xecrets.File.Cli.Implementation
 
             if (nameAndAlias.Length == 2)
             {
+                path = nameAndAlias[0];
                 _aliasName = nameAndAlias[1];
             }
 
