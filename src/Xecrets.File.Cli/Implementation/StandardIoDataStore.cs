@@ -66,15 +66,16 @@ namespace Xecrets.File.Cli.Implementation
                 nameAndAlias = path.Split(XfNameOf.StdoutAlias + XfNameOf.StdIoNameSeparator);
             }
 
+            string adjustedPath = path;
             if (nameAndAlias.Length == 2)
             {
-                path = nameAndAlias[0];
+                adjustedPath = nameAndAlias[0];
                 _aliasName = nameAndAlias[1];
             }
 
             if (IsStdIo)
             {
-                path = path.Substring(0, 1);
+                adjustedPath = path.Substring(0, 1);
             }
 
             static void ValidatePath(string path)
@@ -90,8 +91,8 @@ namespace Xecrets.File.Cli.Implementation
                 }
             }
 
-            ValidatePath(path);
-            _wrapped = new DataStore(path);
+            ValidatePath(adjustedPath);
+            _wrapped = new DataStore(adjustedPath);
 
             ValidatePath(AliasName);
         }
