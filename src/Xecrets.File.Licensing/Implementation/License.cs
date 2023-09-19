@@ -53,13 +53,13 @@ namespace Xecrets.File.Licensing.Implementation
             _validProducts = validProducts;
         }
 
-        public void LoadFrom(IEnumerable<string> licenseCandidates)
+        public async Task LoadFromAsync(IEnumerable<string> licenseCandidates)
         {
-            LicenseToken = GetBestValidLicenseToken(licenseCandidates);
+            LicenseToken = await GetBestValidLicenseTokenAsync(licenseCandidates);
             _subscription = Subscription(LicenseToken);
         }
 
-        public string GetBestValidLicenseToken(IEnumerable<string> candidates)
+        public async Task<string> GetBestValidLicenseTokenAsync(IEnumerable<string> candidates)
         {
             candidates = candidates.Where(c => _newLocator.New<ILicenseCandidates>().IsCandidate(c));
             if (!candidates.Any())
@@ -71,7 +71,7 @@ namespace Xecrets.File.Licensing.Implementation
 
             foreach (string publicKey in _publicKeys)
             {
-                ValidSignedLicenses(publicKey, candidates, validSignedLicenses);
+                await ValidSignedLicenses(publicKey, candidates, validSignedLicenses);
             }
 
             if (!validSignedLicenses.Any())
@@ -138,7 +138,7 @@ namespace Xecrets.File.Licensing.Implementation
             return LicenseStatus.Invalid;
         }
 
-        private static void ValidSignedLicenses(string keyPem, IEnumerable<string> candidates, List<string> validSignedLicenses)
+        private static async Task ValidSignedLicenses(string keyPem, IEnumerable<string> candidates, List<string> validSignedLicenses)
         {
             JsonWebTokenHandler handler = new JsonWebTokenHandler();
             var testKey = ECDsa.Create();
@@ -147,7 +147,7 @@ namespace Xecrets.File.Licensing.Implementation
             foreach (string candidate in candidates)
             {
                 string trimmedCandidate = candidate.Trim();
-                TokenValidationResult result = handler.ValidateToken(trimmedCandidate, new TokenValidationParameters
+                TokenValidationResult result = await handler.ValidateTokenAsync(trimmedCandidate, new TokenValidationParameters
                 {
                     ValidateAudience = false,
                     ValidIssuer = Issuer,

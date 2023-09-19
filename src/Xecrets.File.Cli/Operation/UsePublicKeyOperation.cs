@@ -35,24 +35,24 @@ namespace Xecrets.File.Cli.Operation
 {
     internal class UsePublicKeyOperation : IExecutionPhases
     {
-        public Status Dry(Parameters parameters)
+        public Task<Status> DryAsync(Parameters parameters)
         {
             foreach (string email in parameters.CurrentOp.Arguments)
             {
                 if (!EmailAddress.TryParse(email, out EmailAddress _))
                 {
-                    return new Status(XfStatusCode.InvalidEmail, parameters, "'{0}' is not a valid email address.".Format(email));
+                    return Task.FromResult(new Status(XfStatusCode.InvalidEmail, parameters, "'{0}' is not a valid email address.".Format(email)));
                 }
             }
 
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
 
-        public Status Real(Parameters parameters)
+        public Task<Status> RealAsync(Parameters parameters)
         {
             if (!parameters.LoadedPublicKeys.PublicKeys.Any())
             {
-                return new Status(XfStatusCode.PublicKeyNotFound, "Can't use a public key, no public keys has been provided. See --help for options.");
+                return Task.FromResult(new Status(XfStatusCode.PublicKeyNotFound, "Can't use a public key, no public keys has been provided. See --help for options."));
             }
 
             foreach (EmailAddress email in parameters.Arguments.Select(p => EmailAddress.Parse(p)))
@@ -60,12 +60,12 @@ namespace Xecrets.File.Cli.Operation
                 UserPublicKey? publicKey = parameters.LoadedPublicKeys.PublicKeys.FirstOrDefault(pk => pk.Email == email);
                 if (publicKey == null)
                 {
-                    return new Status(XfStatusCode.PublicKeyNotFound, parameters, "The public key for '{0}' could not be found.".Format(email));
+                    return Task.FromResult(new Status(XfStatusCode.PublicKeyNotFound, parameters, "The public key for '{0}' could not be found.".Format(email)));
                 }
 
                 parameters.SharingEmails.Add(publicKey.Email);
             }
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
     }
 }

@@ -30,14 +30,14 @@ namespace Xecrets.File.Cli.Operation
 {
     internal class NoOperation : IExecutionPhases
     {
-        public Status Dry(Parameters parameters)
+        public Task<Status> DryAsync(Parameters parameters)
         {
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
 
-        public Status Real(Parameters parameters)
+        public Task<Status> RealAsync(Parameters parameters)
         {
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
     }
 }

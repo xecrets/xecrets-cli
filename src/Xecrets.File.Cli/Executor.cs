@@ -39,9 +39,9 @@ namespace Xecrets.File.Cli
             _parameters = parameters;
         }
 
-        public Status Run()
+        public async Task<Status> RunAsync()
         {
-            Status status = Run(new DryRunFactory(_parameters));
+            Status status = await RunAsync(new DryRunFactory(_parameters));
             if ((_parameters.Parser.IsQuiet || _parameters.Parser.Internal) && status.IsSuccess)
             {
                 New<Splash>().Clear();
@@ -59,7 +59,7 @@ namespace Xecrets.File.Cli
 
             ResetParametersForRealRun();
 
-            return Run(new RealRunFactory(_parameters));
+            return await RunAsync(new RealRunFactory(_parameters));
         }
 
         private void ResetParametersForRealRun()
@@ -68,13 +68,13 @@ namespace Xecrets.File.Cli
             _parameters.Overwrite = false;
         }
 
-        private static Status Run(RunFactory factory)
+        private static async Task<Status> RunAsync(RunFactory factory)
         {
             foreach (ParsedOp parsedOp in factory.Parameters.Parser.ParsedOps)
             {
                 factory.Parameters.CurrentOp = parsedOp;
 
-                Status status = factory.Create(parsedOp.OpCode).Do();
+                Status status = await factory.Create(parsedOp.OpCode).DoAsync();
 
                 if (!status.IsSuccess)
                 {

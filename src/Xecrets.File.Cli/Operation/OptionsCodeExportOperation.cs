@@ -33,12 +33,12 @@ namespace Xecrets.File.Cli.Operation
 {
     internal class OptionsCodeExportOperation : IExecutionPhases
     {
-        public Status Dry(Parameters parameters)
+        public Task<Status> DryAsync(Parameters parameters)
         {
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
 
-        public Status Real(Parameters parameters)
+        public Task<Status> RealAsync(Parameters parameters)
         {
             StringBuilder sb = new StringBuilder();
             _ = sb.AppendLine("using System.Collections.Generic;");
@@ -82,7 +82,7 @@ namespace Xecrets.File.Cli.Operation
 
             parameters.Logger.Log(new Status(parameters, sb.ToString()));
 
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
     }
 }

@@ -33,9 +33,9 @@ namespace Xecrets.File.Cli.Operation
 {
     internal class JwtClaimsOperation : IExecutionPhases
     {
-        public Status Dry(Parameters parameters)
+        public Task<Status> DryAsync(Parameters parameters)
         {
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
 
         /// <summary>
@@ -45,14 +45,14 @@ namespace Xecrets.File.Cli.Operation
         /// <param name="parameters"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public Status Real(Parameters parameters)
+        public Task<Status> RealAsync(Parameters parameters)
         {
             string daysText = parameters.Arguments[0];
             string claimsJson = parameters.Arguments[1];
 
             if (!int.TryParse(daysText, out int days))
             {
-                return new Status(XfStatusCode.InvalidDays, $"Can't interpret '{daysText}' as an integer number of days claims are valid.");
+                return Task.FromResult(new Status(XfStatusCode.InvalidDays, $"Can't interpret '{daysText}' as an integer number of days claims are valid."));
             }
             parameters.JwtDaysUntilExpiration = days;
 
@@ -66,10 +66,10 @@ namespace Xecrets.File.Cli.Operation
             }
             catch (Exception ex)
             {
-                return new Status(XfStatusCode.JwtDeserializeError, ex.Message + Environment.NewLine + ex.StackTrace);
+                return Task.FromResult(new Status(XfStatusCode.JwtDeserializeError, ex.Message + Environment.NewLine + ex.StackTrace));
             }
 
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
     }
 }

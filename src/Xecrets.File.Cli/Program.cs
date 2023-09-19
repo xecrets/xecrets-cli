@@ -92,7 +92,7 @@ TypeMap.Register.Singleton<ILicenseCandidates>(() => new LicenseCandidates());
 TypeMap.Register.Singleton<ILicenseExpiration>(() => new LicenseExpirationByBuildTime(new NewLocator()));
 TypeMap.Register.Singleton(() => new LicenseBlurb(new NewLocator(), Resource.UnlicensedOrGplBlurb, Resource.LicensedExpiredDownloadBlurb, Resource.LicensedDownloadBlurb, Resource.LicenseNotValidForProductBlurb));
 
-New<ILicense>().LoadFrom(New<ILicenseCandidates>().CandidatesFromFiles(New<IBuildUtc>().IsGplBuild ? Array.Empty<string>() : Directory.GetFiles(AppContext.BaseDirectory, "*.txt")));
+await New<ILicense>().LoadFromAsync(New<ILicenseCandidates>().CandidatesFromFiles(New<IBuildUtc>().IsGplBuild ? Array.Empty<string>() : Directory.GetFiles(AppContext.BaseDirectory, "*.txt")));
 
 var options = new OptionsParser(Environment.CommandLine);
 var parameters = new Parameters(options);
@@ -102,7 +102,7 @@ try
 {
     using (var executor = new Executor(parameters))
     {
-        status = executor.Run();
+        status = await executor.RunAsync();
 
         if (!status.IsSuccess)
         {
@@ -140,9 +140,11 @@ static async Task WaitForKeyPressedOrTimeoutWhenStartedWithoutArguments(string[]
     }
 
     CancellationTokenSource cancellation = new();
-    await Task.Run(async () => {
+    await Task.Run(async () =>
+    {
         int totalMsWait = 0;
-        while (!Console.IsInputRedirected && !Console.KeyAvailable && totalMsWait < 5000) {
+        while (!Console.IsInputRedirected && !Console.KeyAvailable && totalMsWait < 5000)
+        {
             await Task.Delay(100);
             totalMsWait += 100;
         }

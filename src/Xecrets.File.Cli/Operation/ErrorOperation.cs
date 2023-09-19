@@ -38,14 +38,14 @@ namespace Xecrets.File.Cli.Operation
             _message = message;
         }
 
-        public Status Dry(Parameters parameters)
+        public Task<Status> DryAsync(Parameters parameters)
         {
-            return new Status(XfStatusCode.Error, parameters, _message);
+            return Task.FromResult(new Status(XfStatusCode.Error, parameters, _message));
         }
 
-        public Status Real(Parameters parameters)
+        public Task<Status> RealAsync(Parameters parameters)
         {
-            return new Status(XfStatusCode.Error, parameters, _message);
+            return Task.FromResult(new Status(XfStatusCode.Error, parameters, _message));
         }
     }
 }

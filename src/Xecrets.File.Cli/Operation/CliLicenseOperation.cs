@@ -36,21 +36,21 @@ namespace Xecrets.File.Cli.Operation
 {
     internal class CliLicenseOperation : IExecutionPhases
     {
-        public Status Dry(Parameters parameters)
+        public Task<Status> DryAsync(Parameters parameters)
         {
             ILicenseCandidates licenseCandidates = New<ILicenseCandidates>();
             string candidate = parameters.Arguments[0];
             if (!licenseCandidates.IsCandidate(candidate))
             {
-                return new Status(Public.XfStatusCode.InvalidLicenseFormat, "A license must look like a JWT string.");
+                return Task.FromResult(new Status(Public.XfStatusCode.InvalidLicenseFormat, "A license must look like a JWT string."));
             }
 
             ILicense license = New<ILicense>();
-            license.LoadFrom(new string[] { parameters.Arguments[0] });
+            license.LoadFromAsync(new string[] { parameters.Arguments[0] });
 
             if (license.Status() == LicenseStatus.Unlicensed)
             {
-                return new Status(Public.XfStatusCode.InvalidLicenseSignature, "The license was signed with an unknown key.");
+                return Task.FromResult(new Status(Public.XfStatusCode.InvalidLicenseSignature, "The license was signed with an unknown key."));
             }
 
             if (license.Subscription().Product != "cli")
@@ -58,12 +58,12 @@ namespace Xecrets.File.Cli.Operation
                 TypeMap.Register.Singleton<ILicenseExpiration>(() => new LicenseExpirationByCurrentTime());
             }
 
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
 
-        public Status Real(Parameters parameters)
+        public Task<Status> RealAsync(Parameters parameters)
         {
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
     }
 }

@@ -28,6 +28,6 @@ namespace Xecrets.File.Cli.Abstractions
 {
     internal interface IOperation
     {
-        public Status Do();
+        public Task<Status> DoAsync();
     }
 }

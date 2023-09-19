@@ -29,9 +29,9 @@ namespace Xecrets.File.Licensing.Abstractions
 {
     public interface ILicense
     {
-        void LoadFrom(IEnumerable<string> licenseCandidates);
+        Task LoadFromAsync(IEnumerable<string> licenseCandidates);
 
-        string GetBestValidLicenseToken(IEnumerable<string> candidates);
+        Task<string> GetBestValidLicenseTokenAsync(IEnumerable<string> candidates);
 
         string LicenseToken { get; }
 

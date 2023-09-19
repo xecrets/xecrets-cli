@@ -37,36 +37,36 @@ namespace Xecrets.File.Cli.Operation
     {
         protected abstract (Status, IStandardIoDataStore) ToStore(Parameters parameters, string originalFileName);
 
-        public Status Dry(Parameters parameters)
+        public Task<Status> DryAsync(Parameters parameters)
         {
             if (!parameters.Identities.Any())
             {
-                return new Status(XfStatusCode.NoPassword, "A password must be provided to decrypt files.");
+                return Task.FromResult(new Status(XfStatusCode.NoPassword, "A password must be provided to decrypt files."));
             }
 
             IStandardIoDataStore fromStore = New<IStandardIoDataStore>(parameters.From);
             if (!New<IFileVerify>().CanReadFromFile(fromStore))
             {
-                return new Status(XfStatusCode.CannotRead, parameters, "Can't read from '{0}'.".Format(fromStore.Name));
+                return Task.FromResult(new Status(XfStatusCode.CannotRead, parameters, "Can't read from '{0}'.".Format(fromStore.Name)));
             }
 
             (Status status, IStandardIoDataStore toStore) = ToStore(parameters, "placeholder.tmp");
             if (!status.IsSuccess)
             {
-                return status;
+                return Task.FromResult(status);
             }
 
             if (!toStore.IsStdout && !New<IFileVerify>().CanWriteToFolder(toStore.Container))
             {
-                return new Status(XfStatusCode.CannotWrite, parameters, "Can't write to '{0}'".Format(toStore.Container.Name));
+                return Task.FromResult(new Status(XfStatusCode.CannotWrite, parameters, "Can't write to '{0}'".Format(toStore.Container.Name)));
             }
 
             parameters.TotalsTracker.AddWorkItem(fromStore.Length());
 
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
 
-        public Status Real(Parameters parameters)
+        public Task<Status> RealAsync(Parameters parameters)
         {
             IStandardIoDataStore fromStore = New<IStandardIoDataStore>(parameters.From);
 
@@ -75,13 +75,13 @@ namespace Xecrets.File.Cli.Operation
             {
                 if (!decryption.HasValidPassphrase)
                 {
-                    return new Status(XfStatusCode.InvalidPassword, parameters, "Could not decrypt '{0}', no suitable password or private key.".Format(parameters.From));
+                    return Task.FromResult(new Status(XfStatusCode.InvalidPassword, parameters, "Could not decrypt '{0}', no suitable password or private key.".Format(parameters.From)));
                 }
 
                 (Status status, IStandardIoDataStore toStore) = ToStore(parameters, decryption.OriginalFileName);
                 if (!status.IsSuccess)
                 {
-                    return status;
+                    return Task.FromResult(status);
                 }
 
                 decryption.DecryptTo(toStore);
@@ -96,7 +96,7 @@ namespace Xecrets.File.Cli.Operation
                 });
             }
 
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
     }
 }

@@ -45,37 +45,37 @@ namespace Xecrets.File.Cli.Operation
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public Status Dry(Parameters parameters)
+        public Task<Status> DryAsync(Parameters parameters)
         {
             var signedTokenStore = New<IStandardIoDataStore>(parameters.File);
             if (!New<IFileVerify>().CanWriteToFile(signedTokenStore))
             {
-                return new Status(XfStatusCode.CannotWrite, parameters, "Can't write to '{0}'.".Format(signedTokenStore.Name));
+                return Task.FromResult(new Status(XfStatusCode.CannotWrite, parameters, "Can't write to '{0}'.".Format(signedTokenStore.Name)));
             }
 
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
 
-        public Status Real(Parameters parameters)
+        public Task<Status> RealAsync(Parameters parameters)
         {
             if (parameters.JwtIssuer.Length == 0)
             {
-                return new Status(XfStatusCode.MissingArgument, "You must specify the issuer of the signed token before the signing operation.");
+                return Task.FromResult(new Status(XfStatusCode.MissingArgument, "You must specify the issuer of the signed token before the signing operation."));
             }
 
             if (parameters.JwtAudience.Length == 0)
             {
-                return new Status(XfStatusCode.MissingArgument, "You must specify the audience of the signed token before the signing operation.");
+                return Task.FromResult(new Status(XfStatusCode.MissingArgument, "You must specify the audience of the signed token before the signing operation."));
             }
 
             if (parameters.JwtDaysUntilExpiration <= 0)
             {
-                return new Status(XfStatusCode.MissingArgument, "You must specify the claims of the signed token before the signing operation.");
+                return Task.FromResult(new Status(XfStatusCode.MissingArgument, "You must specify the claims of the signed token before the signing operation."));
             }
 
             if (!parameters.JwtClaims.Any())
             {
-                return new Status(XfStatusCode.MissingArgument, "You must specify the claims of the signed token before the signing operation.");
+                return Task.FromResult(new Status(XfStatusCode.MissingArgument, "You must specify the claims of the signed token before the signing operation."));
             }
 
             var now = DateTime.UtcNow;
@@ -100,7 +100,7 @@ namespace Xecrets.File.Cli.Operation
                 writer.Write(token);
             }
 
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
     }
 }

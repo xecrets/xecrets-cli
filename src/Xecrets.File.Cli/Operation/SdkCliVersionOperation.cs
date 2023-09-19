@@ -31,18 +31,18 @@ namespace Xecrets.File.Cli.Operation
 {
     internal class SdkCliVersionOperation : IExecutionPhases
     {
-        public Status Dry(Parameters parameters)
+        public Task<Status> DryAsync(Parameters parameters)
         {
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
 
-        public Status Real(Parameters parameters)
+        public Task<Status> RealAsync(Parameters parameters)
         {
             parameters.Logger.Log(new Status(parameters, XfExportVersion.CliVersion.ToString())
             {
                 CliVersion = XfExportVersion.CliVersion.ToString(),
             });
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
     }
 }

@@ -29,8 +29,8 @@ namespace Xecrets.File.Cli.Abstractions
 {
     internal interface IExecutionPhases
     {
-        public Status Dry(Parameters parameters);
+        public Task<Status> DryAsync(Parameters parameters);
 
-        public Status Real(Parameters parameters);
+        public Task<Status> RealAsync(Parameters parameters);
     }
 }

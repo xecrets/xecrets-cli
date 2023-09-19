@@ -96,12 +96,12 @@ namespace Xecrets.File.Cli.Run
                 _opCode = opCode;
             }
 
-            public Status Do()
+            public async Task<Status> DoAsync()
             {
                 Status status;
                 try
                 {
-                    status = _factory.Parameters.IsDryRun ? _methods.Dry(_factory.Parameters) : _methods.Real(_factory.Parameters);
+                    status = _factory.Parameters.IsDryRun ? await _methods.DryAsync(_factory.Parameters) : await _methods.RealAsync(_factory.Parameters);
                 }
                 catch (XecretsFileCliException xfcex)
                 {

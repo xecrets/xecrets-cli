@@ -33,19 +33,19 @@ namespace Xecrets.File.Cli.Operation
 {
     internal class CliDebugBreakOperation : IExecutionPhases
     {
-        public Status Dry(Parameters parameters)
+        public Task<Status> DryAsync(Parameters parameters)
         {
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
 
-        public Status Real(Parameters parameters)
+        public Task<Status> RealAsync(Parameters parameters)
         {
             if (Debugger.Launch())
             {
-                return Status.Success;
+                return Task.FromResult(Status.Success);
             }
 
-            return new Status(XfStatusCode.DebugBreakFailed, "Failed to launch and attach to a debugger.");
+            return Task.FromResult(new Status(XfStatusCode.DebugBreakFailed, "Failed to launch and attach to a debugger."));
         }
     }
 }

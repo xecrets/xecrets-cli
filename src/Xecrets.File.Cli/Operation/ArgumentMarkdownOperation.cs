@@ -25,7 +25,6 @@
 
 using System.Text;
 
-using NDesk.Options;
 using Xecrets.File.Cli.Abstractions;
 using Xecrets.File.Cli.Run;
 
@@ -33,12 +32,12 @@ namespace Xecrets.File.Cli.Operation
 {
     internal class ArgumentMarkdownOperation : IExecutionPhases
     {
-        public Status Dry(Parameters parameters)
+        public Task<Status> DryAsync(Parameters parameters)
         {
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
 
-        public Status Real(Parameters parameters)
+        public Task<Status> RealAsync(Parameters parameters)
         {
             StringBuilder descriptions = new StringBuilder();
             StringBuilder synopsis = new StringBuilder();
@@ -63,7 +62,7 @@ namespace Xecrets.File.Cli.Operation
             parameters.Logger.Log(new Status(parameters, synopsis.ToString()));
             parameters.Logger.Log(string.Empty);
             parameters.Logger.Log(new Status(parameters, descriptions.ToString()));
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
     }
 }

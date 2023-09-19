@@ -33,16 +33,16 @@ namespace Xecrets.File.Cli.Operation
     {
         protected abstract LogStyle UpdateLogStyle(LogStyle currentLogStyle);
 
-        public Status Dry(Parameters parameters)
+        public Task<Status> DryAsync(Parameters parameters)
         {
             parameters.TotalsTracker.LogStyle = parameters.Parser.IsQuiet ? LogStyle.None : UpdateLogStyle(parameters.TotalsTracker.LogStyle);
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
 
-        public Status Real(Parameters parameters)
+        public Task<Status> RealAsync(Parameters parameters)
         {
             parameters.TotalsTracker.LogStyle = parameters.Parser.IsQuiet ? LogStyle.None : UpdateLogStyle(parameters.TotalsTracker.LogStyle);
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
     }
 }

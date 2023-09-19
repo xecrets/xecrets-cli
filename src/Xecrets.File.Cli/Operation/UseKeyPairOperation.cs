@@ -23,8 +23,6 @@
 
 #endregion Coypright and GPL License
 
-using System.Security.Cryptography.X509Certificates;
-
 using AxCrypt.Abstractions;
 using AxCrypt.Core.Crypto;
 using AxCrypt.Core.Crypto.Asymmetric;
@@ -42,21 +40,21 @@ namespace Xecrets.File.Cli.Operation
 {
     internal class UseKeyPairOperation : IExecutionPhases
     {
-        public Status Dry(Parameters parameters)
+        public Task<Status> DryAsync(Parameters parameters)
         {
             if (!parameters.Identities.Any())
             {
-                return new Status(XfStatusCode.NoPassword, "A password must be provided to access an encrypted key pair file.");
+                return Task.FromResult(new Status(XfStatusCode.NoPassword, "A password must be provided to access an encrypted key pair file."));
             }
             var fromStore = New<IStandardIoDataStore>(parameters.From);
             if (!New<IFileVerify>().CanReadFromFile(fromStore))
             {
-                return new Status(XfStatusCode.CannotRead, "Can't read from file '{0}'.".Format(fromStore.Name));
+                return Task.FromResult(new Status(XfStatusCode.CannotRead, "Can't read from file '{0}'.".Format(fromStore.Name)));
             }
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
 
-        public Status Real(Parameters parameters)
+        public Task<Status> RealAsync(Parameters parameters)
         {
             byte[] keyPairFile = New<IDataStore>(parameters.From).ToArray();
             UserKeyPair? keyPair = null;
@@ -76,7 +74,7 @@ namespace Xecrets.File.Cli.Operation
 
             if (keyPair == null)
             {
-                return new Status(XfStatusCode.InvalidPassword, "No valid password was provided to decrypt the key pair.");
+                return Task.FromResult(new Status(XfStatusCode.InvalidPassword, "No valid password was provided to decrypt the key pair."));
             }
 
             identities[index] = new LogOnIdentity(identity!.KeyPairs.Concat(new UserKeyPair[] { keyPair }), identity!.Passphrase);
@@ -92,7 +90,7 @@ namespace Xecrets.File.Cli.Operation
 
             parameters.SharingEmails.Add(userPublicKey.Email);
 
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
     }
 }

@@ -23,7 +23,6 @@
 
 #endregion Coypright and GPL License
 
-
 using Xecrets.File.Cli.Abstractions;
 using Xecrets.File.Cli.Run;
 
@@ -31,16 +30,16 @@ namespace Xecrets.File.Cli.Operation
 {
     internal class NoOverwriteOperation : IExecutionPhases
     {
-        public Status Dry(Parameters parameters)
+        public Task<Status> DryAsync(Parameters parameters)
         {
             parameters.Overwrite = false;
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
 
-        public Status Real(Parameters parameters)
+        public Task<Status> RealAsync(Parameters parameters)
         {
             parameters.Overwrite = false;
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
     }
 }

@@ -46,24 +46,24 @@ namespace Xecrets.File.Cli.Operation
     /// <returns></returns>
     internal class JwtVerifyOperation : IExecutionPhases
     {
-        public Status Dry(Parameters parameters)
+        public Task<Status> DryAsync(Parameters parameters)
         {
             var publicPemStore = New<IStandardIoDataStore>(parameters.Arguments[0]);
             if (!New<IFileVerify>().CanReadFromFile(publicPemStore))
             {
-                return new Status(XfStatusCode.CannotRead, "Can't read from file '{0}'.".Format(publicPemStore.Name));
+                return Task.FromResult(new Status(XfStatusCode.CannotRead, "Can't read from file '{0}'.".Format(publicPemStore.Name)));
             }
 
             var signedTokenStore = New<IStandardIoDataStore>(parameters.Arguments[1]);
             if (!New<IFileVerify>().CanReadFromFile(signedTokenStore))
             {
-                return new Status(XfStatusCode.CannotRead, "Can't read from file '{0}'.".Format(signedTokenStore.Name));
+                return Task.FromResult(new Status(XfStatusCode.CannotRead, "Can't read from file '{0}'.".Format(signedTokenStore.Name)));
             }
 
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
 
-        public Status Real(Parameters parameters)
+        public async Task<Status> RealAsync(Parameters parameters)
         {
             if (parameters.JwtIssuer.Length == 0)
             {
@@ -94,7 +94,7 @@ namespace Xecrets.File.Cli.Operation
             var key = ECDsa.Create();
             key.ImportFromPem(publicPem);
 
-            TokenValidationResult result = handler.ValidateToken(signedToken, new TokenValidationParameters
+            TokenValidationResult result = await handler.ValidateTokenAsync(signedToken, new TokenValidationParameters
             {
                 ValidIssuer = parameters.JwtIssuer,
                 ValidAudience = parameters.JwtAudience,

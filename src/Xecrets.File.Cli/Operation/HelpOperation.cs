@@ -33,12 +33,12 @@ namespace Xecrets.File.Cli.Operation
 {
     internal class HelpOperation : IExecutionPhases
     {
-        public Status Dry(Parameters parameters)
+        public Task<Status> DryAsync(Parameters parameters)
         {
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
 
-        public Status Real(Parameters parameters)
+        public Task<Status> RealAsync(Parameters parameters)
         {
             parameters.HelpLevel++;
 
@@ -84,7 +84,7 @@ namespace Xecrets.File.Cli.Operation
             parameters.Logger.Log(new Status(parameters, m));
             parameters.Logger.Log(string.Empty);
 
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
     }
 }

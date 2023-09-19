@@ -41,28 +41,28 @@ namespace Xecrets.File.Cli.Operation
 {
     internal class CreateKeyPairOperation : IExecutionPhases
     {
-        public Status Dry(Parameters parameters)
+        public Task<Status> DryAsync(Parameters parameters)
         {
             if (!parameters.Identities.Any())
             {
-                return new Status(XfStatusCode.NoPassword, parameters, "A password must be provided to create a key pair.");
+                return Task.FromResult(new Status(XfStatusCode.NoPassword, parameters, "A password must be provided to create a key pair."));
             }
 
             if (!EmailAddress.TryParse(parameters.Email, out EmailAddress _))
             {
-                return new Status(XfStatusCode.InvalidEmail, parameters, "'{0}' is not a valid email address.".Format(parameters.Email));
+                return Task.FromResult(new Status(XfStatusCode.InvalidEmail, parameters, "'{0}' is not a valid email address.".Format(parameters.Email)));
             }
 
             var toStore = New<IStandardIoDataStore>(parameters.To);
             if (!New<IFileVerify>().CanWriteToFile(toStore))
             {
-                return new Status(XfStatusCode.CannotWrite, parameters, "The file path '{0}' cannot be written to.".Format(toStore.Name));
+                return Task.FromResult(new Status(XfStatusCode.CannotWrite, parameters, "The file path '{0}' cannot be written to.".Format(toStore.Name)));
             }
 
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
 
-        public Status Real(Parameters parameters)
+        public Task<Status> RealAsync(Parameters parameters)
         {
             parameters.Logger.Log(XfOpCode.Progressing, new Status(parameters, "Generating a key pair may take some time, please be patient."));
 
@@ -81,7 +81,7 @@ namespace Xecrets.File.Cli.Operation
 
             parameters.Logger.Log(new Status(parameters, $"Created a key pair for '{parameters.CurrentOp.Email}' in '{parameters.CurrentOp.To}'."));
 
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
     }
 }

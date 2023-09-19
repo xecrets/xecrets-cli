@@ -41,18 +41,18 @@ namespace Xecrets.File.Cli.Operation
     /// <exception cref="InvalidOperationException"></exception>
     internal class JwtUseKeyPairOperation : IExecutionPhases
     {
-        public Status Dry(Parameters parameters)
+        public Task<Status> DryAsync(Parameters parameters)
         {
             var privatePemStore = New<IStandardIoDataStore>(parameters.From);
             if (!New<IFileVerify>().CanReadFromFile(privatePemStore))
             {
-                return new Status(XfStatusCode.CannotRead, "Can't read from file '{0}'.".Format(privatePemStore.Name));
+                return Task.FromResult(new Status(XfStatusCode.CannotRead, "Can't read from file '{0}'.".Format(privatePemStore.Name)));
             }
 
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
 
-        public Status Real(Parameters parameters)
+        public Task<Status> RealAsync(Parameters parameters)
         {
             var privatePemStore = New<IStandardIoDataStore>(parameters.From);
             string privatePem;
@@ -62,7 +62,7 @@ namespace Xecrets.File.Cli.Operation
             }
             parameters.JwtPrivateKeyPem = privatePem;
 
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
     }
 }

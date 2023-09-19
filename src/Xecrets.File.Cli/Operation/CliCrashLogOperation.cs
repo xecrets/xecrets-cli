@@ -30,27 +30,27 @@ namespace Xecrets.File.Cli.Operation
 {
     internal class CliCrashLogOperation : IExecutionPhases
     {
-        public Status Dry(Parameters parameters)
+        public Task<Status> DryAsync(Parameters parameters)
         {
             string crashLogFullName = parameters.Arguments[0];
             if (Directory.Exists(crashLogFullName))
             {
-                return new Status(Public.XfStatusCode.NotAFile, $"Crash log file path '{crashLogFullName}' is a folder.");
+                return Task.FromResult(new Status(Public.XfStatusCode.NotAFile, $"Crash log file path '{crashLogFullName}' is a folder."));
             }
 
             string directory = Path.GetDirectoryName(crashLogFullName) ?? string.Empty;
             if (directory.Length > 0 && !Directory.Exists(directory))
             {
-                return new Status(Public.XfStatusCode.NotAFolder, $"Crash log file folder '{directory}' does not exist.");
+                return Task.FromResult(new Status(Public.XfStatusCode.NotAFolder, $"Crash log file folder '{directory}' does not exist."));
             }
 
             parameters.CrashLogFile = crashLogFullName;
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
 
-        public Status Real(Parameters parameters)
+        public Task<Status> RealAsync(Parameters parameters)
         {
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
     }
 }

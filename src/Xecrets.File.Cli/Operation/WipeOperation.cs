@@ -37,22 +37,22 @@ namespace Xecrets.File.Cli.Operation
 {
     internal class WipeOperation : IExecutionPhases
     {
-        public Status Dry(Parameters parameters)
+        public Task<Status> DryAsync(Parameters parameters)
         {
             foreach (string file in parameters.Arguments)
             {
                 var fileStore = New<IStandardIoDataStore>(file);
                 if (!New<IFileVerify>().CanDeleteFile(fileStore))
                 {
-                    return new Status(XfStatusCode.CannotDelete, parameters, "Can't delete '{0}'.".Format(fileStore.Name));
+                    return Task.FromResult(new Status(XfStatusCode.CannotDelete, parameters, "Can't delete '{0}'.".Format(fileStore.Name)));
                 }
 
                 parameters.TotalsTracker.AddWorkItem(fileStore.Length());
             }
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
 
-        public Status Real(Parameters parameters)
+        public Task<Status> RealAsync(Parameters parameters)
         {
             var progress = parameters.Logger.Progress;
             progress.NotifyLevelStart();
@@ -86,7 +86,7 @@ namespace Xecrets.File.Cli.Operation
 
             parameters.Logger.Log(new Status(parameters, $"Securely wiped '{parameters.Arguments.Last()}'."));
 
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
     }
 }

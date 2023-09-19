@@ -30,16 +30,16 @@ namespace Xecrets.File.Cli.Operation
 {
     internal class OverwriteOperation : IExecutionPhases
     {
-        public Status Dry(Parameters parameters)
+        public Task<Status> DryAsync(Parameters parameters)
         {
             parameters.Overwrite = true;
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
 
-        public Status Real(Parameters parameters)
+        public Task<Status> RealAsync(Parameters parameters)
         {
             parameters.Overwrite = true;
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
     }
 }

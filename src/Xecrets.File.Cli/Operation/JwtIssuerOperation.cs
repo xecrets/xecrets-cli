@@ -35,21 +35,21 @@ namespace Xecrets.File.Cli.Operation
 {
     internal class JwtIssuerOperation : IExecutionPhases
     {
-        public Status Dry(Parameters parameters)
+        public Task<Status> DryAsync(Parameters parameters)
         {
             if (!EmailAddress.TryParse(parameters.Email, out EmailAddress _))
             {
-                return new Status(XfStatusCode.InvalidEmail, "'{0}' is not a valid email.".Format(parameters.Email));
+                return Task.FromResult(new Status(XfStatusCode.InvalidEmail, "'{0}' is not a valid email.".Format(parameters.Email)));
             }
 
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
 
-        public Status Real(Parameters parameters)
+        public Task<Status> RealAsync(Parameters parameters)
         {
             parameters.JwtIssuer = parameters.Email;
 
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
     }
 }

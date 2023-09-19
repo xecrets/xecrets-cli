@@ -35,12 +35,12 @@ namespace Xecrets.File.Cli.Operation
 {
     internal class CliPlatformOperation : IExecutionPhases
     {
-        public Status Dry(Parameters parameters)
+        public Task<Status> DryAsync(Parameters parameters)
         {
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
 
-        public Status Real(Parameters parameters)
+        public Task<Status> RealAsync(Parameters parameters)
         {
             string version = GetType().Assembly.GetName().Version?.ToString() ?? "0.0.0.0";
             string platform = New<IRuntimeEnvironment>().Platform.ToString();
@@ -49,7 +49,7 @@ namespace Xecrets.File.Cli.Operation
                 Platform = platform,
                 ProgramVersion = version,
             });
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
     }
 }

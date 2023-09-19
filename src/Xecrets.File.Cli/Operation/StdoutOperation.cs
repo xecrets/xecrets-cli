@@ -33,17 +33,17 @@ namespace Xecrets.File.Cli.Operation
 {
     internal class StdoutOperation : IExecutionPhases
     {
-        public Status Dry(Parameters parameters)
+        public Task<Status> DryAsync(Parameters parameters)
         {
             TextWriter writer = parameters.Flag ? Console.Out : Console.Error;
             TypeMap.Register.Singleton(() => new ConsoleOut(writer));
             parameters.IsStdoutLog = true;
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
 
-        public Status Real(Parameters parameters)
+        public Task<Status> RealAsync(Parameters parameters)
         {
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
     }
 }

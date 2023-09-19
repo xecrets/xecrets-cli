@@ -38,27 +38,27 @@ namespace Xecrets.File.Cli.Operation
 {
     internal class ExportPublicKeyOperation : IExecutionPhases
     {
-        public Status Dry(Parameters parameters)
+        public Task<Status> DryAsync(Parameters parameters)
         {
             if (!EmailAddress.TryParse(parameters.CurrentOp.Email, out EmailAddress _))
             {
-                return new Status(XfStatusCode.InvalidEmail, "'{0}' is not a valid email.".Format(parameters.CurrentOp.Email));
+                return Task.FromResult(new Status(XfStatusCode.InvalidEmail, "'{0}' is not a valid email.".Format(parameters.CurrentOp.Email)));
             }
             var toStore = New<IStandardIoDataStore>(parameters.To);
             if (!New<IFileVerify>().CanWriteToFile(toStore))
             {
-                return new Status(XfStatusCode.CannotWrite, parameters, "Can't write to file '{0}'.".Format(toStore.Name));
+                return Task.FromResult(new Status(XfStatusCode.CannotWrite, parameters, "Can't write to file '{0}'.".Format(toStore.Name)));
             }
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
 
-        public Status Real(Parameters parameters)
+        public Task<Status> RealAsync(Parameters parameters)
         {
             EmailAddress email = EmailAddress.Parse(parameters.Email);
             UserPublicKey? userPublicKey = parameters.PublicKeys.FirstOrDefault(pk => pk.Email == email);
             if (userPublicKey == null)
             {
-                return new Status(XfStatusCode.PublicKeyNotFound, "Did not find a public key for '{0}' to export.".Format(parameters.CurrentOp.Email));
+                return Task.FromResult(new Status(XfStatusCode.PublicKeyNotFound, "Did not find a public key for '{0}' to export.".Format(parameters.CurrentOp.Email)));
             }
 
             var publicKeyFile = New<IDataStore>(parameters.CurrentOp.To);
@@ -70,7 +70,7 @@ namespace Xecrets.File.Cli.Operation
 
 
             parameters.Logger.Log(new Status(parameters, $"Extracted a public key for '{parameters.CurrentOp.Email}' to '{parameters.CurrentOp.To}'."));
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
     }
 }

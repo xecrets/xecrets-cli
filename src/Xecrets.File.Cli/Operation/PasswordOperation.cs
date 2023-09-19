@@ -32,15 +32,15 @@ namespace Xecrets.File.Cli.Operation
 {
     internal class PasswordOperation : IExecutionPhases
     {
-        public Status Dry(Parameters parameters)
+        public Task<Status> DryAsync(Parameters parameters)
         {
             parameters.Identities.Add(new LogOnIdentity(new Passphrase(parameters.CurrentOp.Arguments[0])));
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
 
-        public Status Real(Parameters parameters)
+        public Task<Status> RealAsync(Parameters parameters)
         {
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
     }
 }

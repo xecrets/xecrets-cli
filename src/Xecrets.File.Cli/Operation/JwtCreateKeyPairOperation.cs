@@ -38,41 +38,41 @@ namespace Xecrets.File.Cli.Operation
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public Status Dry(Parameters parameters)
+        public Task<Status> DryAsync(Parameters parameters)
         {
             IStandardIoDataStore privateFreeStore = parameters.File.FindFree(parameters);
             if (!privateFreeStore.VerifyCanWrite(parameters, out Status status))
             {
-                return status;
+                return Task.FromResult(status);
             }
 
             if (parameters.Arguments.Count == 1)
             {
-                return Status.Success;
+                return Task.FromResult(Status.Success);
             }
 
             IStandardIoDataStore publicFreeStore = parameters.Arguments[1].FindFree(parameters);
             if (!publicFreeStore.VerifyCanWrite(parameters, out status))
             {
-                return status;
+                return Task.FromResult(status);
             }
 
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
 
-        public Status Real(Parameters parameters)
+        public Task<Status> RealAsync(Parameters parameters)
         {
             IStandardIoDataStore privateFreeStore = parameters.File.FindFree(parameters);
             if (!privateFreeStore.VerifyCanWrite(parameters, out Status status))
             {
-                return status;
+                return Task.FromResult(status);
             }
 
             ECDsa key = ECDsa.Create(ECCurve.NamedCurves.nistP256);
             Span<char> keySpan = new Span<char>(new char[500]);
             if (!key.TryExportPkcs8PrivateKeyPem(keySpan, out int charsWritten))
             {
-                return new Status(Public.XfStatusCode.InternalError, "Couldn't export the PKCS8 Private Key.");
+                return Task.FromResult(new Status(Public.XfStatusCode.InternalError, "Couldn't export the PKCS8 Private Key."));
             }
 
             using (StreamWriter writer = new(privateFreeStore.OpenWrite()))
@@ -82,13 +82,13 @@ namespace Xecrets.File.Cli.Operation
 
             if (parameters.Arguments.Count == 1)
             {
-                return Status.Success;
+                return Task.FromResult(Status.Success);
             }
 
             IStandardIoDataStore publicFreeStore = parameters.Arguments[1].FindFree(parameters);
             if (!publicFreeStore.VerifyCanWrite(parameters, out status))
             {
-                return status;
+                return Task.FromResult(status);
             }
 
             string publicPem = key.ExportSubjectPublicKeyInfoPem();
@@ -101,7 +101,7 @@ namespace Xecrets.File.Cli.Operation
                 writer.Write(publicPem);
             }
 
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
     }
 }

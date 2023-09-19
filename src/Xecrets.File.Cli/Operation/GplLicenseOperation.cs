@@ -31,17 +31,17 @@ namespace Xecrets.File.Cli.Operation
 {
     internal class GplLicenseOperation : IExecutionPhases
     {
-        public Status Dry(Parameters parameters)
+        public Task<Status> DryAsync(Parameters parameters)
         {
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
 
-        public Status Real(Parameters parameters)
+        public Task<Status> RealAsync(Parameters parameters)
         {
             parameters.Logger.Log(new Status(parameters, Resource.gpl_3_0));
             parameters.Logger.Log(string.Empty);
 
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
     }
 }

@@ -28,7 +28,6 @@ using System.Text;
 using AxCrypt.Abstractions;
 using AxCrypt.Core.Crypto.Asymmetric;
 using AxCrypt.Core.IO;
-using AxCrypt.Core.Session;
 
 using Xecrets.File.Cli.Abstractions;
 using Xecrets.File.Cli.Public;
@@ -40,20 +39,20 @@ namespace Xecrets.File.Cli.Operation
 {
     internal class LoadPublicKeyOperation : IExecutionPhases
     {
-        public Status Dry(Parameters parameters)
+        public Task<Status> DryAsync(Parameters parameters)
         {
             foreach (string from in parameters.CurrentOp.Arguments)
             {
                 var fromStore = New<IStandardIoDataStore>(from);
                 if (!New<IFileVerify>().CanReadFromFile(fromStore))
                 {
-                    return new Status(XfStatusCode.CannotRead, parameters, "Can't read from file '{0}'.".Format(fromStore.Name));
+                    return Task.FromResult(new Status(XfStatusCode.CannotRead, parameters, "Can't read from file '{0}'.".Format(fromStore.Name)));
                 }
             }
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
 
-        public Status Real(Parameters parameters)
+        public Task<Status> RealAsync(Parameters parameters)
         {
             foreach (string from in parameters.CurrentOp.Arguments)
             {
@@ -68,13 +67,13 @@ namespace Xecrets.File.Cli.Operation
                 UserPublicKey? userPublicKey = New<IStringSerializer>().Deserialize<UserPublicKey>(userPublicKeyJson);
                 if (userPublicKey == null)
                 {
-                    return new Status(XfStatusCode.PublicKeyNotFound, parameters, "Can't find a public key in '{0}'.".Format(fromStore.Name));
+                    return Task.FromResult(new Status(XfStatusCode.PublicKeyNotFound, parameters, "Can't find a public key in '{0}'.".Format(fromStore.Name)));
                 }
                 parameters.LoadedPublicKeys.AddOrReplace(userPublicKey);
                 parameters.Logger.Log(new Status(parameters, "Loaded a public key for '{0}' from '{1}'.".Format(userPublicKey.Email, parameters.From)));
             }
 
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
     }
 }

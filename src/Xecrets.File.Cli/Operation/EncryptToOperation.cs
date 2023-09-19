@@ -26,7 +26,6 @@
 using AxCrypt.Abstractions;
 using AxCrypt.Core.Crypto;
 using AxCrypt.Core.Crypto.Asymmetric;
-using AxCrypt.Core.IO;
 
 using Xecrets.File.Cli.Abstractions;
 using Xecrets.File.Cli.Public;
@@ -39,41 +38,41 @@ namespace Xecrets.File.Cli.Operation
 {
     internal class EncryptToOperation : IExecutionPhases
     {
-        public Status Dry(Parameters parameters)
+        public Task<Status> DryAsync(Parameters parameters)
         {
             if (!parameters.Identities.Where(id => id.Passphrase != Passphrase.Empty).Any())
             {
-                return new Status(XfStatusCode.NoPassword, "A password must be provided to encrypt files.");
+                return Task.FromResult(new Status(XfStatusCode.NoPassword, "A password must be provided to encrypt files."));
             }
 
             IStandardIoDataStore toFreeStore = parameters.To.FindFree(parameters);
             if (!toFreeStore.VerifyCanWrite(parameters, out Status status))
             {
-                return status;
+                return Task.FromResult(status);
             }
 
             IStandardIoDataStore fromStore = New<IStandardIoDataStore>(parameters.From);
             if (fromStore.IsStdIo && !fromStore.IsNamedStdIo)
             {
-                return new Status(XfStatusCode.InvalidOption, "Encryption is not supported from an unnamed standard input stream.");
+                return Task.FromResult(new Status(XfStatusCode.InvalidOption, "Encryption is not supported from an unnamed standard input stream."));
             }
 
             if (!New<IFileVerify>().CanReadFromFile(fromStore))
             {
-                return new Status(XfStatusCode.CannotRead, "Can't read from '{0}'.".Format(fromStore.Name));
+                return Task.FromResult(new Status(XfStatusCode.CannotRead, "Can't read from '{0}'.".Format(fromStore.Name)));
             }
             if (!fromStore.IsEncryptable)
             {
-                return new Status(XfStatusCode.FileUnavailable, "Encryption of '{0}' is not supported, it may be a system file or hidden.".Format(parameters.CurrentOp.From));
+                return Task.FromResult(new Status(XfStatusCode.FileUnavailable, "Encryption of '{0}' is not supported, it may be a system file or hidden.".Format(parameters.CurrentOp.From)));
             }
 
             if (!LicenseAllowed(fromStore))
             {
-                return new Status(XfStatusCode.Unlicensed, "Encryption of '{0}' is not allowed, a download subscription is required for files > 1MB.".Format(parameters.CurrentOp.From));
+                return Task.FromResult(new Status(XfStatusCode.Unlicensed, "Encryption of '{0}' is not allowed, a download subscription is required for files > 1MB.".Format(parameters.CurrentOp.From)));
             }
 
             parameters.TotalsTracker.AddWorkItem(fromStore.Length());
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
 
         private static bool LicenseAllowed(IStandardIoDataStore fromStore)
@@ -82,7 +81,7 @@ namespace Xecrets.File.Cli.Operation
             {
                 return true;
             }
-            if (fromStore.Length() <= 1024*124)
+            if (fromStore.Length() <= 1024 * 124)
             {
                 return true;
             }
@@ -94,12 +93,12 @@ namespace Xecrets.File.Cli.Operation
             return false;
         }
 
-        public Status Real(Parameters parameters)
+        public Task<Status> RealAsync(Parameters parameters)
         {
             IStandardIoDataStore toFreeStore = parameters.To.FindFree(parameters);
             if (!toFreeStore.VerifyCanWrite(parameters, out Status status))
             {
-                return status;
+                return Task.FromResult(status);
             }
 
             IStandardIoDataStore fromStore = New<IStandardIoDataStore>(parameters.From);
@@ -113,7 +112,7 @@ namespace Xecrets.File.Cli.Operation
             }
 
             parameters.Logger.Log(new Status(parameters, "Encrypted '{0}' to '{1}'.".Format(parameters.From, parameters.To)));
-            return Status.Success;
+            return Task.FromResult(Status.Success);
         }
     }
 }
