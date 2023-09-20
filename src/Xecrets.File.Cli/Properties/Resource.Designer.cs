@@ -83,6 +83,15 @@ namespace Xecrets.File.Cli.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please support development and buy a download subscription. See https://www.axantum.com/ ..
+        /// </summary>
+        internal static string GplBlurb {
+            get {
+                return ResourceManager.GetString("GplBlurb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to *** IMPORTANT ***
         ///
         ///Always test on copies of non-essential files before using this program on real data. Encryption is
@@ -111,7 +120,7 @@ namespace Xecrets.File.Cli.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Download subscription for {licensee} valid to {expiration}, thank you!\nVisit https://www.axantum.com/ for updates..
+        ///   Looks up a localized string similar to Download subscription for {licensee} valid to {expiration}, thank you!\nSee https://www.axantum.com/ ..
         /// </summary>
         internal static string LicensedDownloadBlurb {
             get {
@@ -120,7 +129,7 @@ namespace Xecrets.File.Cli.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Download subscription for {licensee} expired at {expiration}.\nUse an older build, or buy a new subscription at https://www.axantum.com/ ..
+        ///   Looks up a localized string similar to Download subscription for {licensee} expired at {expiration}. Encryption limit is 1 MB.\nUse an older build, a GPL build or buy a subscription. See https://www.axantum.com/ ..
         /// </summary>
         internal static string LicensedExpiredDownloadBlurb {
             get {
@@ -129,7 +138,7 @@ namespace Xecrets.File.Cli.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Download subscription &apos;{product}&apos; for {licensee} is not valid for this download.\nVisit https://www.axantum.com/ for information..
+        ///   Looks up a localized string similar to Download subscription &apos;{product}&apos; for {licensee} is not valid for this software. Encryption limit is 1 MB.\nSee https://www.axantum.com/ ..
         /// </summary>
         internal static string LicenseNotValidForProductBlurb {
             get {
@@ -163,7 +172,7 @@ namespace Xecrets.File.Cli.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to Xecrets File Command Line - A cross platform AxCrypt compatible tool for applied strong cryptography.
-        ///Portions Copyright © 2022-2023, Svante Seleborg, All Rights Reserved.
+        ///Portions Copyright 2022-2023, Svante Seleborg, All Rights Reserved.
         ///BETA {gpl} Version {version} {buildutc} {runtime}
         ///
         ///This program is free software; It is licensed under GNU General Public License version 3 or any later version.
@@ -177,11 +186,11 @@ namespace Xecrets.File.Cli.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please support development, buy a download subscription at https://www.axantum.com/ ..
+        ///   Looks up a localized string similar to No download subscription. Encryption limit is 1 MB.\nUse a GPL build or buy a subscription. See https://www.axantum.com/ ..
         /// </summary>
-        internal static string UnlicensedOrGplBlurb {
+        internal static string UnlicensedBlurb {
             get {
-                return ResourceManager.GetString("UnlicensedOrGplBlurb", resourceCulture);
+                return ResourceManager.GetString("UnlicensedBlurb", resourceCulture);
             }
         }
     }

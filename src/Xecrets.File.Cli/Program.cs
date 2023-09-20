@@ -90,7 +90,7 @@ TypeMap.Register.Singleton<IBuildUtc>(() => new BuildUtc(typeof(Program)));
 TypeMap.Register.Singleton<ILicense>(() => new License(new NewLocator(), new[] { Resource.LicensePublicKeyProduction, Resource.LicensePublicKeyTest }, new[] { "cli", "sdk", "ez" }));
 TypeMap.Register.Singleton<ILicenseCandidates>(() => new LicenseCandidates());
 TypeMap.Register.Singleton<ILicenseExpiration>(() => new LicenseExpirationByBuildTime(new NewLocator()));
-TypeMap.Register.Singleton(() => new LicenseBlurb(new NewLocator(), Resource.UnlicensedOrGplBlurb, Resource.LicensedExpiredDownloadBlurb, Resource.LicensedDownloadBlurb, Resource.LicenseNotValidForProductBlurb));
+TypeMap.Register.Singleton(() => new LicenseBlurb(new NewLocator(), Resource.GplBlurb, Resource.UnlicensedBlurb, Resource.LicensedExpiredDownloadBlurb, Resource.LicensedDownloadBlurb, Resource.LicenseNotValidForProductBlurb));
 
 await New<ILicense>().LoadFromAsync(New<ILicenseCandidates>().CandidatesFromFiles(New<IBuildUtc>().IsGplBuild ? Array.Empty<string>() : Directory.GetFiles(AppContext.BaseDirectory, "*.txt")));
 

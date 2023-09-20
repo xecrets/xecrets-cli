@@ -32,14 +32,16 @@ namespace Xecrets.File.Licensing.Implementation
     public class LicenseBlurb
     {
         private readonly INewLocator _newLocator;
+        private readonly string _gplBlurb;
         private readonly string _unlicensedBlurb;
         private readonly string _expiredBlurb;
         private readonly string _licensedBlurb;
         private readonly string _invalidBlurb;
 
-        public LicenseBlurb(INewLocator newLocator, string unlicensedBlurb, string expiredBlurb, string licensedBlurb, string invalidBlurb)
+        public LicenseBlurb(INewLocator newLocator, string gplBlurb, string unlicensedBlurb, string expiredBlurb, string licensedBlurb, string invalidBlurb)
         {
             _newLocator = newLocator;
+            _gplBlurb = gplBlurb;
             _unlicensedBlurb = unlicensedBlurb;
             _expiredBlurb = expiredBlurb;
             _licensedBlurb = licensedBlurb;
@@ -54,7 +56,9 @@ namespace Xecrets.File.Licensing.Implementation
         {
             return status switch
             {
-                LicenseStatus.Gpl or LicenseStatus.Unlicensed => _unlicensedBlurb,
+                LicenseStatus.Gpl => _gplBlurb,
+
+                LicenseStatus.Unlicensed => _unlicensedBlurb,
 
                 LicenseStatus.Expired => FillLicenseInfo(subscription, _expiredBlurb),
 
@@ -66,7 +70,7 @@ namespace Xecrets.File.Licensing.Implementation
             };
         }
 
-        private string FillLicenseInfo(LicenseSubscription subscription, string text)
+        private static string FillLicenseInfo(LicenseSubscription subscription, string text)
         {
             return text
                 .Replace("{licensee}", subscription.Licensee)

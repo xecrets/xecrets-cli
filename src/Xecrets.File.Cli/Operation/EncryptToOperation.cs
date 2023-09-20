@@ -68,7 +68,7 @@ namespace Xecrets.File.Cli.Operation
 
             if (!LicenseAllowed(fromStore))
             {
-                return Task.FromResult(new Status(XfStatusCode.Unlicensed, "Encryption of '{0}' is not allowed, a download subscription is required for files > 1MB.".Format(parameters.CurrentOp.From)));
+                return Task.FromResult(new Status(XfStatusCode.Unlicensed, "Encryption of '{0}' is not allowed, a valid download subscription is required for files > 1 MB, or use a GPL build.".Format(parameters.CurrentOp.From)));
             }
 
             parameters.TotalsTracker.AddWorkItem(fromStore.Length());
