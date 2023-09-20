@@ -6,5 +6,8 @@
 		{
 			"path": "../xecrets-net"
 		}
-	]
+	],
+	"settings": {
+		"dotnet.defaultSolution": "xecrets-file-cli/src/Xecrets.File.Cli.sln"
+	}
 }
