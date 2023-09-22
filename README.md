@@ -18,10 +18,10 @@ bugfixes and finally another very few minor changes to be able to work well with
 the command line interface code. No changes to the core cryptography has been
 made.
 
-The motivation for providing Xecrets File Cli is to once again provide
-the community with a true free open source encryption and decryption command
-line tool exposing the functionality in a way easily consumable by scripts, code
-as well as humans. We also believe it's time to get back to basics, and remove a
+The motivation for providing Xecrets File Cli is to once again provide the
+community with a true free open source encryption and decryption command line
+tool exposing the functionality in a way easily consumable by scripts, code as
+well as humans. We also believe it's time to get back to basics, and remove a
 lot of the complexity present in AxCrypt with it's server integration,
 commercial license handling, and an overly ambitious user interface.
 
@@ -29,19 +29,32 @@ Starting with Xecrets File Cli, we're planning to add a nuget SDK for direct
 integration with .NET code, as well as radically simplified desktop application
 Xecrets File Ez (albeit with less functionality).
 
-Xecrets File Cli does not in any way communicate with any server or
-other infrastructure over the Internet. It is entirely run and executed locally
-in your system.
+Xecrets File Cli does not in any way communicate with any server or other
+infrastructure over the Internet. It is entirely run and executed locally in
+your system.
+
+## Command Line Arguments ##
+
+Xecrets File Command Line is intended to be called from the command line by
+humans, scripts or code. It has a large number of options, making it a very
+powerful toolbox, but the basic usage is still very simple. Check out the
+[documentation](docs/index.md 'Command Line Options') for details and examples.
+
+## Software Development Kit ##
+
+To call Xecrets File Command Line from a .NET application as a library, use the
+SDK which is available as a nuget package Xecrets.File.Sdk to install. It comes
+with [intellisense documentation](sdk-docs/index.md 'The SDK API').
 
 ## Support Development ##
 
 Please purchase your ready-built download from us at https://www.axantum.com/ !
 
-Xecrets File Cli is free software, licensed under the GNU GPL Version 3 or
-later license. This means you can use it anywhere and any way you like for free,
-and you are also free to modify it as you wish as long as you do not
-redistribute it. If you do redistribute it, please check with the Free Software
-Foundation how this works, https://www.gnu.org/licenses/ .
+Xecrets File Cli is free software, licensed under the GNU GPL Version 3 or later
+license. This means you can use it anywhere and any way you like for free, and
+you are also free to modify it as you wish as long as you do not redistribute
+it. If you do redistribute it, please check with the Free Software Foundation
+how this works, https://www.gnu.org/licenses/ .
 
 Of course this also applies to us, so we're not requiring you to pay anything to
 use Xecrets File Cli.
@@ -81,4 +94,5 @@ compilation.
 
 ### Contact ###
 
-Contact us via support@axantum.com or through github .
+Contact us via our [support](https://www.axantum.com/support 'Xecrets Support
+Site') or through github .

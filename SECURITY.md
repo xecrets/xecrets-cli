@@ -2,12 +2,13 @@
 
 ## Supported Versions
 
-All versions 2.1.x.y are supported.
+All versions 2.3.x.y are supported.
 
 ## Reporting a Vulnerability
 
-Please report vulnerabilities to support@axantum.com . If you have a suggested
-fix, a pull request is also appreciated.
+Please report vulnerabilities to our [support](https://www.axantum.com/support
+'Xecrets Support Site') . If you have a suggested fix, a pull request is also
+appreciated.
 
 Depending on the situation, we will work to resolve the vulnerability as soon as
 possible.

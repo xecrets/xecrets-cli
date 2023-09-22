@@ -25,7 +25,8 @@ _private-pem_ _public-pem_] [--jwt-issuer _issuer_] [--jwt-sign _signed-jwt_]
 DESCRIPTION
 ===========
 
-Encrypts, decrypts, creates public key pairs, imports key pairs and public keys and securely wipes files.
+Encrypts, decrypts, creates public key pairs, imports key pairs and public keys
+and securely wipes files.
 
 Options
 -------
@@ -392,7 +393,7 @@ informational purposes.
 AUTHOR
 ======
 
-Svante Seleborg / Axantum Software AB <support@axantum.com> . Note that the code
+Svante Seleborg / Axantum Software AB, you can reach the author via our [support](https://www.axantum.com/support 'Xecrets Support Site') . Note that the code
 used from AxCrypt is with minor exceptions also originally written by Svante
 Seleborg / Axantum Software AB.
 
