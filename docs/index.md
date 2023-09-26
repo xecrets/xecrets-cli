@@ -171,7 +171,7 @@ platforms.
 COMPATIBILITY
 =============
 
-This software is backwards and forward compatible with AxCrypt 2.x, at the time
+This software is backward and forward compatible with AxCrypt 2.x, at the time
 of publication. If AxCrypt implements some breaking changes in the future, this
 may no longer hold true - but in this case, all older versions of AxCrypt before
 the breaking change suffer the same problem.
@@ -312,7 +312,9 @@ It's also more complicated to use when sharing encrypted files with others, as a
 secure channel is need to send the shared secret password and also there's a
 need then to keep track of multiple passwords.
 
-For more details, see AxCryptVersion2AlgorithmsandFileFormat.pdf .
+For more details, see
+[AxCryptVersion2AlgorithmsandFileFormat.pdf](AxCryptVersion2AlgorithmsandFileFormat.pdf)
+.
 
 PUBLIC KEY BASED ENCRYPTION
 ===========================
@@ -323,7 +325,9 @@ not need to be secret and can be sent to anyone or even published. The
 decryption, or private, key needs to be kept secret, and this is typically done
 by encrypting it in turn as Xecrets File-encrypted file with a password.
 
-For more details, see AxCryptVersion2AlgorithmsandFileFormat.pdf .
+For more details, see
+[AxCryptVersion2AlgorithmsandFileFormat.pdf](AxCryptVersion2AlgorithmsandFileFormat.pdf)
+.
 
 ENVIRONMENT
 ===========
@@ -433,9 +437,10 @@ informational purposes.
 AUTHOR
 ======
 
-Svante Seleborg / Axantum Software AB, you can reach the author via our [support](https://www.axantum.com/support 'Xecrets Support Site') . Note that the code
-used from AxCrypt is with minor exceptions also originally written by Svante
-Seleborg / Axantum Software AB.
+Svante Seleborg / Axantum Software AB, you can reach the author via our
+[support](https://www.axantum.com/support 'Xecrets Support Site') . Note that
+the code used from AxCrypt is with minor exceptions also originally written by
+Svante Seleborg / Axantum Software AB.
 
 SEE ALSO
 ========
