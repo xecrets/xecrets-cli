@@ -30,6 +30,10 @@ using Xecrets.File.Cli.Run;
 
 namespace Xecrets.File.Cli.Operation
 {
+    /// <summary>
+    /// Helper to produce Markdown command line documentation. Use as for example:
+    /// XecretsFileCli.exe --stdout --internal --argument-markdown
+    /// </summary>
     internal class ArgumentMarkdownOperation : IExecutionPhases
     {
         public Task<Status> DryAsync(Parameters parameters)
@@ -41,23 +45,24 @@ namespace Xecrets.File.Cli.Operation
         {
             StringBuilder descriptions = new StringBuilder();
             StringBuilder synopsis = new StringBuilder();
-            _ = synopsis.Append("XecretsFileCli");
+            synopsis.Append("XecretsFileCli");
             foreach (string[] description in parameters.Parser.Descriptions)
             {
                 string[] parts = description[0].Split(' ');
                 string option = parts[0].Split('|').Last();
                 string arguments = string.Join(' ', parts.Skip(1).ToArray());
-                _ = synopsis.Append(" [").Append(option).Append(arguments.Length > 0 ? " " : string.Empty).Append(arguments).Append(']');
+                synopsis.Append(" [").Append(option).Append(arguments.Length > 0 ? " " : string.Empty).Append(arguments).Append(']');
 
-                _ = descriptions.AppendLine(description[0]);
-                _ = descriptions.AppendLine(":       " + description[1]);
+                descriptions.AppendLine(description[0]);
+                descriptions.AppendLine(":       " + description[1]);
                 for (int i = 2; i < description.Length; ++i)
                 {
-                    _ = descriptions.AppendLine("        " + description[i]);
+                    descriptions.AppendLine("        " + description[i]);
                 }
+                descriptions.AppendLine();
             }
-            _ = synopsis.Replace('{', '_').Replace('}', '_');
-            _ = descriptions.Replace('{', '_').Replace('}', '_');
+            synopsis.Replace('{', '_').Replace('}', '_');
+            descriptions.Replace('{', '_').Replace('}', '_');
 
             parameters.Logger.Log(new Status(parameters, synopsis.ToString()));
             parameters.Logger.Log(string.Empty);

@@ -15,12 +15,12 @@ _encrypted_] [--file _name_] [--gpl-license] [--help] [--id] [--json-log]
 [--environment _variable_] [--progress] [--password _secret_] [--quiet]
 [--dryrun] [--stdout] [--text-log] [--load-public-key _file(s)_] [--overwrite]
 [--wipe _file_] [--export-public-key _email_ _file_] [--platform] [--echo]
-[--debug-break] [--debug-break-parse] [--argument-markdown]
-[--cli-options-code-export] [--cli-version] [--internal] [--jwt-audience
-_audience_] [--jwt-claims _expiration_ _claims_] [--jwt-create-key-pair
-_private-pem_ _public-pem_] [--jwt-issuer _issuer_] [--jwt-sign _signed-jwt_]
-[--jwt-private-key _private-pem_] [--jwt-verify _public-pem_ _signed-jwt_]
-[--license _jwt-license_]
+[--debug-break] [--debug-break-parse] [--argument-markdown] [--cli-crash-log
+_file_] [--cli-license _jwt-license_] [--options-code-export] [--cli-version]
+[--internal] [--jwt-audience _audience_] [--jwt-claims _expiration_ _claims_]
+[--jwt-create-key-pair _private-pem_ _public-pem_] [--jwt-issuer _issuer_]
+[--jwt-sign _signed-jwt_] [--jwt-private-key _private-pem_] [--jwt-verify
+_public-pem_ _signed-jwt_]
 
 DESCRIPTION
 ===========
@@ -32,81 +32,121 @@ Options
 -------
 -b|--use-public-key _email(s)_
 :       Use selected loaded public key(s) for encryption.
+
 -c|--create-key-pair _email_ _encrypted_
 :       Create a key pair for an email moniker, in an encrypted file.
+
 -d|--decrypt-to _encrypted_ _clear_
 :       Decrypt a file to the given file path.
+
 -e|--encrypt-to _clear_ _encrypted_
 :       Encrypt a file to the given file path.
+
 -f|--file _name_
 :       Take options from a file.
+
 -g|--gpl-license 
 :       Display the full GNU GPL license.
+
 -h|-?|--help 
 :       Display this helpful help message, use again for details.
+
 -i|--id 
 :       Arbitrary id which is returned in JSON-logging.
+
 -j|--json-log 
 :       Enable JSON-based logging.
+
 -k|--use-key-pair _encrypted_
 :       Use a key-pair, from an encrypted file path. Password is required.
+
 -l|--decrypt-to-folder _encrypted_ [_folder_]
 :       Decrypt a file path with it's original name to a destination folder.
         If _folder_ is not provided, the _encrypted_'s folder will be used.
+
 -n|--environment _variable_
 :       Take options from environment variable.
+
 -o|--progress 
 :       Continuously log progress.
+
 -p|--password _secret_
 :       A password to use for encryption or decryption.
+
 -q|--quiet 
 :       Do not display any messages or progress (global).
+
 -r|--dryrun 
 :       Only perform a dry run without actually modifying anything (global).
+
 -s|--stdout 
 :       Write log output to stdout instead of stderr (global).
+
 -t|--text-log 
 :       Enable text-based console log.
+
 -u|--load-public-key _file(s)_
 :       Load public key(s) from file(s).
+
 -v|--overwrite 
-:       Overwrite files instead of using alternate target name (global).
+:       Overwrite files instead of using alternate target name.
+
 -w|--wipe _file_
 :       Securely wipe and delete a file.
+
 -x|--export-public-key _email_ _file_
 :       Export a public key.
+
 --platform 
 :       Display the platform the program is running on.
+
 --echo 
 :       Display the command line received by the program.
+
 --debug-break 
 :       Break into debugger when executing this argument.
+
 --debug-break-parse 
 :       Break into debugger when parsing this argument.
+
 --argument-markdown 
 :       Display help texts as markdown.
---cli-options-code-export 
+
+--cli-crash-log _file_
+:       Write crash log here (global).
+
+--cli-license _jwt-license_
+:       Use this license. Overrides any others found (global).
+
+--options-code-export 
 :       Display C# source code for options.
+
 --cli-version 
 :       Display the CLI API version.
+
 --internal 
 :       Display help for internal use commands and disable splash (global).
+
 --jwt-audience _audience_
 :       Set audience email for JWT.
+
 --jwt-claims _expiration_ _claims_
 :       Set days until expiration and claims JSON.
+
 --jwt-create-key-pair _private-pem_ _public-pem_
 :       Create JWT keypair as PEM files.
+
 --jwt-issuer _issuer_
 :       Set issuer email for JWT.
+
 --jwt-sign _signed-jwt_
 :       Sign and write JWT to file.
+
 --jwt-private-key _private-pem_
 :       Use a private key PEM file for signing.
+
 --jwt-verify _public-pem_ _signed-jwt_
 :       Verify a signed JWT file using a public PEM file.
---license _jwt-license_
-:       Use this license. Overrides any others found (global).
 
 Options are processed in order and may appear multiple times, except when
 'global'. Arguments such as _email_ are required placeholders. Flags may be
