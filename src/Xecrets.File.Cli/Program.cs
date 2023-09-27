@@ -130,7 +130,8 @@ if (status != Status.Success && parameters.CrashLogFile.Length > 0)
 
 await WaitForKeyPressedOrTimeoutWhenStartedWithoutArguments(args, status);
 
-return (int)status.StatusCode;
+Environment.ExitCode = (int)status.StatusCode;
+return Environment.ExitCode;
 
 static async Task WaitForKeyPressedOrTimeoutWhenStartedWithoutArguments(string[] args, Status status)
 {
