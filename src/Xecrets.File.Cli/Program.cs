@@ -125,7 +125,7 @@ catch (Exception ex)
 
 if (status != Status.Success && parameters.CrashLogFile.Length > 0)
 {
-    File.WriteAllText(parameters.CrashLogFile, $"Cli status code: '{status.StatusCode}'.{Environment.NewLine}{status.Message}");
+    File.WriteAllText(parameters.CrashLogFile, $"Cli status code: '{status.StatusCode}' ({(int)status.StatusCode}).{Environment.NewLine}{status.Message}");
 }
 
 await WaitForKeyPressedOrTimeoutWhenStartedWithoutArguments(args, status);
@@ -140,7 +140,6 @@ static async Task WaitForKeyPressedOrTimeoutWhenStartedWithoutArguments(string[]
         return;
     }
 
-    CancellationTokenSource cancellation = new();
     await Task.Run(async () =>
     {
         int totalMsWait = 0;
