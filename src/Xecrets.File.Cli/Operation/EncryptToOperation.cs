@@ -81,7 +81,7 @@ namespace Xecrets.File.Cli.Operation
             {
                 return true;
             }
-            if (fromStore.Length() <= 1024 * 124)
+            if (fromStore.Length() <= 1024 * 1024)
             {
                 return true;
             }
