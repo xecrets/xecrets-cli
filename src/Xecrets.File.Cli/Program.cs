@@ -48,8 +48,8 @@ using Xecrets.File.Cli.Log;
 using Xecrets.File.Cli.Properties;
 using Xecrets.File.Cli.Public;
 using Xecrets.File.Cli.Run;
-using Xecrets.File.Licensing.Abstractions;
-using Xecrets.File.Licensing.Implementation;
+using Xecrets.Licensing.Abstractions;
+using Xecrets.Licensing.Implementation;
 
 using static AxCrypt.Abstractions.TypeResolve;
 
@@ -87,7 +87,7 @@ TypeMap.Register.Singleton(() => new RewindableStdinStream());
 TypeMap.Register.New<string, IStandardIoDataStore>((path) => new StandardIoDataStore(path));
 TypeMap.Register.Singleton<IFileVerify>(() => new FileVerify());
 TypeMap.Register.Singleton<IBuildUtc>(() => new BuildUtc(typeof(Program)));
-TypeMap.Register.Singleton<ILicense>(() => new License(new NewLocator(), new[] { Resource.LicensePublicKeyProduction, Resource.LicensePublicKeyTest }, new[] { "cli", "sdk", "ez" }));
+TypeMap.Register.Singleton<ILicense>(() => new License(new NewLocator(), issuer: "xecrets@axantum.com", claim: "xflic.axantum.com", new[] { Resource.LicensePublicKeyProduction, Resource.LicensePublicKeyTest }, new[] { "cli", "sdk", "ez" }));
 TypeMap.Register.Singleton<ILicenseCandidates>(() => new LicenseCandidates());
 TypeMap.Register.Singleton<ILicenseExpiration>(() => new LicenseExpirationByBuildTime(new NewLocator()));
 TypeMap.Register.Singleton(() => new LicenseBlurb(new NewLocator(), Resource.GplBlurb, Resource.UnlicensedBlurb, Resource.LicensedExpiredDownloadBlurb, Resource.LicensedDownloadBlurb, Resource.LicenseNotValidForProductBlurb));

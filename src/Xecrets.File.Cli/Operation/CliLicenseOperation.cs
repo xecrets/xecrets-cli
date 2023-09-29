@@ -27,8 +27,8 @@ using AxCrypt.Abstractions;
 
 using Xecrets.File.Cli.Abstractions;
 using Xecrets.File.Cli.Run;
-using Xecrets.File.Licensing.Abstractions;
-using Xecrets.File.Licensing.Implementation;
+using Xecrets.Licensing.Abstractions;
+using Xecrets.Licensing.Implementation;
 
 using static AxCrypt.Abstractions.TypeResolve;
 

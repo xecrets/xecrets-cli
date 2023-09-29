@@ -30,7 +30,7 @@ using AxCrypt.Core.Crypto.Asymmetric;
 using Xecrets.File.Cli.Abstractions;
 using Xecrets.File.Cli.Public;
 using Xecrets.File.Cli.Run;
-using Xecrets.File.Licensing.Abstractions;
+using Xecrets.Licensing.Abstractions;
 
 using static AxCrypt.Abstractions.TypeResolve;
 

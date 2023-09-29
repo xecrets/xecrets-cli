@@ -25,7 +25,7 @@
 
 using AxCrypt.Abstractions;
 
-using Xecrets.File.Licensing.Abstractions;
+using Xecrets.Licensing.Abstractions;
 
 namespace Xecrets.File.Cli.Implementation
 {

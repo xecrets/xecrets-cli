@@ -38,12 +38,12 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="7.0.0" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
+    <PackageReference Include="Xecrets.Licensing" Version="1.0.4" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\xecrets-net\AxCrypt.Core\Xecrets.File.Core.csproj" />
     <ProjectReference Include="..\..\..\xecrets-net\AxCrypt.Mono\Xecrets.File.Implementation.NET.csproj" />
-    <ProjectReference Include="..\Xecrets.File.Licensing\Xecrets.File.Licensing.csproj" />
   </ItemGroup>
 
   <ItemGroup>
