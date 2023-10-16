@@ -24,13 +24,17 @@
 #endregion Coypright and GPL License
 
 using Xecrets.File.Cli.Log;
+using Xecrets.File.Cli.Run;
 
 namespace Xecrets.File.Cli.Operation
 {
     internal class SdkJsonLogOperation : LogOperationBase
     {
-        protected override LogStyle UpdateLogStyle(LogStyle currentLogStyle)
+        protected override LogStyle UpdateLogStyle(Parameters parameters)
         {
+            parameters.ProgrammaticUse = true;
+
+            LogStyle currentLogStyle = parameters.TotalsTracker.LogStyle;
             currentLogStyle &= ~(LogStyle.Text);
             currentLogStyle |= LogStyle.Json;
             return currentLogStyle;

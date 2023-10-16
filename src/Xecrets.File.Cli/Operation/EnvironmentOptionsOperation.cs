@@ -23,18 +23,22 @@
 
 #endregion Coypright and GPL License
 
-using Xecrets.File.Cli.Log;
+using Xecrets.File.Cli.Abstractions;
 using Xecrets.File.Cli.Run;
 
 namespace Xecrets.File.Cli.Operation
 {
-    internal class NoLogOperation : LogOperationBase
+    internal class EnvironmentOptionsOperation : IExecutionPhases
     {
-        protected override LogStyle UpdateLogStyle(Parameters parameters)
+        public Task<Status> DryAsync(Parameters parameters)
         {
-            LogStyle currentLogStyle = parameters.TotalsTracker.LogStyle;
-            currentLogStyle &= ~(LogStyle.Progress | LogStyle.Json | LogStyle.Text);
-            return currentLogStyle;
+            parameters.ProgrammaticUse = true;
+            return Task.FromResult(Status.Success);
+        }
+
+        public Task<Status> RealAsync(Parameters parameters)
+        {
+            return Task.FromResult(Status.Success);
         }
     }
 }

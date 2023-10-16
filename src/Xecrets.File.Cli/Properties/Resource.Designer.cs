@@ -83,7 +83,7 @@ namespace Xecrets.File.Cli.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please support development and buy a download subscription. See https://www.axantum.com/ ..
+        ///   Looks up a localized string similar to Please support development and buy a subscription. See https://www.axantum.com/ ..
         /// </summary>
         internal static string GplBlurb {
             get {
@@ -120,7 +120,7 @@ namespace Xecrets.File.Cli.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Download subscription for {licensee} valid to {expiration}, thank you!\nSee https://www.axantum.com/ ..
+        ///   Looks up a localized string similar to Maintenance subscription for {licensee} valid to {expiration}, thank you!\nSee https://www.axantum.com/ ..
         /// </summary>
         internal static string LicensedDownloadBlurb {
             get {
@@ -129,7 +129,7 @@ namespace Xecrets.File.Cli.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Download subscription for {licensee} expired at {expiration}. Encryption limit is 1 MB.\nUse an older build, a GPL build or buy a subscription. See https://www.axantum.com/ ..
+        ///   Looks up a localized string similar to Maintenance subscription for {licensee} expired at {expiration}, free for non-programmatic use.\nSee https://www.axantum.com/ ..
         /// </summary>
         internal static string LicensedExpiredDownloadBlurb {
             get {
@@ -138,7 +138,7 @@ namespace Xecrets.File.Cli.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Download subscription &apos;{product}&apos; for {licensee} is not valid for this software. Encryption limit is 1 MB.\nSee https://www.axantum.com/ ..
+        ///   Looks up a localized string similar to Maintenance subscription &apos;{product}&apos; for {licensee} is not valid for this software, free for non-programmatic use.\nSee https://www.axantum.com/ ..
         /// </summary>
         internal static string LicenseNotValidForProductBlurb {
             get {
@@ -186,7 +186,7 @@ namespace Xecrets.File.Cli.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No download subscription. Encryption limit is 1 MB.\nUse a GPL build or buy a subscription. See https://www.axantum.com/ ..
+        ///   Looks up a localized string similar to No subscription, free for non-programmatic use. See https://www.axantum.com/ ..
         /// </summary>
         internal static string UnlicensedBlurb {
             get {

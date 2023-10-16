@@ -32,6 +32,7 @@ namespace Xecrets.File.Cli.Operation
     {
         public Task<Status> DryAsync(Parameters parameters)
         {
+            parameters.ProgrammaticUse = true;
             return Task.FromResult(Status.Success);
         }
 

@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="GplBlurb" xml:space="preserve">
-    <value>Please support development and buy a download subscription. See https://www.axantum.com/ .</value>
+    <value>Please support development and buy a subscription. See https://www.axantum.com/ .</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="gpl_3_0" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -131,13 +131,13 @@
     <value>..\..\..\docs\index.md;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="LicensedDownloadBlurb" xml:space="preserve">
-    <value>Download subscription for {licensee} valid to {expiration}, thank you!\nSee https://www.axantum.com/ .</value>
+    <value>Maintenance subscription for {licensee} valid to {expiration}, thank you!\nSee https://www.axantum.com/ .</value>
   </data>
   <data name="LicensedExpiredDownloadBlurb" xml:space="preserve">
-    <value>Download subscription for {licensee} expired at {expiration}. Encryption limit is 1 MB.\nUse an older build, a GPL build or buy a subscription. See https://www.axantum.com/ .</value>
+    <value>Maintenance subscription for {licensee} expired at {expiration}, free for non-programmatic use.\nSee https://www.axantum.com/ .</value>
   </data>
   <data name="LicenseNotValidForProductBlurb" xml:space="preserve">
-    <value>Download subscription '{product}' for {licensee} is not valid for this software. Encryption limit is 1 MB.\nSee https://www.axantum.com/ .</value>
+    <value>Maintenance subscription '{product}' for {licensee} is not valid for this software, free for non-programmatic use.\nSee https://www.axantum.com/ .</value>
   </data>
   <data name="LicensePublicKeyProduction" xml:space="preserve">
     <value>-----BEGIN PUBLIC KEY-----
@@ -155,6 +155,6 @@ Idyr4Ko9NUmkM4V6HGk0HUD0lmIM0l1WTppDFoKfdOflwpxXqISTTjQODg==
     <value>..\Resources\splash.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="UnlicensedBlurb" xml:space="preserve">
-    <value>No download subscription. Encryption limit is 1 MB.\nUse a GPL build or buy a subscription. See https://www.axantum.com/ .</value>
+    <value>No subscription, free for non-programmatic use. See https://www.axantum.com/ .</value>
   </data>
 </root>

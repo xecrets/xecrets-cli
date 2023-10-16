@@ -95,6 +95,8 @@ namespace Xecrets.File.Cli.Run
 
         public int HelpLevel { get; set; }
 
+        public bool ProgrammaticUse { get; set; }
+
         public void StartReal()
         {
             IsDryRun = false;

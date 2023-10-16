@@ -5,6 +5,8 @@
 # All files
 [*]
 indent_style = space
+guidelines = 100
+guidelines_style = 1px dotted black
 
 # XML project files
 [*.{csproj,vbproj,vcxproj,vcxproj.filters,proj,projitems,shproj}]
@@ -19,6 +21,7 @@ indent_size = 2
 indent_size = 4
 insert_final_newline = true
 charset = utf-8-bom
+guidelines = 120
 ###############################
 # .NET Coding Conventions     #
 ###############################
@@ -58,7 +61,7 @@ dotnet_style_prefer_conditional_expression_over_return = true:silent
 ###############################
 # Style Definitions
 dotnet_naming_style.pascal_case_style.capitalization             = pascal_case
-# Use PascalCase for constant fields  
+# Use PascalCase for constant fields
 dotnet_naming_rule.constant_fields_should_be_pascal_case.severity = suggestion
 dotnet_naming_rule.constant_fields_should_be_pascal_case.symbols  = constant_fields
 dotnet_naming_rule.constant_fields_should_be_pascal_case.style    = pascal_case_style

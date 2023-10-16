@@ -31,17 +31,17 @@ namespace Xecrets.File.Cli.Operation
 {
     internal abstract class LogOperationBase : IExecutionPhases
     {
-        protected abstract LogStyle UpdateLogStyle(LogStyle currentLogStyle);
+        protected abstract LogStyle UpdateLogStyle(Parameters parameters);
 
         public Task<Status> DryAsync(Parameters parameters)
         {
-            parameters.TotalsTracker.LogStyle = parameters.Parser.IsQuiet ? LogStyle.None : UpdateLogStyle(parameters.TotalsTracker.LogStyle);
+            parameters.TotalsTracker.LogStyle = parameters.Parser.IsQuiet ? LogStyle.None : UpdateLogStyle(parameters);
             return Task.FromResult(Status.Success);
         }
 
         public Task<Status> RealAsync(Parameters parameters)
         {
-            parameters.TotalsTracker.LogStyle = parameters.Parser.IsQuiet ? LogStyle.None : UpdateLogStyle(parameters.TotalsTracker.LogStyle);
+            parameters.TotalsTracker.LogStyle = parameters.Parser.IsQuiet ? LogStyle.None : UpdateLogStyle(parameters);
             return Task.FromResult(Status.Success);
         }
     }

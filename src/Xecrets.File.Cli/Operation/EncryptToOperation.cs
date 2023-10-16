@@ -66,31 +66,38 @@ namespace Xecrets.File.Cli.Operation
                 return Task.FromResult(new Status(XfStatusCode.FileUnavailable, "Encryption of '{0}' is not supported, it may be a system file or hidden.".Format(parameters.CurrentOp.From)));
             }
 
-            if (!LicenseAllowed(fromStore))
+            if (parameters.ProgrammaticUse && FileLargerThanLicenseLimit(fromStore))
             {
-                return Task.FromResult(new Status(XfStatusCode.Unlicensed, "Encryption of '{0}' is not allowed, a valid download subscription is required for files > 1 MB, or use a GPL build.".Format(parameters.CurrentOp.From)));
+                return Task.FromResult(new Status(XfStatusCode.Unlicensed, "'{0}' is too large for encryption. When using options for programmatic use, a valid maintenance subscription is required for files > 1 MB, or use a GPL build.".Format(parameters.CurrentOp.From)));
             }
 
             parameters.TotalsTracker.AddWorkItem(fromStore.Length());
             return Task.FromResult(Status.Success);
         }
 
-        private static bool LicenseAllowed(IStandardIoDataStore fromStore)
+        private static bool FileLargerThanLicenseLimit(IStandardIoDataStore fromStore)
         {
+            long length;
             if (fromStore.IsStdIo)
             {
-                return true;
+                Stream stdin = fromStore.OpenRead(); // Don't think we should close the stdin stream
+                length = stdin.CanSeek ? stdin.Length : 0;
             }
-            if (fromStore.Length() <= 1024 * 1024)
+            else
             {
-                return true;
+                length = fromStore.Length();
+            }
+
+            if (length <= 1024 * 1024)
+            {
+                return false;
             }
             LicenseStatus licenseStatus = New<ILicense>().Status();
             if (licenseStatus is LicenseStatus.Gpl or LicenseStatus.Valid)
             {
-                return true;
+                return false;
             }
-            return false;
+            return true;
         }
 
         public Task<Status> RealAsync(Parameters parameters)
@@ -111,7 +118,8 @@ namespace Xecrets.File.Cli.Operation
                 encryption.EncryptTo(toFreeStore, fromStore.AliasName);
             }
 
-            parameters.Logger.Log(new Status(parameters, "Encrypted '{0}' to '{1}'.".Format(parameters.From, parameters.To)));
+            string freeTo = Path.Combine(Path.GetDirectoryName(parameters.To) ?? string.Empty, toFreeStore.Name);
+            parameters.Logger.Log(new Status(parameters, "Encrypted '{0}' to '{1}'.".Format(parameters.From, freeTo)));
             return Task.FromResult(Status.Success);
         }
     }

@@ -53,7 +53,7 @@ namespace Xecrets.File.Cli.Operation
                 return Task.FromResult(new Status(Public.XfStatusCode.InvalidLicenseSignature, "The license was signed with an unknown key."));
             }
 
-            if (license.Subscription().Product != "cli")
+            if (license.Subscription().Product is not "cli" and not "sdk")
             {
                 TypeMap.Register.Singleton<ILicenseExpiration>(() => new LicenseExpirationByCurrentTime());
             }

@@ -13,9 +13,12 @@ GNU General Public License for more details, use the --gpl-license option.
 
 Options are case-sensitive, and except (global) are processed in order. The --dryrun option is
 useful to verify the syntax and correctness of the options. Since files may be created by previous
-steps, a dry run does not validate the existance of input files.
+steps, a dry run does not validate the existence of input files.
 
 All log output and error messages are written to stderr, but you can redirect it with --stdout.
+
+If you are using pre-built binaries from https://www.axantum.com/, (programmatic) options require a
+valid maintenance subscription, or encryption is limited to 1 MB.
 
 Xecrets File encrypts using a password and optionally one or more public keys. Anyone can generate a
 key pair consisting of a publick key and a private key, and then share the public key to others so

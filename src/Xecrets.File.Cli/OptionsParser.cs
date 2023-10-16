@@ -60,8 +60,8 @@ namespace Xecrets.File.Cli
                     "{clear} {encrypted}:Encrypt a file to the given file path.",
                     (ora, op, from, to) => ora.Add(op, from, to) },
                 {"f|file=", XfOpCode.OptionsFromFile,
-                    "{name}:Take options from a file.",
-                    (ora, op, name) => RecursivelyParseFromFile(name, parsed, extra)},
+                    "{name}:Take options from a file (programmatic).",
+                    (ora, op, name) => { ora.Add(op); RecursivelyParseFromFile(name, parsed, extra); } },
                 {"g|gpl-license",XfOpCode.GplLicense,
                     ":Display the full GNU GPL license.",
                     (ora, op, gpl) => ora.Add(gpl != null ? op : XfOpCode.None) },
@@ -72,7 +72,7 @@ namespace Xecrets.File.Cli
                     ":Arbitrary id which is returned in JSON-logging.",
                     (ora, op, id) => ora.Add(op, id) },
                 {"j|json-log", XfOpCode.SdkJsonLog,
-                    ":Enable JSON-based logging.",
+                    ":Enable JSON console logging (programmatic).",
                     (ora, op, json) => ora.Add(json != null ? op : XfOpCode.NoLog) },
                 {"k|use-key-pair=", XfOpCode.UseKeyPair,
                     "{encrypted}:Use a key-pair, from an encrypted file path. Password is required.",
@@ -82,8 +82,8 @@ namespace Xecrets.File.Cli
                     ":If {folder} is not provided, the {encrypted}'s folder will be used.",
                     (ora, op, from) => ora.AddOneRunning(op, from) },
                 {"n|environment=", XfOpCode.EnvironmentOption,
-                    "{variable}:Take options from environment variable.",
-                    (ora, op, variable) => RecursivelyParseFromString(variable, parsed, extra)},
+                    "{variable}:Take options from environment variable (programmatic).",
+                    (ora, op, variable) => { ora.Add(op); RecursivelyParseFromString(variable, parsed, extra); } },
                 {"o|progress", XfOpCode.ProgressLog,
                     ":Continuously log progress.",
                     (ora, op, progress) => ora.Add(progress != null ? op : XfOpCode.NoProgress) },
@@ -100,7 +100,7 @@ namespace Xecrets.File.Cli
                     ":Write log output to stdout instead of stderr (global).",
                     (ora, op, text) => ora.Add(op, text != null) },
                 {"t|text-log",XfOpCode.TextLog,
-                    ":Enable text-based console log.",
+                    ":Enable text console logging for interactive and simple script use.",
                     (ora, op, text) => ora.Add(text != null ? XfOpCode.TextLog : XfOpCode.NoLog) },
                 {"u|load-public-key=", XfOpCode.LoadPublicKey,
                     "{file(s)}:Load public key(s) from file(s).",
@@ -123,7 +123,7 @@ namespace Xecrets.File.Cli
                 { "<>", XfOpCode.DefaultInternal, (ora, op, v) => ora.RunningAction(v) },
             };
 
-            if (New<IRuntimeEnvironment>().Platform == Platform.WindowsDesktop)
+            if (OperatingSystem.IsWindows())
             {
                 optionSet.Add("debug-break", XfOpCode.CliDebugBreak, ":?Break into debugger when executing this argument.", (ora, op, dbg) => ora.Add(dbg != null ? op : XfOpCode.None));
                 optionSet.Add("debug-break-parse", XfOpCode.CliDebugBreakParse, ":?Break into debugger when parsing this argument.", (ora, op, dbg) => { if (dbg != null) _ = Debugger.Launch(); });

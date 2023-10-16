@@ -77,7 +77,7 @@ namespace Xecrets.File.Cli.Operation
                     break;
 
                 default:
-                    m += "Sorry, there is no more help to get!";
+                    m += "Sorry, there is no more help to get here! See https://www.axantum.com/ .";
                     break;
             }
 

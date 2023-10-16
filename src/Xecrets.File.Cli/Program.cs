@@ -57,6 +57,8 @@ using static AxCrypt.Abstractions.TypeResolve;
 
 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
+var options = new OptionsParser(Environment.CommandLine);
+
 RuntimeEnvironment.RegisterTypeFactories();
 Resolve.RegisterTypeFactories(Path.GetTempPath(), Array.Empty<Assembly>());
 TypeMap.Register.Singleton(() => new FileLocker());
@@ -94,7 +96,6 @@ TypeMap.Register.Singleton(() => new LicenseBlurb(new NewLocator(), Resource.Gpl
 
 await New<ILicense>().LoadFromAsync(New<ILicenseCandidates>().CandidatesFromFiles(New<IBuildUtc>().IsGplBuild ? Array.Empty<string>() : Directory.GetFiles(AppContext.BaseDirectory, "*.txt")));
 
-var options = new OptionsParser(Environment.CommandLine);
 var parameters = new Parameters(options);
 
 Status status;
