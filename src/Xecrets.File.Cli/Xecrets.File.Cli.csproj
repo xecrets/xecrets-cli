@@ -38,7 +38,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="7.0.0" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
-    <PackageReference Include="Xecrets.Licensing" Version="1.0.5" />
+    <PackageReference Include="Xecrets.Licensing" Version="1.0.6" />
   </ItemGroup>
 
   <ItemGroup>
