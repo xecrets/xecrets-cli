@@ -7,7 +7,8 @@
 
 ## IXfApi Interface
 
-The main SDK interface to use when calling the CLI for operations. Use [XfApiFactory](Xecrets.File.Sdk.XfApiFactory.md 'Xecrets.File.Sdk.XfApiFactory') to create instances of the interface.
+The main SDK interface to use when calling the command line for operations. Use [XfApiFactory](Xecrets.File.Sdk.XfApiFactory.md 'Xecrets.File.Sdk.XfApiFactory') to  
+create instances of the interface.
 
 ```csharp
 public interface IXfApi
@@ -18,7 +19,7 @@ public interface IXfApi
 
 ## IXfApi.CliToolInformationAsync() Method
 
-Call the CLI and request information as a [CliToolInformation](Xecrets.File.Sdk.Cli.Models.CliToolInformation.md 'Xecrets.File.Sdk.Cli.Models.CliToolInformation') instance.
+Call the command line and request information as a [CliToolInformation](Xecrets.File.Sdk.Cli.Models.CliToolInformation.md 'Xecrets.File.Sdk.Cli.Models.CliToolInformation') instance.
 
 ```csharp
 System.Threading.Tasks.Task<Xecrets.File.Sdk.Cli.Models.CliToolInformation> CliToolInformationAsync();
@@ -26,7 +27,7 @@ System.Threading.Tasks.Task<Xecrets.File.Sdk.Cli.Models.CliToolInformation> CliT
 
 #### Returns
 [System.Threading.Tasks.Task&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')[CliToolInformation](Xecrets.File.Sdk.Cli.Models.CliToolInformation.md 'Xecrets.File.Sdk.Cli.Models.CliToolInformation')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')  
-The information requested by calling the CLI.
+The information requested by calling the command line.
 
 <a name='Xecrets.File.Sdk.Abstractions.IXfApi.CreateKeyPairAsync(string,string)'></a>
 
@@ -302,8 +303,8 @@ A [System.Threading.Tasks.Task](https://docs.microsoft.com/en-us/dotnet/api/Syst
 ## IXfApi.IsSdkCompatibleWith(Version) Method
 
 Determine if the consumer, using this version of the SDK and the provided [cliApiVersion](Xecrets.File.Sdk.Abstractions.md#Xecrets.File.Sdk.Abstractions.IXfApi.IsSdkCompatibleWith(System.Version).cliApiVersion 'Xecrets.File.Sdk.Abstractions.IXfApi.IsSdkCompatibleWith(System.Version).cliApiVersion')  
-version are compatible, i.e. if the caller having a CLI of the given version can use this version of the  
-SDK.
+version are compatible, i.e. if the caller having a command line tool of the given version can use this  
+version of the SDK.
 
 ```csharp
 bool IsSdkCompatibleWith(System.Version cliApiVersion);
@@ -314,11 +315,11 @@ bool IsSdkCompatibleWith(System.Version cliApiVersion);
 
 `cliApiVersion` [System.Version](https://docs.microsoft.com/en-us/dotnet/api/System.Version 'System.Version')
 
-The version of the CLI API to check.
+The version of the command line tool API to check.
 
 #### Returns
 [System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')  
-True if this SDK can work with the provided CLI.
+True if this SDK can work with the provided command line tool.
 
 <a name='Xecrets.File.Sdk.Abstractions.IXfApi.StartMe(string)'></a>
 

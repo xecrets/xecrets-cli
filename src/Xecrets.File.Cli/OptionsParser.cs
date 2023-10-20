@@ -133,7 +133,7 @@ namespace Xecrets.File.Cli
             optionSet.Add("cli-crash-log=", XfOpCode.CliCrashLog, "{file}:?Write crash log here (global).", (ora, op, log) => ora.Add(op, log));
             optionSet.Add("cli-license=", XfOpCode.CliLicense, "{jwt-license}:?Use this license. Overrides any others found (global).", (ora, op, license) => ora.Add(op, license));
             optionSet.Add("options-code-export", XfOpCode.OptionsCodeExport, ":?Display C# source code for options.", (ora, op, arg) => ora.Add(arg != null ? op : XfOpCode.None));
-            optionSet.Add("cli-version", XfOpCode.SdkCliVersion, ":?Display the CLI API version.", (ora, op, arg) => ora.Add(arg != null ? op : XfOpCode.None));
+            optionSet.Add("cli-version", XfOpCode.SdkCliVersion, ":?Display the command line tool API version.", (ora, op, arg) => ora.Add(arg != null ? op : XfOpCode.None));
             optionSet.Add("internal", XfOpCode.Internal, ":?Display help for internal use commands and disable splash (global).", (ora, op, @internal) => Internal = @internal != null);
             optionSet.Add("jwt-audience=", XfOpCode.JwtAudience,"{audience}:?Set audience email for JWT.", (ora, op, audience) => ora.Add(op, audience));
             optionSet.Add("jwt-claims={}", XfOpCode.JwtClaims, "{expiration} {claims}:?Set days until expiration and claims JSON.", (ora, op, days, claims) => ora.Add(op, days, claims));

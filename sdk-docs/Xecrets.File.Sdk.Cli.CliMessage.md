@@ -3,7 +3,7 @@
 
 ## CliMessage Class
 
-Log output and progress from the CLI tool.
+Log output and progress from the command line tool.
 
 ```csharp
 public class CliMessage
@@ -16,7 +16,7 @@ Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.O
 
 ## CliMessage.CliApiVersion Property
 
-The API version of the CLI tool
+The API version of the command line tool
 
 ```csharp
 public string? CliApiVersion { get; set; }
@@ -146,7 +146,7 @@ public string? OriginalFileName { get; set; }
 
 ## CliMessage.Percent Property
 
-The completion percentage in progress of this invocation of the CLI tool.
+The completion percentage in progress of this invocation of the command line tool.
 
 ```csharp
 public int Percent { get; set; }
@@ -159,7 +159,7 @@ public int Percent { get; set; }
 
 ## CliMessage.Platform Property
 
-The platform this CLI tool is built for and running on.
+The platform this command line tool is built for and running on.
 
 ```csharp
 public string? Platform { get; set; }
@@ -172,7 +172,7 @@ public string? Platform { get; set; }
 
 ## CliMessage.ProgramVersion Property
 
-The full program version of the CLI tool.
+The full program version of the command line tool.
 
 ```csharp
 public string? ProgramVersion { get; set; }
@@ -263,7 +263,7 @@ public int TotalPercent { get; set; }
 
 ## CliMessage.TotalWork Property
 
-The total work that is to be done by this CLI tool invocation.
+The total work that is to be done by this command line tool invocation.
 
 ```csharp
 public long TotalWork { get; set; }

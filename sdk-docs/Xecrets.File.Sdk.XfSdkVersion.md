@@ -3,7 +3,7 @@
 
 ## XfSdkVersion Class
 
-Helper to determine if the current SDK version is compatible with a given CLI Tool API version.
+Helper to determine if the current SDK version is compatible with a given command line tool API version.
 
 ```csharp
 public static class XfSdkVersion
@@ -38,7 +38,7 @@ removals of json property names in <seealso cref="T:Xecrets.File.Sdk.Cli.CliMess
 
 ## XfSdkVersion.IsSdkCompatibleWith(Version) Method
 
-A predicate determining if this SDK is compatible with a given CLI Tool API version.
+A predicate determining if this SDK is compatible with a given command line tool API version.
 
 ```csharp
 public static bool IsSdkCompatibleWith(System.Version cliApiVersion);
@@ -49,8 +49,8 @@ public static bool IsSdkCompatibleWith(System.Version cliApiVersion);
 
 `cliApiVersion` [System.Version](https://docs.microsoft.com/en-us/dotnet/api/System.Version 'System.Version')
 
-The CLI Tool API version
+The command line tool API version
 
 #### Returns
 [System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')  
-[true](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/bool 'https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/bool') if this SDK is compatible with the CLI, [false](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/bool 'https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/bool') otherwise.
+[true](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/bool 'https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/bool') if this SDK is compatible with the command line tool, [false](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/bool 'https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/bool') otherwise.

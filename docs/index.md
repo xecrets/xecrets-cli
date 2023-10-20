@@ -1,32 +1,29 @@
-XecretsFileCli - Xecrets File Command Line Documentation
+XecretsFileCli - Xecrets File Cli Documentation
 
 NAME
 ====
 
-XecretsFileCli - Cross Platform AxCrypt Compatible Command Line Tool 
+XecretsFileCli - A Cross Platform AxCrypt Compatible Command Line Tool 
 
 SYNOPSIS
 ========
 
-XecretsFileCli [--use-public-key _email(s)_] [--create-key-pair _email_
-_encrypted_] [--decrypt-to _encrypted_ _clear_] [--encrypt-to _clear_
-_encrypted_] [--file _name_] [--gpl-license] [--help] [--id] [--json-log]
-[--use-key-pair _encrypted_] [--decrypt-to-folder _encrypted_ [_folder_]]
-[--environment _variable_] [--progress] [--password _secret_] [--quiet]
-[--dryrun] [--stdout] [--text-log] [--load-public-key _file(s)_] [--overwrite]
-[--wipe _file_] [--export-public-key _email_ _file_] [--platform] [--echo]
-[--debug-break] [--debug-break-parse] [--argument-markdown] [--cli-crash-log
-_file_] [--cli-license _jwt-license_] [--options-code-export] [--cli-version]
-[--internal] [--jwt-audience _audience_] [--jwt-claims _expiration_ _claims_]
-[--jwt-create-key-pair _private-pem_ _public-pem_] [--jwt-issuer _issuer_]
-[--jwt-sign _signed-jwt_] [--jwt-private-key _private-pem_] [--jwt-verify
-_public-pem_ _signed-jwt_]
+XecretsFileCli [--use-public-key _email(s)_] [--create-key-pair _email_ _encrypted_] [--decrypt-to
+_encrypted_ _clear_] [--encrypt-to _clear_ _encrypted_] [--file _name_] [--gpl-license] [--help]
+[--id] [--json-log] [--use-key-pair _encrypted_] [--decrypt-to-folder _encrypted_ [_folder_]]
+[--environment _variable_] [--progress] [--password _secret_] [--quiet] [--dryrun] [--stdout]
+[--text-log] [--load-public-key _file(s)_] [--overwrite] [--wipe _file_] [--export-public-key
+_email_ _file_] [--platform] [--echo] [--debug-break] [--debug-break-parse] [--argument-markdown]
+[--cli-crash-log _file_] [--cli-license _jwt-license_] [--options-code-export] [--cli-version]
+[--internal] [--jwt-audience _audience_] [--jwt-claims _expiration_ _claims_] [--jwt-create-key-pair
+_private-pem_ _public-pem_] [--jwt-issuer _issuer_] [--jwt-sign _signed-jwt_] [--jwt-private-key
+_private-pem_] [--jwt-verify _public-pem_ _signed-jwt_]
 
 DESCRIPTION
 ===========
 
-Encrypts, decrypts, creates public key pairs, imports key pairs and public keys
-and securely wipes files.
+Encrypts, decrypts, creates public key pairs, imports key pairs and public keys and securely wipes
+files.
 
 Options
 -------
@@ -43,7 +40,7 @@ Options
 :       Encrypt a file to the given file path.
 
 -f|--file _name_
-:       Take options from a file.
+:       Take options from a file (programmatic).
 
 -g|--gpl-license 
 :       Display the full GNU GPL license.
@@ -55,7 +52,7 @@ Options
 :       Arbitrary id which is returned in JSON-logging.
 
 -j|--json-log 
-:       Enable JSON-based logging.
+:       Enable JSON console logging (programmatic).
 
 -k|--use-key-pair _encrypted_
 :       Use a key-pair, from an encrypted file path. Password is required.
@@ -65,7 +62,7 @@ Options
         If _folder_ is not provided, the _encrypted_'s folder will be used.
 
 -n|--environment _variable_
-:       Take options from environment variable.
+:       Take options from environment variable (programmatic).
 
 -o|--progress 
 :       Continuously log progress.
@@ -83,7 +80,7 @@ Options
 :       Write log output to stdout instead of stderr (global).
 
 -t|--text-log 
-:       Enable text-based console log.
+:       Enable text console logging for interactive and simple script use.
 
 -u|--load-public-key _file(s)_
 :       Load public key(s) from file(s).
@@ -122,7 +119,7 @@ Options
 :       Display C# source code for options.
 
 --cli-version 
-:       Display the CLI API version.
+:       Display the command line tool API version.
 
 --internal 
 :       Display help for internal use commands and disable splash (global).
@@ -148,195 +145,174 @@ Options
 --jwt-verify _public-pem_ _signed-jwt_
 :       Verify a signed JWT file using a public PEM file.
 
-Options are processed in order and may appear multiple times, except when
-'global'. Arguments such as _email_ are required placeholders. Flags may be
-negated by suffixing with '-'.; Single letter flags may be bundled together.
-'-', '--' or '/' are allowed as option prefixes. Quote special characters with a
-single backslash (\\), and enclose single values that contain spaces with quotes
+Options are processed in order and may appear multiple times, except when 'global'. Arguments such
+as _email_ are required placeholders. Flags may be negated by suffixing with '-'.; Single letter
+flags may be bundled together. '-', '--' or '/' are allowed as option prefixes. Quote special
+characters with a single backslash (\\), and enclose single values that contain spaces with quotes
 (").
 
-Since options are accepted from the command line, from environment variables,
-and from files, as well as in different operating systems the native command
-line parsing is not used, instead the command line is taken as a whole and
-parsed internally into discrete arguments. Although the command line treatment
-of arguments is similar across Windows, Linux and OS X, there are various
-differences. Therefore it is parsed internally with consistent rules.
-Essentially only double quotes to contain spaces in an argument, and escape with
-a backslash is supported. When reading arguments from a source other than the
-command line, command line features such as environment variable expansion and
-other injections of data into the command are not supported. Options specified
-in environment variables and files will behave consistently across all supported
-platforms.
+Since options are accepted from the command line, from environment variables, and from files, as
+well as in different operating systems the native command line parsing is not used, instead the
+command line is taken as a whole and parsed internally into discrete arguments. Although the command
+line treatment of arguments is similar across Windows, Linux and OS X, there are various
+differences. Therefore it is parsed internally with consistent rules. Essentially only double quotes
+to contain spaces in an argument, and escape with a backslash is supported. When reading arguments
+from a source other than the command line, command line features such as environment variable
+expansion and other injections of data into the command are not supported. Options specified in
+environment variables and files will behave consistently across all supported platforms.
 
 COMPATIBILITY
 =============
 
-This software is backward and forward compatible with AxCrypt 2.x, at the time
-of publication. If AxCrypt implements some breaking changes in the future, this
-may no longer hold true - but in this case, all older versions of AxCrypt before
-the breaking change suffer the same problem.
+This software is backward and forward compatible with AxCrypt 2.x, at the time of publication. If
+AxCrypt implements some breaking changes in the future, this may no longer hold true - but in this
+case, all older versions of AxCrypt before the breaking change suffer the same problem.
 
-Xecrets File Command Line encrypts data with AxCrypt version 2 format, using
-AES-256 encryption always. It can still decrypt AxCrypt version 1 files, as well
-as AES-128 encrypted version 2 files.
+Xecrets File Cli encrypts data with AxCrypt version 2 format, using AES-256 encryption always. It
+can still decrypt AxCrypt version 1 files, as well as AES-128 encrypted version 2 files.
 
 FILES
 =====
 
 *Encrypted Files* - *.axx
 
-:   Encrypted files are files that have been encryped using one or more
-passwords and optionally one or more public keys. They traditionally have a
-".axx" file extension, but this is not a requirement.
+:   Encrypted files are files that have been encryped using one or more passwords and optionally one
+or more public keys. They traditionally have a ".axx" file extension, but this is not a requirement.
 
 *Private key pair files* - email@example.org-private.axx
 
-:   Key pair files are encrypted files that contain both a private key which is
-secret, and the matching public key. A private key can be used to decrypt files
-encrypted with the public key. A private key pair file is essentially a text
-file that is encrypted, and thus typically have a ".axx" extension. We recommend
-naming them as "someone@example.org-private.axx".
+:   Key pair files are encrypted files that contain both a private key which is secret, and the
+matching public key. A private key can be used to decrypt files encrypted with the public key. A
+private key pair file is essentially a text file that is encrypted, and thus typically have a ".axx"
+extension. We recommend naming them as "someone@example.org-private.axx".
 
 *Public key files* - email@example.org-public.txt
 
-:   Public key files are non-secret text files that can be sent openly to
-anyone, and then used to encrypt files that the owner of the corresponding
-private key can open. We recommend naming them as
+:   Public key files are non-secret text files that can be sent openly to anyone, and then used to
+encrypt files that the owner of the corresponding private key can open. We recommend naming them as
 "someone@example.org-public.txt".
 
 FILE NAMES
 ==========
 
-Encrypted files carry the original file name with them inside the encrypted
-container, with the intention that when decryption is done, the original name
-can be restored without depending on the name of the encrypted file. This also
-allows the protection by encryption of the original name, since the encrypted
-file can be named something that does not give away any information which the
+Encrypted files carry the original file name with them inside the encrypted container, with the
+intention that when decryption is done, the original name can be restored without depending on the
+name of the encrypted file. This also allows the protection by encryption of the original name,
+since the encrypted file can be named something that does not give away any information which the
 original name often does.
 
-This can cause some problems when moving files between operating system, where
-different name rules apply, and also some characters are very difficult to use
-in some operating systems.
+This can cause some problems when moving files between operating system, where different name rules
+apply, and also some characters are very difficult to use in some operating systems.
 
-Our recommendation is therefore to name files safely, which means avoiding most
-special characters. To be really safe, use only: 0-9 a-z A-Z - (dash) . (dot) _
-(underscore) . Other characters will work in most cases, but your mileage may
-vary. Do try it out in your intended environments before wide scale use.
+Our recommendation is therefore to name files safely, which means avoiding most special characters.
+To be really safe, use only: 0-9 a-z A-Z - (dash) . (dot) _ (underscore) . Other characters will
+work in most cases, but your mileage may vary. Do try it out in your intended environments before
+wide scale use.
 
 Standard IO Aliases
 -------------------
 
-Xecrets File supports special aliases for the standard input and standard output
-stream respectively where a path to a file may occur.
+Xecrets File supports special aliases for the standard input and standard output stream respectively
+where a path to a file may occur.
 
 Standard Input: - (dash)
 Standard Output: + (plus)
 
-Using one of these aliases in place of a path will cause Xecrets File to read or
-write to a standard IO stream instead.
+Using one of these aliases in place of a path will cause Xecrets File to read or write to a standard
+IO stream instead.
 
-A special situation arises when encrypting from standard input, as an encrypted file
-always contains the orginal file name in encrypted form in the file. To specify
-the name to use in this case, use the following syntax:
+A special situation arises when encrypting from standard input, as an encrypted file always contains
+the orginal file name in encrypted form in the file. To specify the name to use in this case, use
+the following syntax:
 
 -:_FileName_
 
-I.e. the dash for standard input, followed by a : (colon), followed by the name
-to use.
+I.e. the dash for standard input, followed by a : (colon), followed by the name to use.
 
 BASIC CONCEPTS
 ==============
 
-Xecrets File Command Line encrypts files using at least a password, and
-optionally with one or more public keys.
+Xecrets File Cli encrypts files using at least a password, and optionally with one or more public
+keys.
 
-With Xecrets File, a key pair can be created with --create-key-pair, and the
-public part can be extracted and shared with other people, for example it can be
-published on a web site, or distributed in any other way. It is a clear text
-plain text file that is not secret.
+With Xecrets File, a key pair can be created with --create-key-pair, and the public part can be
+extracted and shared with other people, for example it can be published on a web site, or
+distributed in any other way. It is a clear text plain text file that is not secret.
 
-The public key is typically used to encrypt data for someone else without
-sharing any secret information. All that is required is that the recipient of
-the encrypted data provides the sender with their public key in such a file.
+The public key is typically used to encrypt data for someone else without sharing any secret
+information. All that is required is that the recipient of the encrypted data provides the sender
+with their public key in such a file.
 
-It can also be used as a key recovery mechanism, if all encryption is performed
-using such a public key, the holder of the private key can always decrypt the
-file without known the password used by the encrypting party. This is how
-AxCrypt implements key recovery.
+It can also be used as a key recovery mechanism, if all encryption is performed using such a public
+key, the holder of the private key can always decrypt the file without known the password used by
+the encrypting party. This is how AxCrypt implements key recovery.
 
-Finally, the recommendation is that encryption is never done only with a
-password, but always with the encrypting partys personal public key. If the
-personal key pair is kept safe, and accessible, the files can then be decrypted
-using the private key part of the key pair.
+Finally, the recommendation is that encryption is never done only with a password, but always with
+the encrypting partys personal public key. If the personal key pair is kept safe, and accessible,
+the files can then be decrypted using the private key part of the key pair.
 
 LOGGING AND MESSAGES
 ====================
 
-Progress, informative messages and error messages may be written in either text
-format for humans, or in JSON to be interpreted by scripts or software.
+Progress, informative messages and error messages may be written in either text format for humans,
+or in JSON to be interpreted by scripts or software.
 
-Use --text-log or --json-log respectivey. If none is provided, very little
-output is written. To make the software entirely silent, use --quiet.
+Use --text-log or --json-log respectivey. If none is provided, very little output is written. To
+make the software entirely silent, use --quiet.
 
-All messages are always written to the stderr console output stream, unless
-explicitly redirected to standard output with --stdout .
+All messages are always written to the stderr console output stream, unless explicitly redirected to
+standard output with --stdout .
 
 ENCRYPTION
 ==========
 
-To encrypt a file, a --password must be supplied. If more are given, only the
-first is used for encryption, although the others may be used to attempt
-decryption.
+To encrypt a file, a --password must be supplied. If more are given, only the first is used for
+encryption, although the others may be used to attempt decryption.
 
-If a key pair is supplied via --use-key-pair, the file is also encrypted using
-that key pairs public key.
+If a key pair is supplied via --use-key-pair, the file is also encrypted using that key pairs public
+key.
 
-If a list of public keys is given with --load-public-key, and --use-public-key
-with an email contained in the list is also given, the file will be encrypted
-using that public key as well.
+If a list of public keys is given with --load-public-key, and --use-public-key with an email
+contained in the list is also given, the file will be encrypted using that public key as well.
 
 PASSWORD BASED ENCRYPTION
 =========================
 
-Password based encryption is performed using the PBKDF2-HMACS-HA512 key
-derivation function with 1,000 iterations. This derived key is then used
-in the NIST AES Key Wrap algorithm to actually protect the file master encryption key.
+Password based encryption is performed using the PBKDF2-HMACS-HA512 key derivation function with
+1,000 iterations. This derived key is then used in the NIST AES Key Wrap algorithm to actually
+protect the file master encryption key.
 
-The advantage of password based encryption is that it's the only thing that
-needs to be kept secret, and it can be kept in memory, a piece of paper or
-preferrably a password manager. As long as you know the password, and have
-access to or are able to create appropriate software then the original data is
-recoverable.
+The advantage of password based encryption is that it's the only thing that needs to be kept secret,
+and it can be kept in memory, a piece of paper or preferrably a password manager. As long as you
+know the password, and have access to or are able to create appropriate software then the original
+data is recoverable.
 
-It's also more complicated to use when sharing encrypted files with others, as a
-secure channel is need to send the shared secret password and also there's a
-need then to keep track of multiple passwords.
+It's also more complicated to use when sharing encrypted files with others, as a secure channel is
+need to send the shared secret password and also there's a need then to keep track of multiple
+passwords.
 
 For more details, see
-[AxCryptVersion2AlgorithmsandFileFormat.pdf](AxCryptVersion2AlgorithmsandFileFormat.pdf)
-.
+[AxCryptVersion2AlgorithmsandFileFormat.pdf](AxCryptVersion2AlgorithmsandFileFormat.pdf) .
 
 PUBLIC KEY BASED ENCRYPTION
 ===========================
 
-Public key based encryption is done using RSA-4096, where the encryption key and
-the decryption key is split into two parts. The encryption, or public, key does
-not need to be secret and can be sent to anyone or even published. The
-decryption, or private, key needs to be kept secret, and this is typically done
-by encrypting it in turn as Xecrets File-encrypted file with a password.
+Public key based encryption is done using RSA-4096, where the encryption key and the decryption key
+is split into two parts. The encryption, or public, key does not need to be secret and can be sent
+to anyone or even published. The decryption, or private, key needs to be kept secret, and this is
+typically done by encrypting it in turn as Xecrets File-encrypted file with a password.
 
 For more details, see
-[AxCryptVersion2AlgorithmsandFileFormat.pdf](AxCryptVersion2AlgorithmsandFileFormat.pdf)
-.
+[AxCryptVersion2AlgorithmsandFileFormat.pdf](AxCryptVersion2AlgorithmsandFileFormat.pdf) .
 
 ENVIRONMENT
 ===========
 
 _ANY VARIABLE_
 
-:   Any environment variable can contain options, which is typically used to
-provide passwords to the command line without exposing them visibly or in logs.
-Use --environment _variable_ to read options from an environment variable.
+:   Any environment variable can contain options, which is typically used to provide passwords to
+the command line without exposing them visibly or in logs. Use --environment _variable_ to read
+options from an environment variable.
 
 EXAMPLES
 ========
@@ -417,30 +393,25 @@ See GitHub Issues: <https://github.com/xecrets/xecrets-file-cli/issues>
 ACKNOWLEDGEMENTS
 ================
 
-This program uses code from AxCrypt to perform high level cryptographic
-operations on streams and files, and is licensed under GNU GPL version 3. See
-https://www.axcrypt.net/ for details.
+This program uses code from AxCrypt to perform high level cryptographic operations on streams and
+files, and is licensed under GNU GPL version 3. See https://www.axcrypt.net/ for details.
 
-This program uses code from the Legion of the Bouncy Castle, Copyright (c) 2000
-\- 2017 The Legion of the Bouncy Castle Inc. (http://www.bouncycastle.org), to
-perform low level public key cryptography and is licensed under an adaptation of
-the MIT X11 License, see https://www.bouncycastle.org/csharp/licence.html for
-details.
+This program uses code from the Legion of the Bouncy Castle, Copyright (c) 2000 \- 2017 The Legion
+of the Bouncy Castle Inc. (http://www.bouncycastle.org), to perform low level public key
+cryptography and is licensed under an adaptation of the MIT X11 License, see
+https://www.bouncycastle.org/csharp/licence.html for details.
 
-This program uses code from NDeks.Options to parse the command line and is
-licensed under the MIT/X11 license, see http://www.ndesk.org/Options for
-details.
+This program uses code from NDesk.Options to parse the command line and is licensed under the
+MIT/X11 license, see http://www.ndesk.org/Options for details.
 
-AxCrypt is a registered trademark of AxCrypt AB, and is only used for
-informational purposes.
+AxCrypt is a registered trademark of AxCrypt AB, and is only used for informational purposes.
 
 AUTHOR
 ======
 
 Svante Seleborg / Axantum Software AB, you can reach the author via our
-[support](https://www.axantum.com/support 'Xecrets Support Site') . Note that
-the code used from AxCrypt is with minor exceptions also originally written by
-Svante Seleborg / Axantum Software AB.
+[support](https://www.axantum.com/support 'Xecrets Support Site') . Note that the code used from
+AxCrypt is with minor exceptions also originally written by Svante Seleborg / Axantum Software AB.
 
 SEE ALSO
 ========

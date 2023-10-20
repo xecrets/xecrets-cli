@@ -171,11 +171,12 @@ namespace Xecrets.File.Cli.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Xecrets File Command Line - A cross platform AxCrypt compatible tool for applied strong cryptography.
+        ///   Looks up a localized string similar to Xecrets File Cli - A cross platform AxCrypt compatible tool for applied strong cryptography.
         ///Portions Copyright 2022-2023, Svante Seleborg, All Rights Reserved.
         ///BETA {gpl} Version {version} {buildutc} {runtime}
         ///
-        ///This program is free software; It is licensed under GNU General Public License version 3 or any later version.
+        ///This program is free software; It is licensed under GNU General Public License version 3 or any
+        ///later version.
         ///
         ///{blurb}.
         /// </summary>

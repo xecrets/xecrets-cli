@@ -3,7 +3,7 @@
 
 ## CliToolInformation Class
 
-Information about the CLI tool found and used by the SDK
+Information about the command line tool found and used by the SDK
 
 ```csharp
 public class CliToolInformation

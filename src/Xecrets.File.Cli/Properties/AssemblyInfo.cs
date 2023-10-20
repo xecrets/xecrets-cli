@@ -36,11 +36,11 @@ using System.Resources;
 [assembly: AssemblyConfiguration("Release")]
 #endif
 [assembly: AssemblyCompany("Axantum Software AB")]
-[assembly: AssemblyCopyright("Xecrets File Command Line is Copyright © 2022-2023 Svante Seleborg, All Rights Reserved")]
+[assembly: AssemblyCopyright("Xecrets File Cli is Copyright © 2022-2023 Svante Seleborg, All Rights Reserved")]
 [assembly: AssemblyDescription("A cross platform AxCrypt compatible tool for applied strong cryptography")]
 [assembly: AssemblyTrademark("Xecrets is a trademark of Axantum Software AB")]
-[assembly: AssemblyProduct("Xecrets File Command Line")]
-[assembly: AssemblyTitle("Xecrets File Command Line BETA GPL")]
+[assembly: AssemblyProduct("Xecrets File Cli")]
+[assembly: AssemblyTitle("Xecrets File Cli BETA GPL")]
 [assembly: NeutralResourcesLanguage("en-US")]
 [assembly: CLSCompliant(true)]
 

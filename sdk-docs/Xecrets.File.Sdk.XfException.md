@@ -3,9 +3,10 @@
 
 ## XfException Class
 
-The exception type thrown when something goes wrong calling the CLI tool. In addition to the base class [System.Exception](https://docs.microsoft.com/en-us/dotnet/api/System.Exception 'System.Exception') there is an [ExitCode](Xecrets.File.Sdk.XfException.md#Xecrets.File.Sdk.XfException.ExitCode 'Xecrets.File.Sdk.XfException.ExitCode') property containing the actual exit code from the tool.  
-Exit codes are [System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32') but they are mapped to enum [Xecrets.File.Cli.Public.XfStatusCode](https://docs.microsoft.com/en-us/dotnet/api/Xecrets.File.Cli.Public.XfStatusCode 'Xecrets.File.Cli.Public.XfStatusCode') here. To ensure that the  
-mapping is correct, call [IsSdkCompatibleWith(Version)](Xecrets.File.Sdk.Abstractions.md#Xecrets.File.Sdk.Abstractions.IXfApi.IsSdkCompatibleWith(System.Version) 'Xecrets.File.Sdk.Abstractions.IXfApi.IsSdkCompatibleWith(System.Version)') ./>
+The exception type thrown when something goes wrong calling the command line tool. In addition to the base class  
+[System.Exception](https://docs.microsoft.com/en-us/dotnet/api/System.Exception 'System.Exception') there is an [ExitCode](Xecrets.File.Sdk.XfException.md#Xecrets.File.Sdk.XfException.ExitCode 'Xecrets.File.Sdk.XfException.ExitCode') property containing the actual exit code from the  
+tool. Exit codes are [System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32') but they are mapped to enum [Xecrets.File.Cli.Public.XfStatusCode](https://docs.microsoft.com/en-us/dotnet/api/Xecrets.File.Cli.Public.XfStatusCode 'Xecrets.File.Cli.Public.XfStatusCode') here. To ensure  
+that the mapping is correct, call [IsSdkCompatibleWith(Version)](Xecrets.File.Sdk.Abstractions.md#Xecrets.File.Sdk.Abstractions.IXfApi.IsSdkCompatibleWith(System.Version) 'Xecrets.File.Sdk.Abstractions.IXfApi.IsSdkCompatibleWith(System.Version)') ./>
 
 ```csharp
 public class XfException : System.Exception
@@ -29,7 +30,7 @@ public XfException(int exitCode, string message);
 
 `exitCode` [System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')
 
-The CLI exit code.
+The command line exit code.
 
 <a name='Xecrets.File.Sdk.XfException.XfException(int,string).message'></a>
 
@@ -52,7 +53,7 @@ public XfException(int exitCode, string message, System.Exception ex);
 
 `exitCode` [System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')
 
-The CLI exit code.
+The command line tool exit code.
 
 <a name='Xecrets.File.Sdk.XfException.XfException(int,string,System.Exception).message'></a>
 
@@ -111,7 +112,7 @@ The inner exception.
 
 ## XfException.ExitCode Property
 
-The exit code from the CLI.
+The exit code from the command line tool.
 
 ```csharp
 public int ExitCode { get; }

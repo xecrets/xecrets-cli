@@ -26,6 +26,10 @@ guidelines = 120
 # .NET Coding Conventions     #
 ###############################
 [*.{cs,vb}]
+
+# IDE0046: Convert to conditional expression
+dotnet_diagnostic.IDE0046.severity = none
+
 # Organize usings
 dotnet_sort_system_directives_first = true
 # this. preferences

@@ -4,4 +4,4 @@
 
 | Classes | |
 | :--- | :--- |
-| [CliMessage](Xecrets.File.Sdk.Cli.CliMessage.md 'Xecrets.File.Sdk.Cli.CliMessage') | Log output and progress from the CLI tool. |
+| [CliMessage](Xecrets.File.Sdk.Cli.CliMessage.md 'Xecrets.File.Sdk.Cli.CliMessage') | Log output and progress from the command line tool. |
