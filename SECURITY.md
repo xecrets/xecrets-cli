@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-All versions 2.3.x.y are supported.
+All versions 2.3.x are supported.
 
 ## Reporting a Vulnerability
 
