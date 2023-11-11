@@ -60,7 +60,11 @@ Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 var options = new OptionsParser(Environment.CommandLine);
 
 RuntimeEnvironment.RegisterTypeFactories();
-Resolve.RegisterTypeFactories(Path.Combine(Path.GetTempPath(), "Axantum/XecretsFileCli".Replace('/', Path.DirectorySeparatorChar)), Array.Empty<Assembly>());
+
+string workFolderPath = Path.Combine(Path.GetTempPath(), "Axantum/XecretsFileCli".Replace('/', Path.DirectorySeparatorChar));
+Directory.CreateDirectory(workFolderPath); 
+Resolve.RegisterTypeFactories(workFolderPath, Array.Empty<Assembly>());
+
 TypeMap.Register.Singleton(() => new FileLocker());
 TypeMap.Register.Singleton<IProtectedData>(() => new ProtectedDataImplementation("Xecrets.File.Cli"));
 TypeMap.Register.New<ILauncher>(() => new Launcher());
