@@ -60,7 +60,7 @@ Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 var options = new OptionsParser(Environment.CommandLine);
 
 RuntimeEnvironment.RegisterTypeFactories();
-Resolve.RegisterTypeFactories(Path.GetTempPath(), Array.Empty<Assembly>());
+Resolve.RegisterTypeFactories(Path.Combine(Path.GetTempPath(), "Axantum/XecretsFileCli".Replace('/', Path.DirectorySeparatorChar)), Array.Empty<Assembly>());
 TypeMap.Register.Singleton(() => new FileLocker());
 TypeMap.Register.Singleton<IProtectedData>(() => new ProtectedDataImplementation("Xecrets.File.Cli"));
 TypeMap.Register.New<ILauncher>(() => new Launcher());
@@ -77,10 +77,18 @@ TypeMap.Register.New(() => new AxCryptApiClient(Resolve.KnownIdentities.DefaultE
 TypeMap.Register.New<ISystemCryptoPolicy>(() => new ProCryptoPolicy());
 TypeMap.Register.New<ICryptoPolicy>(() => New<LicensePolicy>().Capabilities.CryptoPolicy);
 
-TypeMap.Register.Singleton<IReport>(() => new Report(Path.GetTempPath(), 1000000));
+TypeMap.Register.Singleton<IReport>(() => new Report(Resolve.WorkFolder.FileInfo.FullName, 1000000));
 TypeMap.Register.Singleton<INow>(() => new Now());
 TypeMap.Register.New<string, IFileWatcher>((path) => new FileWatcher());
-TypeMap.Register.Singleton<ISettingsStore>(() => new SettingsStore(Resolve.WorkFolder.FileInfo.FileItemInfo("UserSettings.txt")));
+
+// Avoid JSON deserialization errors when the user settings file is empty.
+IDataStore settings = Resolve.WorkFolder.FileInfo.FileItemInfo("UserSettings.txt");
+if (settings.IsAvailable && settings.Length() == 0)
+{
+    settings.Delete();
+}
+TypeMap.Register.Singleton<ISettingsStore>(() => new SettingsStore(settings));
+
 TypeMap.Register.Singleton<IUIThread>(() => new UIThread());
 TypeMap.Register.Singleton(() => new ConsoleOut(Console.Error));
 TypeMap.Register.Singleton<IEmailParser>(() => new EmailParser());
