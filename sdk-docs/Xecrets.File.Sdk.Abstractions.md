@@ -119,30 +119,30 @@ A list of key pairs to try to decrypt.
 [System.Threading.Tasks.Task&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')[XfKeyPair](Xecrets.File.Sdk.Models.XfKeyPair.md 'Xecrets.File.Sdk.Models.XfKeyPair')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')  
 The first key pair possible to decrypt, or null if none could be decrypted.
 
-<a name='Xecrets.File.Sdk.Abstractions.IXfApi.DecryptStream(Xecrets.File.Sdk.Models.XfCredentials,System.IO.Stream,System.IO.Stream)'></a>
+<a name='Xecrets.File.Sdk.Abstractions.IXfApi.DecryptStreamAsync(Xecrets.File.Sdk.Models.XfCredentials,System.IO.Stream,System.IO.Stream)'></a>
 
-## IXfApi.DecryptStream(XfCredentials, Stream, Stream) Method
+## IXfApi.DecryptStreamAsync(XfCredentials, Stream, Stream) Method
 
 Decrypt an arbitrary stream to another stream
 
 ```csharp
-System.Threading.Tasks.Task<string> DecryptStream(Xecrets.File.Sdk.Models.XfCredentials credentials, System.IO.Stream cipherStream, System.IO.Stream clearStream);
+System.Threading.Tasks.Task<string> DecryptStreamAsync(Xecrets.File.Sdk.Models.XfCredentials credentials, System.IO.Stream cipherStream, System.IO.Stream clearStream);
 ```
 #### Parameters
 
-<a name='Xecrets.File.Sdk.Abstractions.IXfApi.DecryptStream(Xecrets.File.Sdk.Models.XfCredentials,System.IO.Stream,System.IO.Stream).credentials'></a>
+<a name='Xecrets.File.Sdk.Abstractions.IXfApi.DecryptStreamAsync(Xecrets.File.Sdk.Models.XfCredentials,System.IO.Stream,System.IO.Stream).credentials'></a>
 
 `credentials` [XfCredentials](Xecrets.File.Sdk.Models.XfCredentials.md 'Xecrets.File.Sdk.Models.XfCredentials')
 
 One or more passwords to encrypt with.
 
-<a name='Xecrets.File.Sdk.Abstractions.IXfApi.DecryptStream(Xecrets.File.Sdk.Models.XfCredentials,System.IO.Stream,System.IO.Stream).cipherStream'></a>
+<a name='Xecrets.File.Sdk.Abstractions.IXfApi.DecryptStreamAsync(Xecrets.File.Sdk.Models.XfCredentials,System.IO.Stream,System.IO.Stream).cipherStream'></a>
 
 `cipherStream` [System.IO.Stream](https://docs.microsoft.com/en-us/dotnet/api/System.IO.Stream 'System.IO.Stream')
 
 A stream of data to decrypt.
 
-<a name='Xecrets.File.Sdk.Abstractions.IXfApi.DecryptStream(Xecrets.File.Sdk.Models.XfCredentials,System.IO.Stream,System.IO.Stream).clearStream'></a>
+<a name='Xecrets.File.Sdk.Abstractions.IXfApi.DecryptStreamAsync(Xecrets.File.Sdk.Models.XfCredentials,System.IO.Stream,System.IO.Stream).clearStream'></a>
 
 `clearStream` [System.IO.Stream](https://docs.microsoft.com/en-us/dotnet/api/System.IO.Stream 'System.IO.Stream')
 
@@ -259,36 +259,36 @@ The key pair to encrypt.
 [System.Threading.Tasks.Task&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')[XfEncryptedKeyPair](Xecrets.File.Sdk.Models.XfEncryptedKeyPair.md 'Xecrets.File.Sdk.Models.XfEncryptedKeyPair')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')  
 The encrypted key pair as a blob.
 
-<a name='Xecrets.File.Sdk.Abstractions.IXfApi.EncryptStream(Xecrets.File.Sdk.Models.XfCredentials,string,System.IO.Stream,System.IO.Stream)'></a>
+<a name='Xecrets.File.Sdk.Abstractions.IXfApi.EncryptStreamAsync(Xecrets.File.Sdk.Models.XfCredentials,string,System.IO.Stream,System.IO.Stream)'></a>
 
-## IXfApi.EncryptStream(XfCredentials, string, Stream, Stream) Method
+## IXfApi.EncryptStreamAsync(XfCredentials, string, Stream, Stream) Method
 
 Encrypt an arbitrary stream to another stream
 
 ```csharp
-System.Threading.Tasks.Task EncryptStream(Xecrets.File.Sdk.Models.XfCredentials credentials, string originalFileName, System.IO.Stream clearStream, System.IO.Stream cipherStream);
+System.Threading.Tasks.Task EncryptStreamAsync(Xecrets.File.Sdk.Models.XfCredentials credentials, string originalFileName, System.IO.Stream clearStream, System.IO.Stream cipherStream);
 ```
 #### Parameters
 
-<a name='Xecrets.File.Sdk.Abstractions.IXfApi.EncryptStream(Xecrets.File.Sdk.Models.XfCredentials,string,System.IO.Stream,System.IO.Stream).credentials'></a>
+<a name='Xecrets.File.Sdk.Abstractions.IXfApi.EncryptStreamAsync(Xecrets.File.Sdk.Models.XfCredentials,string,System.IO.Stream,System.IO.Stream).credentials'></a>
 
 `credentials` [XfCredentials](Xecrets.File.Sdk.Models.XfCredentials.md 'Xecrets.File.Sdk.Models.XfCredentials')
 
 One or more passwords to encrypt with.
 
-<a name='Xecrets.File.Sdk.Abstractions.IXfApi.EncryptStream(Xecrets.File.Sdk.Models.XfCredentials,string,System.IO.Stream,System.IO.Stream).originalFileName'></a>
+<a name='Xecrets.File.Sdk.Abstractions.IXfApi.EncryptStreamAsync(Xecrets.File.Sdk.Models.XfCredentials,string,System.IO.Stream,System.IO.Stream).originalFileName'></a>
 
 `originalFileName` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
 
 The original file name to embed into the encrypted file stream
 
-<a name='Xecrets.File.Sdk.Abstractions.IXfApi.EncryptStream(Xecrets.File.Sdk.Models.XfCredentials,string,System.IO.Stream,System.IO.Stream).clearStream'></a>
+<a name='Xecrets.File.Sdk.Abstractions.IXfApi.EncryptStreamAsync(Xecrets.File.Sdk.Models.XfCredentials,string,System.IO.Stream,System.IO.Stream).clearStream'></a>
 
 `clearStream` [System.IO.Stream](https://docs.microsoft.com/en-us/dotnet/api/System.IO.Stream 'System.IO.Stream')
 
 A stream of data to encrypt.
 
-<a name='Xecrets.File.Sdk.Abstractions.IXfApi.EncryptStream(Xecrets.File.Sdk.Models.XfCredentials,string,System.IO.Stream,System.IO.Stream).cipherStream'></a>
+<a name='Xecrets.File.Sdk.Abstractions.IXfApi.EncryptStreamAsync(Xecrets.File.Sdk.Models.XfCredentials,string,System.IO.Stream,System.IO.Stream).cipherStream'></a>
 
 `cipherStream` [System.IO.Stream](https://docs.microsoft.com/en-us/dotnet/api/System.IO.Stream 'System.IO.Stream')
 
