@@ -32,30 +32,20 @@ namespace Xecrets.File.Cli.Implementation
     /// <summary>
     /// Wrap a progress context, to also count down progress for a accumulative totals counter.
     /// </summary>
-    internal class TotalsProgressContext : IProgressContext
+    internal class TotalsProgressContext(IProgressContext progressToWrap, TotalsTracker totalsTracker) : IProgressContext
     {
-        private readonly IProgressContext _progressToWrap;
+        public string Display { get { return progressToWrap.Display; } set { progressToWrap.Display = value; } }
 
-        private readonly TotalsTracker _totalsTracker;
+        public bool Cancel { get { return progressToWrap.Cancel; } set { progressToWrap.Cancel = value; } }
 
-        public TotalsProgressContext(IProgressContext progressToWrap, TotalsTracker totalsTracker)
-        {
-            _progressToWrap = progressToWrap;
-            _totalsTracker = totalsTracker;
-        }
+        public bool AllItemsConfirmed { get { return progressToWrap.AllItemsConfirmed; } set { progressToWrap.AllItemsConfirmed = value; } }
 
-        public string Display { get { return _progressToWrap.Display; } set { _progressToWrap.Display = value; } }
-
-        public bool Cancel { get { return _progressToWrap.Cancel; } set { _progressToWrap.Cancel = value; } }
-
-        public bool AllItemsConfirmed { get { return _progressToWrap.AllItemsConfirmed; } set { _progressToWrap.AllItemsConfirmed = value; } }
-
-        public ProgressTotals Totals { get => _progressToWrap.Totals; }
+        public ProgressTotals Totals { get => progressToWrap.Totals; }
 
         public event EventHandler<ProgressEventArgs>? Progressing
         {
-            add { _progressToWrap.Progressing += value; }
-            remove { _progressToWrap.Progressing -= value; }
+            add { progressToWrap.Progressing += value; }
+            remove { progressToWrap.Progressing -= value; }
         }
 
         /// <summary>
@@ -64,8 +54,8 @@ namespace Xecrets.File.Cli.Implementation
         /// <param name="count">The amount of work having been performed in this step.</param>
         public void AddCount(long count)
         {
-            _totalsTracker.DoWork(count);
-            _progressToWrap.AddCount(count);
+            totalsTracker.DoWork(count);
+            progressToWrap.AddCount(count);
         }
 
         /// <summary>
@@ -74,33 +64,33 @@ namespace Xecrets.File.Cli.Implementation
         /// <param name="count">The amount of work to add.</param>
         public void AddTotal(long count)
         {
-            _progressToWrap.AddTotal(count);
+            progressToWrap.AddTotal(count);
         }
 
         public Task EnterSingleThread()
         {
-            return _progressToWrap.EnterSingleThread();
+            return progressToWrap.EnterSingleThread();
         }
 
         public void LeaveSingleThread()
         {
-            _progressToWrap.LeaveSingleThread();
+            progressToWrap.LeaveSingleThread();
         }
 
         public void NotifyLevelFinished()
         {
-            _totalsTracker.DoItems(1);
-            _progressToWrap.NotifyLevelFinished();
+            totalsTracker.DoItems(1);
+            progressToWrap.NotifyLevelFinished();
         }
 
         public void NotifyLevelStart()
         {
-            _progressToWrap.NotifyLevelStart();
+            progressToWrap.NotifyLevelStart();
         }
 
         public void RemoveCount(long totalCount, long progressCount)
         {
-            _progressToWrap.RemoveCount(totalCount, progressCount);
+            progressToWrap.RemoveCount(totalCount, progressCount);
         }
     }
 }

@@ -54,11 +54,5 @@ namespace Xecrets.File.Cli
         {
             Status = new Status(XfStatusCode.ExceptionError, message);
         }
-
-        protected XecretsFileCliException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-            Status = new Status(XfStatusCode.ExceptionError, "An exception occurred.");
-        }
     }
 }

@@ -30,14 +30,9 @@ using Xecrets.File.Cli.Public;
 
 namespace Xecrets.File.Cli.Log
 {
-    internal class NoLogger : ILogger
+    internal class NoLogger(TotalsTracker totalsTracker) : ILogger
     {
-        public NoLogger(TotalsTracker totalsTracker)
-        {
-            Progress = new TotalsProgressContext(new NoProgressContext(), totalsTracker);
-        }
-
-        public IProgressContext Progress { get; } = new NoProgressContext();
+        public IProgressContext Progress { get; } = new TotalsProgressContext(new NoProgressContext(), totalsTracker);
 
         public void Log(XfOpCode opCode, Status status)
         {

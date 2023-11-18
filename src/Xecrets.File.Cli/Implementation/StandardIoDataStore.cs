@@ -36,7 +36,7 @@ namespace Xecrets.File.Cli.Implementation
 {
     internal class StandardIoDataStore : IStandardIoDataStore
     {
-        private readonly IDataStore _wrapped;
+        private readonly DataStore _wrapped;
 
         public bool IsStdin { get; }
 

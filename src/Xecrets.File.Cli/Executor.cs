@@ -30,19 +30,12 @@ using static AxCrypt.Abstractions.TypeResolve;
 
 namespace Xecrets.File.Cli
 {
-    internal class Executor : IDisposable
+    internal class Executor(Parameters parameters) : IDisposable
     {
-        private readonly Parameters _parameters;
-
-        public Executor(Parameters parameters)
-        {
-            _parameters = parameters;
-        }
-
         public async Task<Status> RunAsync()
         {
-            Status status = await RunAsync(new DryRunFactory(_parameters));
-            if ((_parameters.Parser.IsQuiet || _parameters.Parser.Internal) && status.IsSuccess)
+            Status status = await RunAsync(new DryRunFactory(parameters));
+            if ((parameters.Parser.IsQuiet || parameters.Parser.Internal) && status.IsSuccess)
             {
                 New<Splash>().Clear();
             }
@@ -52,20 +45,20 @@ namespace Xecrets.File.Cli
                 return status;
             }
 
-            if (_parameters.Parser.IsDryRunOnly)
+            if (parameters.Parser.IsDryRunOnly)
             {
                 return new Status("A successful dry run was executed, no files were changed.");
             }
 
             ResetParametersForRealRun();
 
-            return await RunAsync(new RealRunFactory(_parameters));
+            return await RunAsync(new RealRunFactory(parameters));
         }
 
         private void ResetParametersForRealRun()
         {
-            _parameters.TotalsTracker.ResetLogger(_parameters);
-            _parameters.Overwrite = false;
+            parameters.TotalsTracker.ResetLogger(parameters);
+            parameters.Overwrite = false;
         }
 
         private static async Task<Status> RunAsync(RunFactory factory)
@@ -100,7 +93,7 @@ namespace Xecrets.File.Cli
                 return;
             }
 
-            _parameters.Dispose();
+            parameters.Dispose();
             _disposed = true;
         }
     }

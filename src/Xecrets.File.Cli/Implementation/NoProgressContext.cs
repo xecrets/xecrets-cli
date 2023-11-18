@@ -31,18 +31,13 @@ using Xecrets.File.Cli.Log;
 
 namespace Xecrets.File.Cli.Implementation
 {
-    internal class NoProgressContext : ProgressContext
+    internal class NoProgressContext(TimeSpan timeToFirstProgress, TimeSpan progressTimeInterval) : ProgressContext(timeToFirstProgress, progressTimeInterval)
     {
         [AllowNull]
         public TotalsTracker TotalsTracker { get; set; }
 
         public NoProgressContext()
             : this(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1))
-        {
-        }
-
-        public NoProgressContext(TimeSpan timeToFirstProgress, TimeSpan progressTimeInterval)
-            : base(timeToFirstProgress, progressTimeInterval)
         {
         }
     }

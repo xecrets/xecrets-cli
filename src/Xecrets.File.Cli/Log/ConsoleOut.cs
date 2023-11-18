@@ -25,24 +25,17 @@
 
 namespace Xecrets.File.Cli.Log
 {
-    internal class ConsoleOut
+    internal class ConsoleOut(TextWriter writer)
     {
         public bool BlankLinePending { get; set; }
 
-        private readonly TextWriter _writer;
-
         private bool _newLinePending;
-
-        public ConsoleOut(TextWriter writer)
-        {
-            _writer = writer;
-        }
 
         public void Write(object text)
         {
             WritePending();
             string m = NormalizeNewLines(text.ToString() ?? string.Empty);
-            _writer.Write(m);
+            writer.Write(m);
             _lastLineLength = 0;
         }
 
@@ -55,7 +48,7 @@ namespace Xecrets.File.Cli.Log
         public void WriteLine(object text)
         {
             Write(text);
-            _writer.WriteLine();
+            writer.WriteLine();
             _lastLineLength = 0;
         }
 
@@ -72,10 +65,10 @@ namespace Xecrets.File.Cli.Log
             WriteBlankLinePending();
 
             m = Pad(value);
-            _writer.Write(m);
+            writer.Write(m);
 
             _lastLineLength = m.Length;
-            _writer.Write('\r');
+            writer.Write('\r');
             _newLinePending = true;
         }
 
@@ -90,7 +83,7 @@ namespace Xecrets.File.Cli.Log
         {
             if (_newLinePending)
             {
-                _writer.Write(string.Empty.PadRight(_lastLineLength) + '\r');
+                writer.Write(string.Empty.PadRight(_lastLineLength) + '\r');
                 _newLinePending = false;
                 _lastLineLength = 0;
             }
@@ -101,7 +94,7 @@ namespace Xecrets.File.Cli.Log
         {
             if (BlankLinePending)
             {
-                _writer.WriteLine();
+                writer.WriteLine();
                 BlankLinePending = false;
                 _lastLineLength = 0;
             }

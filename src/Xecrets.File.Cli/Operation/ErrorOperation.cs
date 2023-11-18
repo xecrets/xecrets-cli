@@ -29,23 +29,16 @@ using Xecrets.File.Cli.Run;
 
 namespace Xecrets.File.Cli.Operation
 {
-    internal class ErrorOperation : IExecutionPhases
+    internal class ErrorOperation(string message) : IExecutionPhases
     {
-        private readonly string _message;
-
-        public ErrorOperation(string message)
-        {
-            _message = message;
-        }
-
         public Task<Status> DryAsync(Parameters parameters)
         {
-            return Task.FromResult(new Status(XfStatusCode.Error, parameters, _message));
+            return Task.FromResult(new Status(XfStatusCode.Error, parameters, message));
         }
 
         public Task<Status> RealAsync(Parameters parameters)
         {
-            return Task.FromResult(new Status(XfStatusCode.Error, parameters, _message));
+            return Task.FromResult(new Status(XfStatusCode.Error, parameters, message));
         }
     }
 }

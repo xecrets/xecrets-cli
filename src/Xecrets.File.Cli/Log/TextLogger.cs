@@ -32,14 +32,9 @@ using static AxCrypt.Abstractions.TypeResolve;
 
 namespace Xecrets.File.Cli.Log
 {
-    internal class TextLogger : ILogger
+    internal class TextLogger(TotalsTracker totalsTracker, bool progress) : ILogger
     {
-        public TextLogger(TotalsTracker totalsTracker, bool progress)
-        {
-            Progress = new TotalsProgressContext(progress ? new TextProgressContext(totalsTracker) : new NoProgressContext(), totalsTracker);
-        }
-
-        public IProgressContext Progress { get; }
+        public IProgressContext Progress { get; } = new TotalsProgressContext(progress ? new TextProgressContext(totalsTracker) : new NoProgressContext(), totalsTracker);
 
         public void Log(Status status)
         {

@@ -8,7 +8,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <NeutralLanguage>en-US</NeutralLanguage>
@@ -16,13 +16,12 @@
     <AssemblyName>XecretsFileCli</AssemblyName>
     <ApplicationIcon>XecretsFile.ico</ApplicationIcon>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <NoWarn>1701;1702;IL2026;IL2104</NoWarn>
-    <WarningsNotAsErrors></WarningsNotAsErrors>
+    <WarningsNotAsErrors>
+    </WarningsNotAsErrors>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <NoWarn>1701;1702;IL2026;IL2104</NoWarn>
@@ -30,22 +29,18 @@
     <DebuggerSupport>false</DebuggerSupport>
     <PublishTrimmed>true</PublishTrimmed>
   </PropertyGroup>
-
   <ItemGroup>
     <Content Include="XecretsFile.ico" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="7.0.3" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
     <PackageReference Include="Xecrets.Licensing" Version="1.0.10" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\..\xecrets-net\AxCrypt.Core\Xecrets.File.Core.csproj" />
     <ProjectReference Include="..\..\..\xecrets-net\AxCrypt.Mono\Xecrets.File.Implementation.NET.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Update="Properties\Resource.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -53,14 +48,12 @@
       <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Update="Properties\Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-
   <ItemGroup>
     <None Update="Properties\AssemblyVersion.cs">
       <DesignTime>True</DesignTime>
@@ -68,7 +61,6 @@
       <DependentUpon>AssemblyVersion.tt</DependentUpon>
     </None>
   </ItemGroup>
-
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>

@@ -324,7 +324,7 @@ EXAMPLES
       
     echo === Assume set PATH=%%PATH%%;[Path-to-executable] 
     echo === For example:  
-    echo === set PATH=%%PATH%%;"C:\Users\%UserName%\Documents\Visual Studio 2022\Projects\xecrets-file-cli\src\Xecrets.File.Cli\bin\Debug\net7.0\"  
+    echo === set PATH=%%PATH%%;"C:\Users\%UserName%\Documents\Visual Studio 2022\Projects\xecrets-file-cli\src\Xecrets.File.Cli\bin\Debug\net8.0\"  
     echo.  
     echo === Ensure there is a file thfg.mp4 and a folder Photos with files 1.jpg ... 5.jpg  
     echo === in the current folder, named win-x64.  

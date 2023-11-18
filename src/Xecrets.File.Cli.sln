@@ -19,7 +19,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\README.md = ..\README.md
 		..\SECURITY.md = ..\SECURITY.md
 		..\win-x64-zip.ps1 = ..\win-x64-zip.ps1
-		..\..\xecrets-licensing\src\Xecrets.Licensing\Xecrets.Licensing.csproj = ..\..\xecrets-licensing\src\Xecrets.Licensing\Xecrets.Licensing.csproj
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xecrets.File.Common", "..\..\xecrets-net\AxCrypt.Common\Xecrets.File.Common.csproj", "{4C18EBBA-EF5F-4CAE-9101-368129372E17}"

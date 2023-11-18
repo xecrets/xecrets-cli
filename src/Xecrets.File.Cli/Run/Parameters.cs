@@ -33,7 +33,7 @@ using Xecrets.File.Cli.Public;
 
 namespace Xecrets.File.Cli.Run
 {
-    internal class Parameters : IDisposable
+    internal class Parameters(OptionsParser parser) : IDisposable
     {
         public bool IsDryRun { get; set; } = true;
 
@@ -69,7 +69,7 @@ namespace Xecrets.File.Cli.Run
 
         public KnownPublicKeys LoadedPublicKeys { get; } = new KnownPublicKeys();
 
-        public OptionsParser Parser { get; }
+        public OptionsParser Parser { get; } = parser;
 
         public IList<LogOnIdentity> Identities { get; } = new List<LogOnIdentity>();
 
@@ -100,11 +100,6 @@ namespace Xecrets.File.Cli.Run
         public void StartReal()
         {
             IsDryRun = false;
-        }
-
-        public Parameters(OptionsParser parser)
-        {
-            Parser = parser;
         }
 
         public void Dispose()

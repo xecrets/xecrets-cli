@@ -28,13 +28,13 @@ using Xecrets.File.Cli.Run;
 
 namespace Xecrets.File.Cli
 {
-    internal class Status
+    internal class Status(XfStatusCode code, string message)
     {
         public static Status Success = new(XfStatusCode.Success, string.Empty);
 
-        public XfStatusCode StatusCode { get;  }
+        public XfStatusCode StatusCode { get; } = code;
 
-        public string Message { get; set; }
+        public string Message { get; set; } = message ?? throw new ArgumentNullException(nameof(message));
 
         public XfOpCode OpCode { get; set; } = XfOpCode.None;
 
@@ -80,12 +80,6 @@ namespace Xecrets.File.Cli
             Email = parameters.Email;
             From = parameters.From;
             To = parameters.To;
-        }
-
-        public Status(XfStatusCode code, string message)
-        {
-            StatusCode = code;
-            Message = message ?? throw new ArgumentNullException(nameof(message));
         }
 
         public override string ToString()

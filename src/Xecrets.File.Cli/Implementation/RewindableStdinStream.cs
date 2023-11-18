@@ -44,20 +44,14 @@ namespace Xecrets.File.Cli.Implementation
 
         private class Buffers
         {
-            private class Buffer
+            private class Buffer(long position, int length)
             {
-                public Buffer(long position, int length)
-                {
-                    Data = new byte[length];
-                    Position = position;
-                }
+                public byte[] Data = new byte[length];
 
-                public byte[] Data;
-
-                public long Position;
+                public long Position = position;
             }
 
-            private readonly List<Buffer> _buffers = new List<Buffer>();
+            private readonly List<Buffer> _buffers = [];
 
             public int Read(long position, byte[] data, int offset, int count)
             {

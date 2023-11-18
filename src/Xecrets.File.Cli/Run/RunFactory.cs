@@ -31,7 +31,7 @@ using Xecrets.File.Cli.Public;
 
 namespace Xecrets.File.Cli.Run
 {
-    internal abstract class RunFactory
+    internal abstract class RunFactory(Parameters parameters)
     {
         readonly Dictionary<XfOpCode, Func<IExecutionPhases>> _operationTable = new Dictionary<XfOpCode, Func<IExecutionPhases>>()
         {
@@ -76,34 +76,16 @@ namespace Xecrets.File.Cli.Run
             { XfOpCode.Wipe, () => new WipeOperation() },
         };
 
-        public Parameters Parameters { get; }
+        public Parameters Parameters { get; } = parameters;
 
-        public RunFactory(Parameters parameters)
+        private class SomeAction(RunFactory factory, IExecutionPhases methods, XfOpCode opCode) : IOperation
         {
-            Parameters = parameters;
-        }
-
-        private class SomeAction : IOperation
-        {
-            private readonly RunFactory _factory;
-
-            private readonly IExecutionPhases _methods;
-
-            private readonly XfOpCode _opCode;
-
-            public SomeAction(RunFactory factory, IExecutionPhases methods, XfOpCode opCode)
-            {
-                _factory = factory;
-                _methods = methods;
-                _opCode = opCode;
-            }
-
             public async Task<Status> DoAsync()
             {
                 Status status;
                 try
                 {
-                    status = _factory.Parameters.IsDryRun ? await _methods.DryAsync(_factory.Parameters) : await _methods.RealAsync(_factory.Parameters);
+                    status = factory.Parameters.IsDryRun ? await methods.DryAsync(factory.Parameters) : await methods.RealAsync(factory.Parameters);
                 }
                 catch (XecretsFileCliException xfcex)
                 {
@@ -113,26 +95,26 @@ namespace Xecrets.File.Cli.Run
                 {
                     status = new Status(XfStatusCode.AxCryptException, acex.ToString())
                     {
-                        Id = _factory.Parameters.TotalsTracker.Id,
+                        Id = factory.Parameters.TotalsTracker.Id,
                     };
                 }
                 catch (FileNotFoundException fnfex)
                 {
                     status = new Status(XfStatusCode.FileUnavailable, fnfex.ToString())
                     {
-                        Id = _factory.Parameters.TotalsTracker.Id,
-                        File = fnfex.FileName ?? (_factory.Parameters.From),
+                        Id = factory.Parameters.TotalsTracker.Id,
+                        File = fnfex.FileName ?? (factory.Parameters.From),
                     };
                 }
                 catch (Exception ex)
                 {
                     status = new Status(XfStatusCode.UnhandledOperationException, ex.ToString())
                     {
-                        Id = _factory.Parameters.TotalsTracker.Id,
+                        Id = factory.Parameters.TotalsTracker.Id,
                     };
                 }
 
-                status.OpCode = _opCode;
+                status.OpCode = opCode;
                 return status;
             }
         }

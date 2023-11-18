@@ -37,14 +37,9 @@ using static AxCrypt.Abstractions.TypeResolve;
 
 namespace Xecrets.File.Cli.Run
 {
-    internal sealed class Decryption : IDisposable
+    internal sealed class Decryption(Stream fromStream, IEnumerable<LogOnIdentity> identities, IProgressContext progress) : IDisposable
     {
-        private IAxCryptDocument _document;
-
-        public Decryption(Stream fromStream, IEnumerable<LogOnIdentity> identities, IProgressContext progress)
-        {
-            _document = CreateDocument(identities, new ProgressStream(fromStream, progress));
-        }
+        private IAxCryptDocument _document = CreateDocument(identities, new ProgressStream(fromStream, progress));
 
         public bool HasValidPassphrase => _document.PassphraseIsValid;
 
@@ -103,7 +98,7 @@ namespace Xecrets.File.Cli.Run
             return document;
         }
 
-        private static IEnumerable<DecryptionParameter> DecryptionParameters(IEnumerable<LogOnIdentity> identities, bool isLegacyV1)
+        private static List<DecryptionParameter> DecryptionParameters(IEnumerable<LogOnIdentity> identities, bool isLegacyV1)
         {
             var decryptionParameters = new List<DecryptionParameter>();
             foreach (var identity in identities)

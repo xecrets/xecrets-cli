@@ -34,14 +34,9 @@ using static AxCrypt.Abstractions.TypeResolve;
 
 namespace Xecrets.File.Cli.Log
 {
-    internal class JsonLogger : ILogger
+    internal class JsonLogger(TotalsTracker totalsTracker, bool progress) : ILogger
     {
-        public JsonLogger(TotalsTracker totalsTracker, bool progress)
-        {
-            Progress = new TotalsProgressContext(progress ? new JsonProgressContext(totalsTracker) : new NoProgressContext(), totalsTracker);
-        }
-
-        public IProgressContext Progress { get; }
+        public IProgressContext Progress { get; } = new TotalsProgressContext(progress ? new JsonProgressContext(totalsTracker) : new NoProgressContext(), totalsTracker);
 
         public void Log(Status status)
         {

@@ -25,19 +25,12 @@
 
 namespace Xecrets.File.Cli.Public
 {
-    internal class XfOptionDefinition
+    internal class XfOptionDefinition(int opCode, string prototype, string description)
     {
-        public XfOptionDefinition(int opCode, string prototype, string description)
-        {
-            OpCode = opCode;
-            Prototype = prototype.TrimEnd('=', ':', '{', '}');
-            Description = description;
-        }
+        public int OpCode { get; } = opCode;
 
-        public int OpCode { get; }
+        public string Prototype { get; } = prototype.TrimEnd('=', ':', '{', '}');
 
-        public string Prototype { get; }
-
-        public string Description { get; }
+        public string Description { get; } = description;
     }
 }

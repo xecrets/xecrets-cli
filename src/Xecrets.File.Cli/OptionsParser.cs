@@ -193,10 +193,10 @@ namespace Xecrets.File.Cli
 #if !DEBUG
             if (!Internal && (option.Description == null || option.Description.Contains(":?")))
             {
-                return Array.Empty<string>();
+                return [];
             }
 #endif
-            string[] split = option.Description?.Split(':') ?? new string[] { string.Empty, string.Empty, };
+            string[] split = option.Description?.Split(':') ?? [string.Empty, string.Empty,];
             if (split[1].StartsWith('?'))
             {
                 split[1] = split[1].Substring(1);
@@ -204,7 +204,7 @@ namespace Xecrets.File.Cli
             string options = string.Join('|', option.GetNames().Select(n => n.Length == 1 ? $"-{n}" : $"--{n}").ToArray());
             if (options == "--<>")
             {
-                return Array.Empty<string>();
+                return [];
             }
             split[0] = options + ' ' + split[0];
             return split;
@@ -216,8 +216,8 @@ namespace Xecrets.File.Cli
 
         private (ExportableOptionCollection, IEnumerable<ParsedOp>, IEnumerable<string>) ArgumentsToOptions(string commandLine)
         {
-            List<ParsedOp> parsedOps = new List<ParsedOp>();
-            List<string> extra = new List<string>();
+            List<ParsedOp> parsedOps = [];
+            List<string> extra = [];
 
             string[] args = SplitArgs(commandLine).Skip(1).ToArray();
 
@@ -283,7 +283,7 @@ namespace Xecrets.File.Cli
             }
         }
         
-        private class ExportableOptionCollection : OptionSetCollection
+        private class ExportableOptionCollection(Version cliVersion, RunningArguments ora) : OptionSetCollection
         {
             /// <summary>
             /// This must be updated when the options are updated in an incompatible way.
@@ -292,48 +292,36 @@ namespace Xecrets.File.Cli
             /// Increase the major version, if changes in any way changes an existing option
             /// so it may not work as expected by an older consumer.
             /// </summary>
-            public Version CliVersion { get; }
+            public Version CliVersion { get; } = cliVersion;
 
-            private readonly RunningArguments _ora;
-
-            public ExportableOptionCollection(Version cliVersion, RunningArguments ora)
+            public class ExportableOption(int item1, string item2, string item3) : Tuple<int, string, string>(item1, item2, item3)
             {
-                CliVersion = cliVersion;
-                _ora = ora;
             }
 
-            public class ExportableOption : Tuple<int, string, string>
-            {
-                public ExportableOption(int item1, string item2, string item3)
-                    : base(item1, item2, item3)
-                {
-                }
-            }
-
-            public IList<ExportableOption> Export = new List<ExportableOption>();
+            public List<ExportableOption> Export = [];
 
             public void Add(string prototype, XfOpCode opCode, Action<RunningArguments, XfOpCode, string> action)
             {
-                _ = Add(prototype, (p1) => action(_ora, opCode, p1));
+                _ = Add(prototype, (p1) => action(ora, opCode, p1));
                 Export.Add(new ExportableOption((int)opCode, prototype, string.Empty));
             }
 
             public void Add(string prototype, XfOpCode opCode, Action<RunningArguments, XfOpCode, string, string> action)
             {
-                _ = Add(prototype, (p1, p2) => action(_ora, opCode, p1, p2));
+                _ = Add(prototype, (p1, p2) => action(ora, opCode, p1, p2));
                 Export.Add(new ExportableOption((int)opCode, prototype, string.Empty));
             }
 
             public void Add(string prototype, XfOpCode opCode, string description, Action<RunningArguments, XfOpCode, string> action)
             {
-                _ = Add(prototype, description, (p1) => action(_ora, opCode, p1));
-                Export.Add(new ExportableOption((int)opCode, prototype, string.Join(':', (description?.Split(':').Skip(1).ToArray() ?? Array.Empty<string>()))));
+                _ = Add(prototype, description, (p1) => action(ora, opCode, p1));
+                Export.Add(new ExportableOption((int)opCode, prototype, string.Join(':', (description?.Split(':').Skip(1).ToArray() ?? []))));
             }
 
             public void Add(string prototype, XfOpCode opCode, string description, Action<RunningArguments, XfOpCode, string, string> action)
             {
-                _ = Add(prototype, description, (p1, p2) => action(_ora, opCode, p1, p2));
-                Export.Add(new ExportableOption((int)opCode, prototype, string.Join(':', (description?.Split(':').Skip(1).ToArray() ?? Array.Empty<string>()))));
+                _ = Add(prototype, description, (p1, p2) => action(ora, opCode, p1, p2));
+                Export.Add(new ExportableOption((int)opCode, prototype, string.Join(':', (description?.Split(':').Skip(1).ToArray() ?? []))));
             }
         }
 
@@ -349,7 +337,7 @@ namespace Xecrets.File.Cli
                     return;
                 }
 
-                if (extra.Any())
+                if (extra.Count != 0)
                 {
                     ParseStatus = new Status(XfStatusCode.ExtraArguments, "Extra unprocessed arguments '{0}' were found.".Format(string.Join(',', extra)));
                     return;
@@ -369,7 +357,7 @@ namespace Xecrets.File.Cli
             foreach (string line in System.IO.File.ReadAllLines(path))
             {
                 string trimmed = line.Trim();
-                if (trimmed.Length == 0 || trimmed.StartsWith("#"))
+                if (trimmed.Length == 0 || trimmed.StartsWith('#'))
                 {
                     continue;
                 }
