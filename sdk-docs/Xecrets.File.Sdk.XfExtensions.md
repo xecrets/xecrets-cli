@@ -258,7 +258,12 @@ private static System.Text.RegularExpressions.Regex TrailingNumberInParenthesis(
 [System.Text.RegularExpressions.Regex](https://docs.microsoft.com/en-us/dotnet/api/System.Text.RegularExpressions.Regex 'System.Text.RegularExpressions.Regex')
 
 ### Remarks
-Pattern explanation:<br/>  
+Pattern:<br/>  
+  
+```csharp  
+\\([\\d]+\\)$  
+```<br/>  
+Explanation:<br/>  
   
 ```csharp  
 ○ Match the string " (".<br/>  

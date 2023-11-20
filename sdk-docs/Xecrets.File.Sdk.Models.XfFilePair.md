@@ -10,6 +10,9 @@ public class XfFilePair
 ```
 
 Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object') &#129106; XfFilePair
+
+### Remarks
+Create a new instance.
 ### Constructors
 
 <a name='Xecrets.File.Sdk.Models.XfFilePair.XfFilePair(string,string)'></a>
@@ -39,7 +42,7 @@ The full path and name of the target, plain text.
 
 ## XfFilePair(string, string, string) Constructor
 
-Create a new instance.
+A plain text/cipher text file pair
 
 ```csharp
 public XfFilePair(string sourceFullName, string targetFullName, string originalFileName);
@@ -63,6 +66,9 @@ The full path and name of the target, cipher text.
 `originalFileName` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
 
 The original file name to use when encrypting.
+
+### Remarks
+Create a new instance.
 ### Properties
 
 <a name='Xecrets.File.Sdk.Models.XfFilePair.OriginalFileName'></a>

@@ -10,13 +10,16 @@ public class CliToolInformation
 ```
 
 Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object') &#129106; CliToolInformation
+
+### Remarks
+Create a new instance.
 ### Constructors
 
 <a name='Xecrets.File.Sdk.Cli.Models.CliToolInformation.CliToolInformation(string,string,string)'></a>
 
 ## CliToolInformation(string, string, string) Constructor
 
-Create a new instance.
+Information about the command line tool found and used by the SDK
 
 ```csharp
 public CliToolInformation(string apiVersion, string splash, string fullName);
@@ -40,6 +43,9 @@ The "splash" text displayed by the tool, will include the tool version.
 `fullName` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
 
 The full path and name of the tool found and used.
+
+### Remarks
+Create a new instance.
 ### Properties
 
 <a name='Xecrets.File.Sdk.Cli.Models.CliToolInformation.CliToolApiVersion'></a>

@@ -10,13 +10,16 @@ public class XfEncryptedKeyPair
 ```
 
 Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object') &#129106; XfEncryptedKeyPair
+
+### Remarks
+Create a new instance.
 ### Constructors
 
 <a name='Xecrets.File.Sdk.Models.XfEncryptedKeyPair.XfEncryptedKeyPair(string,string,byte[])'></a>
 
 ## XfEncryptedKeyPair(string, string, byte[]) Constructor
 
-Create a new instance.
+An encrypted key pair blob with some meta data.
 
 ```csharp
 public XfEncryptedKeyPair(string fullName, string email, byte[] data);
@@ -41,6 +44,9 @@ The email moniker that this key pair is associated with.
 `data` [System.Byte](https://docs.microsoft.com/en-us/dotnet/api/System.Byte 'System.Byte')[[]](https://docs.microsoft.com/en-us/dotnet/api/System.Array 'System.Array')
 
 The encrypted key pair blob.
+
+### Remarks
+Create a new instance.
 ### Properties
 
 <a name='Xecrets.File.Sdk.Models.XfEncryptedKeyPair.Data'></a>
