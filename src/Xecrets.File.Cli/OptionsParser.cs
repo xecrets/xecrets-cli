@@ -187,6 +187,7 @@ namespace Xecrets.File.Cli
         }
 #if DEBUG
         [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Can't be static in Release builds.")]
+        [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "It's not unnecessary in Release mode.")]
 #endif
         private string[] SplitDescription(OptionBase option)
         {
