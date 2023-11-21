@@ -131,13 +131,13 @@
     <value>..\..\..\docs\index.md;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="LicensedDownloadBlurb" xml:space="preserve">
-    <value>Maintenance subscription for {licensee} valid to {expiration}, thank you!\nSee https://www.axantum.com/ .</value>
+    <value>Maintenance subscription for {licensee} for builds no newer than {expiration}.\nThank you! See https://www.axantum.com/ .</value>
   </data>
   <data name="LicensedExpiredDownloadBlurb" xml:space="preserve">
-    <value>Maintenance subscription for {licensee} expired at {expiration}, free for non-programmatic use.\nSee https://www.axantum.com/ .</value>
+    <value>Maintenance subscription for {licensee} expired for builds newer than {expiration}.\nIt's still free for non-programmatic use! See https://www.axantum.com/ .</value>
   </data>
   <data name="LicenseNotValidForProductBlurb" xml:space="preserve">
-    <value>Maintenance subscription '{product}' for {licensee} is not valid for this software, free for non-programmatic use.\nSee https://www.axantum.com/ .</value>
+    <value>Maintenance subscription '{product}' for {licensee} is not valid for this software.\nIt's still free for non-programmatic use! See https://www.axantum.com/ .</value>
   </data>
   <data name="LicensePublicKeyProduction" xml:space="preserve">
     <value>-----BEGIN PUBLIC KEY-----
@@ -155,6 +155,6 @@ Idyr4Ko9NUmkM4V6HGk0HUD0lmIM0l1WTppDFoKfdOflwpxXqISTTjQODg==
     <value>..\Resources\splash.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="UnlicensedBlurb" xml:space="preserve">
-    <value>No subscription, free for non-programmatic use. See https://www.axantum.com/ .</value>
+    <value>No maintenance subscription found. It's still free for non-programmatic use. See https://www.axantum.com/ .</value>
   </data>
 </root>

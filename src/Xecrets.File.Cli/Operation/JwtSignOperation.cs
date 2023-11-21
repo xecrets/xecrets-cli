@@ -68,7 +68,7 @@ namespace Xecrets.File.Cli.Operation
                 return Task.FromResult(new Status(XfStatusCode.MissingArgument, "You must specify the audience of the signed token before the signing operation."));
             }
 
-            if (parameters.JwtDaysUntilExpiration <= 0)
+            if (parameters.JwtDaysUntilExpiration < 0)
             {
                 return Task.FromResult(new Status(XfStatusCode.MissingArgument, "You must specify the claims of the signed token before the signing operation."));
             }
@@ -82,7 +82,7 @@ namespace Xecrets.File.Cli.Operation
             var handler = new JsonWebTokenHandler();
 
             var key = ECDsa.Create();
-            key.ImportFromPem(parameters.JwtPrivateKeyPem);
+            key.ImportFromPem(parameters.JwtPrivateKeyPem.Replace("\\n", Environment.NewLine));
             string token = handler.CreateToken(new SecurityTokenDescriptor
             {
                 Issuer = parameters.JwtIssuer,

@@ -120,7 +120,7 @@ namespace Xecrets.File.Cli.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Maintenance subscription for {licensee} valid to {expiration}, thank you!\nSee https://www.axantum.com/ ..
+        ///   Looks up a localized string similar to Maintenance subscription for {licensee} for builds no newer than {expiration}.\nThank you! See https://www.axantum.com/ ..
         /// </summary>
         internal static string LicensedDownloadBlurb {
             get {
@@ -129,7 +129,7 @@ namespace Xecrets.File.Cli.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Maintenance subscription for {licensee} expired at {expiration}, free for non-programmatic use.\nSee https://www.axantum.com/ ..
+        ///   Looks up a localized string similar to Maintenance subscription for {licensee} expired for builds newer than {expiration}.\nIt&apos;s still free for non-programmatic use! See https://www.axantum.com/ ..
         /// </summary>
         internal static string LicensedExpiredDownloadBlurb {
             get {
@@ -138,7 +138,7 @@ namespace Xecrets.File.Cli.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Maintenance subscription &apos;{product}&apos; for {licensee} is not valid for this software, free for non-programmatic use.\nSee https://www.axantum.com/ ..
+        ///   Looks up a localized string similar to Maintenance subscription &apos;{product}&apos; for {licensee} is not valid for this software.\nIt&apos;s still free for non-programmatic use! See https://www.axantum.com/ ..
         /// </summary>
         internal static string LicenseNotValidForProductBlurb {
             get {
@@ -187,7 +187,7 @@ namespace Xecrets.File.Cli.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No subscription, free for non-programmatic use. See https://www.axantum.com/ ..
+        ///   Looks up a localized string similar to No maintenance subscription found. It&apos;s still free for non-programmatic use. See https://www.axantum.com/ ..
         /// </summary>
         internal static string UnlicensedBlurb {
             get {

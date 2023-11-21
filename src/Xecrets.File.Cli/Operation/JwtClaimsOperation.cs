@@ -58,7 +58,7 @@ namespace Xecrets.File.Cli.Operation
 
             try
             {
-                Dictionary<string, object> claims = JsonSerializer.Deserialize<Dictionary<string, object>>(claimsJson) ?? throw new InvalidOperationException($"Can't deserialize '{claimsJson}' as a claims dictionary.");
+                Dictionary<string, object> claims = JsonSerializer.Deserialize<Dictionary<string, object>>(claimsJson, SourceGenerationContext.Default.DictionaryStringObject) ?? throw new InvalidOperationException($"Can't deserialize '{claimsJson}' as a claims dictionary.");
                 foreach (KeyValuePair<string, object> kvp in claims)
                 {
                     parameters.JwtClaims.Add(kvp.Key, ((JsonElement)kvp.Value).ToObject() ?? throw new InvalidOperationException("Deserialized value ToString() can't be null here."));
