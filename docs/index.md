@@ -125,7 +125,7 @@ Options
 :       Display help for internal use commands and disable splash (global).
 
 --jwt-audience _audience_
-:       Set audience email for JWT.
+:       Set audience string or URI for JWT.
 
 --jwt-claims _expiration_ _claims_
 :       Set days until expiration and claims JSON.

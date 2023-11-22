@@ -23,10 +23,6 @@
 
 #endregion Coypright and GPL License
 
-using AxCrypt.Abstractions;
-
-using AxCrypt.Core.UI;
-
 using Xecrets.File.Cli.Abstractions;
 using Xecrets.File.Cli.Public;
 using Xecrets.File.Cli.Run;
@@ -36,24 +32,23 @@ namespace Xecrets.File.Cli.Operation
     internal class JwtAudienceOperation : IExecutionPhases
     {
         /// <summary>
-        /// Arguments[0] => The audience, i.e. 'licensee@acme.com'
+        /// Arguments[0] => The audience, i.e. 'licensee@acme.com' or 'MyCoolApp'.
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
         public Task<Status> DryAsync(Parameters parameters)
         {
-
-            if (!EmailAddress.TryParse(parameters.Email, out EmailAddress _))
+            string audience = parameters.Value;
+            if (audience.Length == 0 || (audience.Contains(':') && !Uri.TryCreate(audience, UriKind.Absolute, out Uri? _)))
             {
-                return Task.FromResult(new Status(XfStatusCode.InvalidEmail, "'{0}' is not a valid email.".Format(parameters.Email)));
+                return Task.FromResult(new Status(XfStatusCode.InvalidOption, parameters, $"Invalid audience URI '{audience}'."));
             }
-
             return Task.FromResult(Status.Success);
         }
 
         public Task<Status> RealAsync(Parameters parameters)
         {
-            parameters.JwtAudience = parameters.Email;
+            parameters.JwtAudience = parameters.Value;
 
             return Task.FromResult(Status.Success);
         }
