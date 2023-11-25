@@ -1,7 +1,7 @@
 # README #
 
 Xecrets File Cli 2.x - A Cross Platform AxCrypt compatible Open Source Encryption command line
-tool in C# for .NET 7+
+tool in C# for .NET 8+
 
 Xecrets File Cli (aka "the command line", "the command line tool", or "the CLI") is built on top of
 [AxCrypt 2.1.x](https://github.com/axantum/xecrets-net) as released under GNU GPL version 3 or later
@@ -66,9 +66,8 @@ as [nuget package Xecrets.File.Sdk](https://www.nuget.org/packages/Xecrets.File.
 ## Support Development ##
 
 If you represent a business, please purchase your maintenance subscription for the build from us at
-https://www.axantum.com/ or if you're a private individual, get and purchase the desktop app
-[Xecrets File Ez](https://www.axantum.com/xecrets-file-ez) which includes full use of the command
-line.
+https://www.axantum.com/ or if you're a private individual, get and build it from source but if you'd
+like to support us, do purchase a premium subscription for the desktop app. It's also very useful.
 
 Xecrets File Cli is free software, licensed under the GNU GPL Version 3 or later license. This means
 you can use it anywhere and any way you like for free, and you are also free to modify it as you
@@ -95,7 +94,7 @@ The software is still in beta, API:s may break and options change at any moment.
 
 ### The AxCrypt fork xecrets-net ###
 
-The only modifications we've done are to update the code to work with .NET 7 and compile with Visual
+The only modifications we've done are to update the code to work with .NET 8 and compile with Visual
 Studio 2022, keep dependencies updated, a few minor bugfixes and finally another very few minor
 changes to be able to work well with the command line tool code. No changes to the core cryptography
 has been made.
