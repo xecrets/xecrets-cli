@@ -23,8 +23,6 @@
 
 #endregion Coypright and GPL License
 
-using System.Text.Encodings.Web;
-using System.Text.Json;
 using System.Text.Json.Serialization;
 
 using Xecrets.File.Cli.Log;
@@ -36,18 +34,5 @@ namespace Xecrets.File.Cli
     [JsonSerializable(typeof(Dictionary<string, object>))]
     internal partial class SourceGenerationContext : JsonSerializerContext
     {
-        private static JsonSerializerOptions CreateJsonSerializerOptions()
-        {
-            var options = new JsonSerializerOptions
-            {
-                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-            };
-
-            return options;
-        }
-        public static JsonSerializerContext Create()
-        {
-            return new SourceGenerationContext(CreateJsonSerializerOptions());
-        }
     }
 }

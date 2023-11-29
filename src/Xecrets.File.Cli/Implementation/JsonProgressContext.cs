@@ -65,7 +65,7 @@ namespace Xecrets.File.Cli.Implementation
 
         private static void JsonConsoleOut(CliMessage jsonMessage)
         {
-            var json = JsonSerializer.Serialize(jsonMessage, typeof(CliMessage), SourceGenerationContext.Create());
+            var json = JsonSerializer.Serialize(jsonMessage, typeof(CliMessage), SourceGenerationContext.Default);
             New<ConsoleOut>().WriteLine(json);
         }
     }

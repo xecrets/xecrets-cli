@@ -13,6 +13,7 @@
     <Nullable>enable</Nullable>
     <NeutralLanguage>en-US</NeutralLanguage>
     <SuppressTrimAnalysisWarnings>false</SuppressTrimAnalysisWarnings>
+    <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
     <AssemblyName>XecretsFileCli</AssemblyName>
     <ApplicationIcon>XecretsFile.ico</ApplicationIcon>
   </PropertyGroup>
