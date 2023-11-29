@@ -26,6 +26,7 @@
 using System.Globalization;
 
 using Xecrets.File.Cli.Properties;
+using Xecrets.Licensing;
 using Xecrets.Licensing.Abstractions;
 using Xecrets.Licensing.Implementation;
 
@@ -52,7 +53,7 @@ namespace Xecrets.File.Cli.Log
             _splash = splash
                 .Replace("{gpl} ", New<IBuildUtc>().IsGplBuild ? "GPL " : string.Empty)
                 .Replace("{version}", GetType().Assembly.GetName().Version?.ToString() ?? "0.0.0.0")
-                .Replace("{buildutc}", buildUtc)
+                .Replace("{buildutc}", buildUtc.FromUtc().ToLocal())
                 .Replace("{runtime}", runtime)
                 .Replace("{blurb}", New<LicenseBlurb>().ToString());
         }
