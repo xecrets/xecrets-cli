@@ -78,7 +78,7 @@ namespace Xecrets.File.Cli.Operation
                 return Task.FromResult(new Status(XfStatusCode.MissingArgument, "You must specify the claims of the signed token before the signing operation."));
             }
 
-            var now = DateTime.UtcNow;
+            var now = New<INow>().Utc;
             var handler = new JsonWebTokenHandler();
 
             var key = ECDsa.Create();

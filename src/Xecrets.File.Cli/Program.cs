@@ -30,7 +30,6 @@ using System.Text;
 using AxCrypt.Abstractions;
 using AxCrypt.Abstractions.Algorithm;
 using AxCrypt.Api;
-using AxCrypt.Common;
 using AxCrypt.Core;
 using AxCrypt.Core.Crypto;
 using AxCrypt.Core.Extensions;
@@ -82,7 +81,8 @@ TypeMap.Register.New<ISystemCryptoPolicy>(() => new ProCryptoPolicy());
 TypeMap.Register.New<ICryptoPolicy>(() => New<LicensePolicy>().Capabilities.CryptoPolicy);
 
 TypeMap.Register.Singleton<IReport>(() => new Report(Resolve.WorkFolder.FileInfo.FullName, 1000000));
-TypeMap.Register.Singleton<INow>(() => new Now());
+TypeMap.Register.Singleton<TimeProvider>(() => TimeProvider.System);
+TypeMap.Register.Singleton<INow>(() => new TimeProviderNow());
 TypeMap.Register.New<string, IFileWatcher>((path) => new FileWatcher());
 
 // Avoid JSON deserialization errors when the user settings file is empty.
