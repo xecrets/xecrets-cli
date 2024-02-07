@@ -34,7 +34,7 @@
     <Content Include="XecretsFile.ico" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="7.0.3" />
+    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="7.3.1" />
     <PackageReference Include="Xecrets.Licensing" Version="1.0.17" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
   </ItemGroup>
