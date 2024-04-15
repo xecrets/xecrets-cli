@@ -5,7 +5,7 @@ Push-Location -Path "src\Xecrets.File.Cli\bin\Release\net8.0\publish\win-x64"
 try {
     $compress = @{
         Path = "XecretsFileCli.exe"
-        DestinationPath = "XecretsFileCli-Win-x64-${Version}.zip"
+        DestinationPath = "XecretsFileCli-Win-${Version}.zip"
     }
     Compress-Archive @compress
 }
