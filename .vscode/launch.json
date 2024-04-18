@@ -10,9 +10,9 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/Xecrets.File.Cli/bin/Debug/net6.0/XecretsFileCli.dll",
+            "program": "${workspaceFolder}/Xecrets.Cli/bin/Debug/net6.0/XecretsCli.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/Xecrets.File.Cli",
+            "cwd": "${workspaceFolder}/Xecrets.Cli",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",
             "stopAtEntry": false

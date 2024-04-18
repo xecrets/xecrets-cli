@@ -1,14 +1,14 @@
-XecretsFileCli - Xecrets File Cli Documentation
+XecretsCli - Xecrets Cli Documentation
 
 NAME
 ====
 
-XecretsFileCli - A Cross Platform AxCrypt Compatible Command Line Tool 
+XecretsCli - A Cross Platform AxCrypt Compatible Command Line Tool 
 
 SYNOPSIS
 ========
 
-XecretsFileCli [--use-public-key _email(s)_] [--create-key-pair _email_ _encrypted_] [--decrypt-to
+XecretsCli [--use-public-key _email(s)_] [--create-key-pair _email_ _encrypted_] [--decrypt-to
 _encrypted_ _clear_] [--encrypt-to _clear_ _encrypted_] [--file _name_] [--gpl-license] [--help]
 [--id] [--json-log] [--use-key-pair _encrypted_] [--decrypt-to-folder _encrypted_ [_folder_]]
 [--environment _variable_] [--progress] [--password _secret_] [--quiet] [--dryrun] [--stdout]
@@ -168,7 +168,7 @@ This software is backward and forward compatible with AxCrypt 2.x, at the time o
 AxCrypt implements some breaking changes in the future, this may no longer hold true - but in this
 case, all older versions of AxCrypt before the breaking change suffer the same problem.
 
-Xecrets File Cli encrypts data with AxCrypt version 2 format, using AES-256 encryption always. It
+Xecrets Cli encrypts data with AxCrypt version 2 format, using AES-256 encryption always. It
 can still decrypt AxCrypt version 1 files, as well as AES-128 encrypted version 2 files.
 
 FILES
@@ -212,13 +212,13 @@ wide scale use.
 Standard IO Aliases
 -------------------
 
-Xecrets File supports special aliases for the standard input and standard output stream respectively
+Xecrets Cli supports special aliases for the standard input and standard output stream respectively
 where a path to a file may occur.
 
 Standard Input: - (dash)
 Standard Output: + (plus)
 
-Using one of these aliases in place of a path will cause Xecrets File to read or write to a standard
+Using one of these aliases in place of a path will cause Xecrets Cli to read or write to a standard
 IO stream instead.
 
 A special situation arises when encrypting from standard input, as an encrypted file always contains
@@ -232,10 +232,10 @@ I.e. the dash for standard input, followed by a : (colon), followed by the name 
 BASIC CONCEPTS
 ==============
 
-Xecrets File Cli encrypts files using at least a password, and optionally with one or more public
+Xecrets Cli encrypts files using at least a password, and optionally with one or more public
 keys.
 
-With Xecrets File, a key pair can be created with --create-key-pair, and the public part can be
+With Xecrets Cli, a key pair can be created with --create-key-pair, and the public part can be
 extracted and shared with other people, for example it can be published on a web site, or
 distributed in any other way. It is a clear text plain text file that is not secret.
 
@@ -300,7 +300,7 @@ PUBLIC KEY BASED ENCRYPTION
 Public key based encryption is done using RSA-4096, where the encryption key and the decryption key
 is split into two parts. The encryption, or public, key does not need to be secret and can be sent
 to anyone or even published. The decryption, or private, key needs to be kept secret, and this is
-typically done by encrypting it in turn as Xecrets File-encrypted file with a password.
+typically done by encrypting it in turn as Xecrets Cli-encrypted file with a password.
 
 For more details, see
 [AxCryptVersion2AlgorithmsandFileFormat.pdf](AxCryptVersion2AlgorithmsandFileFormat.pdf) .
@@ -324,7 +324,7 @@ EXAMPLES
       
     echo === Assume set PATH=%%PATH%%;[Path-to-executable] 
     echo === For example:  
-    echo === set PATH=%%PATH%%;"C:\Users\%UserName%\Documents\Visual Studio 2022\Projects\xecrets-file-cli\src\Xecrets.File.Cli\bin\Debug\net8.0\"  
+    echo === set PATH=%%PATH%%;"C:\Users\%UserName%\Documents\Visual Studio 2022\Projects\xecrets-file-cli\src\Xecrets.Cli\bin\Debug\net8.0\"  
     echo.  
     echo === Ensure there is a file thfg.mp4 and a folder Photos with files 1.jpg ... 5.jpg  
     echo === in the current folder, named win-x64.  
@@ -338,17 +338,17 @@ EXAMPLES
     echo === Encrypt a file thfg(1).mp4 using just a password to thfg.axx, and then wipe the original.  
     rem --echo echoes the command line, facilitates reading output and may be useful for debugging.  
     rem The actual --echo option is not echoed.
-    XecretsFileCli --echo --password fileSecret --encrypt-to thfg(1).mp4 thfg.axx --wipe thfg(1).mp4  
+    XecretsCli --echo --password fileSecret --encrypt-to thfg(1).mp4 thfg.axx --wipe thfg(1).mp4  
     if errorlevel 1 goto error  
     echo.  
     echo === Decrypt a file to it's original file name, in this case thfg(1).mp4, in it's original folder  
     cd ..  
-    XecretsFileCli --echo --password fileSecret --decrypt-to-folder win-x64/thfg.axx --wipe win-x64/thfg.axx  
+    XecretsCli --echo --password fileSecret --decrypt-to-folder win-x64/thfg.axx --wipe win-x64/thfg.axx  
     if errorlevel 1 goto error  
     echo.   
     echo === Create a private key pair file xecrets@example.org-private.axx with password 'masterSecret'  
     cd win-x64  
-    XecretsFileCli --echo --password masterSecret --create-key-pair xecrets@example.org xecrets@example.org-private.axx  
+    XecretsCli --echo --password masterSecret --create-key-pair xecrets@example.org xecrets@example.org-private.axx  
     if errorlevel 1 goto error  
     echo.  
     echo === Use an environment variable to hold the master key  
@@ -357,15 +357,15 @@ EXAMPLES
     if errorlevel 1 goto error  
     echo.  
     echo === Export the non-secret public key from the private key pair to xecrets@example.org-public.txt  
-    XecretsFileCli --echo --environment XFKEY --use-key-pair xecrets@example.org-private.axx --export-public-key xecrets@example.org xecrets@example.org-public.txt  
+    XecretsCli --echo --environment XFKEY --use-key-pair xecrets@example.org-private.axx --export-public-key xecrets@example.org xecrets@example.org-public.txt  
     if errorlevel 1 goto error  
     echo.  
     echo === Encrypt the file thfg.mp4 using a password and also with a public key for xecrets@example.org  
-    XecretsFileCli --echo --password fileSecret --load-public-key xecrets@example.org-public.txt --use-public-key xecrets@example.org --encrypt-to thfg(1).mp4 thfg.axx  
+    XecretsCli --echo --password fileSecret --load-public-key xecrets@example.org-public.txt --use-public-key xecrets@example.org --encrypt-to thfg(1).mp4 thfg.axx  
     if errorlevel 1 goto error  
     echo.  
     echo === Decrypt the file thfg.axx using the private key from the secret key pair instead of the password  
-    XecretsFileCli --echo --password masterSecret --use-key-pair xecrets@example.org-private.axx --decrypt-to thfg.axx thfg(1).mp4  
+    XecretsCli --echo --password masterSecret --use-key-pair xecrets@example.org-private.axx --decrypt-to thfg.axx thfg(1).mp4  
     if errorlevel 1 goto error  
     echo.  
     echo === Compare the decrypted with the original to ensure we got back what we had  
@@ -374,7 +374,7 @@ EXAMPLES
     if errorlevel 1 goto error  
     echo.  
     echo === Securely wipe intermediate files
-    XecretsFileCli --echo --wipe thfg(1).mp4 thfg.axx xecrets@example.org-public.txt xecrets@example.org-private.axx  
+    XecretsCli --echo --wipe thfg(1).mp4 thfg.axx xecrets@example.org-public.txt xecrets@example.org-private.axx  
     if errorlevel 1 goto error  
       
     exit /b  

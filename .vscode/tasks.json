@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/src/Xecrets.File.Cli.sln",
+                "${workspaceFolder}/src/Xecrets.Cli.sln",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,9 +19,9 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/src/Xecrets.File.Cli/Xecrets.File.Cli.csproj",
+                "${workspaceFolder}/src/Xecrets.Cli/Xecrets.Cli.csproj",
                 "/property:Configuration=Release",
-                "/property:PublishProfile=${workspaceFolder}/src/Xecrets.File.Cli/Properties/PublishProfiles/osx-x64.pubxml",
+                "/property:PublishProfile=${workspaceFolder}/src/Xecrets.Cli/Properties/PublishProfiles/osx-x64.pubxml",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -33,9 +33,9 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/src/Xecrets.File.Cli/Xecrets.File.Cli.csproj",
+                "${workspaceFolder}/src/Xecrets.Cli/Xecrets.Cli.csproj",
                 "/property:Configuration=Release",
-                "/property:PublishProfile=${workspaceFolder}/src/Xecrets.File.Cli/Properties/PublishProfiles/linux-x64.pubxml",
+                "/property:PublishProfile=${workspaceFolder}/src/Xecrets.Cli/Properties/PublishProfiles/linux-x64.pubxml",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -47,9 +47,9 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/src/Xecrets.File.Cli/Xecrets.File.Cli.csproj",
+                "${workspaceFolder}/src/Xecrets.Cli/Xecrets.Cli.csproj",
                 "/property:Configuration=Release",
-                "/property:PublishProfile=${workspaceFolder}/src/Xecrets.File.Cli/Properties/PublishProfiles/win-x64.pubxml",
+                "/property:PublishProfile=${workspaceFolder}/src/Xecrets.Cli/Properties/PublishProfiles/win-x64.pubxml",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -63,7 +63,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/src/Xecrets.File.Cli.sln",
+                "${workspaceFolder}/src/Xecrets.Cli.sln",
             ],
             "problemMatcher": "$msCompile"
         }
