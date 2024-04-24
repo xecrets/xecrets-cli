@@ -101,7 +101,7 @@ namespace Xecrets.Cli.Properties {
         ///password or have access to a private key matching a public key used when encrypting the file, the
         ///contents of the file is irretrievably lost and cannot be recovered.
         ///
-        ///Xecrets Cli is distribut [rest of string was truncated]&quot;;.
+        ///Xecrets Cli is distributed in [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string help_details {
             get {
