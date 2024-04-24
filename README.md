@@ -81,7 +81,7 @@ you are a business and are using the business-oriented features for programmatic
 software, there _is_ a maintenance subscription required for use of the ready-built and tested
 software from https://www.axantum.com/ .
 
-Nothing prevents you from downloading [the source code](https://github.com/xecrets/xecrets-file-cli)
+Nothing prevents you from downloading [the source code](https://github.com/xecrets/xecrets-cli)
 from github where we keep the code, and building it yourself. It's maybe even a good idea to try it
 out. But in the long run, by getting the ready-built software from us your project is spared all the
 time to keep your tooling updated, building, updating the source code etc. We believe we provide a
@@ -100,7 +100,7 @@ has been made.
 
 ### How To Build?
 
-Download the [xecrets-cli](https://github.com/xecrets/xecrets-file-cli) and
+Download the [xecrets-cli](https://github.com/xecrets/xecrets-cli) and
 [xecrets-net](https://github.com/axantum/xecrets-net) repositories side by side. The solution
 expects to find the source code for the original, slightly modified, AxCrypt there. Open the Xecrets
 Cli solution in Visual Studio or the workspace in Visual Studio Code and build. There are no

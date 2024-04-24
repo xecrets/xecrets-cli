@@ -1,7 +1,7 @@
 ﻿#region Coypright and GPL License
 
 /*
- * Xecrets Cli - Copyright © 2022-2023, Svante Seleborg, All Rights Reserved.
+ * Xecrets Cli - Copyright © 2022-2024, Svante Seleborg, All Rights Reserved.
  *
  * This code file is part of Xecrets Cli, parts of which in turn are derived from AxCrypt as licensed under GPL v3 or later.
  * 
@@ -36,7 +36,7 @@ using System.Resources;
 [assembly: AssemblyConfiguration("Release")]
 #endif
 [assembly: AssemblyCompany("Axantum Software AB")]
-[assembly: AssemblyCopyright("Xecrets Cli is Copyright © 2022-2023 Svante Seleborg, All Rights Reserved")]
+[assembly: AssemblyCopyright("Copyright © 2022-2024 Svante Seleborg, All Rights Reserved")]
 [assembly: AssemblyDescription("A cross platform AxCrypt compatible tool for applied strong cryptography")]
 [assembly: AssemblyTrademark("Xecrets is a trademark of Axantum Software AB")]
 [assembly: AssemblyProduct("Xecrets Cli")]
