@@ -73,8 +73,8 @@ you can use it anywhere and any way you like for free, and you are also free to 
 wish as long as you do not redistribute it. If you do redistribute it, please check with the Free
 Software Foundation how this works, https://www.gnu.org/licenses/ .
 
-Naturally this also applies to us, so we're not requiring you to pay anything to use the Xecrets
-File Cli software.
+Naturally this also applies to us, so we're not requiring you to pay anything to use the Xecrets Cli
+software.
 
 However, we do spend time and money to develop, maintain and distribute the software for you, so if
 you are a business and are using the business-oriented features for programmatic integration of the
