@@ -49,7 +49,7 @@ namespace Xecrets.Cli.Implementation
             {
                 OpCode = (int)XfOpCode.Progressing,
                 OpCodeName = XfOpCode.Progressing.ToString(),
-                Item = e.Display,
+                Display = e.Display,
                 Percent = e.Percent,
                 TotalWork = TotalsTracker.TotalWork,
                 TotalDone = TotalsTracker.TotalDone,

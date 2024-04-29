@@ -49,9 +49,9 @@ namespace Xecrets.Cli.Log
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public string? Id { get; set; }
 
-        [JsonPropertyName("item")]
+        [JsonPropertyName("display")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string? Item { get; set; }
+        public string? Display { get; set; }
 
         [JsonPropertyName("message")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]

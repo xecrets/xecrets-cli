@@ -64,7 +64,7 @@ The [XfEncryptedKeyPair](Xecrets.Sdk.Models.XfEncryptedKeyPair.md 'Xecrets.Sdk.M
 Decrypt files in their location, using the stored original file name.
 
 ```csharp
-System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<System.IO.FileInfo>> DecryptFilesInPlaceAsync(Xecrets.Sdk.Models.XfCredentials credentials, System.Collections.Generic.IEnumerable<Xecrets.Sdk.Models.XfFilePair> files, System.Action<Xecrets.Sdk.Cli.CliMessage> progress);
+System.Threading.Tasks.Task<Xecrets.Sdk.Models.XfFileResult[]> DecryptFilesInPlaceAsync(Xecrets.Sdk.Models.XfCredentials credentials, System.Collections.Generic.IEnumerable<Xecrets.Sdk.Models.XfFilePair> files, System.Action<Xecrets.Sdk.Cli.CliMessage> progress);
 ```
 #### Parameters
 
@@ -88,8 +88,8 @@ The list of files to decrypt. Only the [SourceFullName](Xecrets.Sdk.Models.XfFil
 An [System.Action](https://docs.microsoft.com/en-us/dotnet/api/System.Action 'System.Action') delegate called with progress.
 
 #### Returns
-[System.Threading.Tasks.Task&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')[System.Collections.Generic.IEnumerable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')[System.IO.FileInfo](https://docs.microsoft.com/en-us/dotnet/api/System.IO.FileInfo 'System.IO.FileInfo')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')  
-An enumeration of [System.IO.FileInfo](https://docs.microsoft.com/en-us/dotnet/api/System.IO.FileInfo 'System.IO.FileInfo') instances representing the decrypted files.
+[System.Threading.Tasks.Task&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')[XfFileResult](Xecrets.Sdk.Models.XfFileResult.md 'Xecrets.Sdk.Models.XfFileResult')[[]](https://docs.microsoft.com/en-us/dotnet/api/System.Array 'System.Array')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')  
+An array of [XfFileResult](Xecrets.Sdk.Models.XfFileResult.md 'Xecrets.Sdk.Models.XfFileResult') instances representing the resulting files.
 
 <a name='Xecrets.Sdk.Abstractions.IXfApi.DecryptKeyPairAsync(string,System.Collections.Generic.IEnumerable_Xecrets.Sdk.Models.XfEncryptedKeyPair_)'></a>
 

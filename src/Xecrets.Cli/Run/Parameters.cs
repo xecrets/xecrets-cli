@@ -71,9 +71,9 @@ namespace Xecrets.Cli.Run
 
         public OptionsParser Parser { get; } = parser;
 
-        public IList<LogOnIdentity> Identities { get; } = new List<LogOnIdentity>();
+        public IList<LogOnIdentity> Identities { get; } = [];
 
-        public IList<EmailAddress> SharingEmails { get; } = new List<EmailAddress>();
+        public IList<EmailAddress> SharingEmails { get; } = [];
 
         public IDictionary<string, object> JwtClaims { get; } = new Dictionary<string, object>();
 

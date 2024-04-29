@@ -24,6 +24,7 @@
 #endregion Coypright and GPL License
 
 using Xecrets.Cli.Log;
+using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
 
 using static AxCrypt.Abstractions.TypeResolve;
@@ -61,13 +62,34 @@ namespace Xecrets.Cli
             parameters.Overwrite = false;
         }
 
+        private static readonly XfStatusCode[] RecoverableInSequence = [XfStatusCode.InvalidPassword];
+
         private static async Task<Status> RunAsync(RunFactory factory)
         {
-            foreach (ParsedOp parsedOp in factory.Parameters.Parser.ParsedOps)
+            int skipLevel = 0;
+            OptionsParser parser = factory.Parameters.Parser;
+            foreach (ParsedOp parsedOp in parser.ParsedOps)
             {
                 factory.Parameters.CurrentOp = parsedOp;
+                if (skipLevel > 0 && parsedOp.OpCode != XfOpCode.End && parsedOp.OpCode != XfOpCode.Begin)
+                {
+                    continue;
+                }
 
                 Status status = await factory.Create(parsedOp.OpCode).DoAsync();
+                if (skipLevel > parser.OpLevel)
+                {
+                    skipLevel = 0;
+                }
+
+                // If the operation failed and it's recoverable and we're in a sequence, skip the rest of the sequence,
+                // and continue instead of aborting and returning the error.
+                if (!status.IsSuccess && parser.OpLevel > 0 && RecoverableInSequence.Contains(status.StatusCode))
+                {
+                    factory.Parameters.Logger.Log(status);
+                    skipLevel = parser.OpLevel;
+                    continue;
+                }
 
                 if (!status.IsSuccess)
                 {
@@ -75,7 +97,12 @@ namespace Xecrets.Cli
                 }
             }
 
-            return factory.Parameters.Parser.ParseStatus;
+            if (parser.OpLevel > 0)
+            {
+                return new Status(XfStatusCode.BadSequence, "Begin sequence without matching end.");
+            }
+
+            return parser.ParseStatus;
         }
 
         public void Dispose()

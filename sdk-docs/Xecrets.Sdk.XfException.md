@@ -38,6 +38,35 @@ The command line exit code.
 
 The message.
 
+<a name='Xecrets.Sdk.XfException.XfException(int,string,System.Collections.Generic.IEnumerable_string_)'></a>
+
+## XfException(int, string, IEnumerable<string>) Constructor
+
+Initializes a new instance of the [XfException](Xecrets.Sdk.XfException.md 'Xecrets.Sdk.XfException') class with a specified message, exit code and item.
+
+```csharp
+public XfException(int exitCode, string message, System.Collections.Generic.IEnumerable<string> files);
+```
+#### Parameters
+
+<a name='Xecrets.Sdk.XfException.XfException(int,string,System.Collections.Generic.IEnumerable_string_).exitCode'></a>
+
+`exitCode` [System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')
+
+The command line exit code.
+
+<a name='Xecrets.Sdk.XfException.XfException(int,string,System.Collections.Generic.IEnumerable_string_).message'></a>
+
+`message` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+
+The message.
+
+<a name='Xecrets.Sdk.XfException.XfException(int,string,System.Collections.Generic.IEnumerable_string_).files'></a>
+
+`files` [System.Collections.Generic.IEnumerable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')
+
+The files(s) causing the exception
+
 <a name='Xecrets.Sdk.XfException.XfException(int,string,System.Exception)'></a>
 
 ## XfException(int, string, Exception) Constructor
@@ -120,6 +149,19 @@ public int ExitCode { get; }
 
 #### Property Value
 [System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')
+
+<a name='Xecrets.Sdk.XfException.Files'></a>
+
+## XfException.Files Property
+
+The file(s) that caused the exception.
+
+```csharp
+public string[] Files { get; }
+```
+
+#### Property Value
+[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[[]](https://docs.microsoft.com/en-us/dotnet/api/System.Array 'System.Array')
 ### Methods
 
 <a name='Xecrets.Sdk.XfException.ToString()'></a>

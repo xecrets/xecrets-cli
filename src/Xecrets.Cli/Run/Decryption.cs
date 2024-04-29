@@ -113,10 +113,10 @@ namespace Xecrets.Cli.Run
         {
             var cryptoIds =
                 isLegacyV1
-                ? new Guid[] { new V1Aes128CryptoFactory().CryptoId }
+                ? [new V1Aes128CryptoFactory().CryptoId]
                 : Resolve.CryptoFactory.OrderedIds.Where(id => id != new V1Aes128CryptoFactory().CryptoId);
 
-            return DecryptionParameter.CreateAll(new Passphrase[] { passphrase }, privateKeys, cryptoIds);
+            return DecryptionParameter.CreateAll([passphrase], privateKeys, cryptoIds);
         }
 
         public void Dispose()

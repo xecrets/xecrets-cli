@@ -62,7 +62,7 @@ RuntimeEnvironment.RegisterTypeFactories();
 
 string workFolderPath = Path.Combine(Path.GetTempPath(), "Axantum/XecretsCli".Replace('/', Path.DirectorySeparatorChar));
 Directory.CreateDirectory(workFolderPath); 
-Resolve.RegisterTypeFactories(workFolderPath, Array.Empty<Assembly>());
+Resolve.RegisterTypeFactories(workFolderPath, []);
 
 TypeMap.Register.Singleton(() => new FileLocker());
 TypeMap.Register.Singleton<IProtectedData>(() => new ProtectedDataImplementation("Xecrets.Cli"));
@@ -101,7 +101,7 @@ TypeMap.Register.Singleton(() => new RewindableStdinStream());
 TypeMap.Register.New<string, IStandardIoDataStore>((path) => new StandardIoDataStore(path));
 TypeMap.Register.Singleton<IFileVerify>(() => new FileVerify());
 TypeMap.Register.Singleton<IBuildUtc>(() => new BuildUtc(typeof(Program)));
-TypeMap.Register.Singleton<ILicense>(() => new License(new NewLocator(), issuer: "xecrets@axantum.com", claim: "xflic.axantum.com", new[] { Resource.LicensePublicKeyProduction, Resource.LicensePublicKeyTest }, [ "cli", "sdk" ]));
+TypeMap.Register.Singleton<ILicense>(() => new License(new NewLocator(), issuer: "xecrets@axantum.com", claim: "xflic.axantum.com", [Resource.LicensePublicKeyProduction, Resource.LicensePublicKeyTest], ["cli", "sdk"]));
 TypeMap.Register.Singleton<ILicenseCandidates>(() => new LicenseCandidates());
 TypeMap.Register.Singleton<ILicenseExpiration>(() => new LicenseExpirationByBuildTime(new NewLocator()));
 TypeMap.Register.Singleton(() => new LicenseBlurb(new NewLocator(), Resource.GplBlurb, Resource.UnlicensedBlurb, Resource.LicensedExpiredDownloadBlurb, Resource.LicensedDownloadBlurb, Resource.LicenseNotValidForProductBlurb));

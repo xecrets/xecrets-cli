@@ -77,7 +77,7 @@ namespace Xecrets.Cli.Operation
             }
 
             LogOnIdentity identity = parameters.Identities[0];
-            parameters.Identities[0] = new LogOnIdentity(identity.KeyPairs.Concat(new UserKeyPair[] { userKeyPair }), identity.Passphrase);
+            parameters.Identities[0] = new LogOnIdentity(identity.KeyPairs.Concat([userKeyPair]), identity.Passphrase);
 
             parameters.Logger.Log(new Status(parameters, $"Created a key pair for '{parameters.CurrentOp.Email}' in '{parameters.CurrentOp.To}'."));
 

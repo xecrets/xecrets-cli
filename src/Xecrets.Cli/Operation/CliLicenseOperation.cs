@@ -46,7 +46,7 @@ namespace Xecrets.Cli.Operation
             }
 
             ILicense license = New<ILicense>();
-            license.LoadFromAsync(new string[] { parameters.Arguments[0] });
+            license.LoadFromAsync([parameters.Arguments[0]]);
 
             if (license.Status() == LicenseStatus.Unlicensed)
             {

@@ -74,10 +74,10 @@ namespace Xecrets.Cli.Operation
 
             if (keyPair == null)
             {
-                return Task.FromResult(new Status(XfStatusCode.InvalidPassword, "No valid password was provided to decrypt the key pair."));
+                return Task.FromResult(new Status(XfStatusCode.InvalidPassword, parameters, "No valid password was provided to decrypt the key pair."));
             }
 
-            identities[index] = new LogOnIdentity(identity!.KeyPairs.Concat(new UserKeyPair[] { keyPair }), identity!.Passphrase);
+            identities[index] = new LogOnIdentity(identity!.KeyPairs.Concat([keyPair]), identity!.Passphrase);
 
             parameters.Logger.Log(new Status(parameters, "Loaded a key pair created {3} with tag '{2}' for '{1}' from '{0}'".Format(parameters.CurrentOp.From, keyPair.UserEmail, keyPair.KeyPair.PublicKey.Tag, keyPair.Timestamp.ToLocalTime()))
             {

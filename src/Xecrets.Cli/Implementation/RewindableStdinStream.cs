@@ -88,7 +88,7 @@ namespace Xecrets.Cli.Implementation
             }
         }
 
-        private readonly Buffers _buffers = new Buffers();
+        private readonly Buffers _buffers = new();
 
         private long _position;
 

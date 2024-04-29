@@ -39,7 +39,7 @@ namespace Xecrets.Cli
 
         public bool Flag { get; }
 
-        public IList<string> Arguments { get; } = parameters.ToList();
+        public IList<string> Arguments { get; } = [.. parameters];
 
         public string From { get { return Arguments.Count > 0 ? Arguments[0] : string.Empty; } }
 

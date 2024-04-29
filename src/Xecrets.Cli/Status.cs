@@ -79,6 +79,7 @@ namespace Xecrets.Cli
             Id = parameters.TotalsTracker.Id;
             Email = parameters.Email;
             From = parameters.From;
+            File = parameters.File;
             To = parameters.To;
         }
 

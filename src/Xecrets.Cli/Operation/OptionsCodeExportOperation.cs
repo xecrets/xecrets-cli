@@ -41,44 +41,41 @@ namespace Xecrets.Cli.Operation
         public Task<Status> RealAsync(Parameters parameters)
         {
             StringBuilder sb = new StringBuilder();
-            _ = sb.AppendLine("using System.Collections.Generic;");
-            _ = sb.AppendLine("using System;");
-            _ = sb.AppendLine();
-            _ = sb.AppendLine("namespace Xecrets.Cli.Public");
-            _ = sb.AppendLine("{");
+            sb.AppendLine("namespace Xecrets.Cli.Public");
+            sb.AppendLine("{");
 
-            _ = sb.AppendLine($"    public enum {nameof(XfOpCode)}");
-            _ = sb.AppendLine("    {");
+            sb.AppendLine($"    public enum {nameof(XfOpCode)}");
+            sb.AppendLine("    {");
             foreach (XfOpCode opCode in Enum.GetValues(typeof(XfOpCode)))
             {
-                _ = sb.Append("        ").Append(Enum.GetName(opCode)).Append(" = ").Append((int)opCode).AppendLine(",");
+                sb.Append("        ").Append(Enum.GetName(opCode)).Append(" = ").Append((int)opCode).AppendLine(",");
             }
-            _ = sb.AppendLine("    }");
-            _ = sb.AppendLine();
+            sb.AppendLine("    }");
+            sb.AppendLine();
 
-            _ = sb.AppendLine($"    public enum {nameof(XfStatusCode)}");
-            _ = sb.AppendLine("    {");
+            sb.AppendLine($"    public enum {nameof(XfStatusCode)}");
+            sb.AppendLine("    {");
             foreach (XfStatusCode statusCode in Enum.GetValues(typeof(XfStatusCode)))
             {
-                _ = sb.Append("        ").Append(Enum.GetName(statusCode)).Append(" = ").Append((int)statusCode).AppendLine(",");
+                sb.Append("        ").Append(Enum.GetName(statusCode)).Append(" = ").Append((int)statusCode).AppendLine(",");
             }
-            _ = sb.AppendLine("    }");
-            _ = sb.AppendLine();
+            sb.AppendLine("    }");
+            sb.AppendLine();
 
-            _ = sb.AppendLine("    public class XfCliApi");
-            _ = sb.AppendLine("    {");
+            sb.AppendLine("    public class XfCliApi");
+            sb.AppendLine("    {");
             string version = $"{parameters.Parser.ExportableCliVersion.Major},{parameters.Parser.ExportableCliVersion.Minor}";
-            _ = sb.Append("        public Version XfCliVersion { get; } = new Version(").Append(version).AppendLine(");");
-            _ = sb.AppendLine();
-            _ = sb.AppendLine("        public List<(int, string, string)> XfCliOptions { get; } = new List<(int, string, string)>()");
-            _ = sb.AppendLine("        {");
+            sb.Append("        public Version XfCliVersion { get; } = new Version(").Append(version).AppendLine(");");
+            sb.AppendLine();
+            sb.AppendLine("        public List<(int, string, string)> XfCliOptions { get; } =");
+            sb.AppendLine("        [");
             foreach (XfOptionDefinition def in parameters.Parser.ExportableCliDefinitions)
             {
-                _ = sb.AppendLine($"            ({def.OpCode}, \"{def.Prototype}\", \"{def.Description}\"),");
+                sb.AppendLine($"            ({def.OpCode}, \"{def.Prototype}\", \"{def.Description}\"),");
             }
-            _ = sb.AppendLine("        };");
-            _ = sb.AppendLine("    }");
-            _ = sb.AppendLine("}");
+            sb.AppendLine("        ];");
+            sb.AppendLine("    }");
+            sb.AppendLine("}");
 
             parameters.Logger.Log(new Status(parameters, sb.ToString()));
 

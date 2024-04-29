@@ -25,6 +25,19 @@ public string? CliApiVersion { get; set; }
 #### Property Value
 [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
 
+<a name='Xecrets.Sdk.Cli.CliMessage.Display'></a>
+
+## CliMessage.Display Property
+
+The current display parameter in effect for this response
+
+```csharp
+public string? Display { get; set; }
+```
+
+#### Property Value
+[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+
 <a name='Xecrets.Sdk.Cli.CliMessage.Email'></a>
 
 ## CliMessage.Email Property
@@ -72,19 +85,6 @@ The current id value parameter in effect for this response
 
 ```csharp
 public string? Id { get; set; }
-```
-
-#### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
-
-<a name='Xecrets.Sdk.Cli.CliMessage.Item'></a>
-
-## CliMessage.Item Property
-
-The current item parameter in effect for this response
-
-```csharp
-public string? Item { get; set; }
 ```
 
 #### Property Value

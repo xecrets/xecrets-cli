@@ -33,18 +33,20 @@ namespace Xecrets.Cli.Run
 {
     internal abstract class RunFactory(Parameters parameters)
     {
-        readonly Dictionary<XfOpCode, Func<IExecutionPhases>> _operationTable = new Dictionary<XfOpCode, Func<IExecutionPhases>>()
+        readonly Dictionary<XfOpCode, Func<IExecutionPhases>> _operationTable = new()
         {
             { XfOpCode.ArgumentMarkdown, () => new ArgumentMarkdownOperation() },
             { XfOpCode.CliCrashLog, () => new CliCrashLogOperation() },
             { XfOpCode.OptionsCodeExport, () => new OptionsCodeExportOperation() },
             { XfOpCode.SdkCliVersion, () => new SdkCliVersionOperation() },
+            { XfOpCode.Begin, () => new BeginOperation() },
             { XfOpCode.CreateKeyPair, () => new CreateKeyPairOperation() },
             { XfOpCode.CliDebugBreak, () => new CliDebugBreakOperation() },
             { XfOpCode.DecryptTo, () => new DecryptToOperation() },
             { XfOpCode.DecryptToFolder, () => new DecryptToFolderOperation() },
             { XfOpCode.Echo, () => new EchoOperation() },
             { XfOpCode.EncryptTo, () => new EncryptToOperation() },
+            { XfOpCode.End, () => new EndOperation() },
             { XfOpCode.EnvironmentOption, () => new EnvironmentOptionsOperation() },
             { XfOpCode.ExportPublicKey, () => new ExportPublicKeyOperation() },
             { XfOpCode.OptionsFromFile, () => new FileOptionsOperation() },

@@ -21,22 +21,25 @@
  * contributions. You may also visit https://www.axantum.com for more information about the author.
 */
 
-#endregion Coypright and GPL License
+#endregion Coypright and GPL Licenseusing System.Text;
 
-namespace Xecrets.Cli.Public
+using Xecrets.Cli.Abstractions;
+using Xecrets.Cli.Run;
+
+namespace Xecrets.Cli.Operation
 {
-    /// <summary>
-    /// The version must be updated when the command line options are updated in
-    /// an incompatible way. Increase the minor version, if changes do not
-    /// change the meaning or syntax of any pre-existing options, i.e. purely
-    /// new additional capabilities. Increase the major version, if changes in
-    /// any way changes an existing option so it may not work as expected by an
-    /// older consumer. The consumer should thus only accept an export version
-    /// that has the same Major version, and a minor version greather than or equal
-    /// to it's known version.
-    /// </summary>
-    public static class XfExportVersion
+    internal class BeginOperation : IExecutionPhases
     {
-        public static Version CliVersion => new(1, 0);
+        public Task<Status> DryAsync(Parameters parameters)
+        {
+            parameters.Parser.OpLevel++;
+            return Task.FromResult(Status.Success);
+        }
+
+        public Task<Status> RealAsync(Parameters parameters)
+        {
+            parameters.Parser.OpLevel++;
+            return Task.FromResult(Status.Success);
+        }
     }
 }
