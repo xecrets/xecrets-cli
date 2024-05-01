@@ -55,7 +55,7 @@ namespace Xecrets.Cli.Operation
 
             if (license.Subscription().Product is not "cli" and not "sdk")
             {
-                TypeMap.Register.Singleton<ILicenseExpiration>(() => new LicenseExpirationByCurrentTime());
+                TypeMap.Register.Singleton<ILicenseExpiration>(() => new LicenseExpirationByCurrentTime(New<TimeProvider>()));
             }
 
             return Task.FromResult(Status.Success);

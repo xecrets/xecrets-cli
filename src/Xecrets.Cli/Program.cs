@@ -93,6 +93,7 @@ if (settings.IsAvailable && settings.Length() == 0)
 }
 TypeMap.Register.Singleton<ISettingsStore>(() => new SettingsStore(settings));
 
+TypeMap.Register.Singleton(() => TimeProvider.System);
 TypeMap.Register.Singleton<IUIThread>(() => new UIThread());
 TypeMap.Register.Singleton(() => new ConsoleOut(Console.Error));
 TypeMap.Register.Singleton<IEmailParser>(() => new EmailParser());
