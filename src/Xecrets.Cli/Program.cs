@@ -81,7 +81,7 @@ TypeMap.Register.New<ISystemCryptoPolicy>(() => new ProCryptoPolicy());
 TypeMap.Register.New<ICryptoPolicy>(() => New<LicensePolicy>().Capabilities.CryptoPolicy);
 
 TypeMap.Register.Singleton<IReport>(() => new Report(Resolve.WorkFolder.FileInfo.FullName, 1000000));
-TypeMap.Register.Singleton<TimeProvider>(() => TimeProvider.System);
+TypeMap.Register.Singleton(() => TimeProvider.System);
 TypeMap.Register.Singleton<INow>(() => new TimeProviderNow());
 TypeMap.Register.New<string, IFileWatcher>((path) => new FileWatcher());
 
@@ -93,7 +93,6 @@ if (settings.IsAvailable && settings.Length() == 0)
 }
 TypeMap.Register.Singleton<ISettingsStore>(() => new SettingsStore(settings));
 
-TypeMap.Register.Singleton(() => TimeProvider.System);
 TypeMap.Register.Singleton<IUIThread>(() => new UIThread());
 TypeMap.Register.Singleton(() => new ConsoleOut(Console.Error));
 TypeMap.Register.Singleton<IEmailParser>(() => new EmailParser());

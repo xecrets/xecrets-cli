@@ -31,6 +31,6 @@ namespace Xecrets.Cli.Implementation
 {
     internal class TimeProviderNow : INow
     {
-        public DateTime Utc => New<TimeProvider>().GetUtcNow().DateTime;
+        public DateTime Utc => New<TimeProvider>().GetUtcNow().UtcDateTime;
     }
 }
