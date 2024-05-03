@@ -122,7 +122,7 @@
     },
     "Encrypt test.mp4": {
       "commandName": "Project",
-      "commandLineArgs": "--password a --encrypt-to test.mp4 test.mp4.axx",
+      "commandLineArgs": "--password a --overwrite --encrypt-to test.mp4 test.mp4.axx",
       "workingDirectory": "TestCli",
       "remoteDebugEnabled": false,
       "hotReloadEnabled": false
