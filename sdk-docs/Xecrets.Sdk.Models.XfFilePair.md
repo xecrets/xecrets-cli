@@ -38,38 +38,57 @@ The full path and name of the source, cipher text.
 
 The full path and name of the target, plain text.
 
-<a name='Xecrets.Sdk.Models.XfFilePair.XfFilePair(string,string,string)'></a>
+<a name='Xecrets.Sdk.Models.XfFilePair.XfFilePair(string,string,string,bool)'></a>
 
-## XfFilePair(string, string, string) Constructor
+## XfFilePair(string, string, string, bool) Constructor
 
 A plain text/cipher text file pair
 
 ```csharp
-public XfFilePair(string sourceFullName, string targetFullName, string originalFileName);
+public XfFilePair(string sourceFullName, string targetFullName, string originalFileName, bool compressBeforeEncrypt);
 ```
 #### Parameters
 
-<a name='Xecrets.Sdk.Models.XfFilePair.XfFilePair(string,string,string).sourceFullName'></a>
+<a name='Xecrets.Sdk.Models.XfFilePair.XfFilePair(string,string,string,bool).sourceFullName'></a>
 
 `sourceFullName` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
 
 The full path and name of the source, plain text.
 
-<a name='Xecrets.Sdk.Models.XfFilePair.XfFilePair(string,string,string).targetFullName'></a>
+<a name='Xecrets.Sdk.Models.XfFilePair.XfFilePair(string,string,string,bool).targetFullName'></a>
 
 `targetFullName` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
 
 The full path and name of the target, cipher text.
 
-<a name='Xecrets.Sdk.Models.XfFilePair.XfFilePair(string,string,string).originalFileName'></a>
+<a name='Xecrets.Sdk.Models.XfFilePair.XfFilePair(string,string,string,bool).originalFileName'></a>
 
 `originalFileName` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
 
 The original file name to use when encrypting.
 
+<a name='Xecrets.Sdk.Models.XfFilePair.XfFilePair(string,string,string,bool).compressBeforeEncrypt'></a>
+
+`compressBeforeEncrypt` [System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')
+
+True if the file should be compressed before encryption.
+
 ### Remarks
 Create a new instance.
 ### Properties
+
+<a name='Xecrets.Sdk.Models.XfFilePair.CompressBeforeEncrypt'></a>
+
+## XfFilePair.CompressBeforeEncrypt Property
+
+True if the file should be compressed before encryption.
+
+```csharp
+public bool CompressBeforeEncrypt { get; set; }
+```
+
+#### Property Value
+[System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')
 
 <a name='Xecrets.Sdk.Models.XfFilePair.OriginalFileName'></a>
 

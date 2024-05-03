@@ -24,6 +24,7 @@
 #endregion Coypright and GPL License
 
 using AxCrypt.Abstractions;
+using AxCrypt.Core;
 using AxCrypt.Core.Crypto;
 using AxCrypt.Core.Crypto.Asymmetric;
 
@@ -115,7 +116,8 @@ namespace Xecrets.Cli.Operation
             IEnumerable<UserPublicKey> userPublicKeys = parameters.PublicKeys.Where(pk => parameters.SharingEmails.Contains(pk.Email));
             using (var encryption = new Encryption(fromStore.OpenRead(), parameters.Identities.Where(id => id.Passphrase != Passphrase.Empty), userPublicKeys, parameters.Progress))
             {
-                encryption.EncryptTo(toFreeStore, fromStore.AliasName);
+                encryption.EncryptTo(toFreeStore, fromStore.AliasName,
+                    parameters.Compress ? AxCryptOptions.EncryptWithCompression : AxCryptOptions.EncryptWithoutCompression);
             }
 
             string freeTo = Path.Combine(Path.GetDirectoryName(parameters.To) ?? string.Empty, toFreeStore.Name);

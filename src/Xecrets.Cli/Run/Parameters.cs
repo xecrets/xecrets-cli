@@ -41,6 +41,8 @@ namespace Xecrets.Cli.Run
 
         public bool Overwrite { get; set; } = false;
 
+        public bool Compress { get; set; } = true;
+
         public string CrashLogFile { get; set; } = string.Empty;
 
         public TotalsTracker TotalsTracker { get; } = new TotalsTracker();

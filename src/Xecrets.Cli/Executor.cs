@@ -60,6 +60,7 @@ namespace Xecrets.Cli
         {
             parameters.TotalsTracker.ResetLogger(parameters);
             parameters.Overwrite = false;
+            parameters.Compress = true;
         }
 
         private static readonly XfStatusCode[] RecoverableInSequence = [XfStatusCode.InvalidPassword];

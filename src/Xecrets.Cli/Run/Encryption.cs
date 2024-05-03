@@ -50,7 +50,7 @@ namespace Xecrets.Cli.Run
             _fromStream = new ProgressStream(fromStream, progress);
         }
 
-        public void EncryptTo(IStandardIoDataStore toStore, string originalFileName)
+        public void EncryptTo(IStandardIoDataStore toStore, string originalFileName, AxCryptOptions options)
         {
             using (_fromStream)
             {
@@ -61,7 +61,7 @@ namespace Xecrets.Cli.Run
                 _document.LastAccessTimeUtc = _document.CreationTimeUtc;
                 _document.LastWriteTimeUtc = _document.CreationTimeUtc;
 
-                _document.EncryptTo(_fromStream, toStream, AxCryptOptions.EncryptWithCompression);
+                _document.EncryptTo(_fromStream, toStream, options);
             }
         }
 

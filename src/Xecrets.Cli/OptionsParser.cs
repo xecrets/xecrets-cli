@@ -77,6 +77,9 @@ namespace Xecrets.Cli
                     "{encrypted} [{folder}]:Decrypt a file path with it's original name to a destination folder." +
                     ":If {folder} is not provided, the {encrypted}'s folder will be used.",
                     (ora, op, from) => ora.AddOneRunning(op, from) },
+                { "m|compress", XfOpCode.Compress,
+                    ":Compress the file before encryption (default true).",
+                    (ora, op, compress) => ora.Add(compress != null ? op : XfOpCode.NoCompress) },
                 {"n|environment=", XfOpCode.EnvironmentOption,
                     "{variable}:Take options from environment variable (programmatic).",
                     (ora, op, variable) => { ora.Add(op); RecursivelyParseFromString(variable, parsed, extra); } },
