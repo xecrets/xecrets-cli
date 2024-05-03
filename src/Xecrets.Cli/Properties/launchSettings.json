@@ -119,6 +119,13 @@
       "commandLineArgs": "--password b --overwrite\r\n-d Hejhej-txt.axx Hejhej.txt",
       "workingDirectory": "TestCli\\Photos",
       "remoteDebugEnabled": true
+    },
+    "Encrypt test.mp4": {
+      "commandName": "Project",
+      "commandLineArgs": "--password a --encrypt-to test.mp4 test.mp4.axx",
+      "workingDirectory": "TestCli",
+      "remoteDebugEnabled": false,
+      "hotReloadEnabled": false
     }
   }
 }
