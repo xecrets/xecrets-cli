@@ -12,6 +12,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <NeutralLanguage>en-US</NeutralLanguage>
+    <InvariantGlobalization>true</InvariantGlobalization>
     <SuppressTrimAnalysisWarnings>false</SuppressTrimAnalysisWarnings>
     <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
     <AssemblyName>XecretsCli</AssemblyName>
@@ -35,7 +36,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="7.6.2" />
-    <PackageReference Include="Xecrets.Licensing" Version="1.0.30" />
+    <PackageReference Include="Xecrets.Licensing" Version="1.0.33" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
   </ItemGroup>
   <ItemGroup>
