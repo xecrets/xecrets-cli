@@ -245,29 +245,3 @@ The full path to an optional destination folder. Set to empty string if same as 
 #### Returns
 [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')  
 The suggested name for it when encrypted.
-
-<a name='Xecrets.Sdk.XfExtensions.TrailingNumberInParenthesis()'></a>
-
-## XfExtensions.TrailingNumberInParenthesis() Method
-
-```csharp
-private static System.Text.RegularExpressions.Regex TrailingNumberInParenthesis();
-```
-
-#### Returns
-[System.Text.RegularExpressions.Regex](https://docs.microsoft.com/en-us/dotnet/api/System.Text.RegularExpressions.Regex 'System.Text.RegularExpressions.Regex')
-
-### Remarks
-Pattern:<br/>  
-  
-```csharp  
-\\([\\d]+\\)$  
-```<br/>  
-Explanation:<br/>  
-  
-```csharp  
-○ Match the string " (".<br/>  
-○ Match a Unicode digit atomically at least once.<br/>  
-○ Match ')'.<br/>  
-○ Match if at the end of the string or if before an ending newline.<br/>  
-```
