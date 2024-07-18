@@ -23,19 +23,17 @@
 
 #endregion Coypright and GPL License
 
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 
 using AxCrypt.Abstractions;
 using AxCrypt.Abstractions.Algorithm;
-using AxCrypt.Api;
 using AxCrypt.Core;
 using AxCrypt.Core.Crypto;
-using AxCrypt.Core.Extensions;
+using AxCrypt.Core.Crypto.Asymmetric;
 using AxCrypt.Core.IO;
+using AxCrypt.Core.Portable;
 using AxCrypt.Core.Runtime;
-using AxCrypt.Core.Service;
 using AxCrypt.Core.UI;
 using AxCrypt.Mono;
 using AxCrypt.Mono.Portable;
@@ -49,6 +47,8 @@ using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
 using Xecrets.Licensing.Abstractions;
 using Xecrets.Licensing.Implementation;
+using Xecrets.Net.Api.Implementation;
+using Xecrets.Net.Core;
 
 using static AxCrypt.Abstractions.TypeResolve;
 
@@ -58,15 +58,34 @@ Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
 var options = new OptionsParser(Environment.CommandLine);
 
-RuntimeEnvironment.RegisterTypeFactories();
+TypeMap.Register.Singleton<IRuntimeEnvironment>(() => new RuntimeEnvironment(".axx"));
+TypeMap.Register.Singleton<IPortableFactory>(() => new PortableFactory());
+TypeMap.Register.Singleton<ILogging>(() => new Logging());
+TypeMap.Register.Singleton<IPlatform>(() => new MonoPlatform());
+TypeMap.Register.Singleton<IPath>(() => new PortablePath());
+
+TypeMap.Register.New<string, IDataStore>((path) => new DataStore(path));
+TypeMap.Register.New<string, IDataContainer>((path) => new DataContainer(path));
+TypeMap.Register.New<string, IDataItem>((path) => DataItem.Create(path));
 
 string workFolderPath = Path.Combine(Path.GetTempPath(), "Axantum/XecretsCli".Replace('/', Path.DirectorySeparatorChar));
-Directory.CreateDirectory(workFolderPath); 
-Resolve.RegisterTypeFactories(workFolderPath, []);
+Directory.CreateDirectory(workFolderPath);
+
+TypeMap.Register.Singleton(() => new UserSettingsVersion());
+TypeMap.Register.Singleton(() => new UserSettings(New<ISettingsStore>(), New<IterationCalculator>()));
+TypeMap.Register.Singleton<IRandomGenerator>(() => new RandomGenerator());
+TypeMap.Register.Singleton<IAsymmetricFactory>(() => new BouncyCastleAsymmetricFactory());
+TypeMap.Register.Singleton(() => new CryptoFactory([]));
+
+TypeMap.Register.New(() => new AxCryptFactory());
+TypeMap.Register.New(() => new AxCryptFile());
+TypeMap.Register.New<int, Salt>((size) => new Salt(size));
+TypeMap.Register.New(() => new IterationCalculator());
+TypeMap.Register.Singleton<IStringSerializer>(() => new SystemTextJsonStringSerializer(JsonSourceGenerationContext.CreateJsonSerializerContext()));
+
+TypeMap.Register.Singleton(() => new WorkFolder(workFolderPath), () => { });
 
 TypeMap.Register.Singleton(() => new FileLocker());
-TypeMap.Register.Singleton<IProtectedData>(() => new ProtectedDataImplementation("Xecrets.Cli"));
-TypeMap.Register.New<ILauncher>(() => new Launcher());
 TypeMap.Register.New(() => PortableFactory.AxCryptHMACSHA1());
 TypeMap.Register.New<HMACSHA512>(() => new AxCrypt.Mono.Cryptography.HMACSHA512Wrapper(new AxCrypt.Desktop.Cryptography.HMACSHA512CryptoServiceProvider()));
 TypeMap.Register.New<Aes>(() => new AxCrypt.Mono.Cryptography.AesWrapper(System.Security.Cryptography.Aes.Create()));
@@ -74,16 +93,11 @@ TypeMap.Register.New<Sha1>(() => PortableFactory.SHA1Managed());
 TypeMap.Register.New<Sha256>(() => PortableFactory.SHA256Managed());
 TypeMap.Register.New<CryptoStreamBase>(() => PortableFactory.CryptoStream());
 TypeMap.Register.New(() => PortableFactory.RandomNumberGenerator());
-TypeMap.Register.New<LogOnIdentity, IAccountService>((LogOnIdentity identity) => new CachingAccountService(new DeviceAccountService(new LocalAccountService(identity, Resolve.WorkFolder.FileInfo), new ApiAccountService(new AxCryptApiClient(identity.ToRestIdentity(), Resolve.UserSettings.RestApiBaseUrl, Resolve.UserSettings.ApiTimeout)))));
-TypeMap.Register.New(() => new GlobalApiClient(Resolve.UserSettings.RestApiBaseUrl, Resolve.UserSettings.ApiTimeout));
-TypeMap.Register.New(() => new AxCryptApiClient(Resolve.KnownIdentities.DefaultEncryptionIdentity.ToRestIdentity(), Resolve.UserSettings.RestApiBaseUrl, Resolve.UserSettings.ApiTimeout));
 TypeMap.Register.New<ISystemCryptoPolicy>(() => new ProCryptoPolicy());
-TypeMap.Register.New<ICryptoPolicy>(() => New<LicensePolicy>().Capabilities.CryptoPolicy);
 
 TypeMap.Register.Singleton<IReport>(() => new Report(Resolve.WorkFolder.FileInfo.FullName, 1000000));
 TypeMap.Register.Singleton(() => TimeProvider.System);
 TypeMap.Register.Singleton<INow>(() => new TimeProviderNow());
-TypeMap.Register.New<string, IFileWatcher>((path) => new FileWatcher());
 
 // Avoid JSON deserialization errors when the user settings file is empty.
 IDataStore settings = Resolve.WorkFolder.FileInfo.FileItemInfo("UserSettings.txt");
@@ -93,7 +107,6 @@ if (settings.IsAvailable && settings.Length() == 0)
 }
 TypeMap.Register.Singleton<ISettingsStore>(() => new SettingsStore(settings));
 
-TypeMap.Register.Singleton<IUIThread>(() => new UIThread());
 TypeMap.Register.Singleton(() => new ConsoleOut(Console.Error));
 TypeMap.Register.Singleton<IEmailParser>(() => new EmailParser());
 TypeMap.Register.Singleton(() => new Splash(Resource.splash));
