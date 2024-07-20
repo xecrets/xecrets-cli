@@ -118,7 +118,7 @@ The destination full path and name.
 Select the files that appear to be encrypted, according to their extension.
 
 ```csharp
-public static System.Collections.Generic.IEnumerable<string> Encrypted(this System.Collections.Generic.IEnumerable<string> files);
+public static string[] Encrypted(this System.Collections.Generic.IEnumerable<string> files);
 ```
 #### Parameters
 
@@ -129,8 +129,8 @@ public static System.Collections.Generic.IEnumerable<string> Encrypted(this Syst
 File names to filter
 
 #### Returns
-[System.Collections.Generic.IEnumerable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')  
-An enumeration of the files that match the pattern for encrypted files.
+[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[[]](https://docs.microsoft.com/en-us/dotnet/api/System.Array 'System.Array')  
+An array of the files that match the pattern for encrypted files.
 
 <a name='Xecrets.Sdk.XfExtensions.EncryptFileAsync(thisXecrets.Sdk.Abstractions.IXfApi,Xecrets.Sdk.Models.XfCredentials,string,byte[],string)'></a>
 
