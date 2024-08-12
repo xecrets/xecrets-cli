@@ -41,6 +41,7 @@ using System.Resources;
 [assembly: AssemblyTrademark("Xecrets is a trademark of Axantum Software AB")]
 [assembly: AssemblyProduct("Xecrets Cli")]
 [assembly: AssemblyTitle("Xecrets Cli BETA GPL")]
+[assembly: AssemblyMetadata("RepositoryUrl", "https://github.com/xecrets/xecrets-cli")]
 [assembly: NeutralResourcesLanguage("en-US")]
 [assembly: CLSCompliant(true)]
 
