@@ -40,7 +40,7 @@ using System.Resources;
 [assembly: AssemblyDescription("A cross platform AxCrypt compatible tool for applied strong cryptography")]
 [assembly: AssemblyTrademark("Xecrets is a trademark of Axantum Software AB")]
 [assembly: AssemblyProduct("Xecrets Cli")]
-[assembly: AssemblyTitle("Xecrets Cli BETA GPL")]
+[assembly: AssemblyTitle("Xecrets Cli BETA GPL main executable")]
 [assembly: AssemblyMetadata("RepositoryUrl", "https://github.com/xecrets/xecrets-cli")]
 [assembly: NeutralResourcesLanguage("en-US")]
 [assembly: CLSCompliant(true)]
