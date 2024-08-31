@@ -49,6 +49,7 @@ using Xecrets.Licensing.Abstractions;
 using Xecrets.Licensing.Implementation;
 using Xecrets.Net.Api.Implementation;
 using Xecrets.Net.Core;
+using Xecrets.Net.Core.Crypto.Asymmetric;
 
 using static AxCrypt.Abstractions.TypeResolve;
 
@@ -74,14 +75,14 @@ Directory.CreateDirectory(workFolderPath);
 TypeMap.Register.Singleton(() => new UserSettingsVersion());
 TypeMap.Register.Singleton(() => new UserSettings(New<ISettingsStore>(), New<IterationCalculator>()));
 TypeMap.Register.Singleton<IRandomGenerator>(() => new RandomGenerator());
-TypeMap.Register.Singleton<IAsymmetricFactory>(() => new BouncyCastleAsymmetricFactory());
+TypeMap.Register.Singleton<IAsymmetricFactory>(() => new NetAsymmetricFactory());
 TypeMap.Register.Singleton(() => new CryptoFactory([]));
 
 TypeMap.Register.New(() => new AxCryptFactory());
 TypeMap.Register.New(() => new AxCryptFile());
 TypeMap.Register.New<int, Salt>((size) => new Salt(size));
 TypeMap.Register.New(() => new IterationCalculator());
-TypeMap.Register.Singleton<IStringSerializer>(() => new SystemTextJsonStringSerializer(JsonSourceGenerationContext.CreateJsonSerializerContext()));
+TypeMap.Register.Singleton<IStringSerializer>(() => new SystemTextJsonStringSerializer(JsonSourceGenerationContext.CreateJsonSerializerContext(New<IAsymmetricFactory>().GetConverters())));
 
 TypeMap.Register.Singleton(() => new WorkFolder(workFolderPath), () => { });
 
