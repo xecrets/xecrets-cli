@@ -1,4 +1,4 @@
-﻿#region Coypright and GPL License
+﻿#region Copyright and GPL License
 
 /*
  * Xecrets Cli - Copyright © 2022-2024, Svante Seleborg, All Rights Reserved.
@@ -21,7 +21,7 @@
  * contributions. You may also visit https://www.axantum.com for more information about the author.
 */
 
-#endregion Coypright and GPL License
+#endregion Copyright and GPL License
 
 using System.Text;
 
