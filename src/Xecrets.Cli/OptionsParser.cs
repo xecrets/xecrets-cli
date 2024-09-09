@@ -43,6 +43,9 @@ namespace Xecrets.Cli
 
             ExportableOptionCollection optionSet = new ExportableOptionCollection(cliVersion, new RunningArguments(parsed, extra))
             {
+                {"a|armor", XfOpCode.AsciiArmor,
+                    ":Use ASCII armor for encryption and decryption.",
+                    (ora, op, armor) => ora.Add(armor != null ? op : XfOpCode.NoAsciiArmor) },
                 {"b|use-public-key=", XfOpCode.UsePublicKey,
                     "{email(s)}:Use selected loaded public key(s) for encryption.",
                     (ora, op, email) => ora.AddManyRunning(op, email)},
@@ -136,13 +139,13 @@ namespace Xecrets.Cli
             optionSet.Add("cli-version", XfOpCode.SdkCliVersion, ":?Display the command line tool API version.", (ora, op, arg) => ora.Add(arg != null ? op : XfOpCode.None));
             optionSet.Add("end", XfOpCode.End, ":?End a sequence of operations.", (ora, op, end) => ora.Add(op));
             optionSet.Add("internal", XfOpCode.Internal, ":?Display help for internal use commands and disable splash (global).", (ora, op, @internal) => Internal = @internal != null);
-            optionSet.Add("jwt-audience=", XfOpCode.JwtAudience,"{audience}:?Set audience string or URI for JWT.", (ora, op, audience) => ora.Add(op, audience));
+            optionSet.Add("jwt-audience=", XfOpCode.JwtAudience, "{audience}:?Set audience string or URI for JWT.", (ora, op, audience) => ora.Add(op, audience));
             optionSet.Add("jwt-claims={}", XfOpCode.JwtClaims, "{expiration} {claims}:?Set days until expiration and claims JSON.", (ora, op, days, claims) => ora.Add(op, days, claims));
-            optionSet.Add("jwt-create-key-pair={}", XfOpCode.JwtCreateKeyPair, "{private-pem} {public-pem}:?Create JWT keypair as PEM files.",(ora, op, @private, @public) => ora.Add(op, @private, @public));
+            optionSet.Add("jwt-create-key-pair={}", XfOpCode.JwtCreateKeyPair, "{private-pem} {public-pem}:?Create JWT keypair as PEM files.", (ora, op, @private, @public) => ora.Add(op, @private, @public));
             optionSet.Add("jwt-issuer=", XfOpCode.JwtIssuer, "{issuer}:?Set issuer email for JWT.", (ora, op, issuer) => ora.Add(op, issuer));
             optionSet.Add("jwt-sign=", XfOpCode.JwtSign, "{signed-jwt}:?Sign and write JWT to file.", (ora, op, file) => ora.Add(op, file));
             optionSet.Add("jwt-private-key=", XfOpCode.JwtPrivateKey, "{private-pem}:?Use a private key PEM file for signing.", (ora, op, @private) => ora.Add(op, @private));
-            optionSet.Add("jwt-verify={}", XfOpCode.JwtVerify,"{public-pem} {signed-jwt}:?Verify a signed JWT file using a public PEM file.", (ora, op, @public, token) => ora.Add(op, @public, token));
+            optionSet.Add("jwt-verify={}", XfOpCode.JwtVerify, "{public-pem} {signed-jwt}:?Verify a signed JWT file using a public PEM file.", (ora, op, @public, token) => ora.Add(op, @public, token));
 
             return optionSet;
         }
@@ -286,7 +289,7 @@ namespace Xecrets.Cli
                 RunningAction = (s) => op.Arguments.Add(s);
             }
         }
-        
+
         private class ExportableOptionCollection(Version cliVersion, RunningArguments ora) : OptionSetCollection
         {
             /// <summary>

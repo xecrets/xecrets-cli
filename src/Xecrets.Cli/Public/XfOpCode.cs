@@ -45,6 +45,7 @@ namespace Xecrets.Cli.Public
 
         #region Possible-to-change values if API version is updated
         ArgumentMarkdown = 1000,
+        AsciiArmor = 1005,
         Begin = 1010,
         CliCrashLog = 1020,
         CliDebugBreak = 1030,
@@ -76,6 +77,7 @@ namespace Xecrets.Cli.Public
         JwtSign = 1290,
         JwtVerify = 1300,
         LoadPublicKey = 1310,
+        NoAsciiArmor = 1315,
         NoCompress = 1320,
         NoLog = 1330,
         NoOverwrite = 1340,

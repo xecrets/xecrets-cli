@@ -29,6 +29,7 @@ using AxCrypt.Core.Crypto;
 using AxCrypt.Core.Crypto.Asymmetric;
 
 using Xecrets.Cli.Abstractions;
+using Xecrets.Cli.Implementation;
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
 using Xecrets.Licensing.Abstractions;
@@ -116,6 +117,10 @@ namespace Xecrets.Cli.Operation
             IEnumerable<UserPublicKey> userPublicKeys = parameters.PublicKeys.Where(pk => parameters.SharingEmails.Contains(pk.Email));
             using (var encryption = new Encryption(fromStore.OpenRead(), parameters.Identities.Where(id => id.Passphrase != Passphrase.Empty), userPublicKeys, parameters.Progress))
             {
+                if (parameters.AsciiArmor)
+                {
+                    toFreeStore = new AsciiArmorDataStore(toFreeStore);
+                }
                 encryption.EncryptTo(toFreeStore, fromStore.AliasName,
                     parameters.Compress ? AxCryptOptions.EncryptWithCompression : AxCryptOptions.EncryptWithoutCompression);
             }

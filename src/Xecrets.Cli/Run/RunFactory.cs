@@ -36,6 +36,7 @@ namespace Xecrets.Cli.Run
         readonly Dictionary<XfOpCode, Func<IExecutionPhases>> _operationTable = new()
         {
             { XfOpCode.ArgumentMarkdown, () => new ArgumentMarkdownOperation() },
+            { XfOpCode.AsciiArmor, () => new AsciiArmorOperation() },
             { XfOpCode.CliCrashLog, () => new CliCrashLogOperation() },
             { XfOpCode.OptionsCodeExport, () => new OptionsCodeExportOperation() },
             { XfOpCode.SdkCliVersion, () => new SdkCliVersionOperation() },
@@ -66,6 +67,7 @@ namespace Xecrets.Cli.Run
             { XfOpCode.LoadPublicKey, () => new LoadPublicKeyOperation() },
             { XfOpCode.NoLog, () => new NoLogOperation() },
             { XfOpCode.None, () => new NoOperation() },
+            { XfOpCode.NoAsciiArmor, () => new NoAsciiArmorOperation() },
             { XfOpCode.NoCompress, () => new NoCompressOperation() },
             { XfOpCode.NoOverwrite, () => new NoOverwriteOperation() },
             { XfOpCode.NoProgress, () => new NoProgressOperation() },

@@ -26,6 +26,7 @@
 using AxCrypt.Abstractions;
 
 using Xecrets.Cli.Abstractions;
+using Xecrets.Cli.Implementation;
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
 
@@ -71,6 +72,10 @@ namespace Xecrets.Cli.Operation
             IStandardIoDataStore fromStore = New<IStandardIoDataStore>(parameters.From);
 
             parameters.Progress.Display = parameters.From;
+            if (parameters.AsciiArmor)
+            {
+                fromStore = new AsciiArmorDataStore(fromStore);
+            }
             using (var decryption = new Decryption(fromStore.OpenRead(), parameters.Identities, parameters.Progress))
             {
                 if (!decryption.HasValidPassphrase)

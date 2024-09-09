@@ -43,6 +43,8 @@ namespace Xecrets.Cli.Run
 
         public bool Compress { get; set; } = true;
 
+        public bool AsciiArmor { get; set; } = false;
+
         public string CrashLogFile { get; set; } = string.Empty;
 
         public TotalsTracker TotalsTracker { get; } = new TotalsTracker();
