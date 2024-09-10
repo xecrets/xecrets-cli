@@ -66,6 +66,23 @@ public System.Collections.Generic.IEnumerable<string> PublicKeyFullNames { get; 
 [System.Collections.Generic.IEnumerable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')
 ### Methods
 
+<a name='Xecrets.Sdk.Models.XfCredentials.AddCredentials(Xecrets.Sdk.Models.XfCredentials)'></a>
+
+## XfCredentials.AddCredentials(XfCredentials) Method
+
+Add all the credentials from another XfCredentials object.
+
+```csharp
+public void AddCredentials(Xecrets.Sdk.Models.XfCredentials credentials);
+```
+#### Parameters
+
+<a name='Xecrets.Sdk.Models.XfCredentials.AddCredentials(Xecrets.Sdk.Models.XfCredentials).credentials'></a>
+
+`credentials` [XfCredentials](Xecrets.Sdk.Models.XfCredentials.md 'Xecrets.Sdk.Models.XfCredentials')
+
+The credentials to add.
+
 <a name='Xecrets.Sdk.Models.XfCredentials.AddKeyPairFullNames(System.Collections.Generic.IEnumerable_string_)'></a>
 
 ## XfCredentials.AddKeyPairFullNames(IEnumerable<string>) Method
