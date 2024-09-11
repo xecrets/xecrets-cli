@@ -57,6 +57,33 @@ The email to associate the key pair with.
 [System.Threading.Tasks.Task&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')[XfEncryptedKeyPair](Xecrets.Sdk.Models.XfEncryptedKeyPair.md 'Xecrets.Sdk.Models.XfEncryptedKeyPair')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')  
 The [XfEncryptedKeyPair](Xecrets.Sdk.Models.XfEncryptedKeyPair.md 'Xecrets.Sdk.Models.XfEncryptedKeyPair')
 
+<a name='Xecrets.Sdk.Abstractions.IXfApi.DecryptArmorAsync(Xecrets.Sdk.Models.XfCredentials,string)'></a>
+
+## IXfApi.DecryptArmorAsync(XfCredentials, string) Method
+
+Decrypt an arbitrary string from ASCII armor format.
+
+```csharp
+System.Threading.Tasks.Task<(string text,string fileName)> DecryptArmorAsync(Xecrets.Sdk.Models.XfCredentials credentials, string armor);
+```
+#### Parameters
+
+<a name='Xecrets.Sdk.Abstractions.IXfApi.DecryptArmorAsync(Xecrets.Sdk.Models.XfCredentials,string).credentials'></a>
+
+`credentials` [XfCredentials](Xecrets.Sdk.Models.XfCredentials.md 'Xecrets.Sdk.Models.XfCredentials')
+
+One or more passwords to decrypt with.
+
+<a name='Xecrets.Sdk.Abstractions.IXfApi.DecryptArmorAsync(Xecrets.Sdk.Models.XfCredentials,string).armor'></a>
+
+`armor` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+
+The ASCII armor string to decrypt.
+
+#### Returns
+[System.Threading.Tasks.Task&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')[&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.ValueTuple 'System.ValueTuple')[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[,](https://docs.microsoft.com/en-us/dotnet/api/System.ValueTuple 'System.ValueTuple')[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.ValueTuple 'System.ValueTuple')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')  
+The decrypted text, and the original file name embedded in the encrypted data.
+
 <a name='Xecrets.Sdk.Abstractions.IXfApi.DecryptFilesInPlaceAsync(Xecrets.Sdk.Models.XfCredentials,System.Collections.Generic.IEnumerable_Xecrets.Sdk.Models.XfFilePair_,System.Action_Xecrets.Sdk.Cli.CliMessage_)'></a>
 
 ## IXfApi.DecryptFilesInPlaceAsync(XfCredentials, IEnumerable<XfFilePair>, Action<CliMessage>) Method
@@ -134,7 +161,7 @@ System.Threading.Tasks.Task<string> DecryptStreamAsync(Xecrets.Sdk.Models.XfCred
 
 `credentials` [XfCredentials](Xecrets.Sdk.Models.XfCredentials.md 'Xecrets.Sdk.Models.XfCredentials')
 
-One or more passwords to Decrypt with.
+One or more passwords to decrypt with.
 
 <a name='Xecrets.Sdk.Abstractions.IXfApi.DecryptStreamAsync(Xecrets.Sdk.Models.XfCredentials,System.IO.Stream,System.IO.Stream).cipherStream'></a>
 
@@ -152,33 +179,6 @@ A stream to write the clear text to.
 [System.Threading.Tasks.Task&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')  
 A [System.Threading.Tasks.Task](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task 'System.Threading.Tasks.Task') to wait for and the original file name as a string, or an empty string if the  
             credentials were invalid.
-
-<a name='Xecrets.Sdk.Abstractions.IXfApi.DecryptTextAsync(Xecrets.Sdk.Models.XfCredentials,string)'></a>
-
-## IXfApi.DecryptTextAsync(XfCredentials, string) Method
-
-Decrypt an arbitrary string from ASCII armor format.
-
-```csharp
-System.Threading.Tasks.Task<(string text,string fileName)> DecryptTextAsync(Xecrets.Sdk.Models.XfCredentials credentials, string text);
-```
-#### Parameters
-
-<a name='Xecrets.Sdk.Abstractions.IXfApi.DecryptTextAsync(Xecrets.Sdk.Models.XfCredentials,string).credentials'></a>
-
-`credentials` [XfCredentials](Xecrets.Sdk.Models.XfCredentials.md 'Xecrets.Sdk.Models.XfCredentials')
-
-One or more passwords to Decrypt with.
-
-<a name='Xecrets.Sdk.Abstractions.IXfApi.DecryptTextAsync(Xecrets.Sdk.Models.XfCredentials,string).text'></a>
-
-`text` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
-
-The ASCII armor string to decrypt.
-
-#### Returns
-[System.Threading.Tasks.Task&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')[&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.ValueTuple 'System.ValueTuple')[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[,](https://docs.microsoft.com/en-us/dotnet/api/System.ValueTuple 'System.ValueTuple')[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.ValueTuple 'System.ValueTuple')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')  
-The decrypted text, and the original file name embedded in the encrypted data.
 
 <a name='Xecrets.Sdk.Abstractions.IXfApi.DecryptToAndKeepFileAsync(Xecrets.Sdk.Models.XfCredentials,System.IO.FileInfo,System.IO.DirectoryInfo,System.Action_Xecrets.Sdk.Cli.CliMessage_)'></a>
 
@@ -242,7 +242,8 @@ The credentials to use when encrypting the files.
 
 `overwrite` [System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')
 
-Set to 'false' if overwriting the target should be disallowed, and instead use an alternate non-colliding name.
+Set to 'false' if overwriting the target should be disallowed, and instead use an  
+            alternate non-colliding name.
 
 <a name='Xecrets.Sdk.Abstractions.IXfApi.EncryptFilesAsync(Xecrets.Sdk.Models.XfCredentials,bool,bool,System.Collections.Generic.IEnumerable_Xecrets.Sdk.Models.XfFilePair_,System.Action_Xecrets.Sdk.Cli.CliMessage_).wipe'></a>
 
@@ -254,13 +255,15 @@ Set to 'true' to also wipe the original plain text.
 
 `pairs` [System.Collections.Generic.IEnumerable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')[XfFilePair](Xecrets.Sdk.Models.XfFilePair.md 'Xecrets.Sdk.Models.XfFilePair')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')
 
-File name pairs, providing source and target names as well as original name to include in the encrypted file.
+File name pairs, providing source and target names as well as original name to include  
+            in the encrypted file.
 
 <a name='Xecrets.Sdk.Abstractions.IXfApi.EncryptFilesAsync(Xecrets.Sdk.Models.XfCredentials,bool,bool,System.Collections.Generic.IEnumerable_Xecrets.Sdk.Models.XfFilePair_,System.Action_Xecrets.Sdk.Cli.CliMessage_).progress'></a>
 
 `progress` [System.Action&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Action-1 'System.Action`1')[CliMessage](Xecrets.Sdk.Cli.CliMessage.md 'Xecrets.Sdk.Cli.CliMessage')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Action-1 'System.Action`1')
 
-An [System.Action](https://docs.microsoft.com/en-us/dotnet/api/System.Action 'System.Action') delegate that will be called reporting progress of the operation.
+An [System.Action](https://docs.microsoft.com/en-us/dotnet/api/System.Action 'System.Action') delegate that will be called reporting progress of the  
+            operation.
 
 #### Returns
 [System.Threading.Tasks.Task&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')[System.Collections.Generic.IEnumerable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')[System.IO.FileInfo](https://docs.microsoft.com/en-us/dotnet/api/System.IO.FileInfo 'System.IO.FileInfo')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')
