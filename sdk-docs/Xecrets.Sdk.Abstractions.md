@@ -134,7 +134,7 @@ System.Threading.Tasks.Task<string> DecryptStreamAsync(Xecrets.Sdk.Models.XfCred
 
 `credentials` [XfCredentials](Xecrets.Sdk.Models.XfCredentials.md 'Xecrets.Sdk.Models.XfCredentials')
 
-One or more passwords to encrypt with.
+One or more passwords to Decrypt with.
 
 <a name='Xecrets.Sdk.Abstractions.IXfApi.DecryptStreamAsync(Xecrets.Sdk.Models.XfCredentials,System.IO.Stream,System.IO.Stream).cipherStream'></a>
 
@@ -152,6 +152,33 @@ A stream to write the clear text to.
 [System.Threading.Tasks.Task&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')  
 A [System.Threading.Tasks.Task](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task 'System.Threading.Tasks.Task') to wait for and the original file name as a string, or an empty string if the  
             credentials were invalid.
+
+<a name='Xecrets.Sdk.Abstractions.IXfApi.DecryptTextAsync(Xecrets.Sdk.Models.XfCredentials,string)'></a>
+
+## IXfApi.DecryptTextAsync(XfCredentials, string) Method
+
+Decrypt an arbitrary string from ASCII armor format.
+
+```csharp
+System.Threading.Tasks.Task<(string text,string fileName)> DecryptTextAsync(Xecrets.Sdk.Models.XfCredentials credentials, string text);
+```
+#### Parameters
+
+<a name='Xecrets.Sdk.Abstractions.IXfApi.DecryptTextAsync(Xecrets.Sdk.Models.XfCredentials,string).credentials'></a>
+
+`credentials` [XfCredentials](Xecrets.Sdk.Models.XfCredentials.md 'Xecrets.Sdk.Models.XfCredentials')
+
+One or more passwords to Decrypt with.
+
+<a name='Xecrets.Sdk.Abstractions.IXfApi.DecryptTextAsync(Xecrets.Sdk.Models.XfCredentials,string).text'></a>
+
+`text` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+
+The ASCII armor string to decrypt.
+
+#### Returns
+[System.Threading.Tasks.Task&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')[&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.ValueTuple 'System.ValueTuple')[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[,](https://docs.microsoft.com/en-us/dotnet/api/System.ValueTuple 'System.ValueTuple')[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.ValueTuple 'System.ValueTuple')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')  
+The decrypted text, and the original file name embedded in the encrypted data.
 
 <a name='Xecrets.Sdk.Abstractions.IXfApi.DecryptToAndKeepFileAsync(Xecrets.Sdk.Models.XfCredentials,System.IO.FileInfo,System.IO.DirectoryInfo,System.Action_Xecrets.Sdk.Cli.CliMessage_)'></a>
 
@@ -298,6 +325,39 @@ The stream to write the encrypted data to.
 #### Returns
 [System.Threading.Tasks.Task](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task 'System.Threading.Tasks.Task')  
 A [System.Threading.Tasks.Task](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task 'System.Threading.Tasks.Task') to wait for.
+
+<a name='Xecrets.Sdk.Abstractions.IXfApi.EncryptTextAsync(Xecrets.Sdk.Models.XfCredentials,string,string)'></a>
+
+## IXfApi.EncryptTextAsync(XfCredentials, string, string) Method
+
+Encrypt an arbitrary string to ASCII armor format.
+
+```csharp
+System.Threading.Tasks.Task<string> EncryptTextAsync(Xecrets.Sdk.Models.XfCredentials credentials, string text, string originalFileName);
+```
+#### Parameters
+
+<a name='Xecrets.Sdk.Abstractions.IXfApi.EncryptTextAsync(Xecrets.Sdk.Models.XfCredentials,string,string).credentials'></a>
+
+`credentials` [XfCredentials](Xecrets.Sdk.Models.XfCredentials.md 'Xecrets.Sdk.Models.XfCredentials')
+
+One or more passwords to encrypt with.
+
+<a name='Xecrets.Sdk.Abstractions.IXfApi.EncryptTextAsync(Xecrets.Sdk.Models.XfCredentials,string,string).text'></a>
+
+`text` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+
+The text to encrypt.
+
+<a name='Xecrets.Sdk.Abstractions.IXfApi.EncryptTextAsync(Xecrets.Sdk.Models.XfCredentials,string,string).originalFileName'></a>
+
+`originalFileName` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+
+The original file name to embed into the encrypted file stream.
+
+#### Returns
+[System.Threading.Tasks.Task&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')  
+The string encrypted, packaged as an ASCII armor string.
 
 <a name='Xecrets.Sdk.Abstractions.IXfApi.IsSdkCompatibleWith(System.Version)'></a>
 
