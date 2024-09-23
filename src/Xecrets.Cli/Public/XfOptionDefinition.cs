@@ -21,7 +21,7 @@
  * contributions. You may also visit https://www.axantum.com for more information about the author.
 */
 
-#endregion Copyright and GPL Licenseusing System.Text;
+#endregion Copyright and GPL License
 
 namespace Xecrets.Cli.Public
 {
