@@ -25,17 +25,16 @@
 
 using Xecrets.Cli.Public;
 
-namespace Xecrets.Cli.Run
+namespace Xecrets.Cli.Run;
+
+internal class DryRunFactory : RunFactory
 {
-    internal class DryRunFactory : RunFactory
+    public DryRunFactory(Parameters parameters)
+        : base(parameters)
     {
-        public DryRunFactory(Parameters parameters)
-            : base(parameters)
+        if (!parameters.IsDryRun)
         {
-            if (!parameters.IsDryRun)
-            {
-                throw new XecretsCliException(new Status(XfStatusCode.NoDryRun, "Internal error, attempt to perform a dry run out of sequence."));
-            }
+            throw new XecretsCliException(new Status(XfStatusCode.NoDryRun, "Internal error, attempt to perform a dry run out of sequence."));
         }
     }
 }

@@ -25,18 +25,17 @@
 
 using AxCrypt.Core.IO;
 
-namespace Xecrets.Cli.Abstractions
+namespace Xecrets.Cli.Abstractions;
+
+internal interface IStandardIoDataStore : IDataStore
 {
-    internal interface IStandardIoDataStore : IDataStore
-    {
-        bool IsStdin { get; }
+    bool IsStdin { get; }
 
-        bool IsStdout { get; }
+    bool IsStdout { get; }
 
-        bool IsStdIo { get; }
+    bool IsStdIo { get; }
 
-        bool IsNamedStdIo { get; }
+    bool IsNamedStdIo { get; }
 
-        string AliasName { get; }
-    }
+    string AliasName { get; }
 }

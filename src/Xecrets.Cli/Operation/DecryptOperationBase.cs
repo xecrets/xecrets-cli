@@ -32,76 +32,75 @@ using Xecrets.Cli.Run;
 
 using static AxCrypt.Abstractions.TypeResolve;
 
-namespace Xecrets.Cli.Operation
+namespace Xecrets.Cli.Operation;
+
+internal abstract class DecryptOperationBase : IExecutionPhases
 {
-    internal abstract class DecryptOperationBase : IExecutionPhases
+    protected abstract (Status, IStandardIoDataStore) ToStore(Parameters parameters, string originalFileName);
+
+    public Task<Status> DryAsync(Parameters parameters)
     {
-        protected abstract (Status, IStandardIoDataStore) ToStore(Parameters parameters, string originalFileName);
-
-        public Task<Status> DryAsync(Parameters parameters)
+        if (!parameters.Identities.Any())
         {
-            if (!parameters.Identities.Any())
+            return Task.FromResult(new Status(XfStatusCode.NoPassword, "A password must be provided to decrypt files."));
+        }
+
+        IStandardIoDataStore fromStore = New<IStandardIoDataStore>(parameters.Arg1);
+        if (!New<IFileVerify>().CanReadFromFile(fromStore))
+        {
+            return Task.FromResult(new Status(XfStatusCode.CannotRead, parameters, "Can't read from '{0}'.".Format(fromStore.Name)));
+        }
+
+        (Status status, IStandardIoDataStore toStore) = ToStore(parameters, "placeholder.tmp");
+        if (!status.IsSuccess)
+        {
+            return Task.FromResult(status);
+        }
+
+        if (!toStore.IsStdout && !New<IFileVerify>().CanWriteToFolder(toStore.Container))
+        {
+            return Task.FromResult(new Status(XfStatusCode.CannotWrite, parameters, "Can't write to '{0}'".Format(toStore.Container.Name)));
+        }
+
+        parameters.TotalsTracker.AddWorkItem(fromStore.Length());
+
+        return Task.FromResult(Status.Success);
+    }
+
+    public Task<Status> RealAsync(Parameters parameters)
+    {
+        IStandardIoDataStore fromStore = New<IStandardIoDataStore>(parameters.Arg1);
+
+        parameters.Progress.Display = parameters.Arg1;
+        if (parameters.AsciiArmor)
+        {
+            fromStore = new AsciiArmorDataStore(fromStore);
+        }
+        using (var decryption = new Decryption(fromStore.OpenRead(), parameters.Identities, parameters.Progress))
+        {
+            if (!decryption.HasValidPassphrase)
             {
-                return Task.FromResult(new Status(XfStatusCode.NoPassword, "A password must be provided to decrypt files."));
+                return Task.FromResult(new Status(XfStatusCode.InvalidPassword, parameters, "Could not decrypt '{0}', no suitable password or private key.".Format(parameters.Arg1)));
             }
 
-            IStandardIoDataStore fromStore = New<IStandardIoDataStore>(parameters.Arg1);
-            if (!New<IFileVerify>().CanReadFromFile(fromStore))
-            {
-                return Task.FromResult(new Status(XfStatusCode.CannotRead, parameters, "Can't read from '{0}'.".Format(fromStore.Name)));
-            }
-
-            (Status status, IStandardIoDataStore toStore) = ToStore(parameters, "placeholder.tmp");
+            (Status status, IStandardIoDataStore toStore) = ToStore(parameters, decryption.OriginalFileName);
             if (!status.IsSuccess)
             {
                 return Task.FromResult(status);
             }
 
-            if (!toStore.IsStdout && !New<IFileVerify>().CanWriteToFolder(toStore.Container))
+            decryption.DecryptTo(toStore);
+
+            string sourceDisplayName = fromStore.ToDisplayName();
+            string destinationDisplayName = toStore.ToDisplayName();
+
+            parameters.Logger.Log(new Status(parameters, "Decrypted '{0}' to '{1}'.".Format(sourceDisplayName, destinationDisplayName))
             {
-                return Task.FromResult(new Status(XfStatusCode.CannotWrite, parameters, "Can't write to '{0}'".Format(toStore.Container.Name)));
-            }
-
-            parameters.TotalsTracker.AddWorkItem(fromStore.Length());
-
-            return Task.FromResult(Status.Success);
+                OriginalFileName = decryption.OriginalFileName,
+                Result = toStore.FullName,
+            });
         }
 
-        public Task<Status> RealAsync(Parameters parameters)
-        {
-            IStandardIoDataStore fromStore = New<IStandardIoDataStore>(parameters.Arg1);
-
-            parameters.Progress.Display = parameters.Arg1;
-            if (parameters.AsciiArmor)
-            {
-                fromStore = new AsciiArmorDataStore(fromStore);
-            }
-            using (var decryption = new Decryption(fromStore.OpenRead(), parameters.Identities, parameters.Progress))
-            {
-                if (!decryption.HasValidPassphrase)
-                {
-                    return Task.FromResult(new Status(XfStatusCode.InvalidPassword, parameters, "Could not decrypt '{0}', no suitable password or private key.".Format(parameters.Arg1)));
-                }
-
-                (Status status, IStandardIoDataStore toStore) = ToStore(parameters, decryption.OriginalFileName);
-                if (!status.IsSuccess)
-                {
-                    return Task.FromResult(status);
-                }
-
-                decryption.DecryptTo(toStore);
-
-                string sourceDisplayName = fromStore.ToDisplayName();
-                string destinationDisplayName = toStore.ToDisplayName();
-
-                parameters.Logger.Log(new Status(parameters, "Decrypted '{0}' to '{1}'.".Format(sourceDisplayName, destinationDisplayName))
-                {
-                    OriginalFileName = decryption.OriginalFileName,
-                    Result = toStore.FullName,
-                });
-            }
-
-            return Task.FromResult(Status.Success);
-        }
+        return Task.FromResult(Status.Success);
     }
 }

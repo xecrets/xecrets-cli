@@ -28,46 +28,45 @@ using System.Text;
 using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Run;
 
-namespace Xecrets.Cli.Operation
+namespace Xecrets.Cli.Operation;
+
+/// <summary>
+/// Helper to produce Markdown command line documentation. Use as for example:
+/// XecretsCli.exe --stdout --internal --argument-markdown
+/// </summary>
+internal class ArgumentMarkdownOperation : IExecutionPhases
 {
-    /// <summary>
-    /// Helper to produce Markdown command line documentation. Use as for example:
-    /// XecretsCli.exe --stdout --internal --argument-markdown
-    /// </summary>
-    internal class ArgumentMarkdownOperation : IExecutionPhases
+    public Task<Status> DryAsync(Parameters parameters)
     {
-        public Task<Status> DryAsync(Parameters parameters)
-        {
-            return Task.FromResult(Status.Success);
-        }
+        return Task.FromResult(Status.Success);
+    }
 
-        public Task<Status> RealAsync(Parameters parameters)
+    public Task<Status> RealAsync(Parameters parameters)
+    {
+        StringBuilder descriptions = new StringBuilder();
+        StringBuilder synopsis = new StringBuilder();
+        synopsis.Append("XecretsCli");
+        foreach (string[] description in parameters.Parser.Descriptions)
         {
-            StringBuilder descriptions = new StringBuilder();
-            StringBuilder synopsis = new StringBuilder();
-            synopsis.Append("XecretsCli");
-            foreach (string[] description in parameters.Parser.Descriptions)
+            string[] parts = description[0].Split(' ');
+            string option = parts[0].Split('|').Last();
+            string arguments = string.Join(' ', parts.Skip(1).ToArray());
+            synopsis.Append(" [").Append(option).Append(arguments.Length > 0 ? " " : string.Empty).Append(arguments).Append(']');
+
+            descriptions.AppendLine(description[0]);
+            descriptions.AppendLine(":       " + description[1]);
+            for (int i = 2; i < description.Length; ++i)
             {
-                string[] parts = description[0].Split(' ');
-                string option = parts[0].Split('|').Last();
-                string arguments = string.Join(' ', parts.Skip(1).ToArray());
-                synopsis.Append(" [").Append(option).Append(arguments.Length > 0 ? " " : string.Empty).Append(arguments).Append(']');
-
-                descriptions.AppendLine(description[0]);
-                descriptions.AppendLine(":       " + description[1]);
-                for (int i = 2; i < description.Length; ++i)
-                {
-                    descriptions.AppendLine("        " + description[i]);
-                }
-                descriptions.AppendLine();
+                descriptions.AppendLine("        " + description[i]);
             }
-            synopsis.Replace('{', '_').Replace('}', '_');
-            descriptions.Replace('{', '_').Replace('}', '_');
-
-            parameters.Logger.Log(new Status(parameters, synopsis.ToString()));
-            parameters.Logger.Log(string.Empty);
-            parameters.Logger.Log(new Status(parameters, descriptions.ToString()));
-            return Task.FromResult(Status.Success);
+            descriptions.AppendLine();
         }
+        synopsis.Replace('{', '_').Replace('}', '_');
+        descriptions.Replace('{', '_').Replace('}', '_');
+
+        parameters.Logger.Log(new Status(parameters, synopsis.ToString()));
+        parameters.Logger.Log(string.Empty);
+        parameters.Logger.Log(new Status(parameters, descriptions.ToString()));
+        return Task.FromResult(Status.Success);
     }
 }

@@ -31,25 +31,24 @@ using Xecrets.Cli.Run;
 
 using static AxCrypt.Abstractions.TypeResolve;
 
-namespace Xecrets.Cli.Operation
-{
-    internal class CliPlatformOperation : IExecutionPhases
-    {
-        public Task<Status> DryAsync(Parameters parameters)
-        {
-            return Task.FromResult(Status.Success);
-        }
+namespace Xecrets.Cli.Operation;
 
-        public Task<Status> RealAsync(Parameters parameters)
+internal class CliPlatformOperation : IExecutionPhases
+{
+    public Task<Status> DryAsync(Parameters parameters)
+    {
+        return Task.FromResult(Status.Success);
+    }
+
+    public Task<Status> RealAsync(Parameters parameters)
+    {
+        string version = GetType().Assembly.GetName().Version?.ToString() ?? "0.0.0.0";
+        string platform = New<IRuntimeEnvironment>().Platform.ToString();
+        parameters.Logger.Log(new Status(parameters, "'{0}' version {1}".Format(platform, version))
         {
-            string version = GetType().Assembly.GetName().Version?.ToString() ?? "0.0.0.0";
-            string platform = New<IRuntimeEnvironment>().Platform.ToString();
-            parameters.Logger.Log(new Status(parameters, "'{0}' version {1}".Format(platform, version))
-            {
-                Platform = platform,
-                ProgramVersion = version,
-            });
-            return Task.FromResult(Status.Success);
-        }
+            Platform = platform,
+            ProgramVersion = version,
+        });
+        return Task.FromResult(Status.Success);
     }
 }

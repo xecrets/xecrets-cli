@@ -26,20 +26,19 @@
 using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Run;
 
-namespace Xecrets.Cli.Operation
-{
-    internal class NoOverwriteOperation : IExecutionPhases
-    {
-        public Task<Status> DryAsync(Parameters parameters)
-        {
-            parameters.Overwrite = false;
-            return Task.FromResult(Status.Success);
-        }
+namespace Xecrets.Cli.Operation;
 
-        public Task<Status> RealAsync(Parameters parameters)
-        {
-            parameters.Overwrite = false;
-            return Task.FromResult(Status.Success);
-        }
+internal class NoOverwriteOperation : IExecutionPhases
+{
+    public Task<Status> DryAsync(Parameters parameters)
+    {
+        parameters.Overwrite = false;
+        return Task.FromResult(Status.Success);
+    }
+
+    public Task<Status> RealAsync(Parameters parameters)
+    {
+        parameters.Overwrite = false;
+        return Task.FromResult(Status.Success);
     }
 }

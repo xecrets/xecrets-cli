@@ -29,100 +29,99 @@ using Xecrets.Cli.Run;
 
 using static AxCrypt.Abstractions.TypeResolve;
 
-namespace Xecrets.Cli
+namespace Xecrets.Cli;
+
+internal class Executor(Parameters parameters) : IDisposable
 {
-    internal class Executor(Parameters parameters) : IDisposable
+    public async Task<Status> RunAsync()
     {
-        public async Task<Status> RunAsync()
+        Status status = await RunAsync(new DryRunFactory(parameters));
+        if ((parameters.Parser.IsQuiet || parameters.Parser.Internal) && status.IsSuccess)
         {
-            Status status = await RunAsync(new DryRunFactory(parameters));
-            if ((parameters.Parser.IsQuiet || parameters.Parser.Internal) && status.IsSuccess)
+            New<Splash>().Clear();
+        }
+
+        if (!status.IsSuccess)
+        {
+            return status;
+        }
+
+        if (parameters.Parser.IsDryRunOnly)
+        {
+            return new Status("A successful dry run was executed, no files were changed.");
+        }
+
+        ResetParametersForRealRun();
+
+        return await RunAsync(new RealRunFactory(parameters));
+    }
+
+    private void ResetParametersForRealRun()
+    {
+        parameters.TotalsTracker.ResetLogger(parameters);
+        parameters.Overwrite = false;
+        parameters.Compress = true;
+    }
+
+    private static readonly XfStatusCode[] RecoverableInSequence = [XfStatusCode.InvalidPassword];
+
+    private static async Task<Status> RunAsync(RunFactory factory)
+    {
+        int skipLevel = 0;
+        OptionsParser parser = factory.Parameters.Parser;
+        foreach (ParsedOp parsedOp in parser.ParsedOps)
+        {
+            factory.Parameters.CurrentOp = parsedOp;
+            if (skipLevel > 0 && parsedOp.OpCode != XfOpCode.End && parsedOp.OpCode != XfOpCode.Begin)
             {
-                New<Splash>().Clear();
+                continue;
+            }
+
+            Status status = await factory.Create(parsedOp.OpCode).DoAsync();
+            if (skipLevel > parser.OpLevel)
+            {
+                skipLevel = 0;
+            }
+
+            // If the operation failed and it's recoverable and we're in a sequence, skip the rest of the sequence,
+            // and continue instead of aborting and returning the error.
+            if (!status.IsSuccess && parser.OpLevel > 0 && RecoverableInSequence.Contains(status.StatusCode))
+            {
+                factory.Parameters.Logger.Log(status);
+                skipLevel = parser.OpLevel;
+                continue;
             }
 
             if (!status.IsSuccess)
             {
                 return status;
             }
-
-            if (parameters.Parser.IsDryRunOnly)
-            {
-                return new Status("A successful dry run was executed, no files were changed.");
-            }
-
-            ResetParametersForRealRun();
-
-            return await RunAsync(new RealRunFactory(parameters));
         }
 
-        private void ResetParametersForRealRun()
+        if (parser.OpLevel > 0)
         {
-            parameters.TotalsTracker.ResetLogger(parameters);
-            parameters.Overwrite = false;
-            parameters.Compress = true;
+            return new Status(XfStatusCode.BadSequence, "Begin sequence without matching end.");
         }
 
-        private static readonly XfStatusCode[] RecoverableInSequence = [XfStatusCode.InvalidPassword];
+        return parser.ParseStatus;
+    }
 
-        private static async Task<Status> RunAsync(RunFactory factory)
+    public void Dispose()
+    {
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
+    }
+
+    private bool _disposed;
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!disposing || _disposed)
         {
-            int skipLevel = 0;
-            OptionsParser parser = factory.Parameters.Parser;
-            foreach (ParsedOp parsedOp in parser.ParsedOps)
-            {
-                factory.Parameters.CurrentOp = parsedOp;
-                if (skipLevel > 0 && parsedOp.OpCode != XfOpCode.End && parsedOp.OpCode != XfOpCode.Begin)
-                {
-                    continue;
-                }
-
-                Status status = await factory.Create(parsedOp.OpCode).DoAsync();
-                if (skipLevel > parser.OpLevel)
-                {
-                    skipLevel = 0;
-                }
-
-                // If the operation failed and it's recoverable and we're in a sequence, skip the rest of the sequence,
-                // and continue instead of aborting and returning the error.
-                if (!status.IsSuccess && parser.OpLevel > 0 && RecoverableInSequence.Contains(status.StatusCode))
-                {
-                    factory.Parameters.Logger.Log(status);
-                    skipLevel = parser.OpLevel;
-                    continue;
-                }
-
-                if (!status.IsSuccess)
-                {
-                    return status;
-                }
-            }
-
-            if (parser.OpLevel > 0)
-            {
-                return new Status(XfStatusCode.BadSequence, "Begin sequence without matching end.");
-            }
-
-            return parser.ParseStatus;
+            return;
         }
 
-        public void Dispose()
-        {
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
-        }
-
-        private bool _disposed;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposing || _disposed)
-            {
-                return;
-            }
-
-            parameters.Dispose();
-            _disposed = true;
-        }
+        parameters.Dispose();
+        _disposed = true;
     }
 }

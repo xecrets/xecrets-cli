@@ -34,50 +34,49 @@ using Xecrets.Cli.Abstractions;
 
 using static AxCrypt.Abstractions.TypeResolve;
 
-namespace Xecrets.Cli.Run
+namespace Xecrets.Cli.Run;
+
+internal sealed class Encryption : IDisposable
 {
-    internal sealed class Encryption : IDisposable
+    private IAxCryptDocument _document;
+
+    private Stream _fromStream;
+
+    public Encryption(Stream fromStream, IEnumerable<LogOnIdentity> identities, IEnumerable<UserPublicKey> publicKeys, IProgressContext progress)
     {
-        private IAxCryptDocument _document;
+        var encryptionParameters = new EncryptionParameters(new V2Aes256CryptoFactory().CryptoId, identities.First());
+        encryptionParameters.AddOrReplace(publicKeys);
+        _document = New<AxCryptFactory>().CreateDocument(encryptionParameters);
+        _fromStream = new ProgressStream(fromStream, progress);
+    }
 
-        private Stream _fromStream;
-
-        public Encryption(Stream fromStream, IEnumerable<LogOnIdentity> identities, IEnumerable<UserPublicKey> publicKeys, IProgressContext progress)
+    public void EncryptTo(IStandardIoDataStore toStore, string originalFileName, AxCryptOptions options)
+    {
+        using (_fromStream)
         {
-            var encryptionParameters = new EncryptionParameters(new V2Aes256CryptoFactory().CryptoId, identities.First());
-            encryptionParameters.AddOrReplace(publicKeys);
-            _document = New<AxCryptFactory>().CreateDocument(encryptionParameters);
-            _fromStream = new ProgressStream(fromStream, progress);
+            using var toStream = toStore.OpenWrite();
+
+            _document.FileName = originalFileName;
+            _document.CreationTimeUtc = New<INow>().Utc;
+            _document.LastAccessTimeUtc = _document.CreationTimeUtc;
+            _document.LastWriteTimeUtc = _document.CreationTimeUtc;
+
+            _document.EncryptTo(_fromStream, toStream, options);
+        }
+    }
+
+    public void Dispose()
+    {
+        if (_document != null)
+        {
+            _document.Dispose();
+            _document = null!;
         }
 
-        public void EncryptTo(IStandardIoDataStore toStore, string originalFileName, AxCryptOptions options)
+        if (_fromStream != null)
         {
-            using (_fromStream)
-            {
-                using var toStream = toStore.OpenWrite();
-
-                _document.FileName = originalFileName;
-                _document.CreationTimeUtc = New<INow>().Utc;
-                _document.LastAccessTimeUtc = _document.CreationTimeUtc;
-                _document.LastWriteTimeUtc = _document.CreationTimeUtc;
-
-                _document.EncryptTo(_fromStream, toStream, options);
-            }
-        }
-
-        public void Dispose()
-        {
-            if (_document != null)
-            {
-                _document.Dispose();
-                _document = null!;
-            }
-
-            if (_fromStream != null)
-            {
-                _fromStream.Dispose();
-                _fromStream = null!;
-            }
+            _fromStream.Dispose();
+            _fromStream = null!;
         }
     }
 }

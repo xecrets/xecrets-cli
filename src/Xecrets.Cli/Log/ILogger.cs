@@ -25,21 +25,19 @@
 
 using AxCrypt.Core.UI;
 
-using Xecrets.Cli.Implementation;
 using Xecrets.Cli.Public;
 
-namespace Xecrets.Cli.Log
+namespace Xecrets.Cli.Log;
+
+internal interface ILogger
 {
-    internal interface ILogger
-    {
-        public IProgressContext Progress { get; }
+    public IProgressContext Progress { get; }
 
-        public void Log(XfOpCode opCode, Status status);
+    public void Log(XfOpCode opCode, Status status);
 
-        public void Log(Status status);
+    public void Log(Status status);
 
-        public void Log(string message);
+    public void Log(string message);
 
-        public void FlushPending();
-    }
+    public void FlushPending();
 }

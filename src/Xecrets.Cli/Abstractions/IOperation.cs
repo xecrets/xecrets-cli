@@ -24,10 +24,9 @@
 #endregion Copyright and GPL License
 
 
-namespace Xecrets.Cli.Abstractions
+namespace Xecrets.Cli.Abstractions;
+
+internal interface IOperation
 {
-    internal interface IOperation
-    {
-        public Task<Status> DoAsync();
-    }
+    public Task<Status> DoAsync();
 }

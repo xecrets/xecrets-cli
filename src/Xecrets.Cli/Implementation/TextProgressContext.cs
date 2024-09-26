@@ -29,28 +29,27 @@ using Xecrets.Cli.Log;
 
 using static AxCrypt.Abstractions.TypeResolve;
 
-namespace Xecrets.Cli.Implementation
+namespace Xecrets.Cli.Implementation;
+
+internal class TextProgressContext : NoProgressContext
 {
-    internal class TextProgressContext : NoProgressContext
+    public TextProgressContext(TotalsTracker totalsTracker)
     {
-        public TextProgressContext(TotalsTracker totalsTracker)
-        {
-            TotalsTracker = totalsTracker;
-        }
+        TotalsTracker = totalsTracker;
+    }
 
-        protected override void OnProgressing(ProgressEventArgs e)
-        {
-            New<Splash>().Write(m => { New<ConsoleOut>().WriteLine(m); New<ConsoleOut>().BlankLinePending = true; });
+    protected override void OnProgressing(ProgressEventArgs e)
+    {
+        New<Splash>().Write(m => { New<ConsoleOut>().WriteLine(m); New<ConsoleOut>().BlankLinePending = true; });
 
-            int workingItem = e.Percent < 100 && TotalsTracker.ItemsDone < TotalsTracker.ItemsTotal ? TotalsTracker.ItemsDone + 1 : TotalsTracker.ItemsDone;
-            long current100 = TotalsTracker.TotalDone * 100;
-            int totalPercent = TotalsTracker.TotalWork == 0 ? 0 : (int)(current100 / TotalsTracker.TotalWork);
+        int workingItem = e.Percent < 100 && TotalsTracker.ItemsDone < TotalsTracker.ItemsTotal ? TotalsTracker.ItemsDone + 1 : TotalsTracker.ItemsDone;
+        long current100 = TotalsTracker.TotalDone * 100;
+        int totalPercent = TotalsTracker.TotalWork == 0 ? 0 : (int)(current100 / TotalsTracker.TotalWork);
 
-            var m = $"{Display} {e.Percent}% - {workingItem}({TotalsTracker.ItemsTotal}) {totalPercent}%";
+        var m = $"{Display} {e.Percent}% - {workingItem}({TotalsTracker.ItemsTotal}) {totalPercent}%";
 
-            New<ConsoleOut>().WriteReturn(m);
+        New<ConsoleOut>().WriteReturn(m);
 
-            base.OnProgressing(e);
-        }
+        base.OnProgressing(e);
     }
 }

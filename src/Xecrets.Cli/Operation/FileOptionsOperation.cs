@@ -26,19 +26,18 @@
 using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Run;
 
-namespace Xecrets.Cli.Operation
-{
-    internal class FileOptionsOperation : IExecutionPhases
-    {
-        public Task<Status> DryAsync(Parameters parameters)
-        {
-            parameters.ProgrammaticUse = true;
-            return Task.FromResult(Status.Success);
-        }
+namespace Xecrets.Cli.Operation;
 
-        public Task<Status> RealAsync(Parameters parameters)
-        {
-            return Task.FromResult(Status.Success);
-        }
+internal class FileOptionsOperation : IExecutionPhases
+{
+    public Task<Status> DryAsync(Parameters parameters)
+    {
+        parameters.ProgrammaticUse = true;
+        return Task.FromResult(Status.Success);
+    }
+
+    public Task<Status> RealAsync(Parameters parameters)
+    {
+        return Task.FromResult(Status.Success);
     }
 }

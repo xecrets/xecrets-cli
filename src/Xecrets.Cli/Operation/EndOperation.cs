@@ -26,24 +26,23 @@
 using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Run;
 
-namespace Xecrets.Cli.Operation
-{
-    internal class EndOperation : IExecutionPhases
-    {
-        public Task<Status> DryAsync(Parameters parameters)
-        {
-            if (parameters.Parser.OpLevel == 0)
-            {
-                return Task.FromResult(new Status(Public.XfStatusCode.BadSequence, "End sequence without begin sequence."));
-            }
-            parameters.Parser.OpLevel--;
-            return Task.FromResult(Status.Success);
-        }
+namespace Xecrets.Cli.Operation;
 
-        public Task<Status> RealAsync(Parameters parameters)
+internal class EndOperation : IExecutionPhases
+{
+    public Task<Status> DryAsync(Parameters parameters)
+    {
+        if (parameters.Parser.OpLevel == 0)
         {
-            parameters.Parser.OpLevel--;
-            return Task.FromResult(Status.Success);
+            return Task.FromResult(new Status(Public.XfStatusCode.BadSequence, "End sequence without begin sequence."));
         }
+        parameters.Parser.OpLevel--;
+        return Task.FromResult(Status.Success);
+    }
+
+    public Task<Status> RealAsync(Parameters parameters)
+    {
+        parameters.Parser.OpLevel--;
+        return Task.FromResult(Status.Success);
     }
 }

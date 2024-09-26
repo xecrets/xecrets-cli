@@ -26,20 +26,19 @@
 using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Run;
 
-namespace Xecrets.Cli.Operation
+namespace Xecrets.Cli.Operation;
+
+internal class EchoOperation : IExecutionPhases
 {
-    internal class EchoOperation : IExecutionPhases
+    public Task<Status> DryAsync(Parameters parameters)
     {
-        public Task<Status> DryAsync(Parameters parameters)
-        {
-            return Task.FromResult(Status.Success);
-        }
+        return Task.FromResult(Status.Success);
+    }
 
-        public Task<Status> RealAsync(Parameters parameters)
-        {
-            parameters.Logger.Log(new Status(parameters, parameters.Arg1));
+    public Task<Status> RealAsync(Parameters parameters)
+    {
+        parameters.Logger.Log(new Status(parameters, parameters.Arg1));
 
-            return Task.FromResult(Status.Success);
-        }
+        return Task.FromResult(Status.Success);
     }
 }

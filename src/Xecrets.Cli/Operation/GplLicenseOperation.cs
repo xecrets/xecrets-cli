@@ -27,21 +27,20 @@ using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Properties;
 using Xecrets.Cli.Run;
 
-namespace Xecrets.Cli.Operation
+namespace Xecrets.Cli.Operation;
+
+internal class GplLicenseOperation : IExecutionPhases
 {
-    internal class GplLicenseOperation : IExecutionPhases
+    public Task<Status> DryAsync(Parameters parameters)
     {
-        public Task<Status> DryAsync(Parameters parameters)
-        {
-            return Task.FromResult(Status.Success);
-        }
+        return Task.FromResult(Status.Success);
+    }
 
-        public Task<Status> RealAsync(Parameters parameters)
-        {
-            parameters.Logger.Log(new Status(parameters, Resource.gpl_3_0));
-            parameters.Logger.Log(string.Empty);
+    public Task<Status> RealAsync(Parameters parameters)
+    {
+        parameters.Logger.Log(new Status(parameters, Resource.gpl_3_0));
+        parameters.Logger.Log(string.Empty);
 
-            return Task.FromResult(Status.Success);
-        }
+        return Task.FromResult(Status.Success);
     }
 }

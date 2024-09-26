@@ -26,19 +26,18 @@
 using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Run;
 
-namespace Xecrets.Cli.Operation
-{
-    internal class DecryptToOperation : DecryptOperationBase
-    {
-        protected override (Status, IStandardIoDataStore) ToStore(Parameters parameters, string originalFileName)
-        {
-            IStandardIoDataStore toFreeStore = parameters.Arg2.FindFree(parameters);
-            if (!toFreeStore.VerifyCanWrite(parameters, out Status status))
-            {
-                return (status, null!);
-            }
+namespace Xecrets.Cli.Operation;
 
-            return (Status.Success, toFreeStore);
+internal class DecryptToOperation : DecryptOperationBase
+{
+    protected override (Status, IStandardIoDataStore) ToStore(Parameters parameters, string originalFileName)
+    {
+        IStandardIoDataStore toFreeStore = parameters.Arg2.FindFree(parameters);
+        if (!toFreeStore.VerifyCanWrite(parameters, out Status status))
+        {
+            return (status, null!);
         }
+
+        return (Status.Success, toFreeStore);
     }
 }

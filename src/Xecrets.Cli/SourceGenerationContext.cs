@@ -27,12 +27,11 @@ using System.Text.Json.Serialization;
 
 using Xecrets.Cli.Log;
 
-namespace Xecrets.Cli
+namespace Xecrets.Cli;
+
+[JsonSourceGenerationOptions(WriteIndented = false)]
+[JsonSerializable(typeof(CliMessage))]
+[JsonSerializable(typeof(Dictionary<string, object>))]
+internal partial class SourceGenerationContext : JsonSerializerContext
 {
-    [JsonSourceGenerationOptions(WriteIndented = false)]
-    [JsonSerializable(typeof(CliMessage))]
-    [JsonSerializable(typeof(Dictionary<string, object>))]
-    internal partial class SourceGenerationContext : JsonSerializerContext
-    {
-    }
 }

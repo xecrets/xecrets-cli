@@ -27,13 +27,12 @@ using AxCrypt.Abstractions;
 
 using Xecrets.Licensing.Abstractions;
 
-namespace Xecrets.Cli.Implementation
+namespace Xecrets.Cli.Implementation;
+
+internal class NewLocator : INewLocator
 {
-    internal class NewLocator : INewLocator
+    public T New<T>() where T : class
     {
-        public T New<T>() where T : class
-        {
-            return TypeResolve.New<T>();
-        }
+        return TypeResolve.New<T>();
     }
 }

@@ -29,21 +29,20 @@ using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Log;
 using Xecrets.Cli.Run;
 
-namespace Xecrets.Cli.Operation
-{
-    internal class StdoutOperation : IExecutionPhases
-    {
-        public Task<Status> DryAsync(Parameters parameters)
-        {
-            TextWriter writer = parameters.Flag ? Console.Out : Console.Error;
-            TypeMap.Register.Singleton(() => new ConsoleOut(writer));
-            parameters.IsStdoutLog = true;
-            return Task.FromResult(Status.Success);
-        }
+namespace Xecrets.Cli.Operation;
 
-        public Task<Status> RealAsync(Parameters parameters)
-        {
-            return Task.FromResult(Status.Success);
-        }
+internal class StdoutOperation : IExecutionPhases
+{
+    public Task<Status> DryAsync(Parameters parameters)
+    {
+        TextWriter writer = parameters.Flag ? Console.Out : Console.Error;
+        TypeMap.Register.Singleton(() => new ConsoleOut(writer));
+        parameters.IsStdoutLog = true;
+        return Task.FromResult(Status.Success);
+    }
+
+    public Task<Status> RealAsync(Parameters parameters)
+    {
+        return Task.FromResult(Status.Success);
     }
 }

@@ -23,36 +23,33 @@
 
 #endregion Copyright and GPL License
 
-using System.Runtime.Serialization;
-
 using Xecrets.Cli.Public;
 
-namespace Xecrets.Cli
+namespace Xecrets.Cli;
+
+internal class XecretsCliException : Exception
 {
-    internal class XecretsCliException : Exception
+    public Status Status { get; }
+
+    public XecretsCliException()
     {
-        public Status Status { get; }
+        Status = new Status(XfStatusCode.ExceptionError, "An exception occurred.");
+    }
+    public XecretsCliException(Status status)
+        : this(status.Message)
+    {
+        Status = status;
+    }
 
-        public XecretsCliException()
-        {
-            Status = new Status(XfStatusCode.ExceptionError, "An exception occurred.");
-        }
-        public XecretsCliException(Status status)
-            : this(status.Message)
-        {
-            Status = status;
-        }
+    public XecretsCliException(string message)
+        : base(message)
+    {
+        Status = new Status(XfStatusCode.ExceptionError, message);
+    }
 
-        public XecretsCliException(string message)
-            : base(message)
-        {
-            Status = new Status(XfStatusCode.ExceptionError, message);
-        }
-
-        public XecretsCliException(string message, Exception inner)
-            : base(message, inner)
-        {
-            Status = new Status(XfStatusCode.ExceptionError, message);
-        }
+    public XecretsCliException(string message, Exception inner)
+        : base(message, inner)
+    {
+        Status = new Status(XfStatusCode.ExceptionError, message);
     }
 }

@@ -30,45 +30,44 @@ using Xecrets.Cli.Public;
 
 using static AxCrypt.Abstractions.TypeResolve;
 
-namespace Xecrets.Cli.Log
+namespace Xecrets.Cli.Log;
+
+internal class TextLogger(TotalsTracker totalsTracker, bool progress) : ILogger
 {
-    internal class TextLogger(TotalsTracker totalsTracker, bool progress) : ILogger
+    public IProgressContext Progress { get; } = new TotalsProgressContext(progress ? new TextProgressContext(totalsTracker) : new NoProgressContext(), totalsTracker);
+
+    public void Log(Status status)
     {
-        public IProgressContext Progress { get; } = new TotalsProgressContext(progress ? new TextProgressContext(totalsTracker) : new NoProgressContext(), totalsTracker);
+        Log(status.OpCode, status);
+    }
 
-        public void Log(Status status)
-        {
-            Log(status.OpCode, status);
-        }
-
-        public void Log(XfOpCode opCode, Status status)
-        {
-            if (opCode == XfOpCode.CliProgramExit)
-            {
-                FlushPending();
-                return;
-            }
-
-            Log(status.ToString());
-        }
-
-        public void Log(string message)
+    public void Log(XfOpCode opCode, Status status)
+    {
+        if (opCode == XfOpCode.CliProgramExit)
         {
             FlushPending();
-
-            if (message.Length == 0)
-            {
-                New<ConsoleOut>().WritePending();
-                New<ConsoleOut>().BlankLinePending = true;
-                return;
-            }
-
-            New<ConsoleOut>().WriteLine(message);
+            return;
         }
 
-        public void FlushPending()
+        Log(status.ToString());
+    }
+
+    public void Log(string message)
+    {
+        FlushPending();
+
+        if (message.Length == 0)
         {
-            New<Splash>().Write(m => { Log(m); New<ConsoleOut>().BlankLinePending = true; });
+            New<ConsoleOut>().WritePending();
+            New<ConsoleOut>().BlankLinePending = true;
+            return;
         }
+
+        New<ConsoleOut>().WriteLine(message);
+    }
+
+    public void FlushPending()
+    {
+        New<Splash>().Write(m => { Log(m); New<ConsoleOut>().BlankLinePending = true; });
     }
 }

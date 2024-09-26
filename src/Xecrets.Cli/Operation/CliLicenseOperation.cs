@@ -32,38 +32,37 @@ using Xecrets.Licensing.Implementation;
 
 using static AxCrypt.Abstractions.TypeResolve;
 
-namespace Xecrets.Cli.Operation
+namespace Xecrets.Cli.Operation;
+
+internal class CliLicenseOperation : IExecutionPhases
 {
-    internal class CliLicenseOperation : IExecutionPhases
+    public Task<Status> DryAsync(Parameters parameters)
     {
-        public Task<Status> DryAsync(Parameters parameters)
+        ILicenseCandidates licenseCandidates = New<ILicenseCandidates>();
+        string candidate = parameters.Arguments[0];
+        if (!licenseCandidates.IsCandidate(candidate))
         {
-            ILicenseCandidates licenseCandidates = New<ILicenseCandidates>();
-            string candidate = parameters.Arguments[0];
-            if (!licenseCandidates.IsCandidate(candidate))
-            {
-                return Task.FromResult(new Status(Public.XfStatusCode.InvalidLicenseFormat, "A license must look like a JWT string."));
-            }
-
-            ILicense license = New<ILicense>();
-            license.LoadFromAsync([parameters.Arguments[0]]);
-
-            if (license.Status() == LicenseStatus.Unlicensed)
-            {
-                return Task.FromResult(new Status(Public.XfStatusCode.InvalidLicenseSignature, "The license was signed with an unknown key."));
-            }
-
-            if (license.Subscription().Product is not "cli" and not "sdk")
-            {
-                TypeMap.Register.Singleton<ILicenseExpiration>(() => new LicenseExpirationByCurrentTime(New<TimeProvider>()));
-            }
-
-            return Task.FromResult(Status.Success);
+            return Task.FromResult(new Status(Public.XfStatusCode.InvalidLicenseFormat, "A license must look like a JWT string."));
         }
 
-        public Task<Status> RealAsync(Parameters parameters)
+        ILicense license = New<ILicense>();
+        license.LoadFromAsync([parameters.Arguments[0]]);
+
+        if (license.Status() == LicenseStatus.Unlicensed)
         {
-            return Task.FromResult(Status.Success);
+            return Task.FromResult(new Status(Public.XfStatusCode.InvalidLicenseSignature, "The license was signed with an unknown key."));
         }
+
+        if (license.Subscription().Product is not "cli" and not "sdk")
+        {
+            TypeMap.Register.Singleton<ILicenseExpiration>(() => new LicenseExpirationByCurrentTime(New<TimeProvider>()));
+        }
+
+        return Task.FromResult(Status.Success);
+    }
+
+    public Task<Status> RealAsync(Parameters parameters)
+    {
+        return Task.FromResult(Status.Success);
     }
 }

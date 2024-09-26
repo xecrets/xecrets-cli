@@ -27,18 +27,17 @@ using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
 
-namespace Xecrets.Cli.Operation
-{
-    internal class ErrorOperation(string message) : IExecutionPhases
-    {
-        public Task<Status> DryAsync(Parameters parameters)
-        {
-            return Task.FromResult(new Status(XfStatusCode.Error, parameters, message));
-        }
+namespace Xecrets.Cli.Operation;
 
-        public Task<Status> RealAsync(Parameters parameters)
-        {
-            return Task.FromResult(new Status(XfStatusCode.Error, parameters, message));
-        }
+internal class ErrorOperation(string message) : IExecutionPhases
+{
+    public Task<Status> DryAsync(Parameters parameters)
+    {
+        return Task.FromResult(new Status(XfStatusCode.Error, parameters, message));
+    }
+
+    public Task<Status> RealAsync(Parameters parameters)
+    {
+        return Task.FromResult(new Status(XfStatusCode.Error, parameters, message));
     }
 }

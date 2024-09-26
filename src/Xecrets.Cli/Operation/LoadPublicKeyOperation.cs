@@ -35,45 +35,44 @@ using Xecrets.Cli.Run;
 
 using static AxCrypt.Abstractions.TypeResolve;
 
-namespace Xecrets.Cli.Operation
+namespace Xecrets.Cli.Operation;
+
+internal class LoadPublicKeyOperation : IExecutionPhases
 {
-    internal class LoadPublicKeyOperation : IExecutionPhases
+    public Task<Status> DryAsync(Parameters parameters)
     {
-        public Task<Status> DryAsync(Parameters parameters)
+        foreach (string from in parameters.CurrentOp.Arguments)
         {
-            foreach (string from in parameters.CurrentOp.Arguments)
+            var fromStore = New<IStandardIoDataStore>(from);
+            if (!New<IFileVerify>().CanReadFromFile(fromStore))
             {
-                var fromStore = New<IStandardIoDataStore>(from);
-                if (!New<IFileVerify>().CanReadFromFile(fromStore))
-                {
-                    return Task.FromResult(new Status(XfStatusCode.CannotRead, parameters, "Can't read from file '{0}'.".Format(fromStore.Name)));
-                }
+                return Task.FromResult(new Status(XfStatusCode.CannotRead, parameters, "Can't read from file '{0}'.".Format(fromStore.Name)));
             }
-            return Task.FromResult(Status.Success);
         }
+        return Task.FromResult(Status.Success);
+    }
 
-        public Task<Status> RealAsync(Parameters parameters)
+    public Task<Status> RealAsync(Parameters parameters)
+    {
+        foreach (string from in parameters.CurrentOp.Arguments)
         {
-            foreach (string from in parameters.CurrentOp.Arguments)
+            var fromStore = New<IDataStore>(from);
+            string userPublicKeyJson;
+
+            using (var reader = new StreamReader(fromStore.OpenRead(), Encoding.UTF8))
             {
-                var fromStore = New<IDataStore>(from);
-                string userPublicKeyJson;
-
-                using (var reader = new StreamReader(fromStore.OpenRead(), Encoding.UTF8))
-                {
-                    userPublicKeyJson = reader.ReadToEnd();
-                }
-
-                UserPublicKey? userPublicKey = New<IStringSerializer>().Deserialize<UserPublicKey>(userPublicKeyJson);
-                if (userPublicKey == null)
-                {
-                    return Task.FromResult(new Status(XfStatusCode.PublicKeyNotFound, parameters, "Can't find a public key in '{0}'.".Format(fromStore.Name)));
-                }
-                parameters.LoadedPublicKeys.AddOrReplace(userPublicKey);
-                parameters.Logger.Log(new Status(parameters, "Loaded a public key for '{0}' from '{1}'.".Format(userPublicKey.Email, parameters.Arg1)));
+                userPublicKeyJson = reader.ReadToEnd();
             }
 
-            return Task.FromResult(Status.Success);
+            UserPublicKey? userPublicKey = New<IStringSerializer>().Deserialize<UserPublicKey>(userPublicKeyJson);
+            if (userPublicKey == null)
+            {
+                return Task.FromResult(new Status(XfStatusCode.PublicKeyNotFound, parameters, "Can't find a public key in '{0}'.".Format(fromStore.Name)));
+            }
+            parameters.LoadedPublicKeys.AddOrReplace(userPublicKey);
+            parameters.Logger.Log(new Status(parameters, "Loaded a public key for '{0}' from '{1}'.".Format(userPublicKey.Email, parameters.Arg1)));
         }
+
+        return Task.FromResult(Status.Success);
     }
 }

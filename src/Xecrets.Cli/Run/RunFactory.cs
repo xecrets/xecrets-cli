@@ -29,111 +29,110 @@ using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Operation;
 using Xecrets.Cli.Public;
 
-namespace Xecrets.Cli.Run
+namespace Xecrets.Cli.Run;
+
+internal abstract class RunFactory(Parameters parameters)
 {
-    internal abstract class RunFactory(Parameters parameters)
+    readonly Dictionary<XfOpCode, Func<IExecutionPhases>> _operationTable = new()
     {
-        readonly Dictionary<XfOpCode, Func<IExecutionPhases>> _operationTable = new()
-        {
-            { XfOpCode.ArgumentMarkdown, () => new ArgumentMarkdownOperation() },
-            { XfOpCode.AsciiArmor, () => new AsciiArmorOperation() },
-            { XfOpCode.CliCrashLog, () => new CliCrashLogOperation() },
-            { XfOpCode.OptionsCodeExport, () => new OptionsCodeExportOperation() },
-            { XfOpCode.SdkCliVersion, () => new SdkCliVersionOperation() },
-            { XfOpCode.Begin, () => new BeginOperation() },
-            { XfOpCode.CreateKeyPair, () => new CreateKeyPairOperation() },
-            { XfOpCode.CliDebugBreak, () => new CliDebugBreakOperation() },
-            { XfOpCode.Compress, () => new CompressOperation() },
-            { XfOpCode.DecryptTo, () => new DecryptToOperation() },
-            { XfOpCode.DecryptToFolder, () => new DecryptToFolderOperation() },
-            { XfOpCode.Echo, () => new EchoOperation() },
-            { XfOpCode.EncryptTo, () => new EncryptToOperation() },
-            { XfOpCode.End, () => new EndOperation() },
-            { XfOpCode.EnvironmentOption, () => new EnvironmentOptionsOperation() },
-            { XfOpCode.ExportPublicKey, () => new ExportPublicKeyOperation() },
-            { XfOpCode.OptionsFromFile, () => new FileOptionsOperation() },
-            { XfOpCode.GplLicense, () => new GplLicenseOperation() },
-            { XfOpCode.Help, () => new HelpOperation() },
-            { XfOpCode.Id, () => new IdOperation() },
-            { XfOpCode.SdkJsonLog, () => new SdkJsonLogOperation() },
-            { XfOpCode.JwtAudience, () => new JwtAudienceOperation() },
-            { XfOpCode.JwtClaims, () => new JwtClaimsOperation() },
-            { XfOpCode.JwtCreateKeyPair , () => new JwtCreateKeyPairOperation() },
-            { XfOpCode.JwtIssuer, () => new JwtIssuerOperation() },
-            { XfOpCode.JwtPrivateKey, () => new JwtUseKeyPairOperation() },
-            { XfOpCode.JwtSign, () => new JwtSignOperation() },
-            { XfOpCode.JwtVerify, () => new JwtVerifyOperation() },
-            { XfOpCode.CliLicense, () => new CliLicenseOperation() },
-            { XfOpCode.LoadPublicKey, () => new LoadPublicKeyOperation() },
-            { XfOpCode.NoLog, () => new NoLogOperation() },
-            { XfOpCode.None, () => new NoOperation() },
-            { XfOpCode.NoAsciiArmor, () => new NoAsciiArmorOperation() },
-            { XfOpCode.NoCompress, () => new NoCompressOperation() },
-            { XfOpCode.NoOverwrite, () => new NoOverwriteOperation() },
-            { XfOpCode.NoProgress, () => new NoProgressOperation() },
-            { XfOpCode.Overwrite, () => new OverwriteOperation() },
-            { XfOpCode.Password, () => new PasswordOperation() },
-            { XfOpCode.CliPlatform, () => new CliPlatformOperation() },
-            { XfOpCode.ProgressLog, () => new ProgressLogOperation() },
-            { XfOpCode.Stdout, () => new StdoutOperation() },
-            { XfOpCode.TextLog, () => new TextLogOperation() },
-            { XfOpCode.UseKeyPair, () => new UseKeyPairOperation() },
-            { XfOpCode.UsePublicKey, () => new UsePublicKeyOperation() },
-            { XfOpCode.Wipe, () => new WipeOperation() },
-        };
+        { XfOpCode.ArgumentMarkdown, () => new ArgumentMarkdownOperation() },
+        { XfOpCode.AsciiArmor, () => new AsciiArmorOperation() },
+        { XfOpCode.CliCrashLog, () => new CliCrashLogOperation() },
+        { XfOpCode.OptionsCodeExport, () => new OptionsCodeExportOperation() },
+        { XfOpCode.SdkCliVersion, () => new SdkCliVersionOperation() },
+        { XfOpCode.Begin, () => new BeginOperation() },
+        { XfOpCode.CreateKeyPair, () => new CreateKeyPairOperation() },
+        { XfOpCode.CliDebugBreak, () => new CliDebugBreakOperation() },
+        { XfOpCode.Compress, () => new CompressOperation() },
+        { XfOpCode.DecryptTo, () => new DecryptToOperation() },
+        { XfOpCode.DecryptToFolder, () => new DecryptToFolderOperation() },
+        { XfOpCode.Echo, () => new EchoOperation() },
+        { XfOpCode.EncryptTo, () => new EncryptToOperation() },
+        { XfOpCode.End, () => new EndOperation() },
+        { XfOpCode.EnvironmentOption, () => new EnvironmentOptionsOperation() },
+        { XfOpCode.ExportPublicKey, () => new ExportPublicKeyOperation() },
+        { XfOpCode.OptionsFromFile, () => new FileOptionsOperation() },
+        { XfOpCode.GplLicense, () => new GplLicenseOperation() },
+        { XfOpCode.Help, () => new HelpOperation() },
+        { XfOpCode.Id, () => new IdOperation() },
+        { XfOpCode.SdkJsonLog, () => new SdkJsonLogOperation() },
+        { XfOpCode.JwtAudience, () => new JwtAudienceOperation() },
+        { XfOpCode.JwtClaims, () => new JwtClaimsOperation() },
+        { XfOpCode.JwtCreateKeyPair , () => new JwtCreateKeyPairOperation() },
+        { XfOpCode.JwtIssuer, () => new JwtIssuerOperation() },
+        { XfOpCode.JwtPrivateKey, () => new JwtUseKeyPairOperation() },
+        { XfOpCode.JwtSign, () => new JwtSignOperation() },
+        { XfOpCode.JwtVerify, () => new JwtVerifyOperation() },
+        { XfOpCode.CliLicense, () => new CliLicenseOperation() },
+        { XfOpCode.LoadPublicKey, () => new LoadPublicKeyOperation() },
+        { XfOpCode.NoLog, () => new NoLogOperation() },
+        { XfOpCode.None, () => new NoOperation() },
+        { XfOpCode.NoAsciiArmor, () => new NoAsciiArmorOperation() },
+        { XfOpCode.NoCompress, () => new NoCompressOperation() },
+        { XfOpCode.NoOverwrite, () => new NoOverwriteOperation() },
+        { XfOpCode.NoProgress, () => new NoProgressOperation() },
+        { XfOpCode.Overwrite, () => new OverwriteOperation() },
+        { XfOpCode.Password, () => new PasswordOperation() },
+        { XfOpCode.CliPlatform, () => new CliPlatformOperation() },
+        { XfOpCode.ProgressLog, () => new ProgressLogOperation() },
+        { XfOpCode.Stdout, () => new StdoutOperation() },
+        { XfOpCode.TextLog, () => new TextLogOperation() },
+        { XfOpCode.UseKeyPair, () => new UseKeyPairOperation() },
+        { XfOpCode.UsePublicKey, () => new UsePublicKeyOperation() },
+        { XfOpCode.Wipe, () => new WipeOperation() },
+    };
 
-        public Parameters Parameters { get; } = parameters;
+    public Parameters Parameters { get; } = parameters;
 
-        private class SomeAction(RunFactory factory, IExecutionPhases methods, XfOpCode opCode) : IOperation
+    private class SomeAction(RunFactory factory, IExecutionPhases methods, XfOpCode opCode) : IOperation
+    {
+        public async Task<Status> DoAsync()
         {
-            public async Task<Status> DoAsync()
+            Status status;
+            try
             {
-                Status status;
-                try
-                {
-                    status = factory.Parameters.IsDryRun ? await methods.DryAsync(factory.Parameters) : await methods.RealAsync(factory.Parameters);
-                }
-                catch (XecretsCliException xfcex)
-                {
-                    status = new Status(xfcex.Status.StatusCode, xfcex.ToString());
-                }
-                catch (AxCryptException acex)
-                {
-                    status = new Status(XfStatusCode.AxCryptException, acex.ToString())
-                    {
-                        Id = factory.Parameters.TotalsTracker.Id,
-                    };
-                }
-                catch (FileNotFoundException fnfex)
-                {
-                    status = new Status(XfStatusCode.FileUnavailable, fnfex.ToString())
-                    {
-                        Id = factory.Parameters.TotalsTracker.Id,
-                        Arg1 = fnfex.FileName ?? (factory.Parameters.Arg1),
-                    };
-                }
-                catch (Exception ex)
-                {
-                    status = new Status(XfStatusCode.UnhandledOperationException, ex.ToString())
-                    {
-                        Id = factory.Parameters.TotalsTracker.Id,
-                    };
-                }
-
-                status.OpCode = opCode;
-                return status;
+                status = factory.Parameters.IsDryRun ? await methods.DryAsync(factory.Parameters) : await methods.RealAsync(factory.Parameters);
             }
-        }
-
-        public IOperation Create(XfOpCode opCode)
-        {
-            if (_operationTable.TryGetValue(opCode, out var actionFunc))
+            catch (XecretsCliException xfcex)
             {
-                Parameters.TotalsTracker.ResetLogger();
-                return new SomeAction(this, actionFunc(), opCode);
+                status = new Status(xfcex.Status.StatusCode, xfcex.ToString());
+            }
+            catch (AxCryptException acex)
+            {
+                status = new Status(XfStatusCode.AxCryptException, acex.ToString())
+                {
+                    Id = factory.Parameters.TotalsTracker.Id,
+                };
+            }
+            catch (FileNotFoundException fnfex)
+            {
+                status = new Status(XfStatusCode.FileUnavailable, fnfex.ToString())
+                {
+                    Id = factory.Parameters.TotalsTracker.Id,
+                    Arg1 = fnfex.FileName ?? (factory.Parameters.Arg1),
+                };
+            }
+            catch (Exception ex)
+            {
+                status = new Status(XfStatusCode.UnhandledOperationException, ex.ToString())
+                {
+                    Id = factory.Parameters.TotalsTracker.Id,
+                };
             }
 
-            return new SomeAction(this, new ErrorOperation($"Can't create the appropriate action for {opCode}."), XfOpCode.SdkCliError);
+            status.OpCode = opCode;
+            return status;
         }
+    }
+
+    public IOperation Create(XfOpCode opCode)
+    {
+        if (_operationTable.TryGetValue(opCode, out var actionFunc))
+        {
+            Parameters.TotalsTracker.ResetLogger();
+            return new SomeAction(this, actionFunc(), opCode);
+        }
+
+        return new SomeAction(this, new ErrorOperation($"Can't create the appropriate action for {opCode}."), XfOpCode.SdkCliError);
     }
 }

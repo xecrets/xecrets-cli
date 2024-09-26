@@ -26,31 +26,30 @@
 using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Run;
 
-namespace Xecrets.Cli.Operation
+namespace Xecrets.Cli.Operation;
+
+internal class CliCrashLogOperation : IExecutionPhases
 {
-    internal class CliCrashLogOperation : IExecutionPhases
+    public Task<Status> DryAsync(Parameters parameters)
     {
-        public Task<Status> DryAsync(Parameters parameters)
+        string crashLogFullName = parameters.Arguments[0];
+        if (Directory.Exists(crashLogFullName))
         {
-            string crashLogFullName = parameters.Arguments[0];
-            if (Directory.Exists(crashLogFullName))
-            {
-                return Task.FromResult(new Status(Public.XfStatusCode.NotAFile, $"Crash log file path '{crashLogFullName}' is a folder."));
-            }
-
-            string directory = Path.GetDirectoryName(crashLogFullName) ?? string.Empty;
-            if (directory.Length > 0 && !Directory.Exists(directory))
-            {
-                return Task.FromResult(new Status(Public.XfStatusCode.NotAFolder, $"Crash log file folder '{directory}' does not exist."));
-            }
-
-            parameters.CrashLogFile = crashLogFullName;
-            return Task.FromResult(Status.Success);
+            return Task.FromResult(new Status(Public.XfStatusCode.NotAFile, $"Crash log file path '{crashLogFullName}' is a folder."));
         }
 
-        public Task<Status> RealAsync(Parameters parameters)
+        string directory = Path.GetDirectoryName(crashLogFullName) ?? string.Empty;
+        if (directory.Length > 0 && !Directory.Exists(directory))
         {
-            return Task.FromResult(Status.Success);
+            return Task.FromResult(new Status(Public.XfStatusCode.NotAFolder, $"Crash log file folder '{directory}' does not exist."));
         }
+
+        parameters.CrashLogFile = crashLogFullName;
+        return Task.FromResult(Status.Success);
+    }
+
+    public Task<Status> RealAsync(Parameters parameters)
+    {
+        return Task.FromResult(Status.Success);
     }
 }

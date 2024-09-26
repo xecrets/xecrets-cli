@@ -25,21 +25,20 @@
 
 using AxCrypt.Core.IO;
 
-namespace Xecrets.Cli.Implementation
+namespace Xecrets.Cli.Implementation;
+
+internal class FileWatcher : IFileWatcher
 {
-    internal class FileWatcher : IFileWatcher
+    public bool IncludeSubdirectories { get; set; } = false;
+
+    public event EventHandler<FileWatcherEventArgs>? FileChanged;
+
+    protected virtual void OnChanged(FileWatcherEventArgs eventArgs)
     {
-        public bool IncludeSubdirectories { get; set; } = false;
+        FileChanged?.Invoke(null, eventArgs);
+    }
 
-        public event EventHandler<FileWatcherEventArgs>? FileChanged;
-
-        protected virtual void OnChanged(FileWatcherEventArgs eventArgs)
-        {
-            FileChanged?.Invoke(null, eventArgs);
-        }
-
-        public void Dispose()
-        {
-        }
+    public void Dispose()
+    {
     }
 }

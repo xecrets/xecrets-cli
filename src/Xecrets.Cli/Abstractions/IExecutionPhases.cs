@@ -25,12 +25,11 @@
 
 using Xecrets.Cli.Run;
 
-namespace Xecrets.Cli.Abstractions
-{
-    internal interface IExecutionPhases
-    {
-        public Task<Status> DryAsync(Parameters parameters);
+namespace Xecrets.Cli.Abstractions;
 
-        public Task<Status> RealAsync(Parameters parameters);
-    }
+internal interface IExecutionPhases
+{
+    public Task<Status> DryAsync(Parameters parameters);
+
+    public Task<Status> RealAsync(Parameters parameters);
 }

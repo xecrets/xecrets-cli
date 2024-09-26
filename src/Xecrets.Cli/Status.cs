@@ -26,60 +26,59 @@
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
 
-namespace Xecrets.Cli
+namespace Xecrets.Cli;
+
+internal class Status(XfStatusCode code, string message)
 {
-    internal class Status(XfStatusCode code, string message)
+    public static Status Success = new(XfStatusCode.Success, string.Empty);
+
+    public XfStatusCode StatusCode { get; } = code;
+
+    public string Message { get; set; } = message ?? throw new ArgumentNullException(nameof(message));
+
+    public XfOpCode OpCode { get; set; } = XfOpCode.None;
+
+    public string Id { get; set; } = string.Empty;
+
+    public string Arg1 { get; set; } = string.Empty;
+
+    public string Arg2 { get; set; } = string.Empty;
+
+    public string CliVersion { get; set; } = string.Empty;
+
+    public string ProgramVersion { get; set; } = string.Empty;
+
+    public string Platform { get; set; } = string.Empty;
+
+    public string OriginalFileName { get; set; } = string.Empty;
+
+    public string Result { get; set; } = string.Empty;
+
+    public DateTime Utc { get; set; }
+
+    public bool IsSuccess { get { return StatusCode == XfStatusCode.Success; } }
+
+    public Status(string message)
+        : this(XfStatusCode.Success, message)
     {
-        public static Status Success = new(XfStatusCode.Success, string.Empty);
+    }
 
-        public XfStatusCode StatusCode { get; } = code;
+    public Status(Parameters parameters, string message)
+        : this(XfStatusCode.Success, parameters, message)
+    {
+    }
 
-        public string Message { get; set; } = message ?? throw new ArgumentNullException(nameof(message));
+    public Status(XfStatusCode code, Parameters parameters, string message)
+        : this(code, message)
+    {
+        OpCode = parameters.OpCode;
+        Id = parameters.TotalsTracker.Id;
+        Arg1 = parameters.Arg1;
+        Arg2 = parameters.Arg2;
+    }
 
-        public XfOpCode OpCode { get; set; } = XfOpCode.None;
-
-        public string Id { get; set; } = string.Empty;
-
-        public string Arg1 { get; set; } = string.Empty;
-
-        public string Arg2 { get; set; } = string.Empty;
-
-        public string CliVersion { get; set; } = string.Empty;
-
-        public string ProgramVersion { get; set; } = string.Empty;
-
-        public string Platform { get; set; } = string.Empty;
-
-        public string OriginalFileName { get; set; } = string.Empty;
-
-        public string Result { get; set; } = string.Empty;
-
-        public DateTime Utc { get; set; }
-
-        public bool IsSuccess { get { return StatusCode == XfStatusCode.Success; } }
-
-        public Status(string message)
-            : this(XfStatusCode.Success, message)
-        {
-        }
-
-        public Status(Parameters parameters, string message)
-            : this(XfStatusCode.Success, parameters, message)
-        {
-        }
-
-        public Status(XfStatusCode code, Parameters parameters, string message)
-            : this(code, message)
-        {
-            OpCode = parameters.OpCode;
-            Id = parameters.TotalsTracker.Id;
-            Arg1 = parameters.Arg1;
-            Arg2 = parameters.Arg2;
-        }
-
-        public override string ToString()
-        {
-            return Message;
-        }
+    public override string ToString()
+    {
+        return Message;
     }
 }

@@ -27,70 +27,69 @@ using AxCrypt.Core.UI;
 
 using Xecrets.Cli.Log;
 
-namespace Xecrets.Cli.Implementation
+namespace Xecrets.Cli.Implementation;
+
+/// <summary>
+/// Wrap a progress context, to also count down progress for a accumulative totals counter.
+/// </summary>
+internal class TotalsProgressContext(IProgressContext progressToWrap, TotalsTracker totalsTracker) : IProgressContext
 {
-    /// <summary>
-    /// Wrap a progress context, to also count down progress for a accumulative totals counter.
-    /// </summary>
-    internal class TotalsProgressContext(IProgressContext progressToWrap, TotalsTracker totalsTracker) : IProgressContext
+    public string Display { get { return progressToWrap.Display; } set { progressToWrap.Display = value; } }
+
+    public bool Cancel { get { return progressToWrap.Cancel; } set { progressToWrap.Cancel = value; } }
+
+    public bool AllItemsConfirmed { get { return progressToWrap.AllItemsConfirmed; } set { progressToWrap.AllItemsConfirmed = value; } }
+
+    public ProgressTotals Totals { get => progressToWrap.Totals; }
+
+    public event EventHandler<ProgressEventArgs>? Progressing
     {
-        public string Display { get { return progressToWrap.Display; } set { progressToWrap.Display = value; } }
+        add { progressToWrap.Progressing += value; }
+        remove { progressToWrap.Progressing -= value; }
+    }
 
-        public bool Cancel { get { return progressToWrap.Cancel; } set { progressToWrap.Cancel = value; } }
+    /// <summary>
+    /// Add to the count of work having been performed. May lead to a Progressing event.
+    /// </summary>
+    /// <param name="count">The amount of work having been performed in this step.</param>
+    public void AddCount(long count)
+    {
+        totalsTracker.DoWork(count);
+        progressToWrap.AddCount(count);
+    }
 
-        public bool AllItemsConfirmed { get { return progressToWrap.AllItemsConfirmed; } set { progressToWrap.AllItemsConfirmed = value; } }
+    /// <summary>
+    /// Add to the total work count.
+    /// </summary>
+    /// <param name="count">The amount of work to add.</param>
+    public void AddTotal(long count)
+    {
+        progressToWrap.AddTotal(count);
+    }
 
-        public ProgressTotals Totals { get => progressToWrap.Totals; }
+    public Task EnterSingleThread()
+    {
+        return progressToWrap.EnterSingleThread();
+    }
 
-        public event EventHandler<ProgressEventArgs>? Progressing
-        {
-            add { progressToWrap.Progressing += value; }
-            remove { progressToWrap.Progressing -= value; }
-        }
+    public void LeaveSingleThread()
+    {
+        progressToWrap.LeaveSingleThread();
+    }
 
-        /// <summary>
-        /// Add to the count of work having been performed. May lead to a Progressing event.
-        /// </summary>
-        /// <param name="count">The amount of work having been performed in this step.</param>
-        public void AddCount(long count)
-        {
-            totalsTracker.DoWork(count);
-            progressToWrap.AddCount(count);
-        }
+    public void NotifyLevelFinished()
+    {
+        totalsTracker.DoItems(1);
+        progressToWrap.NotifyLevelFinished();
+    }
 
-        /// <summary>
-        /// Add to the total work count.
-        /// </summary>
-        /// <param name="count">The amount of work to add.</param>
-        public void AddTotal(long count)
-        {
-            progressToWrap.AddTotal(count);
-        }
+    public void NotifyLevelStart()
+    {
+        progressToWrap.NotifyLevelStart();
+    }
 
-        public Task EnterSingleThread()
-        {
-            return progressToWrap.EnterSingleThread();
-        }
-
-        public void LeaveSingleThread()
-        {
-            progressToWrap.LeaveSingleThread();
-        }
-
-        public void NotifyLevelFinished()
-        {
-            totalsTracker.DoItems(1);
-            progressToWrap.NotifyLevelFinished();
-        }
-
-        public void NotifyLevelStart()
-        {
-            progressToWrap.NotifyLevelStart();
-        }
-
-        public void RemoveCount(long totalCount, long progressCount)
-        {
-            progressToWrap.RemoveCount(totalCount, progressCount);
-        }
+    public void RemoveCount(long totalCount, long progressCount)
+    {
+        progressToWrap.RemoveCount(totalCount, progressCount);
     }
 }

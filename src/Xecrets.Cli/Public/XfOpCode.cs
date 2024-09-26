@@ -23,77 +23,76 @@
 
 #endregion Copyright and GPL License
 
-namespace Xecrets.Cli.Public
+namespace Xecrets.Cli.Public;
+
+/// <summary>
+/// The possible operation codes. They should have fixed unchangeable ids as they may be emitted in JSON to an independent
+/// program that needs to be able to interpret the action codes correctly.
+/// </summary>
+/// <remarks>
+/// Uses an 'Xf' prefix to distinguish itself, since its name is very generic.
+/// </remarks>
+public enum XfOpCode
 {
-    /// <summary>
-    /// The possible operation codes. They should have fixed unchangeable ids as they may be emitted in JSON to an independent
-    /// program that needs to be able to interpret the action codes correctly.
-    /// </summary>
-    /// <remarks>
-    /// Uses an 'Xf' prefix to distinguish itself, since its name is very generic.
-    /// </remarks>
-    public enum XfOpCode
-    {
-        #region Never-changing values
-        None = 0,
+    #region Never-changing values
+    None = 0,
 
-        SdkCliError = 10,
-        SdkCliSplash = 20,
-        SdkCliVersion = 30,
-        SdkJsonLog = 40,
-        #endregion Never-changing values
+    SdkCliError = 10,
+    SdkCliSplash = 20,
+    SdkCliVersion = 30,
+    SdkJsonLog = 40,
+    #endregion Never-changing values
 
-        #region Possible-to-change values if API version is updated
-        ArgumentMarkdown = 1000,
-        AsciiArmor = 1010,
-        Begin = 1020,
-        CliCrashLog = 1030,
-        CliDebugBreak = 1040,
-        CliDebugBreakParse = 1050,
-        CliLicense = 1060,
-        CliPlatform = 1070,
-        CliProgramExit = 1080,
-        CliTextMessage = 1090,
-        Compress = 1100,
-        CreateKeyPair = 1110,
-        DecryptTo = 1120,
-        DecryptToFolder = 1130,
-        DefaultInternal = 1140,
-        DryRun = 1150,
-        Echo = 1160,
-        EncryptTo = 1170,
-        End = 1180,
-        EnvironmentOption = 1190,
-        ExportPublicKey = 1200,
-        GplLicense = 1210,
-        Help = 1220,
-        Id = 1230,
-        Internal = 1240,
-        JwtAudience = 1250,
-        JwtClaims = 1260,
-        JwtCreateKeyPair = 1270,
-        JwtIssuer = 1280,
-        JwtPrivateKey = 1290,
-        JwtSign = 1300,
-        JwtVerify = 1310,
-        LoadPublicKey = 1320,
-        NoAsciiArmor = 1330,
-        NoCompress = 1340,
-        NoLog = 1350,
-        NoOverwrite = 1360,
-        NoProgress = 1370,
-        OptionsCodeExport = 1380,
-        OptionsFromFile = 1390,
-        Overwrite = 1400,
-        Password = 1410,
-        Progressing = 1420,
-        ProgressLog = 1430,
-        Quiet = 1440,
-        Stdout = 1450,
-        TextLog = 1460,
-        UseKeyPair = 1470,
-        UsePublicKey = 1480,
-        Wipe = 1490
-        #endregion Possible-to-change values if API version is updated
-    }
+    #region Possible-to-change values if API version is updated
+    ArgumentMarkdown = 1000,
+    AsciiArmor = 1010,
+    Begin = 1020,
+    CliCrashLog = 1030,
+    CliDebugBreak = 1040,
+    CliDebugBreakParse = 1050,
+    CliLicense = 1060,
+    CliPlatform = 1070,
+    CliProgramExit = 1080,
+    CliTextMessage = 1090,
+    Compress = 1100,
+    CreateKeyPair = 1110,
+    DecryptTo = 1120,
+    DecryptToFolder = 1130,
+    DefaultInternal = 1140,
+    DryRun = 1150,
+    Echo = 1160,
+    EncryptTo = 1170,
+    End = 1180,
+    EnvironmentOption = 1190,
+    ExportPublicKey = 1200,
+    GplLicense = 1210,
+    Help = 1220,
+    Id = 1230,
+    Internal = 1240,
+    JwtAudience = 1250,
+    JwtClaims = 1260,
+    JwtCreateKeyPair = 1270,
+    JwtIssuer = 1280,
+    JwtPrivateKey = 1290,
+    JwtSign = 1300,
+    JwtVerify = 1310,
+    LoadPublicKey = 1320,
+    NoAsciiArmor = 1330,
+    NoCompress = 1340,
+    NoLog = 1350,
+    NoOverwrite = 1360,
+    NoProgress = 1370,
+    OptionsCodeExport = 1380,
+    OptionsFromFile = 1390,
+    Overwrite = 1400,
+    Password = 1410,
+    Progressing = 1420,
+    ProgressLog = 1430,
+    Quiet = 1440,
+    Stdout = 1450,
+    TextLog = 1460,
+    UseKeyPair = 1470,
+    UsePublicKey = 1480,
+    Wipe = 1490
+    #endregion Possible-to-change values if API version is updated
 }

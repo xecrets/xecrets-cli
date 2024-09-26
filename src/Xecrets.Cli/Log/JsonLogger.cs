@@ -32,66 +32,65 @@ using Xecrets.Cli.Public;
 
 using static AxCrypt.Abstractions.TypeResolve;
 
-namespace Xecrets.Cli.Log
+namespace Xecrets.Cli.Log;
+
+internal class JsonLogger(TotalsTracker totalsTracker, bool progress) : ILogger
 {
-    internal class JsonLogger(TotalsTracker totalsTracker, bool progress) : ILogger
+    public IProgressContext Progress { get; } = new TotalsProgressContext(progress ? new JsonProgressContext(totalsTracker) : new NoProgressContext(), totalsTracker);
+
+    public void Log(Status status)
     {
-        public IProgressContext Progress { get; } = new TotalsProgressContext(progress ? new JsonProgressContext(totalsTracker) : new NoProgressContext(), totalsTracker);
+        Log(status.OpCode, status);
+    }
 
-        public void Log(Status status)
+    public void Log(XfOpCode opCode, Status status)
+    {
+        FlushPending();
+
+        if (opCode == XfOpCode.CliTextMessage && status.Message.Length == 0)
         {
-            Log(status.OpCode, status);
+            return;
         }
 
-        public void Log(XfOpCode opCode, Status status)
+        var statusMessage = new CliMessage()
         {
-            FlushPending();
+            OpCode = (int)opCode,
+            OpCodeName = opCode.ToString(),
+            Message = status.Message.Replace("\r\n", Environment.NewLine),
+            Arg1 = ToNullIfEmpty(status.Arg1),
+            Arg2 = ToNullIfEmpty(status.Arg2),
+            CliApiVersion = ToNullIfEmpty(status.CliVersion),
+            ProgramVersion = ToNullIfEmpty(status.ProgramVersion),
+            Platform = ToNullIfEmpty(status.Platform),
+            OriginalFileName = ToNullIfEmpty(status.OriginalFileName),
+            Result = ToNullIfEmpty(status.Result),
+            Status = (int)status.StatusCode,
+            StatusName = status.StatusCode != 0 ? status.StatusCode.ToString() : null,
+            Id = status.Id.Length > 0 ? status.Id : null,
+            Utc = status.Utc,
+        };
 
-            if (opCode == XfOpCode.CliTextMessage && status.Message.Length == 0)
-            {
-                return;
-            }
+        JsonConsoleOut(statusMessage);
+    }
 
-            var statusMessage = new CliMessage()
-            {
-                OpCode = (int)opCode,
-                OpCodeName = opCode.ToString(),
-                Message = status.Message.Replace("\r\n", Environment.NewLine),
-                Arg1 = ToNullIfEmpty(status.Arg1),
-                Arg2 = ToNullIfEmpty(status.Arg2),
-                CliApiVersion = ToNullIfEmpty(status.CliVersion),
-                ProgramVersion = ToNullIfEmpty(status.ProgramVersion),
-                Platform = ToNullIfEmpty(status.Platform),
-                OriginalFileName = ToNullIfEmpty(status.OriginalFileName),
-                Result = ToNullIfEmpty(status.Result),
-                Status = (int)status.StatusCode,
-                StatusName = status.StatusCode != 0 ? status.StatusCode.ToString() : null,
-                Id = status.Id.Length > 0 ? status.Id : null,
-                Utc = status.Utc,
-            };
+    private static void JsonConsoleOut(CliMessage jsonMessage)
+    {
+        var json = JsonSerializer.Serialize(jsonMessage, typeof(CliMessage), SourceGenerationContext.Default);
+        New<ConsoleOut>().WriteLine(json);
+    }
 
-            JsonConsoleOut(statusMessage);
-        }
+    public void Log(string message)
+    {
+        Log(XfOpCode.CliTextMessage, new Status(message));
+    }
 
-        private static void JsonConsoleOut(CliMessage jsonMessage)
-        {
-            var json = JsonSerializer.Serialize(jsonMessage, typeof(CliMessage), SourceGenerationContext.Default);
-            New<ConsoleOut>().WriteLine(json);
-        }
+    public void FlushPending()
+    {
+        New<Splash>().Write(m => JsonConsoleOut(new CliMessage() { OpCode = (int)XfOpCode.SdkCliSplash, OpCodeName = XfOpCode.SdkCliSplash.ToString(), Message = m, }));
+    }
 
-        public void Log(string message)
-        {
-            Log(XfOpCode.CliTextMessage, new Status(message));
-        }
-
-        public void FlushPending()
-        {
-            New<Splash>().Write(m => JsonConsoleOut(new CliMessage() { OpCode = (int)XfOpCode.SdkCliSplash, OpCodeName = XfOpCode.SdkCliSplash.ToString(), Message = m, }));
-        }
-
-        private static string? ToNullIfEmpty(string value)
-        {
-            return value.Length == 0 ? null : value;
-        }
+    private static string? ToNullIfEmpty(string value)
+    {
+        return value.Length == 0 ? null : value;
     }
 }

@@ -27,30 +27,29 @@ using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
 
-namespace Xecrets.Cli.Operation
+namespace Xecrets.Cli.Operation;
+
+internal class JwtAudienceOperation : IExecutionPhases
 {
-    internal class JwtAudienceOperation : IExecutionPhases
+    /// <summary>
+    /// Arguments[0] => The audience, i.e. 'licensee@acme.com' or 'MyCoolApp'.
+    /// </summary>
+    /// <param name="parameters"></param>
+    /// <returns></returns>
+    public Task<Status> DryAsync(Parameters parameters)
     {
-        /// <summary>
-        /// Arguments[0] => The audience, i.e. 'licensee@acme.com' or 'MyCoolApp'.
-        /// </summary>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
-        public Task<Status> DryAsync(Parameters parameters)
+        string audience = parameters.Arg1;
+        if (audience.Length == 0 || (audience.Contains(':') && !Uri.TryCreate(audience, UriKind.Absolute, out Uri? _)))
         {
-            string audience = parameters.Arg1;
-            if (audience.Length == 0 || (audience.Contains(':') && !Uri.TryCreate(audience, UriKind.Absolute, out Uri? _)))
-            {
-                return Task.FromResult(new Status(XfStatusCode.InvalidOption, parameters, $"Invalid audience URI '{audience}'."));
-            }
-            return Task.FromResult(Status.Success);
+            return Task.FromResult(new Status(XfStatusCode.InvalidOption, parameters, $"Invalid audience URI '{audience}'."));
         }
+        return Task.FromResult(Status.Success);
+    }
 
-        public Task<Status> RealAsync(Parameters parameters)
-        {
-            parameters.JwtAudience = parameters.Arg1;
+    public Task<Status> RealAsync(Parameters parameters)
+    {
+        parameters.JwtAudience = parameters.Arg1;
 
-            return Task.FromResult(Status.Success);
-        }
+        return Task.FromResult(Status.Success);
     }
 }

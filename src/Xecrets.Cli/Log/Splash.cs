@@ -23,53 +23,49 @@
 
 #endregion Copyright and GPL License
 
-using System.Globalization;
-
-using Xecrets.Cli.Properties;
 using Xecrets.Licensing;
 using Xecrets.Licensing.Abstractions;
 using Xecrets.Licensing.Implementation;
 
 using static AxCrypt.Abstractions.TypeResolve;
 
-namespace Xecrets.Cli.Log
+namespace Xecrets.Cli.Log;
+
+internal class Splash
 {
-    internal class Splash
+    private readonly string _splash;
+
+    private bool _written;
+
+    public Splash(string splash)
     {
-        private readonly string _splash;
+        string runtime = OperatingSystem.IsLinux()
+            ? "linux-x64"
+            : OperatingSystem.IsMacOS()
+                ? "osx-x64"
+                : OperatingSystem.IsWindows()
+                    ? "win-x64"
+                    : "unknown";
+        string buildUtc = New<IBuildUtc>().BuildUtcText;
+        _splash = splash
+            .Replace("{gpl} ", New<IBuildUtc>().IsGplBuild ? "GPL " : string.Empty)
+            .Replace("{version}", GetType().Assembly.GetName().Version?.ToString() ?? "0.0.0.0")
+            .Replace("{buildutc}", buildUtc.FromUtc().ToLocal())
+            .Replace("{runtime}", runtime)
+            .Replace("{blurb}", New<LicenseBlurb>().ToString());
+    }
 
-        private bool _written;
-
-        public Splash(string splash)
-        {
-            string runtime = OperatingSystem.IsLinux()
-                ? "linux-x64"
-                : OperatingSystem.IsMacOS()
-                    ? "osx-x64"
-                    : OperatingSystem.IsWindows()
-                        ? "win-x64"
-                        : "unknown";
-            string buildUtc = New<IBuildUtc>().BuildUtcText;
-            _splash = splash
-                .Replace("{gpl} ", New<IBuildUtc>().IsGplBuild ? "GPL " : string.Empty)
-                .Replace("{version}", GetType().Assembly.GetName().Version?.ToString() ?? "0.0.0.0")
-                .Replace("{buildutc}", buildUtc.FromUtc().ToLocal())
-                .Replace("{runtime}", runtime)
-                .Replace("{blurb}", New<LicenseBlurb>().ToString());
-        }
-
-        public void Write(Action<string> splashWriter)
-        {
-            if (!_written)
-            {
-                _written = true;
-                splashWriter(_splash);
-            }
-        }
-
-        public void Clear()
+    public void Write(Action<string> splashWriter)
+    {
+        if (!_written)
         {
             _written = true;
+            splashWriter(_splash);
         }
+    }
+
+    public void Clear()
+    {
+        _written = true;
     }
 }

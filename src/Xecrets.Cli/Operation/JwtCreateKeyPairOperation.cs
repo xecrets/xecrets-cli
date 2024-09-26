@@ -28,80 +28,79 @@ using System.Security.Cryptography;
 using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Run;
 
-namespace Xecrets.Cli.Operation
+namespace Xecrets.Cli.Operation;
+
+internal class JwtCreateKeyPairOperation : IExecutionPhases
 {
-    internal class JwtCreateKeyPairOperation : IExecutionPhases
+    /// <summary>
+    /// Arguments[0] => Private key file PEM, i.e. 'private.pem'
+    /// Arguments[1] => Public key file PEM, i.e. 'public.pem'
+    /// </summary>
+    /// <param name="parameters"></param>
+    /// <returns></returns>
+    public Task<Status> DryAsync(Parameters parameters)
     {
-        /// <summary>
-        /// Arguments[0] => Private key file PEM, i.e. 'private.pem'
-        /// Arguments[1] => Public key file PEM, i.e. 'public.pem'
-        /// </summary>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
-        public Task<Status> DryAsync(Parameters parameters)
+        IStandardIoDataStore privateFreeStore = parameters.Arg1.FindFree(parameters);
+        if (!privateFreeStore.VerifyCanWrite(parameters, out Status status))
         {
-            IStandardIoDataStore privateFreeStore = parameters.Arg1.FindFree(parameters);
-            if (!privateFreeStore.VerifyCanWrite(parameters, out Status status))
-            {
-                return Task.FromResult(status);
-            }
+            return Task.FromResult(status);
+        }
 
-            if (parameters.Arguments.Count == 1)
-            {
-                return Task.FromResult(Status.Success);
-            }
-
-            IStandardIoDataStore publicFreeStore = parameters.Arguments[1].FindFree(parameters);
-            if (!publicFreeStore.VerifyCanWrite(parameters, out status))
-            {
-                return Task.FromResult(status);
-            }
-
+        if (parameters.Arguments.Count == 1)
+        {
             return Task.FromResult(Status.Success);
         }
 
-        public Task<Status> RealAsync(Parameters parameters)
+        IStandardIoDataStore publicFreeStore = parameters.Arguments[1].FindFree(parameters);
+        if (!publicFreeStore.VerifyCanWrite(parameters, out status))
         {
-            IStandardIoDataStore privateFreeStore = parameters.Arg1.FindFree(parameters);
-            if (!privateFreeStore.VerifyCanWrite(parameters, out Status status))
-            {
-                return Task.FromResult(status);
-            }
+            return Task.FromResult(status);
+        }
 
-            ECDsa key = ECDsa.Create(ECCurve.NamedCurves.nistP256);
-            Span<char> keySpan = new Span<char>(new char[500]);
-            if (!key.TryExportPkcs8PrivateKeyPem(keySpan, out int charsWritten))
-            {
-                return Task.FromResult(new Status(Public.XfStatusCode.InternalError, "Couldn't export the PKCS8 Private Key."));
-            }
+        return Task.FromResult(Status.Success);
+    }
 
-            using (StreamWriter writer = new(privateFreeStore.OpenWrite()))
-            {
-                writer.Write(keySpan.Slice(0, charsWritten));
-            }
+    public Task<Status> RealAsync(Parameters parameters)
+    {
+        IStandardIoDataStore privateFreeStore = parameters.Arg1.FindFree(parameters);
+        if (!privateFreeStore.VerifyCanWrite(parameters, out Status status))
+        {
+            return Task.FromResult(status);
+        }
 
-            if (parameters.Arguments.Count == 1)
-            {
-                return Task.FromResult(Status.Success);
-            }
+        ECDsa key = ECDsa.Create(ECCurve.NamedCurves.nistP256);
+        Span<char> keySpan = new Span<char>(new char[500]);
+        if (!key.TryExportPkcs8PrivateKeyPem(keySpan, out int charsWritten))
+        {
+            return Task.FromResult(new Status(Public.XfStatusCode.InternalError, "Couldn't export the PKCS8 Private Key."));
+        }
 
-            IStandardIoDataStore publicFreeStore = parameters.Arguments[1].FindFree(parameters);
-            if (!publicFreeStore.VerifyCanWrite(parameters, out status))
-            {
-                return Task.FromResult(status);
-            }
+        using (StreamWriter writer = new(privateFreeStore.OpenWrite()))
+        {
+            writer.Write(keySpan.Slice(0, charsWritten));
+        }
 
-            string publicPem = key.ExportSubjectPublicKeyInfoPem();
-            using (StreamWriter writer = new(publicFreeStore.OpenWrite()))
-            {
-                if (privateFreeStore.IsStdout && publicFreeStore.IsStdout)
-                {
-                    writer.WriteLine();
-                }
-                writer.Write(publicPem);
-            }
-
+        if (parameters.Arguments.Count == 1)
+        {
             return Task.FromResult(Status.Success);
         }
+
+        IStandardIoDataStore publicFreeStore = parameters.Arguments[1].FindFree(parameters);
+        if (!publicFreeStore.VerifyCanWrite(parameters, out status))
+        {
+            return Task.FromResult(status);
+        }
+
+        string publicPem = key.ExportSubjectPublicKeyInfoPem();
+        using (StreamWriter writer = new(publicFreeStore.OpenWrite()))
+        {
+            if (privateFreeStore.IsStdout && publicFreeStore.IsStdout)
+            {
+                writer.WriteLine();
+            }
+            writer.Write(publicPem);
+        }
+
+        return Task.FromResult(Status.Success);
     }
 }

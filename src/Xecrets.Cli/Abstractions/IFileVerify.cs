@@ -25,16 +25,15 @@
 
 using AxCrypt.Core.IO;
 
-namespace Xecrets.Cli.Abstractions
+namespace Xecrets.Cli.Abstractions;
+
+internal interface IFileVerify
 {
-    internal interface IFileVerify
-    {
-        bool CanDeleteFile(IStandardIoDataStore store);
+    bool CanDeleteFile(IStandardIoDataStore store);
 
-        bool CanReadFromFile(IStandardIoDataStore store);
+    bool CanReadFromFile(IStandardIoDataStore store);
 
-        bool CanWriteToFile(IStandardIoDataStore store);
+    bool CanWriteToFile(IStandardIoDataStore store);
 
-        bool CanWriteToFolder(IDataContainer container);
-    }
+    bool CanWriteToFolder(IDataContainer container);
 }

@@ -31,41 +31,40 @@ using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
 
-namespace Xecrets.Cli.Operation
+namespace Xecrets.Cli.Operation;
+
+internal class UsePublicKeyOperation : IExecutionPhases
 {
-    internal class UsePublicKeyOperation : IExecutionPhases
+    public Task<Status> DryAsync(Parameters parameters)
     {
-        public Task<Status> DryAsync(Parameters parameters)
+        foreach (string email in parameters.CurrentOp.Arguments)
         {
-            foreach (string email in parameters.CurrentOp.Arguments)
+            if (!EmailAddress.TryParse(email, out EmailAddress _))
             {
-                if (!EmailAddress.TryParse(email, out EmailAddress _))
-                {
-                    return Task.FromResult(new Status(XfStatusCode.InvalidEmail, parameters, "'{0}' is not a valid email address.".Format(email)));
-                }
+                return Task.FromResult(new Status(XfStatusCode.InvalidEmail, parameters, "'{0}' is not a valid email address.".Format(email)));
             }
-
-            return Task.FromResult(Status.Success);
         }
 
-        public Task<Status> RealAsync(Parameters parameters)
+        return Task.FromResult(Status.Success);
+    }
+
+    public Task<Status> RealAsync(Parameters parameters)
+    {
+        if (!parameters.LoadedPublicKeys.PublicKeys.Any())
         {
-            if (!parameters.LoadedPublicKeys.PublicKeys.Any())
-            {
-                return Task.FromResult(new Status(XfStatusCode.PublicKeyNotFound, "Can't use a public key, no public keys has been provided. See --help for options."));
-            }
-
-            foreach (EmailAddress email in parameters.Arguments.Select(p => EmailAddress.Parse(p)))
-            {
-                UserPublicKey? publicKey = parameters.LoadedPublicKeys.PublicKeys.FirstOrDefault(pk => pk.Email == email);
-                if (publicKey == null)
-                {
-                    return Task.FromResult(new Status(XfStatusCode.PublicKeyNotFound, parameters, "The public key for '{0}' could not be found.".Format(email)));
-                }
-
-                parameters.SharingEmails.Add(publicKey.Email);
-            }
-            return Task.FromResult(Status.Success);
+            return Task.FromResult(new Status(XfStatusCode.PublicKeyNotFound, "Can't use a public key, no public keys has been provided. See --help for options."));
         }
+
+        foreach (EmailAddress email in parameters.Arguments.Select(p => EmailAddress.Parse(p)))
+        {
+            UserPublicKey? publicKey = parameters.LoadedPublicKeys.PublicKeys.FirstOrDefault(pk => pk.Email == email);
+            if (publicKey == null)
+            {
+                return Task.FromResult(new Status(XfStatusCode.PublicKeyNotFound, parameters, "The public key for '{0}' could not be found.".Format(email)));
+            }
+
+            parameters.SharingEmails.Add(publicKey.Email);
+        }
+        return Task.FromResult(Status.Success);
     }
 }

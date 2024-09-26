@@ -31,38 +31,37 @@ using Xecrets.Cli.Run;
 
 using static AxCrypt.Abstractions.TypeResolve;
 
-namespace Xecrets.Cli.Operation
+namespace Xecrets.Cli.Operation;
+
+/// <summary>
+/// Arguments[0] => Private key file PEM, i.e. 'private.pem'
+/// </summary>
+/// <param name="parameters"></param>
+/// <returns></returns>
+/// <exception cref="InvalidOperationException"></exception>
+internal class JwtUseKeyPairOperation : IExecutionPhases
 {
-    /// <summary>
-    /// Arguments[0] => Private key file PEM, i.e. 'private.pem'
-    /// </summary>
-    /// <param name="parameters"></param>
-    /// <returns></returns>
-    /// <exception cref="InvalidOperationException"></exception>
-    internal class JwtUseKeyPairOperation : IExecutionPhases
+    public Task<Status> DryAsync(Parameters parameters)
     {
-        public Task<Status> DryAsync(Parameters parameters)
+        var privatePemStore = New<IStandardIoDataStore>(parameters.Arg1);
+        if (!New<IFileVerify>().CanReadFromFile(privatePemStore))
         {
-            var privatePemStore = New<IStandardIoDataStore>(parameters.Arg1);
-            if (!New<IFileVerify>().CanReadFromFile(privatePemStore))
-            {
-                return Task.FromResult(new Status(XfStatusCode.CannotRead, "Can't read from file '{0}'.".Format(privatePemStore.Name)));
-            }
-
-            return Task.FromResult(Status.Success);
+            return Task.FromResult(new Status(XfStatusCode.CannotRead, "Can't read from file '{0}'.".Format(privatePemStore.Name)));
         }
 
-        public Task<Status> RealAsync(Parameters parameters)
-        {
-            var privatePemStore = New<IStandardIoDataStore>(parameters.Arg1);
-            string privatePem;
-            using (StreamReader reader = new StreamReader(privatePemStore.OpenRead()))
-            {
-                privatePem = reader.ReadToEnd();
-            }
-            parameters.JwtPrivateKeyPem = privatePem;
+        return Task.FromResult(Status.Success);
+    }
 
-            return Task.FromResult(Status.Success);
+    public Task<Status> RealAsync(Parameters parameters)
+    {
+        var privatePemStore = New<IStandardIoDataStore>(parameters.Arg1);
+        string privatePem;
+        using (StreamReader reader = new StreamReader(privatePemStore.OpenRead()))
+        {
+            privatePem = reader.ReadToEnd();
         }
+        parameters.JwtPrivateKeyPem = privatePem;
+
+        return Task.FromResult(Status.Success);
     }
 }

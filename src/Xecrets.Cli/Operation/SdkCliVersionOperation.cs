@@ -27,22 +27,21 @@ using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
 
-namespace Xecrets.Cli.Operation
-{
-    internal class SdkCliVersionOperation : IExecutionPhases
-    {
-        public Task<Status> DryAsync(Parameters parameters)
-        {
-            return Task.FromResult(Status.Success);
-        }
+namespace Xecrets.Cli.Operation;
 
-        public Task<Status> RealAsync(Parameters parameters)
+internal class SdkCliVersionOperation : IExecutionPhases
+{
+    public Task<Status> DryAsync(Parameters parameters)
+    {
+        return Task.FromResult(Status.Success);
+    }
+
+    public Task<Status> RealAsync(Parameters parameters)
+    {
+        parameters.Logger.Log(new Status(parameters, XfExportVersion.CliVersion.ToString())
         {
-            parameters.Logger.Log(new Status(parameters, XfExportVersion.CliVersion.ToString())
-            {
-                CliVersion = XfExportVersion.CliVersion.ToString(),
-            });
-            return Task.FromResult(Status.Success);
-        }
+            CliVersion = XfExportVersion.CliVersion.ToString(),
+        });
+        return Task.FromResult(Status.Success);
     }
 }

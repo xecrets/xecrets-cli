@@ -23,81 +23,80 @@
 
 #endregion Copyright and GPL License
 
-namespace Xecrets.Cli.Log
+namespace Xecrets.Cli.Log;
+
+internal class ConsoleOut(TextWriter writer)
 {
-    internal class ConsoleOut(TextWriter writer)
+    public bool BlankLinePending { get; set; }
+
+    private bool _newLinePending;
+
+    public void Write(object text)
     {
-        public bool BlankLinePending { get; set; }
+        WritePending();
+        string m = NormalizeNewLines(text.ToString() ?? string.Empty);
+        writer.Write(m);
+        _lastLineLength = 0;
+    }
 
-        private bool _newLinePending;
+    private static string NormalizeNewLines(string m)
+    {
+        m = m.Replace("\r\n", Environment.NewLine).Trim(Environment.NewLine.ToCharArray());
+        return m;
+    }
 
-        public void Write(object text)
+    public void WriteLine(object text)
+    {
+        Write(text);
+        writer.WriteLine();
+        _lastLineLength = 0;
+    }
+
+    private int _lastLineLength = 0;
+
+    public void WriteReturn(object value)
+    {
+        string m = NormalizeNewLines(value.ToString() ?? string.Empty);
+        if (m.Contains(Environment.NewLine))
         {
-            WritePending();
-            string m = NormalizeNewLines(text.ToString() ?? string.Empty);
-            writer.Write(m);
+            throw new InvalidOperationException("Internal error, WriteReturn cannot be called with a string containing new lines.");
+        }
+
+        WriteBlankLinePending();
+
+        m = Pad(value);
+        writer.Write(m);
+
+        _lastLineLength = m.Length;
+        writer.Write('\r');
+        _newLinePending = true;
+    }
+
+    private string Pad(object value)
+    {
+        var m = value.ToString() ?? string.Empty;
+        m = m.PadRight(Math.Max(_lastLineLength, m.Length));
+        return m;
+    }
+
+    public void WritePending()
+    {
+        if (_newLinePending)
+        {
+            writer.Write(string.Empty.PadRight(_lastLineLength) + '\r');
+            _newLinePending = false;
             _lastLineLength = 0;
         }
+        WriteBlankLinePending();
+    }
 
-        private static string NormalizeNewLines(string m)
+    private void WriteBlankLinePending()
+    {
+        if (BlankLinePending)
         {
-            m = m.Replace("\r\n", Environment.NewLine).Trim(Environment.NewLine.ToCharArray());
-            return m;
-        }
-
-        public void WriteLine(object text)
-        {
-            Write(text);
             writer.WriteLine();
+            BlankLinePending = false;
             _lastLineLength = 0;
-        }
-
-        private int _lastLineLength = 0;
-
-        public void WriteReturn(object value)
-        {
-            string m = NormalizeNewLines(value.ToString() ?? string.Empty);
-            if (m.Contains(Environment.NewLine))
-            {
-                throw new InvalidOperationException("Internal error, WriteReturn cannot be called with a string containing new lines.");
-            }
-
-            WriteBlankLinePending();
-
-            m = Pad(value);
-            writer.Write(m);
-
-            _lastLineLength = m.Length;
-            writer.Write('\r');
-            _newLinePending = true;
-        }
-
-        private string Pad(object value)
-        {
-            var m = value.ToString() ?? string.Empty;
-            m = m.PadRight(Math.Max(_lastLineLength, m.Length));
-            return m;
-        }
-
-        public void WritePending()
-        {
-            if (_newLinePending)
-            {
-                writer.Write(string.Empty.PadRight(_lastLineLength) + '\r');
-                _newLinePending = false;
-                _lastLineLength = 0;
-            }
-            WriteBlankLinePending();
-        }
-
-        private void WriteBlankLinePending()
-        {
-            if (BlankLinePending)
-            {
-                writer.WriteLine();
-                BlankLinePending = false;
-                _lastLineLength = 0;
-            }
         }
     }
 }

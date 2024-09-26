@@ -23,14 +23,13 @@
 
 #endregion Copyright and GPL License
 
-namespace Xecrets.Cli.Log
+namespace Xecrets.Cli.Log;
+
+[Flags]
+internal enum LogStyle
 {
-    [Flags]
-    internal enum LogStyle
-    {
-        None = 0,
-        Json = 1,
-        Text = 2,
-        Progress = 4
-    }
+    None = 0,
+    Json = 1,
+    Text = 2,
+    Progress = 4
 }

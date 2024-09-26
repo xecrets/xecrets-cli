@@ -34,43 +34,42 @@ using Xecrets.Cli.Run;
 
 using static AxCrypt.Abstractions.TypeResolve;
 
-namespace Xecrets.Cli.Operation
+namespace Xecrets.Cli.Operation;
+
+internal class ExportPublicKeyOperation : IExecutionPhases
 {
-    internal class ExportPublicKeyOperation : IExecutionPhases
+    public Task<Status> DryAsync(Parameters parameters)
     {
-        public Task<Status> DryAsync(Parameters parameters)
+        if (!EmailAddress.TryParse(parameters.CurrentOp.Arg1, out EmailAddress _))
         {
-            if (!EmailAddress.TryParse(parameters.CurrentOp.Arg1, out EmailAddress _))
-            {
-                return Task.FromResult(new Status(XfStatusCode.InvalidEmail, "'{0}' is not a valid email.".Format(parameters.CurrentOp.Arg1)));
-            }
-            var toStore = New<IStandardIoDataStore>(parameters.Arg2);
-            if (!New<IFileVerify>().CanWriteToFile(toStore))
-            {
-                return Task.FromResult(new Status(XfStatusCode.CannotWrite, parameters, "Can't write to file '{0}'.".Format(toStore.Name)));
-            }
-            return Task.FromResult(Status.Success);
+            return Task.FromResult(new Status(XfStatusCode.InvalidEmail, "'{0}' is not a valid email.".Format(parameters.CurrentOp.Arg1)));
+        }
+        var toStore = New<IStandardIoDataStore>(parameters.Arg2);
+        if (!New<IFileVerify>().CanWriteToFile(toStore))
+        {
+            return Task.FromResult(new Status(XfStatusCode.CannotWrite, parameters, "Can't write to file '{0}'.".Format(toStore.Name)));
+        }
+        return Task.FromResult(Status.Success);
+    }
+
+    public Task<Status> RealAsync(Parameters parameters)
+    {
+        EmailAddress email = EmailAddress.Parse(parameters.Arg1);
+        UserPublicKey? userPublicKey = parameters.PublicKeys.FirstOrDefault(pk => pk.Email == email);
+        if (userPublicKey == null)
+        {
+            return Task.FromResult(new Status(XfStatusCode.PublicKeyNotFound, "Did not find a public key for '{0}' to export.".Format(parameters.CurrentOp.Arg1)));
         }
 
-        public Task<Status> RealAsync(Parameters parameters)
+        var publicKeyFile = New<IDataStore>(parameters.CurrentOp.Arg2);
+        string json = New<IStringSerializer>().Serialize(userPublicKey);
+        using (TextWriter writer = new StreamWriter(publicKeyFile.OpenWrite()))
         {
-            EmailAddress email = EmailAddress.Parse(parameters.Arg1);
-            UserPublicKey? userPublicKey = parameters.PublicKeys.FirstOrDefault(pk => pk.Email == email);
-            if (userPublicKey == null)
-            {
-                return Task.FromResult(new Status(XfStatusCode.PublicKeyNotFound, "Did not find a public key for '{0}' to export.".Format(parameters.CurrentOp.Arg1)));
-            }
-
-            var publicKeyFile = New<IDataStore>(parameters.CurrentOp.Arg2);
-            string json = New<IStringSerializer>().Serialize(userPublicKey);
-            using (TextWriter writer = new StreamWriter(publicKeyFile.OpenWrite()))
-            {
-                writer.Write(json);
-            }
-
-
-            parameters.Logger.Log(new Status(parameters, $"Extracted a public key for '{parameters.CurrentOp.Arg1}' to '{parameters.CurrentOp.Arg2}'."));
-            return Task.FromResult(Status.Success);
+            writer.Write(json);
         }
+
+
+        parameters.Logger.Log(new Status(parameters, $"Extracted a public key for '{parameters.CurrentOp.Arg1}' to '{parameters.CurrentOp.Arg2}'."));
+        return Task.FromResult(Status.Success);
     }
 }

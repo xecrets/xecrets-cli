@@ -27,22 +27,21 @@ using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Log;
 using Xecrets.Cli.Run;
 
-namespace Xecrets.Cli.Operation
+namespace Xecrets.Cli.Operation;
+
+internal abstract class LogOperationBase : IExecutionPhases
 {
-    internal abstract class LogOperationBase : IExecutionPhases
+    protected abstract LogStyle UpdateLogStyle(Parameters parameters);
+
+    public Task<Status> DryAsync(Parameters parameters)
     {
-        protected abstract LogStyle UpdateLogStyle(Parameters parameters);
+        parameters.TotalsTracker.LogStyle = parameters.Parser.IsQuiet ? LogStyle.None : UpdateLogStyle(parameters);
+        return Task.FromResult(Status.Success);
+    }
 
-        public Task<Status> DryAsync(Parameters parameters)
-        {
-            parameters.TotalsTracker.LogStyle = parameters.Parser.IsQuiet ? LogStyle.None : UpdateLogStyle(parameters);
-            return Task.FromResult(Status.Success);
-        }
-
-        public Task<Status> RealAsync(Parameters parameters)
-        {
-            parameters.TotalsTracker.LogStyle = parameters.Parser.IsQuiet ? LogStyle.None : UpdateLogStyle(parameters);
-            return Task.FromResult(Status.Success);
-        }
+    public Task<Status> RealAsync(Parameters parameters)
+    {
+        parameters.TotalsTracker.LogStyle = parameters.Parser.IsQuiet ? LogStyle.None : UpdateLogStyle(parameters);
+        return Task.FromResult(Status.Success);
     }
 }

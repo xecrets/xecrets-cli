@@ -26,18 +26,17 @@
 using Xecrets.Cli.Log;
 using Xecrets.Cli.Run;
 
-namespace Xecrets.Cli.Operation
-{
-    internal class SdkJsonLogOperation : LogOperationBase
-    {
-        protected override LogStyle UpdateLogStyle(Parameters parameters)
-        {
-            parameters.ProgrammaticUse = true;
+namespace Xecrets.Cli.Operation;
 
-            LogStyle currentLogStyle = parameters.TotalsTracker.LogStyle;
-            currentLogStyle &= ~(LogStyle.Text);
-            currentLogStyle |= LogStyle.Json;
-            return currentLogStyle;
-        }
+internal class SdkJsonLogOperation : LogOperationBase
+{
+    protected override LogStyle UpdateLogStyle(Parameters parameters)
+    {
+        parameters.ProgrammaticUse = true;
+
+        LogStyle currentLogStyle = parameters.TotalsTracker.LogStyle;
+        currentLogStyle &= ~(LogStyle.Text);
+        currentLogStyle |= LogStyle.Json;
+        return currentLogStyle;
     }
 }

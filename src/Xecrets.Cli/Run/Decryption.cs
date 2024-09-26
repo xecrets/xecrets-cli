@@ -35,97 +35,96 @@ using Xecrets.Cli.Abstractions;
 
 using static AxCrypt.Abstractions.TypeResolve;
 
-namespace Xecrets.Cli.Run
+namespace Xecrets.Cli.Run;
+
+internal sealed class Decryption(Stream fromStream, IEnumerable<LogOnIdentity> identities, IProgressContext progress) : IDisposable
 {
-    internal sealed class Decryption(Stream fromStream, IEnumerable<LogOnIdentity> identities, IProgressContext progress) : IDisposable
+    private IAxCryptDocument _document = CreateDocument(identities, new ProgressStream(fromStream, progress));
+
+    public bool HasValidPassphrase => _document.PassphraseIsValid;
+
+    public string OriginalFileName => _document.FileName;
+
+    public void DecryptTo(IStandardIoDataStore toStore)
     {
-        private IAxCryptDocument _document = CreateDocument(identities, new ProgressStream(fromStream, progress));
-
-        public bool HasValidPassphrase => _document.PassphraseIsValid;
-
-        public string OriginalFileName => _document.FileName;
-
-        public void DecryptTo(IStandardIoDataStore toStore)
+        try
         {
-            try
+            using var toStream = toStore.OpenWrite();
+            _document.DecryptTo(toStream);
+        }
+        catch (Exception)
+        {
+            if (!toStore.IsStdIo && toStore.IsAvailable)
             {
-                using var toStream = toStore.OpenWrite();
-                _document.DecryptTo(toStream);
+                using var destinationLock = New<FileLocker>().Acquire(toStore);
+                new AxCryptFile().Wipe(destinationLock, new ProgressContext());
             }
-            catch (Exception)
-            {
-                if (!toStore.IsStdIo && toStore.IsAvailable)
-                {
-                    using var destinationLock = New<FileLocker>().Acquire(toStore);
-                    new AxCryptFile().Wipe(destinationLock, new ProgressContext());
-                }
-                throw;
-            }
-
-            if (!toStore.IsStdIo)
-            {
-                toStore.SetFileTimes(_document.CreationTimeUtc, _document.LastAccessTimeUtc, _document.LastWriteTimeUtc);
-            }
+            throw;
         }
 
-        private static IAxCryptDocument CreateDocument(IEnumerable<LogOnIdentity> identities, Stream fromStream)
+        if (!toStore.IsStdIo)
         {
-            var headers = new Headers();
-            AxCryptReaderBase reader = headers.CreateReader(new LookAheadStream(fromStream));
-            var isLegacyV1 = reader is V1AxCryptReader;
+            toStore.SetFileTimes(_document.CreationTimeUtc, _document.LastAccessTimeUtc, _document.LastWriteTimeUtc);
+        }
+    }
 
-            var document = AxCryptReaderBase.Document(reader);
+    private static IAxCryptDocument CreateDocument(IEnumerable<LogOnIdentity> identities, Stream fromStream)
+    {
+        var headers = new Headers();
+        AxCryptReaderBase reader = headers.CreateReader(new LookAheadStream(fromStream));
+        var isLegacyV1 = reader is V1AxCryptReader;
 
-            foreach (var decryptionParameter in DecryptionParameters(identities, isLegacyV1: isLegacyV1))
+        var document = AxCryptReaderBase.Document(reader);
+
+        foreach (var decryptionParameter in DecryptionParameters(identities, isLegacyV1: isLegacyV1))
+        {
+            if (decryptionParameter.Passphrase != null)
             {
-                if (decryptionParameter.Passphrase != null)
+                if (document.Load(decryptionParameter.Passphrase, decryptionParameter.CryptoId, headers))
                 {
-                    if (document.Load(decryptionParameter.Passphrase, decryptionParameter.CryptoId, headers))
-                    {
-                        document.DecryptionParameter = decryptionParameter;
-                        return document;
-                    }
-                }
-                if (decryptionParameter.PrivateKey != null)
-                {
-                    if (document.Load(decryptionParameter.PrivateKey, decryptionParameter.CryptoId, headers))
-                    {
-                        document.DecryptionParameter = decryptionParameter;
-                        return document;
-                    }
+                    document.DecryptionParameter = decryptionParameter;
+                    return document;
                 }
             }
-            return document;
-        }
-
-        private static List<DecryptionParameter> DecryptionParameters(IEnumerable<LogOnIdentity> identities, bool isLegacyV1)
-        {
-            var decryptionParameters = new List<DecryptionParameter>();
-            foreach (var identity in identities)
+            if (decryptionParameter.PrivateKey != null)
             {
-                decryptionParameters.AddRange(DecryptionParameters(isLegacyV1: isLegacyV1, identity.Passphrase, identity.PrivateKeys));
+                if (document.Load(decryptionParameter.PrivateKey, decryptionParameter.CryptoId, headers))
+                {
+                    document.DecryptionParameter = decryptionParameter;
+                    return document;
+                }
             }
+        }
+        return document;
+    }
 
-            return decryptionParameters;
+    private static List<DecryptionParameter> DecryptionParameters(IEnumerable<LogOnIdentity> identities, bool isLegacyV1)
+    {
+        var decryptionParameters = new List<DecryptionParameter>();
+        foreach (var identity in identities)
+        {
+            decryptionParameters.AddRange(DecryptionParameters(isLegacyV1: isLegacyV1, identity.Passphrase, identity.PrivateKeys));
         }
 
-        private static IEnumerable<DecryptionParameter> DecryptionParameters(bool isLegacyV1, Passphrase passphrase, IEnumerable<IAsymmetricPrivateKey?> privateKeys)
-        {
-            var cryptoIds =
-                isLegacyV1
-                ? [new V1Aes128CryptoFactory().CryptoId]
-                : Resolve.CryptoFactory.OrderedIds.Where(id => id != new V1Aes128CryptoFactory().CryptoId);
+        return decryptionParameters;
+    }
 
-            return DecryptionParameter.CreateAll([passphrase], privateKeys, cryptoIds);
-        }
+    private static IEnumerable<DecryptionParameter> DecryptionParameters(bool isLegacyV1, Passphrase passphrase, IEnumerable<IAsymmetricPrivateKey?> privateKeys)
+    {
+        var cryptoIds =
+            isLegacyV1
+            ? [new V1Aes128CryptoFactory().CryptoId]
+            : Resolve.CryptoFactory.OrderedIds.Where(id => id != new V1Aes128CryptoFactory().CryptoId);
 
-        public void Dispose()
+        return DecryptionParameter.CreateAll([passphrase], privateKeys, cryptoIds);
+    }
+
+    public void Dispose()
+    {
+        if (_document != null)
         {
-            if (_document != null)
-            {
-                _document.Dispose();
-                _document = null!;
-            }
+            _document.Dispose();
+            _document = null!;
         }
     }
 }

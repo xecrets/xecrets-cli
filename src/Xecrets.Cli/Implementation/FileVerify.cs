@@ -29,21 +29,63 @@ using Xecrets.Cli.Abstractions;
 
 using static System.IO.File;
 
-namespace Xecrets.Cli.Implementation
+namespace Xecrets.Cli.Implementation;
+
+internal class FileVerify : IFileVerify
 {
-    internal class FileVerify : IFileVerify
+    /// <summary>
+    /// Test in an ad-hoc way if a file can be deleted. It has to exist in order to be considered deletable.
+    /// It's portable best-effort, no guarantee that the file can actually be deleted.
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    public bool CanDeleteFile(IStandardIoDataStore store)
     {
-        /// <summary>
-        /// Test in an ad-hoc way if a file can be deleted. It has to exist in order to be considered deletable.
-        /// It's portable best-effort, no guarantee that the file can actually be deleted.
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public bool CanDeleteFile(IStandardIoDataStore store)
+        try
         {
+            using (Open(store.FullName, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+            {
+                return true;
+            }
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    public bool CanReadFromFile(IStandardIoDataStore store)
+    {
+        if (store.IsStdIo)
+        {
+            return store.IsStdin;
+        }
+        try
+        {
+            using (store.OpenRead())
+            {
+                return true;
+            }
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    public bool CanWriteToFile(IStandardIoDataStore store)
+    {
+        if (store.IsStdIo)
+        {
+            return store.IsStdout;
+        }
+
+        bool wasExisting = Exists(store.FullName);
+
+        bool CanWrite() {
             try
             {
-                using (Open(store.FullName, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+                using (OpenWrite(store.FullName))
                 {
                     return true;
                 }
@@ -53,16 +95,30 @@ namespace Xecrets.Cli.Implementation
                 return false;
             }
         }
-
-        public bool CanReadFromFile(IStandardIoDataStore store)
+        
+        bool canWrite = CanWrite();
+        if (!wasExisting && canWrite)
         {
-            if (store.IsStdIo)
+            Delete(store.FullName);
+        }
+        return canWrite;
+    }
+
+    public bool CanWriteToFolder(IDataContainer container)
+    {
+        try
+        {
+            DirectoryInfo directoryInfo = new DirectoryInfo(container.FullName);
+            if (!directoryInfo.Exists)
             {
-                return store.IsStdin;
+                return false;
             }
+            string randomName = Path.GetFileNameWithoutExtension(Path.GetRandomFileName()) + ".tmp";
+            string fullPath = Path.Combine(directoryInfo.FullName, randomName);
+            FileInfo fileInfo = new FileInfo(fullPath);
             try
             {
-                using (store.OpenRead())
+                using (fileInfo.Create())
                 {
                     return true;
                 }
@@ -71,71 +127,14 @@ namespace Xecrets.Cli.Implementation
             {
                 return false;
             }
+            finally
+            {
+                fileInfo.Delete();
+            }
         }
-
-        public bool CanWriteToFile(IStandardIoDataStore store)
+        catch
         {
-            if (store.IsStdIo)
-            {
-                return store.IsStdout;
-            }
-
-            bool wasExisting = Exists(store.FullName);
-
-            bool CanWrite() {
-                try
-                {
-                    using (OpenWrite(store.FullName))
-                    {
-                        return true;
-                    }
-                }
-                catch
-                {
-                    return false;
-                }
-            }
-            
-            bool canWrite = CanWrite();
-            if (!wasExisting && canWrite)
-            {
-                Delete(store.FullName);
-            }
-            return canWrite;
-        }
-
-        public bool CanWriteToFolder(IDataContainer container)
-        {
-            try
-            {
-                DirectoryInfo directoryInfo = new DirectoryInfo(container.FullName);
-                if (!directoryInfo.Exists)
-                {
-                    return false;
-                }
-                string randomName = Path.GetFileNameWithoutExtension(Path.GetRandomFileName()) + ".tmp";
-                string fullPath = Path.Combine(directoryInfo.FullName, randomName);
-                FileInfo fileInfo = new FileInfo(fullPath);
-                try
-                {
-                    using (fileInfo.Create())
-                    {
-                        return true;
-                    }
-                }
-                catch
-                {
-                    return false;
-                }
-                finally
-                {
-                    fileInfo.Delete();
-                }
-            }
-            catch
-            {
-                return false;
-            }
+            return false;
         }
     }
 }

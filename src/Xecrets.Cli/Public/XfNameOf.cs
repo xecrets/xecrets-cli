@@ -23,20 +23,19 @@
 
 #endregion Copyright and GPL License
 
-namespace Xecrets.Cli.Public
+namespace Xecrets.Cli.Public;
+
+/// <summary>
+/// Publically exposed values.
+/// </summary>
+/// <remarks>
+/// Uses an 'Xf' prefix to distinguish itself, since its name is very generic.
+/// </remarks>
+public static class XfNameOf
 {
-    /// <summary>
-    /// Publically exposed values.
-    /// </summary>
-    /// <remarks>
-    /// Uses an 'Xf' prefix to distinguish itself, since its name is very generic.
-    /// </remarks>
-    public static class XfNameOf
-    {
-        public static string StdinAlias { get; } = "-";
+    public static string StdinAlias { get; } = "-";
 
-        public static string StdoutAlias { get; } = "+";
+    public static string StdoutAlias { get; } = "+";
 
-        public static string StdIoNameSeparator { get; } = ":"; 
-    }
+    public static string StdIoNameSeparator { get; } = ":"; 
 }

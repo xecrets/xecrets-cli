@@ -25,84 +25,83 @@
 
 using System.Text.Json.Serialization;
 
-namespace Xecrets.Cli.Log
+namespace Xecrets.Cli.Log;
+
+internal class CliMessage
 {
-    internal class CliMessage
-    {
-        [JsonPropertyName("cliApi")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string? CliApiVersion { get; set; }
+    [JsonPropertyName("cliApi")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public string? CliApiVersion { get; set; }
 
-        [JsonPropertyName("arg1")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string? Arg1 { get; set; }
+    [JsonPropertyName("arg1")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public string? Arg1 { get; set; }
 
-        [JsonPropertyName("arg2")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string? Arg2 { get; set; }
+    [JsonPropertyName("arg2")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public string? Arg2 { get; set; }
 
-        [JsonPropertyName("id")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string? Id { get; set; }
+    [JsonPropertyName("id")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public string? Id { get; set; }
 
-        [JsonPropertyName("display")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string? Display { get; set; }
+    [JsonPropertyName("display")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public string? Display { get; set; }
 
-        [JsonPropertyName("message")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string? Message { get; set; }
+    [JsonPropertyName("message")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public string? Message { get; set; }
 
-        [JsonPropertyName("opCode")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public int OpCode { get; set; }
+    [JsonPropertyName("opCode")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public int OpCode { get; set; }
 
-        [JsonPropertyName("opCodeName")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string? OpCodeName { get; set; }
+    [JsonPropertyName("opCodeName")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public string? OpCodeName { get; set; }
 
-        [JsonPropertyName("originalFileName")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string? OriginalFileName { get; set; }
+    [JsonPropertyName("originalFileName")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public string? OriginalFileName { get; set; }
 
-        [JsonPropertyName("result")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string? Result { get; set; }
+    [JsonPropertyName("result")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public string? Result { get; set; }
 
-        [JsonPropertyName("percent")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public int Percent { get; set; }
+    [JsonPropertyName("percent")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public int Percent { get; set; }
 
-        [JsonPropertyName("platform")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string? Platform { get; set; }
+    [JsonPropertyName("platform")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public string? Platform { get; set; }
 
-        [JsonPropertyName("programVersion")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string? ProgramVersion { get; set; }
+    [JsonPropertyName("programVersion")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public string? ProgramVersion { get; set; }
 
-        [JsonPropertyName("status")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public int Status { get; set; }
+    [JsonPropertyName("status")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public int Status { get; set; }
 
-        [JsonPropertyName("statusName")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string? StatusName { get; set; }
+    [JsonPropertyName("statusName")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public string? StatusName { get; set; }
 
-        [JsonPropertyName("totalDone")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public long TotalDone { get; set; }
+    [JsonPropertyName("totalDone")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public long TotalDone { get; set; }
 
-        [JsonPropertyName("totalPercent")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public int TotalPercent { get; set; }
+    [JsonPropertyName("totalPercent")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public int TotalPercent { get; set; }
 
-        [JsonPropertyName("totalWork")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public long TotalWork { get; set; }
+    [JsonPropertyName("totalWork")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public long TotalWork { get; set; }
 
-        [JsonPropertyName("utc")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public DateTime Utc { get; set; }
-    }
+    [JsonPropertyName("utc")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public DateTime Utc { get; set; }
 }

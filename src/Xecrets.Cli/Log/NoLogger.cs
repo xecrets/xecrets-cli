@@ -28,27 +28,26 @@ using AxCrypt.Core.UI;
 using Xecrets.Cli.Implementation;
 using Xecrets.Cli.Public;
 
-namespace Xecrets.Cli.Log
+namespace Xecrets.Cli.Log;
+
+internal class NoLogger(TotalsTracker totalsTracker) : ILogger
 {
-    internal class NoLogger(TotalsTracker totalsTracker) : ILogger
+    public IProgressContext Progress { get; } = new TotalsProgressContext(new NoProgressContext(), totalsTracker);
+
+    public void Log(XfOpCode opCode, Status status)
     {
-        public IProgressContext Progress { get; } = new TotalsProgressContext(new NoProgressContext(), totalsTracker);
-
-        public void Log(XfOpCode opCode, Status status)
-        {
-        }
+    }
 
 
-        public void Log(Status status)
-        {
-        }
+    public void Log(Status status)
+    {
+    }
 
-        public void Log(string message)
-        {
-        }
+    public void Log(string message)
+    {
+    }
 
-        public void FlushPending()
-        {
-        }
+    public void FlushPending()
+    {
     }
 }

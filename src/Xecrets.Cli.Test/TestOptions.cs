@@ -31,81 +31,80 @@ using NUnit.Framework;
 
 using Xecrets.Cli.Public;
 
-namespace Xecrets.Cli.Test
+namespace Xecrets.Cli.Test;
+
+[TestFixture]
+internal class TestOptions
 {
-    [TestFixture]
-    internal class TestOptions
+    [SetUp]
+    public void SetUp()
     {
-        [SetUp]
-        public void SetUp()
-        {
-            TypeMap.Register.Singleton<IRuntimeEnvironment>(() => new FakeRuntimeEnvironment());
-        }
+        TypeMap.Register.Singleton<IRuntimeEnvironment>(() => new FakeRuntimeEnvironment());
+    }
 
-        [Test]
-        public void TestPasswordWithEncryptOption()
-        {
-            var parser = new OptionsParser("XecretsCli --password secretStuff --encrypt-to from.txt to.axx");
-            Assert.That(parser.ParseStatus, Is.EqualTo(Status.Success));
-            Assert.That(parser.ParseStatus.IsSuccess);
+    [Test]
+    public void TestPasswordWithEncryptOption()
+    {
+        var parser = new OptionsParser("XecretsCli --password secretStuff --encrypt-to from.txt to.axx");
+        Assert.That(parser.ParseStatus, Is.EqualTo(Status.Success));
+        Assert.That(parser.ParseStatus.IsSuccess);
 
-            ParsedOp[] allParsed = parser.ParsedOps.ToArray();
+        ParsedOp[] allParsed = parser.ParsedOps.ToArray();
 
-            Assert.That(allParsed.Length, Is.EqualTo(2));
+        Assert.That(allParsed.Length, Is.EqualTo(2));
 
-            Assert.That(allParsed[0].OpCode, Is.EqualTo(XfOpCode.Password));
-            Assert.That(allParsed[0].Arguments.Count, Is.EqualTo(1));
-            Assert.That(allParsed[0].Arguments[0], Is.EqualTo("secretStuff"));
+        Assert.That(allParsed[0].OpCode, Is.EqualTo(XfOpCode.Password));
+        Assert.That(allParsed[0].Arguments.Count, Is.EqualTo(1));
+        Assert.That(allParsed[0].Arguments[0], Is.EqualTo("secretStuff"));
 
-            Assert.That(allParsed[1].OpCode, Is.EqualTo(XfOpCode.EncryptTo));
-            Assert.That(allParsed[1].Arguments.Count, Is.EqualTo(2));
-            Assert.That(allParsed[1].Arguments[0], Is.EqualTo("from.txt"));
-            Assert.That(allParsed[1].Arguments[1], Is.EqualTo("to.axx"));
-        }
+        Assert.That(allParsed[1].OpCode, Is.EqualTo(XfOpCode.EncryptTo));
+        Assert.That(allParsed[1].Arguments.Count, Is.EqualTo(2));
+        Assert.That(allParsed[1].Arguments[0], Is.EqualTo("from.txt"));
+        Assert.That(allParsed[1].Arguments[1], Is.EqualTo("to.axx"));
+    }
 
-        [Test]
-        public void TestUnknownArgumentTreatedAsExtra()
-        {
-            var parser = new OptionsParser("XecretsCli --unknown blabla");
-            Assert.That(parser.ParseStatus.StatusCode, Is.EqualTo(XfStatusCode.ExtraArguments));
-        }
+    [Test]
+    public void TestUnknownArgumentTreatedAsExtra()
+    {
+        var parser = new OptionsParser("XecretsCli --unknown blabla");
+        Assert.That(parser.ParseStatus.StatusCode, Is.EqualTo(XfStatusCode.ExtraArguments));
+    }
 
-        [Test]
-        public void TestTooManyPasswordsOption()
-        {
-            var parser = new OptionsParser("XecretsCli --password secretStuff moreStuff --encrypt-to from.txt to.axx");
-            Assert.That(parser.ParseStatus.StatusCode, Is.EqualTo(XfStatusCode.ExtraArguments));
-        }
+    [Test]
+    public void TestTooManyPasswordsOption()
+    {
+        var parser = new OptionsParser("XecretsCli --password secretStuff moreStuff --encrypt-to from.txt to.axx");
+        Assert.That(parser.ParseStatus.StatusCode, Is.EqualTo(XfStatusCode.ExtraArguments));
+    }
 
-        [Test]
-        public void TestQuiet()
-        {
-            OptionsParser parser;
-            
-            parser = new OptionsParser("XecretsCli --quiet");
-            Assert.That(parser.ParseStatus.IsSuccess);
+    [Test]
+    public void TestQuiet()
+    {
+        OptionsParser parser;
+        
+        parser = new OptionsParser("XecretsCli --quiet");
+        Assert.That(parser.ParseStatus.IsSuccess);
 
-            Assert.That(parser.IsQuiet, Is.True);
+        Assert.That(parser.IsQuiet, Is.True);
 
-            parser = new OptionsParser("XecretsCli --quiet+");
-            Assert.That(parser.IsQuiet, Is.True);
+        parser = new OptionsParser("XecretsCli --quiet+");
+        Assert.That(parser.IsQuiet, Is.True);
 
-            Assert.That(parser.IsQuiet, Is.True);
+        Assert.That(parser.IsQuiet, Is.True);
 
-            parser = new OptionsParser("XecretsCli --quiet-");
-            Assert.That(parser.IsQuiet, Is.False);
-        }
+        parser = new OptionsParser("XecretsCli --quiet-");
+        Assert.That(parser.IsQuiet, Is.False);
+    }
 
-        [Test]
-        public void TestUnknownOption()
-        {
-            // --password a --text-progress --encrypt-as big.aax big.axx
-            OptionsParser parser;
+    [Test]
+    public void TestUnknownOption()
+    {
+        // --password a --text-progress --encrypt-as big.aax big.axx
+        OptionsParser parser;
 
-            parser = new OptionsParser("XecretsCli --password a --text-log --environment AVALUE big.axx");
-            Assert.That(parser.ParseStatus.IsSuccess, Is.False);
+        parser = new OptionsParser("XecretsCli --password a --text-log --environment AVALUE big.axx");
+        Assert.That(parser.ParseStatus.IsSuccess, Is.False);
 
-            Assert.That(parser.Extra.Count, Is.EqualTo(1));
-        }
+        Assert.That(parser.Extra.Count, Is.EqualTo(1));
     }
 }

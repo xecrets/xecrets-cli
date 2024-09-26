@@ -31,42 +31,41 @@ using Xecrets.Cli.Public;
 
 using static AxCrypt.Abstractions.TypeResolve;
 
-namespace Xecrets.Cli.Implementation
+namespace Xecrets.Cli.Implementation;
+
+internal class JsonProgressContext : NoProgressContext
 {
-    internal class JsonProgressContext : NoProgressContext
+    public JsonProgressContext(TotalsTracker totalsTracker)
+        :base(TimeSpan.FromSeconds(1), TimeSpan.FromMilliseconds(100))
     {
-        public JsonProgressContext(TotalsTracker totalsTracker)
-            :base(TimeSpan.FromSeconds(1), TimeSpan.FromMilliseconds(100))
+        TotalsTracker = totalsTracker;
+    }
+
+    protected override void OnProgressing(ProgressEventArgs e)
+    {
+        New<Splash>().Write(m => JsonConsoleOut(new CliMessage() { OpCode = (int)XfOpCode.SdkCliSplash, OpCodeName = XfOpCode.SdkCliSplash.ToString(), Message = m, }));
+
+        var progressMessage = new CliMessage()
         {
-            TotalsTracker = totalsTracker;
-        }
+            OpCode = (int)XfOpCode.Progressing,
+            OpCodeName = XfOpCode.Progressing.ToString(),
+            Display = e.Display,
+            Percent = e.Percent,
+            TotalWork = TotalsTracker.TotalWork,
+            TotalDone = TotalsTracker.TotalDone,
+            TotalPercent = TotalsTracker.TotalWork == 0 ? 0 : (int)(TotalsTracker.TotalDone * 100 / TotalsTracker.TotalWork),
+            Status = (int)XfStatusCode.Success,
+            StatusName = XfStatusCode.Success.ToString(),
+            Id = TotalsTracker.Id.Length > 0 ? TotalsTracker.Id : null,
+        };
+        JsonConsoleOut(progressMessage);
 
-        protected override void OnProgressing(ProgressEventArgs e)
-        {
-            New<Splash>().Write(m => JsonConsoleOut(new CliMessage() { OpCode = (int)XfOpCode.SdkCliSplash, OpCodeName = XfOpCode.SdkCliSplash.ToString(), Message = m, }));
+        base.OnProgressing(e);
+    }
 
-            var progressMessage = new CliMessage()
-            {
-                OpCode = (int)XfOpCode.Progressing,
-                OpCodeName = XfOpCode.Progressing.ToString(),
-                Display = e.Display,
-                Percent = e.Percent,
-                TotalWork = TotalsTracker.TotalWork,
-                TotalDone = TotalsTracker.TotalDone,
-                TotalPercent = TotalsTracker.TotalWork == 0 ? 0 : (int)(TotalsTracker.TotalDone * 100 / TotalsTracker.TotalWork),
-                Status = (int)XfStatusCode.Success,
-                StatusName = XfStatusCode.Success.ToString(),
-                Id = TotalsTracker.Id.Length > 0 ? TotalsTracker.Id : null,
-            };
-            JsonConsoleOut(progressMessage);
-
-            base.OnProgressing(e);
-        }
-
-        private static void JsonConsoleOut(CliMessage jsonMessage)
-        {
-            var json = JsonSerializer.Serialize(jsonMessage, typeof(CliMessage), SourceGenerationContext.Default);
-            New<ConsoleOut>().WriteLine(json);
-        }
+    private static void JsonConsoleOut(CliMessage jsonMessage)
+    {
+        var json = JsonSerializer.Serialize(jsonMessage, typeof(CliMessage), SourceGenerationContext.Default);
+        New<ConsoleOut>().WriteLine(json);
     }
 }

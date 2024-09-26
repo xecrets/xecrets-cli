@@ -26,79 +26,78 @@
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
 
-namespace Xecrets.Cli.Log
+namespace Xecrets.Cli.Log;
+
+internal class TotalsTracker
 {
-    internal class TotalsTracker
+    private const LogStyle DefaultTextLogStyle = LogStyle.Text | LogStyle.Progress;
+
+    private const LogStyle DefaultJsonLogStyle = LogStyle.Json | LogStyle.Progress;
+
+    public LogStyle LogStyle { get; set; } = DefaultTextLogStyle;
+
+    public int ItemsTotal { get; private set; }
+
+    public int ItemsDone { get; private set; }
+
+    public long TotalWork { get; private set; }
+
+    public long TotalDone { get; private set; }
+
+    public ILogger Logger { get; private set; }
+
+    public string Id { get; set; } = string.Empty;
+
+    public TotalsTracker()
     {
-        private const LogStyle DefaultTextLogStyle = LogStyle.Text | LogStyle.Progress;
+        Logger = GetCurrentLogger();
+    }
 
-        private const LogStyle DefaultJsonLogStyle = LogStyle.Json | LogStyle.Progress;
+    public void ResetLogger()
+    {
+        Logger = GetCurrentLogger();
+    }
 
-        public LogStyle LogStyle { get; set; } = DefaultTextLogStyle;
-
-        public int ItemsTotal { get; private set; }
-
-        public int ItemsDone { get; private set; }
-
-        public long TotalWork { get; private set; }
-
-        public long TotalDone { get; private set; }
-
-        public ILogger Logger { get; private set; }
-
-        public string Id { get; set; } = string.Empty;
-
-        public TotalsTracker()
+    public void ResetLogger(Parameters parameters)
+    {
+        LogStyle = (parameters.Parser.ParsedOps.FirstOrDefault()?.OpCode ?? XfOpCode.None) == XfOpCode.SdkJsonLog
+            ? DefaultJsonLogStyle : DefaultTextLogStyle;
+        if (parameters.Parser.IsQuiet)
         {
-            Logger = GetCurrentLogger();
+            LogStyle = LogStyle.None;
         }
+        ResetLogger();
+    }
 
-        public void ResetLogger()
+    private ILogger GetCurrentLogger()
+    {
+        return LogStyle switch
         {
-            Logger = GetCurrentLogger();
-        }
+            LogStyle.Json or LogStyle.Json | LogStyle.Progress => new JsonLogger(this, progress: LogStyle.HasFlag(LogStyle.Progress)),
+            LogStyle.Text or LogStyle.Text | LogStyle.Progress => new TextLogger(this, progress: LogStyle.HasFlag(LogStyle.Progress)),
+            LogStyle.None or LogStyle.Progress => new NoLogger(this),
+            _ => throw new ArgumentException("Unexpected LogStyle value.", nameof(LogStyle)),
+        };
+    }
 
-        public void ResetLogger(Parameters parameters)
-        {
-            LogStyle = (parameters.Parser.ParsedOps.FirstOrDefault()?.OpCode ?? XfOpCode.None) == XfOpCode.SdkJsonLog
-                ? DefaultJsonLogStyle : DefaultTextLogStyle;
-            if (parameters.Parser.IsQuiet)
-            {
-                LogStyle = LogStyle.None;
-            }
-            ResetLogger();
-        }
+    public void AddWorkItem(long count)
+    {
+        AddWork(count);
+        ItemsTotal += 1;
+    }
 
-        private ILogger GetCurrentLogger()
-        {
-            return LogStyle switch
-            {
-                LogStyle.Json or LogStyle.Json | LogStyle.Progress => new JsonLogger(this, progress: LogStyle.HasFlag(LogStyle.Progress)),
-                LogStyle.Text or LogStyle.Text | LogStyle.Progress => new TextLogger(this, progress: LogStyle.HasFlag(LogStyle.Progress)),
-                LogStyle.None or LogStyle.Progress => new NoLogger(this),
-                _ => throw new ArgumentException("Unexpected LogStyle value.", nameof(LogStyle)),
-            };
-        }
+    public void AddWork(long count)
+    {
+        TotalWork += count;
+    }
 
-        public void AddWorkItem(long count)
-        {
-            AddWork(count);
-            ItemsTotal += 1;
-        }
+    public void DoWork(long count)
+    {
+        TotalDone += count;
+    }
 
-        public void AddWork(long count)
-        {
-            TotalWork += count;
-        }
-
-        public void DoWork(long count)
-        {
-            TotalDone += count;
-        }
-
-        public void DoItems(int items)
-        {
-            ItemsDone += items;
-        }
+    public void DoItems(int items)
+    {
+        ItemsDone += items;
     }
 }

@@ -27,10 +27,9 @@ using AxCrypt.Abstractions;
 
 using static AxCrypt.Abstractions.TypeResolve;
 
-namespace Xecrets.Cli.Implementation
+namespace Xecrets.Cli.Implementation;
+
+internal class TimeProviderNow : INow
 {
-    internal class TimeProviderNow : INow
-    {
-        public DateTime Utc => New<TimeProvider>().GetUtcNow().UtcDateTime;
-    }
+    public DateTime Utc => New<TimeProvider>().GetUtcNow().UtcDateTime;
 }

@@ -29,23 +29,22 @@ using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
 
-namespace Xecrets.Cli.Operation
+namespace Xecrets.Cli.Operation;
+
+internal class CliDebugBreakOperation : IExecutionPhases
 {
-    internal class CliDebugBreakOperation : IExecutionPhases
+    public Task<Status> DryAsync(Parameters parameters)
     {
-        public Task<Status> DryAsync(Parameters parameters)
+        return Task.FromResult(Status.Success);
+    }
+
+    public Task<Status> RealAsync(Parameters parameters)
+    {
+        if (Debugger.Launch())
         {
             return Task.FromResult(Status.Success);
         }
 
-        public Task<Status> RealAsync(Parameters parameters)
-        {
-            if (Debugger.Launch())
-            {
-                return Task.FromResult(Status.Success);
-            }
-
-            return Task.FromResult(new Status(XfStatusCode.DebugBreakFailed, "Failed to launch and attach to a debugger."));
-        }
+        return Task.FromResult(new Status(XfStatusCode.DebugBreakFailed, "Failed to launch and attach to a debugger."));
     }
 }

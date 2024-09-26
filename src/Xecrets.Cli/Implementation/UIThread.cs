@@ -27,32 +27,31 @@ using AxCrypt.Abstractions;
 
 using Xecrets.Cli.Public;
 
-namespace Xecrets.Cli.Implementation
+namespace Xecrets.Cli.Implementation;
+
+internal class UIThread : IUIThread
 {
-    internal class UIThread : IUIThread
+    public bool Blocked { get; set; } = false;
+
+    public bool IsOn { get; } = true;
+
+    public void ExitApplication()
     {
-        public bool Blocked { get; set; } = false;
+        Environment.Exit((int)XfStatusCode.Success);
+    }
 
-        public bool IsOn { get; } = true;
+    public void PostTo(System.Action action) => action();
 
-        public void ExitApplication()
-        {
-            Environment.Exit((int)XfStatusCode.Success);
-        }
+    public void RestartApplication()
+    {
+        Environment.Exit((int)XfStatusCode.Success);
+    }
 
-        public void PostTo(System.Action action) => action();
+    public void SendTo(System.Action action) => action();
 
-        public void RestartApplication()
-        {
-            Environment.Exit((int)XfStatusCode.Success);
-        }
+    public Task SendToAsync(Func<Task> action) => action();
 
-        public void SendTo(System.Action action) => action();
-
-        public Task SendToAsync(Func<Task> action) => action();
-
-        public void Yield()
-        {
-        }
+    public void Yield()
+    {
     }
 }

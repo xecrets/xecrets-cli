@@ -35,81 +35,80 @@ using Xecrets.Cli.Run;
 
 using static AxCrypt.Abstractions.TypeResolve;
 
-namespace Xecrets.Cli
+namespace Xecrets.Cli;
+
+internal static partial class Extensions
 {
-    internal static partial class Extensions
+    public static bool VerifyCanWrite(this IStandardIoDataStore store, Parameters parameters, out Status status)
     {
-        public static bool VerifyCanWrite(this IStandardIoDataStore store, Parameters parameters, out Status status)
+        if (!New<IFileVerify>().CanWriteToFile(store))
         {
-            if (!New<IFileVerify>().CanWriteToFile(store))
-            {
-                status = new Status(XfStatusCode.CannotWrite, "Can't write to '{0}'.".Format(store.Name));
-                return false;
-            }
-
-            if (store.IsNamedStdIo)
-            {
-                status = new Status(XfStatusCode.InvalidOption, "Writing to a named standard output stream is not supported.");
-                return false;
-            }
-
-            if (parameters.IsStdoutLog && store.IsStdIo)
-            {
-                status = new Status(XfStatusCode.NotSupported, "It's not supported to both redirect logs to standard output and a destination.");
-                return false;
-            }
-
-            status = Status.Success;
-            return true;
+            status = new Status(XfStatusCode.CannotWrite, "Can't write to '{0}'.".Format(store.Name));
+            return false;
         }
 
-        public static IStandardIoDataStore FindFree(this string fullPath, Parameters parameters)
+        if (store.IsNamedStdIo)
         {
-            IStandardIoDataStore store = Free(fullPath, parameters);
-            return store;
+            status = new Status(XfStatusCode.InvalidOption, "Writing to a named standard output stream is not supported.");
+            return false;
+        }
 
-            static IStandardIoDataStore Free(string fullPath, Parameters parameters)
+        if (parameters.IsStdoutLog && store.IsStdIo)
+        {
+            status = new Status(XfStatusCode.NotSupported, "It's not supported to both redirect logs to standard output and a destination.");
+            return false;
+        }
+
+        status = Status.Success;
+        return true;
+    }
+
+    public static IStandardIoDataStore FindFree(this string fullPath, Parameters parameters)
+    {
+        IStandardIoDataStore store = Free(fullPath, parameters);
+        return store;
+
+        static IStandardIoDataStore Free(string fullPath, Parameters parameters)
+        {
+            IStandardIoDataStore candidateStore = New<IStandardIoDataStore>(fullPath);
+            if (parameters.Overwrite || candidateStore.IsStdout)
             {
-                IStandardIoDataStore candidateStore = New<IStandardIoDataStore>(fullPath);
-                if (parameters.Overwrite || candidateStore.IsStdout)
-                {
-                    return candidateStore;
-                }
-
-                int i = 0;
-                while (candidateStore.IsAvailable)
-                {
-                    string path = Path.GetDirectoryName(fullPath) ?? string.Empty;
-                    string fileName = Path.GetFileName(fullPath);
-                    string extension = Path.GetExtension(fileName);
-                    string fileNameWithoutExtension = fileName.Substring(0, fileName.Length - extension.Length);
-                    string fileNameWithoutExtensionAndNumber = TrailingNumberInParenthesis().Replace(fileNameWithoutExtension, string.Empty);
-                    string candidateFreeFullPath = Path.Combine(path, $"{fileNameWithoutExtensionAndNumber} ({++i}){extension}");
-                    candidateStore = New<IStandardIoDataStore>(candidateFreeFullPath);
-                }
                 return candidateStore;
             }
-        }
 
-        [GeneratedRegex(@" \([\d]+\)$")]
-        private static partial Regex TrailingNumberInParenthesis();
-
-        public static string ToDisplayName(this IStandardIoDataStore store)
-        {
-            string displayName = Path.GetRelativePath(Environment.CurrentDirectory, store.FullName);
-            return displayName.StartsWith("..") ? store.FullName : displayName;
-        }
-
-        public static object ToObject(this JsonElement element)
-        {
-            return element.ValueKind switch
+            int i = 0;
+            while (candidateStore.IsAvailable)
             {
-                JsonValueKind.String => element.GetString() ?? throw new InvalidOperationException("String value can't be null here."),
-                JsonValueKind.Number => element.GetInt32(),
-                JsonValueKind.True => true,
-                JsonValueKind.False => false,
-                _ => throw new ArgumentException($"Deserializing {element.ValueKind} is not supported here."),
-            };
+                string path = Path.GetDirectoryName(fullPath) ?? string.Empty;
+                string fileName = Path.GetFileName(fullPath);
+                string extension = Path.GetExtension(fileName);
+                string fileNameWithoutExtension = fileName.Substring(0, fileName.Length - extension.Length);
+                string fileNameWithoutExtensionAndNumber = TrailingNumberInParenthesis().Replace(fileNameWithoutExtension, string.Empty);
+                string candidateFreeFullPath = Path.Combine(path, $"{fileNameWithoutExtensionAndNumber} ({++i}){extension}");
+                candidateStore = New<IStandardIoDataStore>(candidateFreeFullPath);
+            }
+            return candidateStore;
         }
+    }
+
+    [GeneratedRegex(@" \([\d]+\)$")]
+    private static partial Regex TrailingNumberInParenthesis();
+
+    public static string ToDisplayName(this IStandardIoDataStore store)
+    {
+        string displayName = Path.GetRelativePath(Environment.CurrentDirectory, store.FullName);
+        return displayName.StartsWith("..") ? store.FullName : displayName;
+    }
+
+    public static object ToObject(this JsonElement element)
+    {
+        return element.ValueKind switch
+        {
+            JsonValueKind.String => element.GetString() ?? throw new InvalidOperationException("String value can't be null here."),
+            JsonValueKind.Number => element.GetInt32(),
+            JsonValueKind.True => true,
+            JsonValueKind.False => false,
+            _ => throw new ArgumentException($"Deserializing {element.ValueKind} is not supported here."),
+        };
     }
 }

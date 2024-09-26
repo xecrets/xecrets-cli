@@ -29,57 +29,56 @@ using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
 
-namespace Xecrets.Cli.Operation
+namespace Xecrets.Cli.Operation;
+
+internal class OptionsCodeExportOperation : IExecutionPhases
 {
-    internal class OptionsCodeExportOperation : IExecutionPhases
+    public Task<Status> DryAsync(Parameters parameters)
     {
-        public Task<Status> DryAsync(Parameters parameters)
+        return Task.FromResult(Status.Success);
+    }
+
+    public Task<Status> RealAsync(Parameters parameters)
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.AppendLine("namespace Xecrets.Cli.Public");
+        sb.AppendLine("{");
+
+        sb.AppendLine($"    public enum {nameof(XfOpCode)}");
+        sb.AppendLine("    {");
+        foreach (XfOpCode opCode in Enum.GetValues(typeof(XfOpCode)))
         {
-            return Task.FromResult(Status.Success);
+            sb.Append("        ").Append(Enum.GetName(opCode)).Append(" = ").Append((int)opCode).AppendLine(",");
         }
+        sb.AppendLine("    }");
+        sb.AppendLine();
 
-        public Task<Status> RealAsync(Parameters parameters)
+        sb.AppendLine($"    public enum {nameof(XfStatusCode)}");
+        sb.AppendLine("    {");
+        foreach (XfStatusCode statusCode in Enum.GetValues(typeof(XfStatusCode)))
         {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine("namespace Xecrets.Cli.Public");
-            sb.AppendLine("{");
-
-            sb.AppendLine($"    public enum {nameof(XfOpCode)}");
-            sb.AppendLine("    {");
-            foreach (XfOpCode opCode in Enum.GetValues(typeof(XfOpCode)))
-            {
-                sb.Append("        ").Append(Enum.GetName(opCode)).Append(" = ").Append((int)opCode).AppendLine(",");
-            }
-            sb.AppendLine("    }");
-            sb.AppendLine();
-
-            sb.AppendLine($"    public enum {nameof(XfStatusCode)}");
-            sb.AppendLine("    {");
-            foreach (XfStatusCode statusCode in Enum.GetValues(typeof(XfStatusCode)))
-            {
-                sb.Append("        ").Append(Enum.GetName(statusCode)).Append(" = ").Append((int)statusCode).AppendLine(",");
-            }
-            sb.AppendLine("    }");
-            sb.AppendLine();
-
-            sb.AppendLine("    public class XfCliApi");
-            sb.AppendLine("    {");
-            string version = $"{parameters.Parser.ExportableCliVersion.Major},{parameters.Parser.ExportableCliVersion.Minor}";
-            sb.Append("        public Version XfCliVersion { get; } = new Version(").Append(version).AppendLine(");");
-            sb.AppendLine();
-            sb.AppendLine("        public List<(int, string, string)> XfCliOptions { get; } =");
-            sb.AppendLine("        [");
-            foreach (XfOptionDefinition def in parameters.Parser.ExportableCliDefinitions)
-            {
-                sb.AppendLine($"            ({def.OpCode}, \"{def.Prototype}\", \"{def.Description}\"),");
-            }
-            sb.AppendLine("        ];");
-            sb.AppendLine("    }");
-            sb.AppendLine("}");
-
-            parameters.Logger.Log(new Status(parameters, sb.ToString()));
-
-            return Task.FromResult(Status.Success);
+            sb.Append("        ").Append(Enum.GetName(statusCode)).Append(" = ").Append((int)statusCode).AppendLine(",");
         }
+        sb.AppendLine("    }");
+        sb.AppendLine();
+
+        sb.AppendLine("    public class XfCliApi");
+        sb.AppendLine("    {");
+        string version = $"{parameters.Parser.ExportableCliVersion.Major},{parameters.Parser.ExportableCliVersion.Minor}";
+        sb.Append("        public Version XfCliVersion { get; } = new Version(").Append(version).AppendLine(");");
+        sb.AppendLine();
+        sb.AppendLine("        public List<(int, string, string)> XfCliOptions { get; } =");
+        sb.AppendLine("        [");
+        foreach (XfOptionDefinition def in parameters.Parser.ExportableCliDefinitions)
+        {
+            sb.AppendLine($"            ({def.OpCode}, \"{def.Prototype}\", \"{def.Description}\"),");
+        }
+        sb.AppendLine("        ];");
+        sb.AppendLine("    }");
+        sb.AppendLine("}");
+
+        parameters.Logger.Log(new Status(parameters, sb.ToString()));
+
+        return Task.FromResult(Status.Success);
     }
 }

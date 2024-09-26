@@ -23,14 +23,13 @@
 
 #endregion Copyright and GPL License
 
-namespace Xecrets.Cli.Public
+namespace Xecrets.Cli.Public;
+
+internal class XfOptionDefinition(int opCode, string prototype, string description)
 {
-    internal class XfOptionDefinition(int opCode, string prototype, string description)
-    {
-        public int OpCode { get; } = opCode;
+    public int OpCode { get; } = opCode;
 
-        public string Prototype { get; } = prototype.TrimEnd('=', ':', '{', '}');
+    public string Prototype { get; } = prototype.TrimEnd('=', ':', '{', '}');
 
-        public string Description { get; } = description;
-    }
+    public string Description { get; } = description;
 }

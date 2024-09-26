@@ -36,83 +36,82 @@ using Xecrets.Cli.Run;
 
 using static AxCrypt.Abstractions.TypeResolve;
 
-namespace Xecrets.Cli.Operation
+namespace Xecrets.Cli.Operation;
+
+/// <summary>
+/// Arguments[0] => The public key, i.e. 'public.pem'
+/// Arguments[1] => The signed token, i.e. 'license.txt'.
+/// </summary>
+/// <param name="parameters"></param>
+/// <returns></returns>
+internal class JwtVerifyOperation : IExecutionPhases
 {
-    /// <summary>
-    /// Arguments[0] => The public key, i.e. 'public.pem'
-    /// Arguments[1] => The signed token, i.e. 'license.txt'.
-    /// </summary>
-    /// <param name="parameters"></param>
-    /// <returns></returns>
-    internal class JwtVerifyOperation : IExecutionPhases
+    public Task<Status> DryAsync(Parameters parameters)
     {
-        public Task<Status> DryAsync(Parameters parameters)
+        var publicPemStore = New<IStandardIoDataStore>(parameters.Arguments[0]);
+        if (!New<IFileVerify>().CanReadFromFile(publicPemStore))
         {
-            var publicPemStore = New<IStandardIoDataStore>(parameters.Arguments[0]);
-            if (!New<IFileVerify>().CanReadFromFile(publicPemStore))
-            {
-                return Task.FromResult(new Status(XfStatusCode.CannotRead, "Can't read from file '{0}'.".Format(publicPemStore.Name)));
-            }
-
-            var signedTokenStore = New<IStandardIoDataStore>(parameters.Arguments[1]);
-            if (!New<IFileVerify>().CanReadFromFile(signedTokenStore))
-            {
-                return Task.FromResult(new Status(XfStatusCode.CannotRead, "Can't read from file '{0}'.".Format(signedTokenStore.Name)));
-            }
-
-            return Task.FromResult(Status.Success);
+            return Task.FromResult(new Status(XfStatusCode.CannotRead, "Can't read from file '{0}'.".Format(publicPemStore.Name)));
         }
 
-        public async Task<Status> RealAsync(Parameters parameters)
+        var signedTokenStore = New<IStandardIoDataStore>(parameters.Arguments[1]);
+        if (!New<IFileVerify>().CanReadFromFile(signedTokenStore))
         {
-            if (parameters.JwtIssuer.Length == 0)
-            {
-                return new Status(XfStatusCode.MissingArgument, "The issuer of the signed token is required.");
-            }
-
-            if (parameters.JwtAudience.Length == 0)
-            {
-                return new Status(XfStatusCode.MissingArgument, "The audience of the signed token is required.");
-            }
-
-            var publicPemStore = New<IStandardIoDataStore>(parameters.Arguments[0]);
-            string publicPem;
-            using (StreamReader reader = new StreamReader(publicPemStore.OpenRead()))
-            {
-                publicPem = reader.ReadToEnd();
-            }
-
-            var signedTokenStore = New<IStandardIoDataStore>(parameters.Arguments[1]);
-            string signedToken;
-            using (StreamReader reader = new StreamReader(signedTokenStore.OpenRead()))
-            {
-                signedToken = reader.ReadToEnd();
-            }
-
-            var handler = new JsonWebTokenHandler();
-
-            var key = ECDsa.Create();
-            key.ImportFromPem(publicPem);
-
-            TokenValidationResult result = await handler.ValidateTokenAsync(signedToken, new TokenValidationParameters
-            {
-                ValidIssuer = parameters.JwtIssuer,
-                ValidAudience = parameters.JwtAudience,
-                IssuerSigningKey = new ECDsaSecurityKey(key)
-            });
-
-            if (!result.IsValid)
-            {
-                return new Status(XfStatusCode.InvalidToken, "Invalid Jwt Token");
-            }
-
-            DateTime notBefore = DateTime.UnixEpoch.AddSeconds((int)result.Claims["nbf"]);
-            DateTime expires = DateTime.UnixEpoch.AddSeconds((int)result.Claims["exp"]);
-            DateTime issuedAt = DateTime.UnixEpoch.AddSeconds((int)result.Claims["iat"]);
-            parameters.Logger.Log(new Status(parameters, "Validated token from '{0}' for '{1}' issued at '{2}' valid from '{3}' until '{4}'."
-                .Format(result.Issuer, result.Claims["aud"], issuedAt.ToString("u"), notBefore.ToString("u"), expires.ToString("u"))));
-
-            return Status.Success;
+            return Task.FromResult(new Status(XfStatusCode.CannotRead, "Can't read from file '{0}'.".Format(signedTokenStore.Name)));
         }
+
+        return Task.FromResult(Status.Success);
+    }
+
+    public async Task<Status> RealAsync(Parameters parameters)
+    {
+        if (parameters.JwtIssuer.Length == 0)
+        {
+            return new Status(XfStatusCode.MissingArgument, "The issuer of the signed token is required.");
+        }
+
+        if (parameters.JwtAudience.Length == 0)
+        {
+            return new Status(XfStatusCode.MissingArgument, "The audience of the signed token is required.");
+        }
+
+        var publicPemStore = New<IStandardIoDataStore>(parameters.Arguments[0]);
+        string publicPem;
+        using (StreamReader reader = new StreamReader(publicPemStore.OpenRead()))
+        {
+            publicPem = reader.ReadToEnd();
+        }
+
+        var signedTokenStore = New<IStandardIoDataStore>(parameters.Arguments[1]);
+        string signedToken;
+        using (StreamReader reader = new StreamReader(signedTokenStore.OpenRead()))
+        {
+            signedToken = reader.ReadToEnd();
+        }
+
+        var handler = new JsonWebTokenHandler();
+
+        var key = ECDsa.Create();
+        key.ImportFromPem(publicPem);
+
+        TokenValidationResult result = await handler.ValidateTokenAsync(signedToken, new TokenValidationParameters
+        {
+            ValidIssuer = parameters.JwtIssuer,
+            ValidAudience = parameters.JwtAudience,
+            IssuerSigningKey = new ECDsaSecurityKey(key)
+        });
+
+        if (!result.IsValid)
+        {
+            return new Status(XfStatusCode.InvalidToken, "Invalid Jwt Token");
+        }
+
+        DateTime notBefore = DateTime.UnixEpoch.AddSeconds((int)result.Claims["nbf"]);
+        DateTime expires = DateTime.UnixEpoch.AddSeconds((int)result.Claims["exp"]);
+        DateTime issuedAt = DateTime.UnixEpoch.AddSeconds((int)result.Claims["iat"]);
+        parameters.Logger.Log(new Status(parameters, "Validated token from '{0}' for '{1}' issued at '{2}' valid from '{3}' until '{4}'."
+            .Format(result.Issuer, result.Claims["aud"], issuedAt.ToString("u"), notBefore.ToString("u"), expires.ToString("u"))));
+
+        return Status.Success;
     }
 }

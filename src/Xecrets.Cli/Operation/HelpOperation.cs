@@ -29,62 +29,61 @@ using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Properties;
 using Xecrets.Cli.Run;
 
-namespace Xecrets.Cli.Operation
+namespace Xecrets.Cli.Operation;
+
+internal class HelpOperation : IExecutionPhases
 {
-    internal class HelpOperation : IExecutionPhases
+    public Task<Status> DryAsync(Parameters parameters)
     {
-        public Task<Status> DryAsync(Parameters parameters)
+        return Task.FromResult(Status.Success);
+    }
+
+    public Task<Status> RealAsync(Parameters parameters)
+    {
+        parameters.HelpLevel++;
+
+        string m = string.Empty;
+
+        switch (parameters.HelpLevel)
         {
-            return Task.FromResult(Status.Success);
-        }
+            case 1:
+                var descriptions = new List<Tuple<string, string>>();
 
-        public Task<Status> RealAsync(Parameters parameters)
-        {
-            parameters.HelpLevel++;
-
-            string m = string.Empty;
-
-            switch (parameters.HelpLevel)
-            {
-                case 1:
-                    var descriptions = new List<Tuple<string, string>>();
-
-                    int maxOptionNameLength = 0;
-                    foreach (string[] description in parameters.Parser.Descriptions)
+                int maxOptionNameLength = 0;
+                foreach (string[] description in parameters.Parser.Descriptions)
+                {
+                    maxOptionNameLength = Math.Max(maxOptionNameLength, description[0].Length);
+                    descriptions.Add(new Tuple<string, string>(description[0], description[1]));
+                    for (int i = 2; i < description.Length; ++i)
                     {
-                        maxOptionNameLength = Math.Max(maxOptionNameLength, description[0].Length);
-                        descriptions.Add(new Tuple<string, string>(description[0], description[1]));
-                        for (int i = 2; i < description.Length; ++i)
-                        {
-                            descriptions.Add(new Tuple<string, string>(string.Empty, description[i]));
-                        }
+                        descriptions.Add(new Tuple<string, string>(string.Empty, description[i]));
                     }
+                }
 
-                    descriptions.ForEach(t => m += t.Item1.PadRight(maxOptionNameLength + 1) + t.Item2 + Environment.NewLine);
+                descriptions.ForEach(t => m += t.Item1.PadRight(maxOptionNameLength + 1) + t.Item2 + Environment.NewLine);
 
-                    m += Environment.NewLine;
-                    m += "Use additional --help options for more help, or visit https://www.axantum.com/ .";
-                    break;
+                m += Environment.NewLine;
+                m += "Use additional --help options for more help, or visit https://www.axantum.com/ .";
+                break;
 
-                case 2:
-                    m += Environment.NewLine;
-                    m += Resource.help_details;
-                    break;
+            case 2:
+                m += Environment.NewLine;
+                m += Resource.help_details;
+                break;
 
-                case 3:
-                    m += Environment.NewLine;
-                    m += Encoding.UTF8.GetString(Resource.index);
-                    break;
+            case 3:
+                m += Environment.NewLine;
+                m += Encoding.UTF8.GetString(Resource.index);
+                break;
 
-                default:
-                    m += "Sorry, there is no more help to get here! See https://www.axantum.com/ .";
-                    break;
-            }
-
-            parameters.Logger.Log(new Status(parameters, m));
-            parameters.Logger.Log(string.Empty);
-
-            return Task.FromResult(Status.Success);
+            default:
+                m += "Sorry, there is no more help to get here! See https://www.axantum.com/ .";
+                break;
         }
+
+        parameters.Logger.Log(new Status(parameters, m));
+        parameters.Logger.Log(string.Empty);
+
+        return Task.FromResult(Status.Success);
     }
 }

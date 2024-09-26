@@ -23,14 +23,13 @@
 
 #endregion Copyright and GPL License
 
-namespace Xecrets.Cli.Run
+namespace Xecrets.Cli.Run;
+
+internal class RealRunFactory : RunFactory
 {
-    internal class RealRunFactory : RunFactory
+    public RealRunFactory(Parameters parameters)
+        : base(parameters)
     {
-        public RealRunFactory(Parameters parameters)
-            : base(parameters)
-        {
-            parameters.StartReal();
-        }
+        parameters.StartReal();
     }
 }

@@ -31,49 +31,48 @@ using Xecrets.Cli.Run;
 
 using static AxCrypt.Abstractions.TypeResolve;
 
-namespace Xecrets.Cli.Operation
+namespace Xecrets.Cli.Operation;
+
+internal class DecryptToFolderOperation : DecryptOperationBase
 {
-    internal class DecryptToFolderOperation : DecryptOperationBase
+    protected override (Status, IStandardIoDataStore) ToStore(Parameters parameters, string originalFileName)
     {
-        protected override (Status, IStandardIoDataStore) ToStore(Parameters parameters, string originalFileName)
+        Status status;
+        string toFolder = ToFolder(parameters.Arg1, parameters.Arg2);
+        if (toFolder.Length == 0)
         {
-            Status status;
-            string toFolder = ToFolder(parameters.Arg1, parameters.Arg2);
-            if (toFolder.Length == 0)
-            {
-                status = new Status(XfStatusCode.NotAFolder, parameters, "Cannot determine a destination folder from '{0}' and '{1}'.".Format(parameters.Arg1, parameters.Arg2));
-                return (status, null!);
-            }
-
-            IStandardIoDataStore toFolderStore = New<IStandardIoDataStore>(toFolder);
-            if (toFolderStore.IsStdIo)
-            {
-                status = new Status(XfStatusCode.NotSupported, parameters, "Decryption to a stream {0} is not supported when decrypting to a folder.".Format(toFolderStore.Name));
-                return (status, null!);
-            }
-
-            string toPath = Path.Combine(toFolder, originalFileName);
-            IStandardIoDataStore toFreeStore = toPath.FindFree(parameters);
-            if (!toFreeStore.VerifyCanWrite(parameters, out status))
-            {
-                return (status, null!);
-            }
-
-            return (Status.Success, toFreeStore);
+            status = new Status(XfStatusCode.NotAFolder, parameters, "Cannot determine a destination folder from '{0}' and '{1}'.".Format(parameters.Arg1, parameters.Arg2));
+            return (status, null!);
         }
 
-        private static string ToFolder(string from, string toFolder)
+        IStandardIoDataStore toFolderStore = New<IStandardIoDataStore>(toFolder);
+        if (toFolderStore.IsStdIo)
         {
-            if (toFolder.Length == 0)
-            {
-                toFolder = Path.GetDirectoryName(from) ?? string.Empty;
-            }
-            if (toFolder.Length == 0)
-            {
-                return ".";
-            }
-
-            return toFolder;
+            status = new Status(XfStatusCode.NotSupported, parameters, "Decryption to a stream {0} is not supported when decrypting to a folder.".Format(toFolderStore.Name));
+            return (status, null!);
         }
+
+        string toPath = Path.Combine(toFolder, originalFileName);
+        IStandardIoDataStore toFreeStore = toPath.FindFree(parameters);
+        if (!toFreeStore.VerifyCanWrite(parameters, out status))
+        {
+            return (status, null!);
+        }
+
+        return (Status.Success, toFreeStore);
+    }
+
+    private static string ToFolder(string from, string toFolder)
+    {
+        if (toFolder.Length == 0)
+        {
+            toFolder = Path.GetDirectoryName(from) ?? string.Empty;
+        }
+        if (toFolder.Length == 0)
+        {
+            return ".";
+        }
+
+        return toFolder;
     }
 }

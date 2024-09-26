@@ -23,20 +23,19 @@
 
 #endregion Copyright and GPL License
 
-namespace Xecrets.Cli.Public
+namespace Xecrets.Cli.Public;
+
+/// <summary>
+/// The version must be updated when the command line options are updated in
+/// an incompatible way. Increase the minor version, if changes do not
+/// change the meaning or syntax of any pre-existing options, i.e. purely
+/// new additional capabilities. Increase the major version, if changes in
+/// any way changes an existing option so it may not work as expected by an
+/// older consumer. The consumer should thus only accept an export version
+/// that has the same Major version, and a minor version greather than or equal
+/// to it's known version.
+/// </summary>
+public static class XfExportVersion
 {
-    /// <summary>
-    /// The version must be updated when the command line options are updated in
-    /// an incompatible way. Increase the minor version, if changes do not
-    /// change the meaning or syntax of any pre-existing options, i.e. purely
-    /// new additional capabilities. Increase the major version, if changes in
-    /// any way changes an existing option so it may not work as expected by an
-    /// older consumer. The consumer should thus only accept an export version
-    /// that has the same Major version, and a minor version greather than or equal
-    /// to it's known version.
-    /// </summary>
-    public static class XfExportVersion
-    {
-        public static Version CliVersion => new(2, 0);
-    }
+    public static Version CliVersion => new(2, 0);
 }

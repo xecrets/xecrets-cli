@@ -36,71 +36,70 @@ using Xecrets.Cli.Run;
 
 using static AxCrypt.Abstractions.TypeResolve;
 
-namespace Xecrets.Cli.Operation
+namespace Xecrets.Cli.Operation;
+
+internal class JwtSignOperation : IExecutionPhases
 {
-    internal class JwtSignOperation : IExecutionPhases
+    /// <summary>
+    /// Arguments[0] => Where to write the signed token, i.e. 'license.txt'.
+    /// </summary>
+    /// <param name="parameters"></param>
+    /// <returns></returns>
+    public Task<Status> DryAsync(Parameters parameters)
     {
-        /// <summary>
-        /// Arguments[0] => Where to write the signed token, i.e. 'license.txt'.
-        /// </summary>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
-        public Task<Status> DryAsync(Parameters parameters)
+        var signedTokenStore = New<IStandardIoDataStore>(parameters.Arg1);
+        if (!New<IFileVerify>().CanWriteToFile(signedTokenStore))
         {
-            var signedTokenStore = New<IStandardIoDataStore>(parameters.Arg1);
-            if (!New<IFileVerify>().CanWriteToFile(signedTokenStore))
-            {
-                return Task.FromResult(new Status(XfStatusCode.CannotWrite, parameters, "Can't write to '{0}'.".Format(signedTokenStore.Name)));
-            }
-
-            return Task.FromResult(Status.Success);
+            return Task.FromResult(new Status(XfStatusCode.CannotWrite, parameters, "Can't write to '{0}'.".Format(signedTokenStore.Name)));
         }
 
-        public Task<Status> RealAsync(Parameters parameters)
+        return Task.FromResult(Status.Success);
+    }
+
+    public Task<Status> RealAsync(Parameters parameters)
+    {
+        if (parameters.JwtIssuer.Length == 0)
         {
-            if (parameters.JwtIssuer.Length == 0)
-            {
-                return Task.FromResult(new Status(XfStatusCode.MissingArgument, "You must specify the issuer of the signed token before the signing operation."));
-            }
-
-            if (parameters.JwtAudience.Length == 0)
-            {
-                return Task.FromResult(new Status(XfStatusCode.MissingArgument, "You must specify the audience of the signed token before the signing operation."));
-            }
-
-            if (parameters.JwtDaysUntilExpiration < 0)
-            {
-                return Task.FromResult(new Status(XfStatusCode.MissingArgument, "You must specify the claims of the signed token before the signing operation."));
-            }
-
-            if (!parameters.JwtClaims.Any())
-            {
-                return Task.FromResult(new Status(XfStatusCode.MissingArgument, "You must specify the claims of the signed token before the signing operation."));
-            }
-
-            var now = New<INow>().Utc;
-            var handler = new JsonWebTokenHandler();
-
-            var key = ECDsa.Create();
-            key.ImportFromPem(parameters.JwtPrivateKeyPem.Replace("\\n", Environment.NewLine));
-            string token = handler.CreateToken(new SecurityTokenDescriptor
-            {
-                Issuer = parameters.JwtIssuer,
-                Audience = parameters.JwtAudience,
-                NotBefore = now,
-                Expires = now.AddDays(parameters.JwtDaysUntilExpiration),
-                IssuedAt = now,
-                Claims = parameters.JwtClaims,
-                SigningCredentials = new SigningCredentials(new ECDsaSecurityKey(key), SecurityAlgorithms.EcdsaSha256)
-            });
-
-            var signedTokenStore = New<IStandardIoDataStore>(parameters.Arg1);
-            using (TextWriter writer = new StreamWriter(signedTokenStore.OpenWrite()))
-            {
-                writer.Write(token);
-            }
-
-            return Task.FromResult(Status.Success);
+            return Task.FromResult(new Status(XfStatusCode.MissingArgument, "You must specify the issuer of the signed token before the signing operation."));
         }
+
+        if (parameters.JwtAudience.Length == 0)
+        {
+            return Task.FromResult(new Status(XfStatusCode.MissingArgument, "You must specify the audience of the signed token before the signing operation."));
+        }
+
+        if (parameters.JwtDaysUntilExpiration < 0)
+        {
+            return Task.FromResult(new Status(XfStatusCode.MissingArgument, "You must specify the claims of the signed token before the signing operation."));
+        }
+
+        if (!parameters.JwtClaims.Any())
+        {
+            return Task.FromResult(new Status(XfStatusCode.MissingArgument, "You must specify the claims of the signed token before the signing operation."));
+        }
+
+        var now = New<INow>().Utc;
+        var handler = new JsonWebTokenHandler();
+
+        var key = ECDsa.Create();
+        key.ImportFromPem(parameters.JwtPrivateKeyPem.Replace("\\n", Environment.NewLine));
+        string token = handler.CreateToken(new SecurityTokenDescriptor
+        {
+            Issuer = parameters.JwtIssuer,
+            Audience = parameters.JwtAudience,
+            NotBefore = now,
+            Expires = now.AddDays(parameters.JwtDaysUntilExpiration),
+            IssuedAt = now,
+            Claims = parameters.JwtClaims,
+            SigningCredentials = new SigningCredentials(new ECDsaSecurityKey(key), SecurityAlgorithms.EcdsaSha256)
+        });
+
+        var signedTokenStore = New<IStandardIoDataStore>(parameters.Arg1);
+        using (TextWriter writer = new StreamWriter(signedTokenStore.OpenWrite()))
+        {
+            writer.Write(token);
+        }
+
+        return Task.FromResult(Status.Success);
     }
 }

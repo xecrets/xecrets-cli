@@ -37,51 +37,50 @@ using Xecrets.Cli.Run;
 
 using static AxCrypt.Abstractions.TypeResolve;
 
-namespace Xecrets.Cli.Operation
+namespace Xecrets.Cli.Operation;
+
+internal class CreateKeyPairOperation : IExecutionPhases
 {
-    internal class CreateKeyPairOperation : IExecutionPhases
+    public Task<Status> DryAsync(Parameters parameters)
     {
-        public Task<Status> DryAsync(Parameters parameters)
+        if (!parameters.Identities.Any())
         {
-            if (!parameters.Identities.Any())
-            {
-                return Task.FromResult(new Status(XfStatusCode.NoPassword, parameters, "A password must be provided to create a key pair."));
-            }
-
-            if (!EmailAddress.TryParse(parameters.Arg1, out EmailAddress _))
-            {
-                return Task.FromResult(new Status(XfStatusCode.InvalidEmail, parameters, "'{0}' is not a valid email address.".Format(parameters.Arg1)));
-            }
-
-            var toStore = New<IStandardIoDataStore>(parameters.Arg2);
-            if (!New<IFileVerify>().CanWriteToFile(toStore))
-            {
-                return Task.FromResult(new Status(XfStatusCode.CannotWrite, parameters, "The file path '{0}' cannot be written to.".Format(toStore.Name)));
-            }
-
-            return Task.FromResult(Status.Success);
+            return Task.FromResult(new Status(XfStatusCode.NoPassword, parameters, "A password must be provided to create a key pair."));
         }
 
-        public Task<Status> RealAsync(Parameters parameters)
+        if (!EmailAddress.TryParse(parameters.Arg1, out EmailAddress _))
         {
-            parameters.Logger.Log(XfOpCode.Progressing, new Status(parameters, "Generating a key pair may take some time, please be patient."));
-
-            EmailAddress email = EmailAddress.Parse(parameters.CurrentOp.Arg1);
-            IAsymmetricKeyPair keyPair = Resolve.AsymmetricFactory.CreateKeyPair(4096);
-            UserKeyPair userKeyPair = new UserKeyPair(email, New<INow>().Utc, keyPair);
-            byte[] encryptedBytes = userKeyPair.ToArray(parameters.Identities.First().Passphrase);
-            IDataStore destination = New<IStandardIoDataStore>(parameters.CurrentOp.Arg2);
-            using (Stream stream = destination.OpenWrite())
-            {
-                stream.Write(encryptedBytes, 0, encryptedBytes.Length);
-            }
-
-            LogOnIdentity identity = parameters.Identities[0];
-            parameters.Identities[0] = new LogOnIdentity(identity.KeyPairs.Concat([userKeyPair]), identity.Passphrase);
-
-            parameters.Logger.Log(new Status(parameters, $"Created a key pair for '{parameters.CurrentOp.Arg1}' in '{parameters.CurrentOp.Arg2}'."));
-
-            return Task.FromResult(Status.Success);
+            return Task.FromResult(new Status(XfStatusCode.InvalidEmail, parameters, "'{0}' is not a valid email address.".Format(parameters.Arg1)));
         }
+
+        var toStore = New<IStandardIoDataStore>(parameters.Arg2);
+        if (!New<IFileVerify>().CanWriteToFile(toStore))
+        {
+            return Task.FromResult(new Status(XfStatusCode.CannotWrite, parameters, "The file path '{0}' cannot be written to.".Format(toStore.Name)));
+        }
+
+        return Task.FromResult(Status.Success);
+    }
+
+    public Task<Status> RealAsync(Parameters parameters)
+    {
+        parameters.Logger.Log(XfOpCode.Progressing, new Status(parameters, "Generating a key pair may take some time, please be patient."));
+
+        EmailAddress email = EmailAddress.Parse(parameters.CurrentOp.Arg1);
+        IAsymmetricKeyPair keyPair = Resolve.AsymmetricFactory.CreateKeyPair(4096);
+        UserKeyPair userKeyPair = new UserKeyPair(email, New<INow>().Utc, keyPair);
+        byte[] encryptedBytes = userKeyPair.ToArray(parameters.Identities.First().Passphrase);
+        IDataStore destination = New<IStandardIoDataStore>(parameters.CurrentOp.Arg2);
+        using (Stream stream = destination.OpenWrite())
+        {
+            stream.Write(encryptedBytes, 0, encryptedBytes.Length);
+        }
+
+        LogOnIdentity identity = parameters.Identities[0];
+        parameters.Identities[0] = new LogOnIdentity(identity.KeyPairs.Concat([userKeyPair]), identity.Passphrase);
+
+        parameters.Logger.Log(new Status(parameters, $"Created a key pair for '{parameters.CurrentOp.Arg1}' in '{parameters.CurrentOp.Arg2}'."));
+
+        return Task.FromResult(Status.Success);
     }
 }

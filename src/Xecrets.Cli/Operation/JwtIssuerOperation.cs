@@ -31,25 +31,24 @@ using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
 
-namespace Xecrets.Cli.Operation
+namespace Xecrets.Cli.Operation;
+
+internal class JwtIssuerOperation : IExecutionPhases
 {
-    internal class JwtIssuerOperation : IExecutionPhases
+    public Task<Status> DryAsync(Parameters parameters)
     {
-        public Task<Status> DryAsync(Parameters parameters)
+        if (!EmailAddress.TryParse(parameters.Arg1, out EmailAddress _))
         {
-            if (!EmailAddress.TryParse(parameters.Arg1, out EmailAddress _))
-            {
-                return Task.FromResult(new Status(XfStatusCode.InvalidEmail, "'{0}' is not a valid email.".Format(parameters.Arg1)));
-            }
-
-            return Task.FromResult(Status.Success);
+            return Task.FromResult(new Status(XfStatusCode.InvalidEmail, "'{0}' is not a valid email.".Format(parameters.Arg1)));
         }
 
-        public Task<Status> RealAsync(Parameters parameters)
-        {
-            parameters.JwtIssuer = parameters.Arg1;
+        return Task.FromResult(Status.Success);
+    }
 
-            return Task.FromResult(Status.Success);
-        }
+    public Task<Status> RealAsync(Parameters parameters)
+    {
+        parameters.JwtIssuer = parameters.Arg1;
+
+        return Task.FromResult(Status.Success);
     }
 }

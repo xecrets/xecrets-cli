@@ -29,47 +29,46 @@ using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
 
-namespace Xecrets.Cli.Operation
+namespace Xecrets.Cli.Operation;
+
+internal class JwtClaimsOperation : IExecutionPhases
 {
-    internal class JwtClaimsOperation : IExecutionPhases
+    public Task<Status> DryAsync(Parameters parameters)
     {
-        public Task<Status> DryAsync(Parameters parameters)
+        return Task.FromResult(Status.Success);
+    }
+
+    /// <summary>
+    /// Arguments[0] => days until expiration, i.e. '365'
+    /// Arguments[1] => claims JSON, i.e. "{\"xflic.axantum.com\":\"cli\"}" or "{\"xflic.axantum.com\":\"skd\"}" or "{\"xflic.axantum.com\":\"ez\"}"
+    /// </summary>
+    /// <param name="parameters"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException"></exception>
+    public Task<Status> RealAsync(Parameters parameters)
+    {
+        string daysText = parameters.Arguments[0];
+        string claimsJson = parameters.Arguments[1];
+
+        if (!int.TryParse(daysText, out int days))
         {
-            return Task.FromResult(Status.Success);
+            return Task.FromResult(new Status(XfStatusCode.InvalidDays, $"Can't interpret '{daysText}' as an integer number of days claims are valid."));
+        }
+        parameters.JwtDaysUntilExpiration = days;
+
+        try
+        {
+            Dictionary<string, object> claims = JsonSerializer.Deserialize<Dictionary<string, object>>(claimsJson, SourceGenerationContext.Default.DictionaryStringObject) ?? throw new InvalidOperationException($"Can't deserialize '{claimsJson}' as a claims dictionary.");
+            foreach (KeyValuePair<string, object> kvp in claims)
+            {
+                parameters.JwtClaims.Add(kvp.Key, ((JsonElement)kvp.Value).ToObject() ?? throw new InvalidOperationException("Deserialized value ToString() can't be null here."));
+            }
+        }
+        catch (Exception ex)
+        {
+            return Task.FromResult(new Status(XfStatusCode.JwtDeserializeError, ex.Message + Environment.NewLine + ex.StackTrace));
         }
 
-        /// <summary>
-        /// Arguments[0] => days until expiration, i.e. '365'
-        /// Arguments[1] => claims JSON, i.e. "{\"xflic.axantum.com\":\"cli\"}" or "{\"xflic.axantum.com\":\"skd\"}" or "{\"xflic.axantum.com\":\"ez\"}"
-        /// </summary>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
-        /// <exception cref="InvalidOperationException"></exception>
-        public Task<Status> RealAsync(Parameters parameters)
-        {
-            string daysText = parameters.Arguments[0];
-            string claimsJson = parameters.Arguments[1];
-
-            if (!int.TryParse(daysText, out int days))
-            {
-                return Task.FromResult(new Status(XfStatusCode.InvalidDays, $"Can't interpret '{daysText}' as an integer number of days claims are valid."));
-            }
-            parameters.JwtDaysUntilExpiration = days;
-
-            try
-            {
-                Dictionary<string, object> claims = JsonSerializer.Deserialize<Dictionary<string, object>>(claimsJson, SourceGenerationContext.Default.DictionaryStringObject) ?? throw new InvalidOperationException($"Can't deserialize '{claimsJson}' as a claims dictionary.");
-                foreach (KeyValuePair<string, object> kvp in claims)
-                {
-                    parameters.JwtClaims.Add(kvp.Key, ((JsonElement)kvp.Value).ToObject() ?? throw new InvalidOperationException("Deserialized value ToString() can't be null here."));
-                }
-            }
-            catch (Exception ex)
-            {
-                return Task.FromResult(new Status(XfStatusCode.JwtDeserializeError, ex.Message + Environment.NewLine + ex.StackTrace));
-            }
-
-            return Task.FromResult(Status.Success);
-        }
+        return Task.FromResult(Status.Success);
     }
 }

@@ -33,60 +33,59 @@ using Xecrets.Cli.Run;
 
 using static AxCrypt.Abstractions.TypeResolve;
 
-namespace Xecrets.Cli.Operation
+namespace Xecrets.Cli.Operation;
+
+internal class WipeOperation : IExecutionPhases
 {
-    internal class WipeOperation : IExecutionPhases
+    public Task<Status> DryAsync(Parameters parameters)
     {
-        public Task<Status> DryAsync(Parameters parameters)
+        foreach (string file in parameters.Arguments)
         {
-            foreach (string file in parameters.Arguments)
+            var fileStore = New<IStandardIoDataStore>(file);
+            if (!New<IFileVerify>().CanDeleteFile(fileStore))
             {
-                var fileStore = New<IStandardIoDataStore>(file);
-                if (!New<IFileVerify>().CanDeleteFile(fileStore))
+                return Task.FromResult(new Status(XfStatusCode.CannotDelete, parameters, "Can't delete '{0}'.".Format(fileStore.Name)));
+            }
+
+            parameters.TotalsTracker.AddWorkItem(fileStore.Length());
+        }
+        return Task.FromResult(Status.Success);
+    }
+
+    public Task<Status> RealAsync(Parameters parameters)
+    {
+        var progress = parameters.Logger.Progress;
+        progress.NotifyLevelStart();
+        try
+        {
+            for (int i = 0; i < parameters.Arguments.Count; ++i)
+            {
+                string file = parameters.Arguments[i];
+                IDataStore fileStore = New<IDataStore>(file);
+
+                progress.Display = file;
+
+                using (FileLock fileLock = New<FileLocker>().Acquire(fileStore))
                 {
-                    return Task.FromResult(new Status(XfStatusCode.CannotDelete, parameters, "Can't delete '{0}'.".Format(fileStore.Name)));
+                    // The design of the Wipe() method is unfortunate, and causes the complication with
+                    // the progress levels etc. Should either be rewritten in the original code base or
+                    // just reimplemented independently in a more flexible way.
+                    New<AxCryptFile>().Wipe(fileLock, progress);
                 }
 
-                parameters.TotalsTracker.AddWorkItem(fileStore.Length());
-            }
-            return Task.FromResult(Status.Success);
-        }
-
-        public Task<Status> RealAsync(Parameters parameters)
-        {
-            var progress = parameters.Logger.Progress;
-            progress.NotifyLevelStart();
-            try
-            {
-                for (int i = 0; i < parameters.Arguments.Count; ++i)
+                if (i != parameters.Arguments.Count - 1)
                 {
-                    string file = parameters.Arguments[i];
-                    IDataStore fileStore = New<IDataStore>(file);
-
-                    progress.Display = file;
-
-                    using (FileLock fileLock = New<FileLocker>().Acquire(fileStore))
-                    {
-                        // The design of the Wipe() method is unfortunate, and causes the complication with
-                        // the progress levels etc. Should either be rewritten in the original code base or
-                        // just reimplemented independently in a more flexible way.
-                        New<AxCryptFile>().Wipe(fileLock, progress);
-                    }
-
-                    if (i != parameters.Arguments.Count - 1)
-                    {
-                        parameters.Logger.Log(new Status(parameters, $"Securely wiped '{file}'."));
-                    }
+                    parameters.Logger.Log(new Status(parameters, $"Securely wiped '{file}'."));
                 }
             }
-            finally
-            {
-                progress.NotifyLevelFinished();
-            }
-
-            parameters.Logger.Log(new Status(parameters, $"Securely wiped '{parameters.Arguments.Last()}'."));
-
-            return Task.FromResult(Status.Success);
         }
+        finally
+        {
+            progress.NotifyLevelFinished();
+        }
+
+        parameters.Logger.Log(new Status(parameters, $"Securely wiped '{parameters.Arguments.Last()}'."));
+
+        return Task.FromResult(Status.Success);
     }
 }

@@ -25,24 +25,23 @@
 
 using Xecrets.Cli.Public;
 
-namespace Xecrets.Cli
+namespace Xecrets.Cli;
+
+internal class ParsedOp(XfOpCode opCode, params string[] parameters)
 {
-    internal class ParsedOp(XfOpCode opCode, params string[] parameters)
+    public ParsedOp(XfOpCode opCode, bool flag)
+        : this(opCode)
     {
-        public ParsedOp(XfOpCode opCode, bool flag)
-            : this(opCode)
-        {
-            Flag = flag;
-        }
-
-        public XfOpCode OpCode { get; } = opCode;
-
-        public bool Flag { get; }
-
-        public IList<string> Arguments { get; } = [.. parameters];
-
-        public string Arg1 { get { return Arguments.Count > 0 ? Arguments[0] : string.Empty; } }
-        
-        public string Arg2 { get { return Arguments.Count > 1 ? Arguments[1] : string.Empty; } }
+        Flag = flag;
     }
+
+    public XfOpCode OpCode { get; } = opCode;
+
+    public bool Flag { get; }
+
+    public IList<string> Arguments { get; } = [.. parameters];
+
+    public string Arg1 { get { return Arguments.Count > 0 ? Arguments[0] : string.Empty; } }
+    
+    public string Arg2 { get { return Arguments.Count > 1 ? Arguments[1] : string.Empty; } }
 }

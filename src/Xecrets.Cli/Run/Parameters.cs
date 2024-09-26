@@ -31,87 +31,86 @@ using AxCrypt.Core.UI;
 using Xecrets.Cli.Log;
 using Xecrets.Cli.Public;
 
-namespace Xecrets.Cli.Run
+namespace Xecrets.Cli.Run;
+
+internal class Parameters(OptionsParser parser) : IDisposable
 {
-    internal class Parameters(OptionsParser parser) : IDisposable
+    public bool IsDryRun { get; set; } = true;
+
+    public bool IsStdoutLog { get; set; } = false;
+
+    public bool Overwrite { get; set; } = false;
+
+    public bool Compress { get; set; } = true;
+
+    public bool AsciiArmor { get; set; } = false;
+
+    public string CrashLogFile { get; set; } = string.Empty;
+
+    public TotalsTracker TotalsTracker { get; } = new TotalsTracker();
+
+    public ILogger Logger => TotalsTracker.Logger;
+
+    public IProgressContext Progress => Logger.Progress;
+
+    public ParsedOp CurrentOp { get; set; } = new ParsedOp(XfOpCode.None);
+
+    public IList<string> Arguments => CurrentOp.Arguments;
+
+    public XfOpCode OpCode => CurrentOp.OpCode;
+
+    public bool Flag => CurrentOp.Flag;
+
+    public string Arg1 => CurrentOp.Arg1;
+
+    public string Arg2 => CurrentOp.Arg2;
+
+    public KnownPublicKeys LoadedPublicKeys { get; } = new KnownPublicKeys();
+
+    public OptionsParser Parser { get; } = parser;
+
+    public IList<LogOnIdentity> Identities { get; } = [];
+
+    public IList<EmailAddress> SharingEmails { get; } = [];
+
+    public IDictionary<string, object> JwtClaims { get; } = new Dictionary<string, object>();
+
+    public string JwtIssuer { get; set; } = string.Empty;
+
+    public string JwtAudience { get; set; } = string.Empty;
+
+    public string JwtPrivateKeyPem { get; set; } = string.Empty;
+
+    public int JwtDaysUntilExpiration { get; set; } = 0;
+
+    public IEnumerable<UserPublicKey> PublicKeys
     {
-        public bool IsDryRun { get; set; } = true;
-
-        public bool IsStdoutLog { get; set; } = false;
-
-        public bool Overwrite { get; set; } = false;
-
-        public bool Compress { get; set; } = true;
-
-        public bool AsciiArmor { get; set; } = false;
-
-        public string CrashLogFile { get; set; } = string.Empty;
-
-        public TotalsTracker TotalsTracker { get; } = new TotalsTracker();
-
-        public ILogger Logger => TotalsTracker.Logger;
-
-        public IProgressContext Progress => Logger.Progress;
-
-        public ParsedOp CurrentOp { get; set; } = new ParsedOp(XfOpCode.None);
-
-        public IList<string> Arguments => CurrentOp.Arguments;
-
-        public XfOpCode OpCode => CurrentOp.OpCode;
-
-        public bool Flag => CurrentOp.Flag;
-
-        public string Arg1 => CurrentOp.Arg1;
-
-        public string Arg2 => CurrentOp.Arg2;
-
-        public KnownPublicKeys LoadedPublicKeys { get; } = new KnownPublicKeys();
-
-        public OptionsParser Parser { get; } = parser;
-
-        public IList<LogOnIdentity> Identities { get; } = [];
-
-        public IList<EmailAddress> SharingEmails { get; } = [];
-
-        public IDictionary<string, object> JwtClaims { get; } = new Dictionary<string, object>();
-
-        public string JwtIssuer { get; set; } = string.Empty;
-
-        public string JwtAudience { get; set; } = string.Empty;
-
-        public string JwtPrivateKeyPem { get; set; } = string.Empty;
-
-        public int JwtDaysUntilExpiration { get; set; } = 0;
-
-        public IEnumerable<UserPublicKey> PublicKeys
+        get
         {
-            get
-            {
-                return Identities.SelectMany(i => i.PublicKeys).Concat(LoadedPublicKeys.PublicKeys);
-            }
+            return Identities.SelectMany(i => i.PublicKeys).Concat(LoadedPublicKeys.PublicKeys);
         }
+    }
 
-        public int HelpLevel { get; set; }
+    public int HelpLevel { get; set; }
 
-        public bool ProgrammaticUse { get; set; }
+    public bool ProgrammaticUse { get; set; }
 
-        public void StartReal()
+    public void StartReal()
+    {
+        IsDryRun = false;
+    }
+
+    public void Dispose()
+    {
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!disposing)
         {
-            IsDryRun = false;
-        }
-
-        public void Dispose()
-        {
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposing)
-            {
-                return;
-            }
+            return;
         }
     }
 }
