@@ -37,6 +37,6 @@ namespace Xecrets.Cli.Public
     /// </summary>
     public static class XfExportVersion
     {
-        public static Version CliVersion => new(1, 0);
+        public static Version CliVersion => new(2, 0);
     }
 }

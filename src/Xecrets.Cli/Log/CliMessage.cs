@@ -33,17 +33,13 @@ namespace Xecrets.Cli.Log
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public string? CliApiVersion { get; set; }
 
-        [JsonPropertyName("email")]
+        [JsonPropertyName("arg1")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string? Email { get; set; }
+        public string? Arg1 { get; set; }
 
-        [JsonPropertyName("file")]
+        [JsonPropertyName("arg2")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string? File { get; set; }
-
-        [JsonPropertyName("from")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string? From { get; set; }
+        public string? Arg2 { get; set; }
 
         [JsonPropertyName("id")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
@@ -92,10 +88,6 @@ namespace Xecrets.Cli.Log
         [JsonPropertyName("statusName")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public string? StatusName { get; set; }
-
-        [JsonPropertyName("to")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string? To { get; set; }
 
         [JsonPropertyName("totalDone")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]

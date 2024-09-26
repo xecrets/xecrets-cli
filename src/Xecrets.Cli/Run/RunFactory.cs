@@ -109,7 +109,7 @@ namespace Xecrets.Cli.Run
                     status = new Status(XfStatusCode.FileUnavailable, fnfex.ToString())
                     {
                         Id = factory.Parameters.TotalsTracker.Id,
-                        File = fnfex.FileName ?? (factory.Parameters.From),
+                        Arg1 = fnfex.FileName ?? (factory.Parameters.Arg1),
                     };
                 }
                 catch (Exception ex)

@@ -41,14 +41,8 @@ namespace Xecrets.Cli
 
         public IList<string> Arguments { get; } = [.. parameters];
 
-        public string From { get { return Arguments.Count > 0 ? Arguments[0] : string.Empty; } }
-
-        public string File => From;
+        public string Arg1 { get { return Arguments.Count > 0 ? Arguments[0] : string.Empty; } }
         
-        public string Value => From;
-
-        public string Email => From;
-
-        public string To { get { return Arguments.Count > 1 ? Arguments[1] : string.Empty; } }
+        public string Arg2 { get { return Arguments.Count > 1 ? Arguments[1] : string.Empty; } }
     }
 }

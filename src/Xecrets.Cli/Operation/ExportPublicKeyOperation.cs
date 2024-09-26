@@ -40,11 +40,11 @@ namespace Xecrets.Cli.Operation
     {
         public Task<Status> DryAsync(Parameters parameters)
         {
-            if (!EmailAddress.TryParse(parameters.CurrentOp.Email, out EmailAddress _))
+            if (!EmailAddress.TryParse(parameters.CurrentOp.Arg1, out EmailAddress _))
             {
-                return Task.FromResult(new Status(XfStatusCode.InvalidEmail, "'{0}' is not a valid email.".Format(parameters.CurrentOp.Email)));
+                return Task.FromResult(new Status(XfStatusCode.InvalidEmail, "'{0}' is not a valid email.".Format(parameters.CurrentOp.Arg1)));
             }
-            var toStore = New<IStandardIoDataStore>(parameters.To);
+            var toStore = New<IStandardIoDataStore>(parameters.Arg2);
             if (!New<IFileVerify>().CanWriteToFile(toStore))
             {
                 return Task.FromResult(new Status(XfStatusCode.CannotWrite, parameters, "Can't write to file '{0}'.".Format(toStore.Name)));
@@ -54,14 +54,14 @@ namespace Xecrets.Cli.Operation
 
         public Task<Status> RealAsync(Parameters parameters)
         {
-            EmailAddress email = EmailAddress.Parse(parameters.Email);
+            EmailAddress email = EmailAddress.Parse(parameters.Arg1);
             UserPublicKey? userPublicKey = parameters.PublicKeys.FirstOrDefault(pk => pk.Email == email);
             if (userPublicKey == null)
             {
-                return Task.FromResult(new Status(XfStatusCode.PublicKeyNotFound, "Did not find a public key for '{0}' to export.".Format(parameters.CurrentOp.Email)));
+                return Task.FromResult(new Status(XfStatusCode.PublicKeyNotFound, "Did not find a public key for '{0}' to export.".Format(parameters.CurrentOp.Arg1)));
             }
 
-            var publicKeyFile = New<IDataStore>(parameters.CurrentOp.To);
+            var publicKeyFile = New<IDataStore>(parameters.CurrentOp.Arg2);
             string json = New<IStringSerializer>().Serialize(userPublicKey);
             using (TextWriter writer = new StreamWriter(publicKeyFile.OpenWrite()))
             {
@@ -69,7 +69,7 @@ namespace Xecrets.Cli.Operation
             }
 
 
-            parameters.Logger.Log(new Status(parameters, $"Extracted a public key for '{parameters.CurrentOp.Email}' to '{parameters.CurrentOp.To}'."));
+            parameters.Logger.Log(new Status(parameters, $"Extracted a public key for '{parameters.CurrentOp.Arg1}' to '{parameters.CurrentOp.Arg2}'."));
             return Task.FromResult(Status.Success);
         }
     }

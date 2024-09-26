@@ -37,9 +37,9 @@ namespace Xecrets.Cli.Operation
     {
         public Task<Status> DryAsync(Parameters parameters)
         {
-            if (!EmailAddress.TryParse(parameters.Email, out EmailAddress _))
+            if (!EmailAddress.TryParse(parameters.Arg1, out EmailAddress _))
             {
-                return Task.FromResult(new Status(XfStatusCode.InvalidEmail, "'{0}' is not a valid email.".Format(parameters.Email)));
+                return Task.FromResult(new Status(XfStatusCode.InvalidEmail, "'{0}' is not a valid email.".Format(parameters.Arg1)));
             }
 
             return Task.FromResult(Status.Success);
@@ -47,7 +47,7 @@ namespace Xecrets.Cli.Operation
 
         public Task<Status> RealAsync(Parameters parameters)
         {
-            parameters.JwtIssuer = parameters.Email;
+            parameters.JwtIssuer = parameters.Arg1;
 
             return Task.FromResult(Status.Success);
         }

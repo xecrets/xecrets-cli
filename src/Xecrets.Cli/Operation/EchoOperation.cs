@@ -37,7 +37,7 @@ namespace Xecrets.Cli.Operation
 
         public Task<Status> RealAsync(Parameters parameters)
         {
-            parameters.Logger.Log(new Status(parameters, parameters.Value));
+            parameters.Logger.Log(new Status(parameters, parameters.Arg1));
 
             return Task.FromResult(Status.Success);
         }

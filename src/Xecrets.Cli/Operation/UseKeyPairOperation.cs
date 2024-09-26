@@ -46,7 +46,7 @@ namespace Xecrets.Cli.Operation
             {
                 return Task.FromResult(new Status(XfStatusCode.NoPassword, "A password must be provided to access an encrypted key pair file."));
             }
-            var fromStore = New<IStandardIoDataStore>(parameters.From);
+            var fromStore = New<IStandardIoDataStore>(parameters.Arg1);
             if (!New<IFileVerify>().CanReadFromFile(fromStore))
             {
                 return Task.FromResult(new Status(XfStatusCode.CannotRead, "Can't read from file '{0}'.".Format(fromStore.Name)));
@@ -56,7 +56,7 @@ namespace Xecrets.Cli.Operation
 
         public Task<Status> RealAsync(Parameters parameters)
         {
-            byte[] keyPairFile = New<IDataStore>(parameters.From).ToArray();
+            byte[] keyPairFile = New<IDataStore>(parameters.Arg1).ToArray();
             UserKeyPair? keyPair = null;
 
             IList<LogOnIdentity> identities = parameters.Identities;
@@ -79,14 +79,14 @@ namespace Xecrets.Cli.Operation
 
             identities[index] = new LogOnIdentity(identity!.KeyPairs.Concat([keyPair]), identity!.Passphrase);
 
-            parameters.Logger.Log(new Status(parameters, "Loaded a key pair created {3} with tag '{2}' for '{1}' from '{0}'".Format(parameters.CurrentOp.From, keyPair.UserEmail, keyPair.KeyPair.PublicKey.Tag, keyPair.Timestamp.ToLocalTime()))
+            parameters.Logger.Log(new Status(parameters, "Loaded a key pair created {3} with tag '{2}' for '{1}' from '{0}'".Format(parameters.CurrentOp.Arg1, keyPair.UserEmail, keyPair.KeyPair.PublicKey.Tag, keyPair.Timestamp.ToLocalTime()))
             {
                 Utc = keyPair.Timestamp,
             });
 
             UserPublicKey userPublicKey = new UserPublicKey(keyPair.UserEmail, keyPair.KeyPair.PublicKey);
             parameters.LoadedPublicKeys.AddOrReplace(userPublicKey);
-            parameters.Logger.Log(new Status(parameters, "Loaded a public key for '{0}' from '{1}'.".Format(userPublicKey.Email, parameters.From)));
+            parameters.Logger.Log(new Status(parameters, "Loaded a public key for '{0}' from '{1}'.".Format(userPublicKey.Email, parameters.Arg1)));
 
             parameters.SharingEmails.Add(userPublicKey.Email);
 

@@ -47,13 +47,13 @@ namespace Xecrets.Cli.Operation
                 return Task.FromResult(new Status(XfStatusCode.NoPassword, "A password must be provided to encrypt files."));
             }
 
-            IStandardIoDataStore toFreeStore = parameters.To.FindFree(parameters);
+            IStandardIoDataStore toFreeStore = parameters.Arg2.FindFree(parameters);
             if (!toFreeStore.VerifyCanWrite(parameters, out Status status))
             {
                 return Task.FromResult(status);
             }
 
-            IStandardIoDataStore fromStore = New<IStandardIoDataStore>(parameters.From);
+            IStandardIoDataStore fromStore = New<IStandardIoDataStore>(parameters.Arg1);
             if (fromStore.IsStdIo && !fromStore.IsNamedStdIo)
             {
                 return Task.FromResult(new Status(XfStatusCode.InvalidOption, "Encryption is not supported from an unnamed standard input stream."));
@@ -65,12 +65,12 @@ namespace Xecrets.Cli.Operation
             }
             if (!fromStore.IsEncryptable)
             {
-                return Task.FromResult(new Status(XfStatusCode.FileUnavailable, "Encryption of '{0}' is not supported, it may be a system file or hidden.".Format(parameters.CurrentOp.From)));
+                return Task.FromResult(new Status(XfStatusCode.FileUnavailable, "Encryption of '{0}' is not supported, it may be a system file or hidden.".Format(parameters.CurrentOp.Arg1)));
             }
 
             if (parameters.ProgrammaticUse && FileLargerThanLicenseLimit(fromStore))
             {
-                return Task.FromResult(new Status(XfStatusCode.Unlicensed, "'{0}' is too large for encryption. When using options for programmatic use, a valid maintenance subscription is required for files > 1 MB, or use a GPL build.".Format(parameters.CurrentOp.From)));
+                return Task.FromResult(new Status(XfStatusCode.Unlicensed, "'{0}' is too large for encryption. When using options for programmatic use, a valid maintenance subscription is required for files > 1 MB, or use a GPL build.".Format(parameters.CurrentOp.Arg1)));
             }
 
             parameters.TotalsTracker.AddWorkItem(fromStore.Length());
@@ -104,15 +104,15 @@ namespace Xecrets.Cli.Operation
 
         public Task<Status> RealAsync(Parameters parameters)
         {
-            IStandardIoDataStore toFreeStore = parameters.To.FindFree(parameters);
+            IStandardIoDataStore toFreeStore = parameters.Arg2.FindFree(parameters);
             if (!toFreeStore.VerifyCanWrite(parameters, out Status status))
             {
                 return Task.FromResult(status);
             }
 
-            IStandardIoDataStore fromStore = New<IStandardIoDataStore>(parameters.From);
+            IStandardIoDataStore fromStore = New<IStandardIoDataStore>(parameters.Arg1);
 
-            parameters.Progress.Display = parameters.From;
+            parameters.Progress.Display = parameters.Arg1;
 
             IEnumerable<UserPublicKey> userPublicKeys = parameters.PublicKeys.Where(pk => parameters.SharingEmails.Contains(pk.Email));
             using (var encryption = new Encryption(fromStore.OpenRead(), parameters.Identities.Where(id => id.Passphrase != Passphrase.Empty), userPublicKeys, parameters.Progress))
@@ -125,8 +125,8 @@ namespace Xecrets.Cli.Operation
                     parameters.Compress ? AxCryptOptions.EncryptWithCompression : AxCryptOptions.EncryptWithoutCompression);
             }
 
-            string freeTo = Path.Combine(Path.GetDirectoryName(parameters.To) ?? string.Empty, toFreeStore.Name);
-            parameters.Logger.Log(new Status(parameters, "Encrypted '{0}' to '{1}'.".Format(parameters.From, freeTo)));
+            string freeTo = Path.Combine(Path.GetDirectoryName(parameters.Arg2) ?? string.Empty, toFreeStore.Name);
+            parameters.Logger.Log(new Status(parameters, "Encrypted '{0}' to '{1}'.".Format(parameters.Arg1, freeTo)));
             return Task.FromResult(Status.Success);
         }
     }

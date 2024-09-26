@@ -45,7 +45,7 @@ namespace Xecrets.Cli.Operation
                 return Task.FromResult(new Status(XfStatusCode.NoPassword, "A password must be provided to decrypt files."));
             }
 
-            IStandardIoDataStore fromStore = New<IStandardIoDataStore>(parameters.From);
+            IStandardIoDataStore fromStore = New<IStandardIoDataStore>(parameters.Arg1);
             if (!New<IFileVerify>().CanReadFromFile(fromStore))
             {
                 return Task.FromResult(new Status(XfStatusCode.CannotRead, parameters, "Can't read from '{0}'.".Format(fromStore.Name)));
@@ -69,9 +69,9 @@ namespace Xecrets.Cli.Operation
 
         public Task<Status> RealAsync(Parameters parameters)
         {
-            IStandardIoDataStore fromStore = New<IStandardIoDataStore>(parameters.From);
+            IStandardIoDataStore fromStore = New<IStandardIoDataStore>(parameters.Arg1);
 
-            parameters.Progress.Display = parameters.From;
+            parameters.Progress.Display = parameters.Arg1;
             if (parameters.AsciiArmor)
             {
                 fromStore = new AsciiArmorDataStore(fromStore);
@@ -80,7 +80,7 @@ namespace Xecrets.Cli.Operation
             {
                 if (!decryption.HasValidPassphrase)
                 {
-                    return Task.FromResult(new Status(XfStatusCode.InvalidPassword, parameters, "Could not decrypt '{0}', no suitable password or private key.".Format(parameters.From)));
+                    return Task.FromResult(new Status(XfStatusCode.InvalidPassword, parameters, "Could not decrypt '{0}', no suitable password or private key.".Format(parameters.Arg1)));
                 }
 
                 (Status status, IStandardIoDataStore toStore) = ToStore(parameters, decryption.OriginalFileName);

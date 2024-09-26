@@ -38,7 +38,7 @@ namespace Xecrets.Cli.Operation
         /// <returns></returns>
         public Task<Status> DryAsync(Parameters parameters)
         {
-            string audience = parameters.Value;
+            string audience = parameters.Arg1;
             if (audience.Length == 0 || (audience.Contains(':') && !Uri.TryCreate(audience, UriKind.Absolute, out Uri? _)))
             {
                 return Task.FromResult(new Status(XfStatusCode.InvalidOption, parameters, $"Invalid audience URI '{audience}'."));
@@ -48,7 +48,7 @@ namespace Xecrets.Cli.Operation
 
         public Task<Status> RealAsync(Parameters parameters)
         {
-            parameters.JwtAudience = parameters.Value;
+            parameters.JwtAudience = parameters.Arg1;
 
             return Task.FromResult(Status.Success);
         }

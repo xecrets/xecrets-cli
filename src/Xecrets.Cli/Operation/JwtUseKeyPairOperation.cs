@@ -43,7 +43,7 @@ namespace Xecrets.Cli.Operation
     {
         public Task<Status> DryAsync(Parameters parameters)
         {
-            var privatePemStore = New<IStandardIoDataStore>(parameters.From);
+            var privatePemStore = New<IStandardIoDataStore>(parameters.Arg1);
             if (!New<IFileVerify>().CanReadFromFile(privatePemStore))
             {
                 return Task.FromResult(new Status(XfStatusCode.CannotRead, "Can't read from file '{0}'.".Format(privatePemStore.Name)));
@@ -54,7 +54,7 @@ namespace Xecrets.Cli.Operation
 
         public Task<Status> RealAsync(Parameters parameters)
         {
-            var privatePemStore = New<IStandardIoDataStore>(parameters.From);
+            var privatePemStore = New<IStandardIoDataStore>(parameters.Arg1);
             string privatePem;
             using (StreamReader reader = new StreamReader(privatePemStore.OpenRead()))
             {

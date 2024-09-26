@@ -40,7 +40,7 @@ namespace Xecrets.Cli.Operation
         /// <returns></returns>
         public Task<Status> DryAsync(Parameters parameters)
         {
-            IStandardIoDataStore privateFreeStore = parameters.File.FindFree(parameters);
+            IStandardIoDataStore privateFreeStore = parameters.Arg1.FindFree(parameters);
             if (!privateFreeStore.VerifyCanWrite(parameters, out Status status))
             {
                 return Task.FromResult(status);
@@ -62,7 +62,7 @@ namespace Xecrets.Cli.Operation
 
         public Task<Status> RealAsync(Parameters parameters)
         {
-            IStandardIoDataStore privateFreeStore = parameters.File.FindFree(parameters);
+            IStandardIoDataStore privateFreeStore = parameters.Arg1.FindFree(parameters);
             if (!privateFreeStore.VerifyCanWrite(parameters, out Status status))
             {
                 return Task.FromResult(status);

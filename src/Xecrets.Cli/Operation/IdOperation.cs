@@ -38,7 +38,7 @@ namespace Xecrets.Cli.Operation
 
         public Task<Status> RealAsync(Parameters parameters)
         {
-            parameters.TotalsTracker.Id = parameters.Value;
+            parameters.TotalsTracker.Id = parameters.Arg1;
             return Task.FromResult(Status.Success);
         }
     }

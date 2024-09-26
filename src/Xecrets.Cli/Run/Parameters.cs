@@ -61,15 +61,9 @@ namespace Xecrets.Cli.Run
 
         public bool Flag => CurrentOp.Flag;
 
-        public string Email => CurrentOp.Email;
+        public string Arg1 => CurrentOp.Arg1;
 
-        public string To => CurrentOp.To;
-
-        public string From => CurrentOp.From;
-
-        public string File => CurrentOp.File;
-
-        public string Value => CurrentOp.Value;
+        public string Arg2 => CurrentOp.Arg2;
 
         public KnownPublicKeys LoadedPublicKeys { get; } = new KnownPublicKeys();
 

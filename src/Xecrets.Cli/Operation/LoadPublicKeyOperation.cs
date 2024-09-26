@@ -70,7 +70,7 @@ namespace Xecrets.Cli.Operation
                     return Task.FromResult(new Status(XfStatusCode.PublicKeyNotFound, parameters, "Can't find a public key in '{0}'.".Format(fromStore.Name)));
                 }
                 parameters.LoadedPublicKeys.AddOrReplace(userPublicKey);
-                parameters.Logger.Log(new Status(parameters, "Loaded a public key for '{0}' from '{1}'.".Format(userPublicKey.Email, parameters.From)));
+                parameters.Logger.Log(new Status(parameters, "Loaded a public key for '{0}' from '{1}'.".Format(userPublicKey.Email, parameters.Arg1)));
             }
 
             return Task.FromResult(Status.Success);

@@ -12,6 +12,32 @@ public class CliMessage
 Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object') &#129106; CliMessage
 ### Properties
 
+<a name='Xecrets.Sdk.Cli.CliMessage.Arg1'></a>
+
+## CliMessage.Arg1 Property
+
+The current first argument in effect for this response, typically an 'email', 'file' or 'from' parameter.
+
+```csharp
+public string? Arg1 { get; set; }
+```
+
+#### Property Value
+[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+
+<a name='Xecrets.Sdk.Cli.CliMessage.Arg2'></a>
+
+## CliMessage.Arg2 Property
+
+The current second argument in effect for this response, typically a 'to' parameter.
+
+```csharp
+public string? Arg2 { get; set; }
+```
+
+#### Property Value
+[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+
 <a name='Xecrets.Sdk.Cli.CliMessage.CliApiVersion'></a>
 
 ## CliMessage.CliApiVersion Property
@@ -33,45 +59,6 @@ The current display parameter in effect for this response
 
 ```csharp
 public string? Display { get; set; }
-```
-
-#### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
-
-<a name='Xecrets.Sdk.Cli.CliMessage.Email'></a>
-
-## CliMessage.Email Property
-
-The current email parameter in effect for this response
-
-```csharp
-public string? Email { get; set; }
-```
-
-#### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
-
-<a name='Xecrets.Sdk.Cli.CliMessage.File'></a>
-
-## CliMessage.File Property
-
-The current file parameter in effect for this response
-
-```csharp
-public string? File { get; set; }
-```
-
-#### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
-
-<a name='Xecrets.Sdk.Cli.CliMessage.From'></a>
-
-## CliMessage.From Property
-
-The current file from parameter in effect for this response
-
-```csharp
-public string? From { get; set; }
 ```
 
 #### Property Value
@@ -215,19 +202,6 @@ The name of the status of the current operation as string.
 
 ```csharp
 public string? StatusName { get; set; }
-```
-
-#### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
-
-<a name='Xecrets.Sdk.Cli.CliMessage.To'></a>
-
-## CliMessage.To Property
-
-The full path name of the to parameter of the current operation.
-
-```csharp
-public string? To { get; set; }
 ```
 
 #### Property Value

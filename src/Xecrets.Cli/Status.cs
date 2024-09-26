@@ -40,13 +40,9 @@ namespace Xecrets.Cli
 
         public string Id { get; set; } = string.Empty;
 
-        public string Email { get; set; } = string.Empty;
+        public string Arg1 { get; set; } = string.Empty;
 
-        public string File { get; set; } = string.Empty;
-
-        public string From { get; set; } = string.Empty;
-
-        public string To { get; set; } = string.Empty;
+        public string Arg2 { get; set; } = string.Empty;
 
         public string CliVersion { get; set; } = string.Empty;
 
@@ -77,10 +73,8 @@ namespace Xecrets.Cli
         {
             OpCode = parameters.OpCode;
             Id = parameters.TotalsTracker.Id;
-            Email = parameters.Email;
-            From = parameters.From;
-            File = parameters.File;
-            To = parameters.To;
+            Arg1 = parameters.Arg1;
+            Arg2 = parameters.Arg2;
         }
 
         public override string ToString()

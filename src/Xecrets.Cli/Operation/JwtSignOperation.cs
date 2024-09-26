@@ -47,7 +47,7 @@ namespace Xecrets.Cli.Operation
         /// <returns></returns>
         public Task<Status> DryAsync(Parameters parameters)
         {
-            var signedTokenStore = New<IStandardIoDataStore>(parameters.File);
+            var signedTokenStore = New<IStandardIoDataStore>(parameters.Arg1);
             if (!New<IFileVerify>().CanWriteToFile(signedTokenStore))
             {
                 return Task.FromResult(new Status(XfStatusCode.CannotWrite, parameters, "Can't write to '{0}'.".Format(signedTokenStore.Name)));
@@ -94,7 +94,7 @@ namespace Xecrets.Cli.Operation
                 SigningCredentials = new SigningCredentials(new ECDsaSecurityKey(key), SecurityAlgorithms.EcdsaSha256)
             });
 
-            var signedTokenStore = New<IStandardIoDataStore>(parameters.File);
+            var signedTokenStore = New<IStandardIoDataStore>(parameters.Arg1);
             using (TextWriter writer = new StreamWriter(signedTokenStore.OpenWrite()))
             {
                 writer.Write(token);

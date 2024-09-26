@@ -38,10 +38,10 @@ namespace Xecrets.Cli.Operation
         protected override (Status, IStandardIoDataStore) ToStore(Parameters parameters, string originalFileName)
         {
             Status status;
-            string toFolder = ToFolder(parameters.From, parameters.To);
+            string toFolder = ToFolder(parameters.Arg1, parameters.Arg2);
             if (toFolder.Length == 0)
             {
-                status = new Status(XfStatusCode.NotAFolder, parameters, "Cannot determine a destination folder from '{0}' and '{1}'.".Format(parameters.From, parameters.To));
+                status = new Status(XfStatusCode.NotAFolder, parameters, "Cannot determine a destination folder from '{0}' and '{1}'.".Format(parameters.Arg1, parameters.Arg2));
                 return (status, null!);
             }
 
