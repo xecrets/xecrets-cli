@@ -42,7 +42,7 @@ internal class Splash
         string runtime = OperatingSystem.IsLinux()
             ? "linux-x64"
             : OperatingSystem.IsMacOS()
-                ? "osx-x64"
+                ? "macos-x64"
                 : OperatingSystem.IsWindows()
                     ? "win-x64"
                     : "unknown";
