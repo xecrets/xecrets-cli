@@ -102,6 +102,8 @@ internal abstract class RunFactory(Parameters parameters)
                 status = new Status(XfStatusCode.AxCryptException, acex.ToString())
                 {
                     Id = factory.Parameters.TotalsTracker.Id,
+                    Arg1 = factory.Parameters.Arg1,
+                    Arg2 = factory.Parameters.Arg2,
                 };
             }
             catch (FileNotFoundException fnfex)
@@ -117,6 +119,8 @@ internal abstract class RunFactory(Parameters parameters)
                 status = new Status(XfStatusCode.UnhandledOperationException, ex.ToString())
                 {
                     Id = factory.Parameters.TotalsTracker.Id,
+                    Arg1 = factory.Parameters.Arg1,
+                    Arg2 = factory.Parameters.Arg2,
                 };
             }
 

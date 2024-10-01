@@ -152,7 +152,10 @@ catch (Exception ex)
 
 if (status != Status.Success && parameters.CrashLogFile.Length > 0)
 {
-    File.WriteAllText(parameters.CrashLogFile, $"Cli status code: '{status.StatusCode}' ({(int)status.StatusCode}).{Environment.NewLine}{status.Message}");
+    File.WriteAllText(parameters.CrashLogFile, $"Cli status code: '{status.StatusCode}' ({(int)status.StatusCode})." +
+        (status.Arg1.Length == 0 ? string.Empty : $"{Environment.NewLine}Arg1 = '{status.Arg1}'") +
+        (status.Arg2.Length == 0 ? string.Empty : $"{Environment.NewLine}Arg2 = '{status.Arg2}'") +
+        Environment.NewLine + Environment.NewLine + status.Message);
 }
 
 await WaitForKeyPressedOrTimeoutWhenStartedWithoutArguments(args, status);
