@@ -80,6 +80,7 @@ internal abstract class RunFactory(Parameters parameters)
         { XfOpCode.UseKeyPair, () => new UseKeyPairOperation() },
         { XfOpCode.UsePublicKey, () => new UsePublicKeyOperation() },
         { XfOpCode.Wipe, () => new WipeOperation() },
+        { XfOpCode.SdkSigInt, () => new SdkSigIntOperation() },
     };
 
     public Parameters Parameters { get; } = parameters;
@@ -113,6 +114,10 @@ internal abstract class RunFactory(Parameters parameters)
                     Id = factory.Parameters.TotalsTracker.Id,
                     Arg1 = fnfex.FileName ?? (factory.Parameters.Arg1),
                 };
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
             }
             catch (Exception ex)
             {

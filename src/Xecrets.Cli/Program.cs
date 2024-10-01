@@ -59,7 +59,8 @@ Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
 var options = new OptionsParser(Environment.CommandLine);
 
-TypeMap.Register.Singleton<IRuntimeEnvironment>(() => new RuntimeEnvironment(".axx"));
+TypeMap.Register.Singleton(() => new CancelSignal());
+TypeMap.Register.Singleton<IRuntimeEnvironment>(() => new AxCrypt.Mono.RuntimeEnvironment(".axx"));
 TypeMap.Register.Singleton<IPortableFactory>(() => new PortableFactory());
 TypeMap.Register.Singleton<ILogging>(() => new Logging());
 TypeMap.Register.Singleton<IPlatform>(() => new MonoPlatform());

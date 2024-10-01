@@ -434,3 +434,50 @@ An [System.Action](https://docs.microsoft.com/en-us/dotnet/api/System.Action 'Sy
 #### Returns
 [System.Threading.Tasks.Task](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task 'System.Threading.Tasks.Task')  
 A waitable task.
+
+<a name='Xecrets.Sdk.Abstractions.IXfApiFactory'></a>
+
+## IXfApiFactory Interface
+
+A factory for creating an IXfApi instance.
+
+```csharp
+public interface IXfApiFactory
+```
+
+Derived  
+&#8627; [XfApiFactory](Xecrets.Sdk.XfApiFactory.md 'Xecrets.Sdk.XfApiFactory')
+### Methods
+
+<a name='Xecrets.Sdk.Abstractions.IXfApiFactory.Create()'></a>
+
+## IXfApiFactory.Create() Method
+
+Create an [IXfApi](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfApi 'Xecrets.Sdk.Abstractions.IXfApi') instance without cancellation."/>
+
+```csharp
+Xecrets.Sdk.Abstractions.IXfApi Create();
+```
+
+#### Returns
+[IXfApi](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfApi 'Xecrets.Sdk.Abstractions.IXfApi')
+
+<a name='Xecrets.Sdk.Abstractions.IXfApiFactory.Create(System.Threading.CancellationToken)'></a>
+
+## IXfApiFactory.Create(CancellationToken) Method
+
+Create an [IXfApi](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfApi 'Xecrets.Sdk.Abstractions.IXfApi') instance.
+
+```csharp
+Xecrets.Sdk.Abstractions.IXfApi Create(System.Threading.CancellationToken ct);
+```
+#### Parameters
+
+<a name='Xecrets.Sdk.Abstractions.IXfApiFactory.Create(System.Threading.CancellationToken).ct'></a>
+
+`ct` [System.Threading.CancellationToken](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.CancellationToken 'System.Threading.CancellationToken')
+
+A [System.Threading.CancellationToken](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.CancellationToken 'System.Threading.CancellationToken') to cancel any long running operation.
+
+#### Returns
+[IXfApi](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfApi 'Xecrets.Sdk.Abstractions.IXfApi')

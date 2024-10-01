@@ -26,6 +26,8 @@
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
 
+using static AxCrypt.Abstractions.TypeResolve;
+
 namespace Xecrets.Cli.Log;
 
 internal class TotalsTracker
@@ -48,8 +50,11 @@ internal class TotalsTracker
 
     public string Id { get; set; } = string.Empty;
 
+    private readonly CancelSignal _cancelSignal;
+
     public TotalsTracker()
     {
+        _cancelSignal = New<CancelSignal>();
         Logger = GetCurrentLogger();
     }
 
@@ -84,20 +89,32 @@ internal class TotalsTracker
     {
         AddWork(count);
         ItemsTotal += 1;
+        AssertNoCancel();
     }
 
     public void AddWork(long count)
     {
         TotalWork += count;
+        AssertNoCancel();
     }
 
     public void DoWork(long count)
     {
         TotalDone += count;
+        AssertNoCancel();
     }
 
     public void DoItems(int items)
     {
         ItemsDone += items;
+        AssertNoCancel();
+    }
+
+    private void AssertNoCancel()
+    {
+        if (_cancelSignal.ImmediateToken.IsCancellationRequested)
+        {
+            throw new OperationCanceledException("Operation immediately canceled.");
+        }
     }
 }

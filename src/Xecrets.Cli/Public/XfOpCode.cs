@@ -41,6 +41,7 @@ public enum XfOpCode
     SdkCliSplash = 20,
     SdkCliVersion = 30,
     SdkJsonLog = 40,
+    SdkSigInt = 50,
     #endregion Never-changing values
 
     #region Possible-to-change values if API version is updated

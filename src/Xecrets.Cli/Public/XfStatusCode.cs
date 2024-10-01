@@ -39,6 +39,7 @@ public enum XfStatusCode
     Success = 0,
     AxCryptException = 3,
     BadSequence = 6,
+    Canceled = 7,
     CannotDelete = 9,
     CannotRead = 12,
     CannotWrite = 15,

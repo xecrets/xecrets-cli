@@ -23,19 +23,56 @@
 
 #endregion Copyright and GPL License
 
-namespace Xecrets.Cli.Public;
+using System.Runtime.InteropServices;
 
-/// <summary>
-/// The version must be updated when the command line options are updated in
-/// an incompatible way. Increase the minor version, if changes do not
-/// change the meaning or syntax of any pre-existing options, i.e. purely
-/// new additional capabilities. Increase the major version, if changes in
-/// any way changes an existing option so it may not work as expected by an
-/// older consumer. The consumer should thus only accept an export version
-/// that has the same Major version, and a minor version greather than or equal
-/// to it's known version.
-/// </summary>
-public static class XfExportVersion
+namespace Xecrets.Cli;
+
+internal class CancelSignal : IDisposable
 {
-    public static Version CliVersion => new(2, 1);
+    private PosixSignalRegistration? _posixRegistration;
+
+    private CancellationTokenSource? _immediateShutdownSource = new();
+
+    public CancellationToken ImmediateToken => _immediateShutdownSource?.Token ??
+        throw new ObjectDisposedException(nameof(ImmediateToken));
+
+    public CancelSignal()
+    {
+        _posixRegistration = PosixSignalRegistration.Create(PosixSignal.SIGINT, (h) =>
+        {
+            h.Cancel = true;
+            _immediateShutdownSource.Cancel();
+        });
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!disposing)
+        {
+            return;
+        }
+
+        if (_immediateShutdownSource != null)
+        {
+            _immediateShutdownSource.Dispose();
+            _immediateShutdownSource = null;
+        }
+
+        if (_posixRegistration != null)
+        {
+            _posixRegistration.Dispose();
+            _posixRegistration = null;
+        }
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    ~CancelSignal()
+    {
+        Dispose(false);
+    }
 }

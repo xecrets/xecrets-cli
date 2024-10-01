@@ -52,16 +52,28 @@ internal sealed class Encryption : IDisposable
 
     public void EncryptTo(IStandardIoDataStore toStore, string originalFileName, AxCryptOptions options)
     {
-        using (_fromStream)
+        try
         {
-            using var toStream = toStore.OpenWrite();
+            using (_fromStream)
+            {
+                using var toStream = toStore.OpenWrite();
 
-            _document.FileName = originalFileName;
-            _document.CreationTimeUtc = New<INow>().Utc;
-            _document.LastAccessTimeUtc = _document.CreationTimeUtc;
-            _document.LastWriteTimeUtc = _document.CreationTimeUtc;
+                _document.FileName = originalFileName;
+                _document.CreationTimeUtc = New<INow>().Utc;
+                _document.LastAccessTimeUtc = _document.CreationTimeUtc;
+                _document.LastWriteTimeUtc = _document.CreationTimeUtc;
 
-            _document.EncryptTo(_fromStream, toStream, options);
+                _document.EncryptTo(_fromStream, toStream, options);
+            }
+        }
+        catch
+        {
+            if (!toStore.IsStdIo && toStore.IsAvailable)
+            {
+                using var destinationLock = New<FileLocker>().Acquire(toStore);
+                new AxCryptFile().Wipe(destinationLock, new ProgressContext());
+            }
+            throw;
         }
     }
 

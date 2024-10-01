@@ -146,6 +146,7 @@ internal class OptionsParser
         optionSet.Add("jwt-sign=", XfOpCode.JwtSign, "{signed-jwt}:?Sign and write JWT to file.", (ora, op, file) => ora.Add(op, file));
         optionSet.Add("jwt-private-key=", XfOpCode.JwtPrivateKey, "{private-pem}:?Use a private key PEM file for signing.", (ora, op, @private) => ora.Add(op, @private));
         optionSet.Add("jwt-verify={}", XfOpCode.JwtVerify, "{public-pem} {signed-jwt}:?Verify a signed JWT file using a public PEM file.", (ora, op, @public, token) => ora.Add(op, @public, token));
+        optionSet.Add("sigint=", XfOpCode.SdkSigInt, "{id}:?Send a SIGINT to process id.", (ora, op, id) => ora.Add(op, id));
 
         return optionSet;
     }

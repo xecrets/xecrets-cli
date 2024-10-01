@@ -35,25 +35,37 @@ internal class Executor(Parameters parameters) : IDisposable
 {
     public async Task<Status> RunAsync()
     {
-        Status status = await RunAsync(new DryRunFactory(parameters));
-        if ((parameters.Parser.IsQuiet || parameters.Parser.Internal) && status.IsSuccess)
+        try
         {
-            New<Splash>().Clear();
-        }
+            Status status = await RunAsync(new DryRunFactory(parameters));
+            if ((parameters.Parser.IsQuiet || parameters.Parser.Internal) && status.IsSuccess)
+            {
+                New<Splash>().Clear();
+            }
 
-        if (!status.IsSuccess)
+            if (!status.IsSuccess)
+            {
+                return status;
+            }
+
+            if (parameters.Parser.IsDryRunOnly)
+            {
+                return new Status("A successful dry run was executed, no files were changed.");
+            }
+
+            ResetParametersForRealRun();
+
+            return await RunAsync(new RealRunFactory(parameters));
+        }
+        catch (OperationCanceledException oce)
         {
-            return status;
+            return new Status(XfStatusCode.Canceled, oce.Message)
+            {
+                Id = parameters.TotalsTracker.Id,
+                Arg1 = parameters.Arg1,
+                Arg2 = parameters.Arg2,
+            };
         }
-
-        if (parameters.Parser.IsDryRunOnly)
-        {
-            return new Status("A successful dry run was executed, no files were changed.");
-        }
-
-        ResetParametersForRealRun();
-
-        return await RunAsync(new RealRunFactory(parameters));
     }
 
     private void ResetParametersForRealRun()
