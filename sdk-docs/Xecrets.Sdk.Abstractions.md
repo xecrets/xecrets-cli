@@ -188,7 +188,7 @@ Decrypt a file using the provided credentials, to a specified directory, returni
 filename and decrypted file represented by a [System.IO.FileInfo](https://docs.microsoft.com/en-us/dotnet/api/System.IO.FileInfo 'System.IO.FileInfo') instance.
 
 ```csharp
-System.Threading.Tasks.Task<(System.IO.FileInfo? decrypted,string originalFileName)> DecryptToAndKeepFileAsync(Xecrets.Sdk.Models.XfCredentials credentials, System.IO.FileInfo file, System.IO.DirectoryInfo directory, System.Action<Xecrets.Sdk.Cli.CliMessage> progress);
+System.Threading.Tasks.Task<Xecrets.Sdk.Models.XfFileResult[]> DecryptToAndKeepFileAsync(Xecrets.Sdk.Models.XfCredentials credentials, System.IO.FileInfo file, System.IO.DirectoryInfo directory, System.Action<Xecrets.Sdk.Cli.CliMessage> progress);
 ```
 #### Parameters
 
@@ -217,9 +217,8 @@ The location to decrypt to.
 An [System.Action](https://docs.microsoft.com/en-us/dotnet/api/System.Action 'System.Action') delegate called with progress.
 
 #### Returns
-[System.Threading.Tasks.Task&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')[&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.ValueTuple 'System.ValueTuple')[System.IO.FileInfo](https://docs.microsoft.com/en-us/dotnet/api/System.IO.FileInfo 'System.IO.FileInfo')[,](https://docs.microsoft.com/en-us/dotnet/api/System.ValueTuple 'System.ValueTuple')[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.ValueTuple 'System.ValueTuple')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')  
-A [System.IO.FileInfo](https://docs.microsoft.com/en-us/dotnet/api/System.IO.FileInfo 'System.IO.FileInfo') representing the result, and just the original file name from the encryped  
-            filed.
+[System.Threading.Tasks.Task&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')[XfFileResult](Xecrets.Sdk.Models.XfFileResult.md 'Xecrets.Sdk.Models.XfFileResult')[[]](https://docs.microsoft.com/en-us/dotnet/api/System.Array 'System.Array')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')  
+An array of results, with excactly 1 element.
 
 <a name='Xecrets.Sdk.Abstractions.IXfApi.EncryptFilesAsync(Xecrets.Sdk.Models.XfCredentials,bool,bool,System.Collections.Generic.IEnumerable_Xecrets.Sdk.Models.XfFilePair_,System.Action_Xecrets.Sdk.Cli.CliMessage_)'></a>
 

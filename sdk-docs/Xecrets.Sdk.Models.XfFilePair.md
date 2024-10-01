@@ -116,6 +116,19 @@ public string SourceFullName { get; }
 #### Property Value
 [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
 
+<a name='Xecrets.Sdk.Models.XfFilePair.SourceLength'></a>
+
+## XfFilePair.SourceLength Property
+
+The length in bytes of the source file.
+
+```csharp
+public long SourceLength { get; }
+```
+
+#### Property Value
+[System.Int64](https://docs.microsoft.com/en-us/dotnet/api/System.Int64 'System.Int64')
+
 <a name='Xecrets.Sdk.Models.XfFilePair.TargetFullName'></a>
 
 ## XfFilePair.TargetFullName Property
