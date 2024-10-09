@@ -56,21 +56,31 @@ internal class EncryptToOperation : IExecutionPhases
         IStandardIoDataStore fromStore = New<IStandardIoDataStore>(parameters.Arg1);
         if (fromStore.IsStdIo && !fromStore.IsNamedStdIo)
         {
-            return Task.FromResult(new Status(XfStatusCode.InvalidOption, "Encryption is not supported from an unnamed standard input stream."));
+            return Task.FromResult(new Status(XfStatusCode.InvalidOption,
+                "Encryption is not supported from an unnamed standard input stream."));
         }
 
         if (!New<IFileVerify>().CanReadFromFile(fromStore))
         {
-            return Task.FromResult(new Status(XfStatusCode.CannotRead, "Can't read from '{0}'.".Format(fromStore.Name)));
+            return Task.FromResult(new Status(XfStatusCode.CannotRead,
+                "Can't read from '{0}'.".Format(fromStore.Name)));
         }
         if (!fromStore.IsEncryptable)
         {
-            return Task.FromResult(new Status(XfStatusCode.FileUnavailable, "Encryption of '{0}' is not supported, it may be a system file or hidden.".Format(parameters.CurrentOp.Arg1)));
+            return Task.FromResult(new Status(XfStatusCode.FileUnavailable,
+                "Encryption of '{0}' is not supported, it may be a system file or hidden.".Format(parameters.CurrentOp.Arg1)));
+        }
+        if (fromStore.IsNamedStdIo && parameters.Arg3.Length > 0)
+        {
+            return Task.FromResult(new Status(XfStatusCode.InvalidOption,
+                $"Cannot specify both original name '{parameters.Arg3}' and stdin alias '{fromStore.AliasName}'."));
         }
 
         if (parameters.ProgrammaticUse && FileLargerThanLicenseLimit(fromStore))
         {
-            return Task.FromResult(new Status(XfStatusCode.Unlicensed, "'{0}' is too large for encryption. When using options for programmatic use, a valid maintenance subscription is required for files > 1 MB, or use a GPL build.".Format(parameters.CurrentOp.Arg1)));
+            return Task.FromResult(new Status(XfStatusCode.Unlicensed,
+                "'{0}' is too large for encryption. When using options for programmatic use, a valid maintenance " +
+                "subscription is required for files > 1 MB, or use a GPL build.".Format(parameters.CurrentOp.Arg1)));
         }
 
         parameters.TotalsTracker.AddWorkItem(fromStore.Length());
@@ -121,7 +131,8 @@ internal class EncryptToOperation : IExecutionPhases
             {
                 toFreeStore = new AsciiArmorDataStore(toFreeStore);
             }
-            encryption.EncryptTo(toFreeStore, fromStore.AliasName,
+            string originalName = parameters.Arg3.Length > 0 ? parameters.Arg3 : fromStore.AliasName;
+            encryption.EncryptTo(toFreeStore, originalName,
                 parameters.Compress ? AxCryptOptions.EncryptWithCompression : AxCryptOptions.EncryptWithoutCompression);
         }
 

@@ -56,8 +56,8 @@ internal class OptionsParser
                 "{encrypted} {clear}:Decrypt a file to the given file path.",
                 (ora, op, from, to) => ora.Add(op, from, to) },
             {"e|encrypt-to={}", XfOpCode.EncryptTo,
-                "{clear} {encrypted}:Encrypt a file to the given file path.",
-                (ora, op, from, to) => ora.Add(op, from, to) },
+                "{clear} {encrypted} [{original}]:Encrypt a file to given file path w/optional original name.",
+                (ora, op, from, to) => ora.AddOneRunning(op, from, to) },
             {"f|file=", XfOpCode.OptionsFromFile,
                 "{name}:Take options from a file (programmatic).",
                 (ora, op, name) => { ora.Add(op); RecursivelyParseFromFile(name, parsed, extra); } },
@@ -276,9 +276,22 @@ internal class OptionsParser
             RunningAction = _noop;
         }
 
+        public void Add(XfOpCode opCode, string p1, string p2, string p3)
+        {
+            _parsed.Add(new ParsedOp(opCode, p1, p2, p3));
+            RunningAction = _noop;
+        }
+
         public void AddOneRunning(XfOpCode opCode, string first)
         {
             var op = new ParsedOp(opCode, first);
+            _parsed.Add(op);
+            RunningAction = (s) => { op.Arguments.Add(s); RunningAction = _noop; };
+        }
+
+        public void AddOneRunning(XfOpCode opCode, string first, string second)
+        {
+            ParsedOp op = new(opCode, first, second);
             _parsed.Add(op);
             RunningAction = (s) => { op.Arguments.Add(s); RunningAction = _noop; };
         }
@@ -288,6 +301,17 @@ internal class OptionsParser
             var op = new ParsedOp(opCode, first);
             _parsed.Add(op);
             RunningAction = (s) => op.Arguments.Add(s);
+        }
+    }
+
+    private sealed class MyActionOption(string prototype, string description, int count,
+        Action<OptionValueCollection> action) : OptionBase(prototype, description, count)
+    {
+        protected override void OnParseComplete(OptionContext c)
+        {
+            ArgumentNullException.ThrowIfNull(c);
+
+            action(c.OptionValues);
         }
     }
 
@@ -329,6 +353,21 @@ internal class OptionsParser
         public void Add(string prototype, XfOpCode opCode, string description, Action<RunningArguments, XfOpCode, string, string> action)
         {
             _ = Add(prototype, description, (p1, p2) => action(ora, opCode, p1, p2));
+            Export.Add(new ExportableOption((int)opCode, prototype, string.Join(':', (description?.Split(':').Skip(1).ToArray() ?? []))));
+        }
+
+        public void Add(string prototype, string description, Action<string, string, string> action)
+        {
+            ArgumentNullException.ThrowIfNull(action);
+            
+            OptionBase p = new MyActionOption(prototype, description, 3,
+                    delegate (OptionValueCollection v) { action(v[0], v[1], v[2]); });
+            Add(p);
+        }
+
+        public void Add(string prototype, XfOpCode opCode, string description, Action<RunningArguments, XfOpCode, string, string, string> action)
+        {
+            Add(prototype, description, (p1, p2, p3) => action(ora, opCode, p1, p2, p3));
             Export.Add(new ExportableOption((int)opCode, prototype, string.Join(':', (description?.Split(':').Skip(1).ToArray() ?? []))));
         }
     }

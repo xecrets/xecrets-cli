@@ -37,5 +37,13 @@ namespace Xecrets.Cli.Public;
 /// </summary>
 public static class XfExportVersion
 {
-    public static Version CliVersion => new(2, 1);
+    /// <summary>
+    /// The version of the Xecrets Cli API.
+    /// </summary>
+    /// <remarks>
+    /// 2.0 -> 2024-09-26 Change parameter names to Arg1 and Arg2 in JSON logger
+    /// 2.1 -> 2024-10-01 Add --sigint posix signal handling
+    /// 2.2 -> 2024-10-09 Add third optional argument to --encrypt-to for original name
+    /// </remarks>
+    public static Version CliVersion => new(2, 2);
 }

@@ -44,4 +44,6 @@ internal class ParsedOp(XfOpCode opCode, params string[] parameters)
     public string Arg1 { get { return Arguments.Count > 0 ? Arguments[0] : string.Empty; } }
     
     public string Arg2 { get { return Arguments.Count > 1 ? Arguments[1] : string.Empty; } }
+
+    public string Arg3 { get { return Arguments.Count > 2 ? Arguments[2] : string.Empty; } }
 }

@@ -65,6 +65,8 @@ internal class Parameters(OptionsParser parser) : IDisposable
 
     public string Arg2 => CurrentOp.Arg2;
 
+    public string Arg3 => CurrentOp.Arg3;
+
     public KnownPublicKeys LoadedPublicKeys { get; } = new KnownPublicKeys();
 
     public OptionsParser Parser { get; } = parser;
