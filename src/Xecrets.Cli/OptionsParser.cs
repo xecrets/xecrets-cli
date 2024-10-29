@@ -147,7 +147,14 @@ internal class OptionsParser
         optionSet.Add("jwt-private-key=", XfOpCode.JwtPrivateKey, "{private-pem}:?Use a private key PEM file for signing.", (ora, op, @private) => ora.Add(op, @private));
         optionSet.Add("jwt-verify={}", XfOpCode.JwtVerify, "{public-pem} {signed-jwt}:?Verify a signed JWT file using a public PEM file.", (ora, op, @public, token) => ora.Add(op, @public, token));
         optionSet.Add("sigint=", XfOpCode.SdkSigInt, "{id}:?Send a SIGINT to process id.", (ora, op, id) => ora.Add(op, id));
-
+        optionSet.Add("slip39-combine=", XfOpCode.Slip39Combine, $"{{{nameof(XfOptionKeys.Bip39)}|{nameof(XfOptionKeys.Hex)}|{nameof(XfOptionKeys.Base64)}|{nameof(XfOptionKeys.Text)}}} [{{file}}]:?Combine shares and recover the secret.", (ora, op, format) => ora.Add(op, format));
+        optionSet.Add("slip39-group={}", XfOpCode.Slip39Group, "{threshold} {count}:?Specify a group to split to.", (ora, op, threshold, count) => ora.Add(op, threshold, count));
+        optionSet.Add("slip39-threshold=", XfOpCode.Slip39GroupThreshold, "{threshold}:?Specify the group threshold (default 1).", (ora, op, threshold) => ora.Add(op, threshold));
+        optionSet.Add("slip39-password=", XfOpCode.Slip39Password, "{password} [{iterations}]:?The password to use and the iteration exponent.", (ora, op, password) => ora.AddOneRunning(op, password));
+        optionSet.Add("slip39-secret={}", XfOpCode.Slip39Secret, $"{{{nameof(XfOptionKeys.Bip39)}|{nameof(XfOptionKeys.Hex)}|{nameof(XfOptionKeys.Base64)}|{nameof(XfOptionKeys.Text)}}} {{secret}}:?Specify the secret to split.", (ora, op, format, secret) => ora.Add(op, format, secret));
+        optionSet.Add("slip39-shares=", XfOpCode.Slip39Shares, "{share(s)}:?Add shares to combine.", (ora, op, share) => ora.AddManyRunning(op, share));
+        optionSet.Add("slip39-split=", XfOpCode.Slip39Split, $"{{{nameof(XfOptionKeys.Slip39)}|{nameof(XfOptionKeys.Hex)}|{nameof(XfOptionKeys.Base64)}}} [{{file}}]:?Split the secret into shares.", (ora, op, format) => ora.AddOneRunning(op, format));
+        optionSet.Add("slip39-info:", XfOpCode.Slip39Information, "[{{file}}]:?Verify the shares and output the prefix information.", (ora, op, to) => ora.AddOneRunning(op));
         return optionSet;
     }
 
@@ -280,6 +287,13 @@ internal class OptionsParser
         {
             _parsed.Add(new ParsedOp(opCode, p1, p2, p3));
             RunningAction = _noop;
+        }
+
+        public void AddOneRunning(XfOpCode opCode)
+        {
+            var op = new ParsedOp(opCode);
+            _parsed.Add(op);
+            RunningAction = (s) => { op.Arguments.Add(s); RunningAction = _noop; };
         }
 
         public void AddOneRunning(XfOpCode opCode, string first)

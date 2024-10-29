@@ -73,6 +73,7 @@ internal class Executor(Parameters parameters) : IDisposable
         parameters.TotalsTracker.ResetLogger(parameters);
         parameters.Overwrite = false;
         parameters.Compress = true;
+        parameters.Slip39 = new();
     }
 
     private static readonly XfStatusCode[] RecoverableInSequence = [XfStatusCode.InvalidPassword];

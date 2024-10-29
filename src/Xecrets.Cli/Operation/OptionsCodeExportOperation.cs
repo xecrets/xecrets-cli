@@ -41,7 +41,7 @@ internal class OptionsCodeExportOperation : IExecutionPhases
     public Task<Status> RealAsync(Parameters parameters)
     {
         StringBuilder sb = new StringBuilder();
-        sb.AppendLine("namespace Xecrets.Cli.Public");
+        sb.AppendLine("namespace Xecrets.Sdk.Cli");
         sb.AppendLine("{");
 
         sb.AppendLine($"    public enum {nameof(XfOpCode)}");
@@ -53,11 +53,29 @@ internal class OptionsCodeExportOperation : IExecutionPhases
         sb.AppendLine("    }");
         sb.AppendLine();
 
+        sb.AppendLine($"    public enum {nameof(XfOptionKeys)}");
+        sb.AppendLine("    {");
+        foreach (XfOptionKeys optionKey in Enum.GetValues(typeof(XfOptionKeys)))
+        {
+            sb.Append("        ").Append(Enum.GetName(optionKey)).Append(" = ").Append((int)optionKey).AppendLine(",");
+        }
+        sb.AppendLine("    }");
+        sb.AppendLine();
+
         sb.AppendLine($"    public enum {nameof(XfStatusCode)}");
         sb.AppendLine("    {");
         foreach (XfStatusCode statusCode in Enum.GetValues(typeof(XfStatusCode)))
         {
             sb.Append("        ").Append(Enum.GetName(statusCode)).Append(" = ").Append((int)statusCode).AppendLine(",");
+        }
+        sb.AppendLine("    }");
+        sb.AppendLine();
+
+        sb.AppendLine($"    public enum {nameof(XfSubStatusCode)}");
+        sb.AppendLine("    {");
+        foreach (XfSubStatusCode subStatus in Enum.GetValues(typeof(XfSubStatusCode)))
+        {
+            sb.Append("        ").Append(Enum.GetName(subStatus)).Append(" = ").Append((int)subStatus).AppendLine(",");
         }
         sb.AppendLine("    }");
         sb.AppendLine();

@@ -23,22 +23,31 @@
 
 #endregion Copyright and GPL License
 
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Xecrets.Cli.Abstractions;
+using Xecrets.Cli.Public;
+using Xecrets.Cli.Run;
 
-using Xecrets.Cli.Implementation;
-using Xecrets.Cli.Log;
+namespace Xecrets.Cli.Operation;
 
-namespace Xecrets.Cli;
-
-[JsonSourceGenerationOptions(WriteIndented = false)]
-[JsonSerializable(typeof(CliMessage))]
-[JsonSerializable(typeof(Dictionary<string, object>))]
-[JsonSerializable(typeof(Slip39Split))]
-[JsonSerializable(typeof(Slip39Combined))]
-[JsonSerializable(typeof(Slip39Prefixes))]
-internal partial class SourceGenerationContext : JsonSerializerContext
+internal class Slip39SharesOperation : IExecutionPhases
 {
-    public static SourceGenerationContext Indented { get; } =
-        new SourceGenerationContext(new JsonSerializerOptions() { WriteIndented = true,});
+    public Task<Status> DryAsync(Parameters parameters) =>
+        Extensions.Slip39Safe(() => ShareOperationInternal(parameters));
+
+    public Task<Status> RealAsync(Parameters parameters) =>
+        Extensions.Slip39Safe(() => ShareOperationInternal(parameters));
+
+    private static Status ShareOperationInternal(Parameters parameters)
+    {
+        if (parameters.Arguments.Count == 0)
+        {
+            return new Status(XfStatusCode.InvalidOption, parameters, "Missing {share(s)}.");
+        }
+        foreach (string share in parameters.Arguments)
+        {
+            parameters.Slip39.Shares.Add(share);
+        }
+
+        return Status.Success;
+    }
 }

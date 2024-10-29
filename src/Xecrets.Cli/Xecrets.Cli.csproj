@@ -42,6 +42,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\xecrets-net\AxCrypt.Core\Xecrets.Net.Core.csproj" />
     <ProjectReference Include="..\..\..\xecrets-net\AxCrypt.Mono\Xecrets.Net.Implementation.csproj" />
+    <ProjectReference Include="..\..\..\xecrets-slip39\src\Xecrets.Slip39\Xecrets.Slip39.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Resource.Designer.cs">

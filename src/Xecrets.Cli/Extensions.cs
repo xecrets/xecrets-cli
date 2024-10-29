@@ -32,6 +32,7 @@ using AxCrypt.Core.Portable;
 using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
+using Xecrets.Slip39;
 
 using static AxCrypt.Abstractions.TypeResolve;
 
@@ -110,5 +111,34 @@ internal static partial class Extensions
             JsonValueKind.False => false,
             _ => throw new ArgumentException($"Deserializing {element.ValueKind} is not supported here."),
         };
+    }
+
+    public static XfSubStatusCode ToXfSubStatusCode(this ErrorCode errorCode)
+    {
+        XfSubStatusCode subStatus = errorCode switch
+        {
+            ErrorCode.InsufficientShares => XfSubStatusCode.Slip39InsufficientShares,
+            ErrorCode.InconsistentShares => XfSubStatusCode.Slip39InconsistentShares,
+            ErrorCode.InvalidGroups => XfSubStatusCode.Slip39InvalidGroups,
+            ErrorCode.InvalidFormat => XfSubStatusCode.Slip39InvalidFormat,
+            ErrorCode.InvalidMnemonic => XfSubStatusCode.Slip39InvalidMnemonic,
+            ErrorCode.InvalidChecksum => XfSubStatusCode.Slip39InvalidChecksum,
+            ErrorCode.NoError => XfSubStatusCode.Success,
+            _ => XfSubStatusCode.Unknown,
+        };
+
+        return subStatus;
+    }
+
+    public static Task<Status> Slip39Safe(Func<Status> operation)
+    {
+        try
+        {
+            return Task.FromResult(operation());
+        }
+        catch (Slip39Exception ex)
+        {
+            return Task.FromResult(new Status(XfStatusCode.Slip39Error, ex.ErrorCode.ToXfSubStatusCode(), ex.Message));
+        }
     }
 }

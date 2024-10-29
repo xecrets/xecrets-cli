@@ -71,6 +71,7 @@ public enum XfStatusCode
     NotWritable = 93,
     NotYetImplemented = 96,
     PublicKeyNotFound = 99,
+    Slip39Error = 100,
     UnhandledOperationException = 102,
     UnhandledRunException = 105,
     UnknownEnvironmentVariable = 108,

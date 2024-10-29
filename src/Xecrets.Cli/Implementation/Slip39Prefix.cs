@@ -23,22 +23,17 @@
 
 #endregion Copyright and GPL License
 
-using System.Text.Json;
 using System.Text.Json.Serialization;
 
-using Xecrets.Cli.Implementation;
-using Xecrets.Cli.Log;
+namespace Xecrets.Cli.Implementation;
 
-namespace Xecrets.Cli;
-
-[JsonSourceGenerationOptions(WriteIndented = false)]
-[JsonSerializable(typeof(CliMessage))]
-[JsonSerializable(typeof(Dictionary<string, object>))]
-[JsonSerializable(typeof(Slip39Split))]
-[JsonSerializable(typeof(Slip39Combined))]
-[JsonSerializable(typeof(Slip39Prefixes))]
-internal partial class SourceGenerationContext : JsonSerializerContext
-{
-    public static SourceGenerationContext Indented { get; } =
-        new SourceGenerationContext(new JsonSerializerOptions() { WriteIndented = true,});
-}
+internal record Slip39Prefix(
+    [property: JsonPropertyName("id")] int Id,
+    [property: JsonPropertyName("extendable")] bool Extendable,
+    [property: JsonPropertyName("exponent")] int IterationExponent,
+    [property: JsonPropertyName("groupIndex")] int GroupIndex,
+    [property: JsonPropertyName("groupThreshold")] int GroupThreshold,
+    [property: JsonPropertyName("groupCount")] int GroupCount,
+    [property: JsonPropertyName("memberIndex")] int MemberIndex,
+    [property: JsonPropertyName("memberThreshold")] int MemberThreshold
+);

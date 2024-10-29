@@ -85,6 +85,10 @@ internal class CliMessage
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public int Status { get; set; }
 
+    [JsonPropertyName("subStatus")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public int SubStatus { get; set; }
+
     [JsonPropertyName("statusName")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public string? StatusName { get; set; }

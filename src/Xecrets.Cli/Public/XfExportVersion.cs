@@ -44,6 +44,7 @@ public static class XfExportVersion
     /// 2.0 -> 2024-09-26 Change parameter names to Arg1 and Arg2 in JSON logger
     /// 2.1 -> 2024-10-01 Add --sigint posix signal handling
     /// 2.2 -> 2024-10-09 Add third optional argument to --encrypt-to for original name
+    /// 2.3 -> 2024-10-29 Add Slip39 support
     /// </remarks>
-    public static Version CliVersion => new(2, 2);
+    public static Version CliVersion => new(2, 3);
 }

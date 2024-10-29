@@ -34,6 +34,8 @@ internal class Status(XfStatusCode code, string message)
 
     public XfStatusCode StatusCode { get; } = code;
 
+    public XfSubStatusCode SubStatusCode { get; } = XfSubStatusCode.Success;
+
     public string Message { get; set; } = message ?? throw new ArgumentNullException(nameof(message));
 
     public XfOpCode OpCode { get; set; } = XfOpCode.None;
@@ -66,6 +68,18 @@ internal class Status(XfStatusCode code, string message)
     public Status(Parameters parameters, string message)
         : this(XfStatusCode.Success, parameters, message)
     {
+    }
+
+    public Status(XfStatusCode code, XfSubStatusCode subCode, string message)
+        : this(code, message)
+    {
+        SubStatusCode = subCode;
+    }
+
+    public Status(XfStatusCode code, XfSubStatusCode subCode, Parameters parameters, string message)
+        :this(code, parameters, message)
+    {
+        SubStatusCode = subCode;
     }
 
     public Status(XfStatusCode code, Parameters parameters, string message)

@@ -23,22 +23,50 @@
 
 #endregion Copyright and GPL License
 
-using System.Text.Json;
-using System.Text.Json.Serialization;
+namespace Xecrets.Cli.Public;
 
-using Xecrets.Cli.Implementation;
-using Xecrets.Cli.Log;
-
-namespace Xecrets.Cli;
-
-[JsonSourceGenerationOptions(WriteIndented = false)]
-[JsonSerializable(typeof(CliMessage))]
-[JsonSerializable(typeof(Dictionary<string, object>))]
-[JsonSerializable(typeof(Slip39Split))]
-[JsonSerializable(typeof(Slip39Combined))]
-[JsonSerializable(typeof(Slip39Prefixes))]
-internal partial class SourceGenerationContext : JsonSerializerContext
+/// <summary>
+/// Sub-status codes giving a more detailed view of the status of an operation.
+/// </summary>
+internal enum XfSubStatusCode
 {
-    public static SourceGenerationContext Indented { get; } =
-        new SourceGenerationContext(new JsonSerializerOptions() { WriteIndented = true,});
+    /// <summary>
+    /// Default and indicating sucess.
+    /// </summary>
+    Success = 0,
+
+    /// <summary>
+    /// An unknown error occurred.
+    /// </summary>
+    Unknown = 1,
+
+    /// <summary>
+    /// A checksum or digest was found to be incorrect. Check the exception message for details.
+    /// </summary>
+    Slip39InvalidChecksum = 1010,
+
+    /// <summary>
+    /// Group specification or actual group meta data is invalid. Check the exception message for details.
+    /// </summary>
+    Slip39InvalidGroups = 1020,
+
+    /// <summary>
+    /// The number of shares is insufficient. Check the exception message for details.
+    /// </summary>
+    Slip39InsufficientShares = 1030,
+
+    /// <summary>
+    /// The set of shares have inconsistent meta data. Check the exception message for details.
+    /// </summary>
+    Slip39InconsistentShares = 1040,
+
+    /// <summary>
+    /// Input is in the wrong format. Check the exception message for details.
+    /// </summary>
+    Slip39InvalidFormat = 1050,
+
+    /// <summary>
+    /// An invalid mnemonic word or set of words were input. Check the exception message for details.
+    /// </summary>
+    Slip39InvalidMnemonic = 1060,
 }

@@ -50,6 +50,7 @@ using Xecrets.Licensing.Implementation;
 using Xecrets.Net.Api.Implementation;
 using Xecrets.Net.Core;
 using Xecrets.Net.Core.Crypto.Asymmetric;
+using Xecrets.Slip39;
 
 using static AxCrypt.Abstractions.TypeResolve;
 
@@ -120,6 +121,8 @@ TypeMap.Register.Singleton<ILicense>(() => new License(new NewLocator(), issuer:
 TypeMap.Register.Singleton<ILicenseCandidates>(() => new LicenseCandidates());
 TypeMap.Register.Singleton<ILicenseExpiration>(() => new LicenseExpirationByBuildTime(new NewLocator()));
 TypeMap.Register.Singleton(() => new LicenseBlurb(new NewLocator(), Resource.GplBlurb, Resource.UnlicensedBlurb, Resource.LicensedExpiredDownloadBlurb, Resource.LicensedDownloadBlurb, Resource.LicenseNotValidForProductBlurb));
+
+TypeMap.Register.Singleton<IShamirsSecretSharing>(() => new ShamirsSecretSharing(new StrongRandom()));
 
 await New<ILicense>().LoadFromAsync(New<ILicenseCandidates>().CandidatesFromFiles(New<IBuildUtc>().IsGplBuild ? [] : Directory.GetFiles(AppContext.BaseDirectory, "*.txt")));
 

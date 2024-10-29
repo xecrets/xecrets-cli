@@ -28,6 +28,7 @@ using AxCrypt.Core.Crypto.Asymmetric;
 using AxCrypt.Core.Session;
 using AxCrypt.Core.UI;
 
+using Xecrets.Cli.Implementation;
 using Xecrets.Cli.Log;
 using Xecrets.Cli.Public;
 
@@ -84,6 +85,8 @@ internal class Parameters(OptionsParser parser) : IDisposable
     public string JwtPrivateKeyPem { get; set; } = string.Empty;
 
     public int JwtDaysUntilExpiration { get; set; } = 0;
+
+    public Slip39Parameters Slip39 { get; set; } = new();
 
     public IEnumerable<UserPublicKey> PublicKeys
     {

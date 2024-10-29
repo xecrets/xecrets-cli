@@ -23,22 +23,40 @@
 
 #endregion Copyright and GPL License
 
-using System.Text.Json;
-using System.Text.Json.Serialization;
+namespace Xecrets.Cli.Public;
 
-using Xecrets.Cli.Implementation;
-using Xecrets.Cli.Log;
-
-namespace Xecrets.Cli;
-
-[JsonSourceGenerationOptions(WriteIndented = false)]
-[JsonSerializable(typeof(CliMessage))]
-[JsonSerializable(typeof(Dictionary<string, object>))]
-[JsonSerializable(typeof(Slip39Split))]
-[JsonSerializable(typeof(Slip39Combined))]
-[JsonSerializable(typeof(Slip39Prefixes))]
-internal partial class SourceGenerationContext : JsonSerializerContext
+/// <summary>
+/// Named option keys, also exported with the OptionsCodeExportOperation, thus available as an enum in the SDK.
+/// </summary>
+public enum XfOptionKeys
 {
-    public static SourceGenerationContext Indented { get; } =
-        new SourceGenerationContext(new JsonSerializerOptions() { WriteIndented = true,});
+    /// <summary>
+    /// Not used. Invalid.
+    /// </summary>
+    Unknown = 0,
+
+    /// <summary>
+    /// Accept or output a secret in Bip39 format.
+    /// </summary>
+    Bip39,
+
+    /// <summary>
+    /// Accept a secret or a share or output a share as hex.
+    /// </summary>
+    Hex,
+
+    /// <summary>
+    /// Accept or output a share as a Slip39 mnemonic word string.
+    /// </summary>
+    Slip39,
+
+    /// <summary>
+    /// Accept or output a secret as a plain text string
+    /// </summary>
+    Text,
+
+    /// <summary>
+    /// Accept a secret or a share or output a share as a URL safe base64 string.
+    /// </summary>
+    Base64,
 }

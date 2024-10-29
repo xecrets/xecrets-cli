@@ -23,22 +23,42 @@
 
 #endregion Copyright and GPL License
 
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Xecrets.Cli.Abstractions;
+using Xecrets.Cli.Public;
+using Xecrets.Cli.Run;
 
-using Xecrets.Cli.Implementation;
-using Xecrets.Cli.Log;
+namespace Xecrets.Cli.Operation;
 
-namespace Xecrets.Cli;
-
-[JsonSourceGenerationOptions(WriteIndented = false)]
-[JsonSerializable(typeof(CliMessage))]
-[JsonSerializable(typeof(Dictionary<string, object>))]
-[JsonSerializable(typeof(Slip39Split))]
-[JsonSerializable(typeof(Slip39Combined))]
-[JsonSerializable(typeof(Slip39Prefixes))]
-internal partial class SourceGenerationContext : JsonSerializerContext
+internal class Slip39PasswordOperation : IExecutionPhases
 {
-    public static SourceGenerationContext Indented { get; } =
-        new SourceGenerationContext(new JsonSerializerOptions() { WriteIndented = true,});
+    public Task<Status> DryAsync(Parameters parameters) =>
+        Extensions.Slip39Safe(() => PasswordOperationInternal(parameters));
+
+    public Task<Status> RealAsync(Parameters parameters) =>
+        Extensions.Slip39Safe(() => PasswordOperationInternal(parameters));
+
+    private static Status PasswordOperationInternal(Parameters parameters)
+    {
+        string password = parameters.Arg1;
+        if (password.Length == 0)
+        {
+            return new Status(XfStatusCode.InvalidOption, parameters, "Missing {password}.");
+        }
+        string exp = parameters.Arg2.Length > 0 ? parameters.Arg2 : "4";
+        if (!int.TryParse(exp, out int exponent))
+        {
+            return new Status(XfStatusCode.InvalidOption, parameters,
+                $"The iteration exponent '{parameters.Arg2}' must be an integer.");
+        }
+        if (exponent is < 0 or > 15)
+        {
+            return new Status(XfStatusCode.InvalidOption, parameters,
+                $"The iteration exponent '{exponent}' must be between 1 and 15.");
+        }
+
+        parameters.Slip39.Password = password;
+        parameters.Slip39.Exponent = exponent;
+
+        return Status.Success;
+    }
 }

@@ -66,6 +66,7 @@ internal class JsonLogger(TotalsTracker totalsTracker, bool progress) : ILogger
             Result = ToNullIfEmpty(status.Result),
             Status = (int)status.StatusCode,
             StatusName = status.StatusCode != 0 ? status.StatusCode.ToString() : null,
+            SubStatus = (int)status.SubStatusCode,
             Id = status.Id.Length > 0 ? status.Id : null,
             Utc = status.Utc,
         };
