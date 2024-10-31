@@ -33,13 +33,13 @@ internal abstract class LogOperationBase : IExecutionPhases
 {
     protected abstract LogStyle UpdateLogStyle(Parameters parameters);
 
-    public Task<Status> DryAsync(Parameters parameters)
+    public virtual Task<Status> DryAsync(Parameters parameters)
     {
         parameters.TotalsTracker.LogStyle = parameters.Parser.IsQuiet ? LogStyle.None : UpdateLogStyle(parameters);
         return Task.FromResult(Status.Success);
     }
 
-    public Task<Status> RealAsync(Parameters parameters)
+    public virtual Task<Status> RealAsync(Parameters parameters)
     {
         parameters.TotalsTracker.LogStyle = parameters.Parser.IsQuiet ? LogStyle.None : UpdateLogStyle(parameters);
         return Task.FromResult(Status.Success);

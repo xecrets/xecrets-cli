@@ -30,10 +30,22 @@ namespace Xecrets.Cli.Operation;
 
 internal class SdkJsonLogOperation : LogOperationBase
 {
-    protected override LogStyle UpdateLogStyle(Parameters parameters)
+    public override Task<Status> DryAsync(Parameters parameters)
     {
         parameters.ProgrammaticUse = true;
 
+        return base.DryAsync(parameters);
+    }
+
+    public override Task<Status> RealAsync(Parameters parameters)
+    {
+        parameters.ProgrammaticUse = true;
+
+        return base.RealAsync(parameters);
+    }
+
+    protected override LogStyle UpdateLogStyle(Parameters parameters)
+    {
         LogStyle currentLogStyle = parameters.TotalsTracker.LogStyle;
         currentLogStyle &= ~(LogStyle.Text);
         currentLogStyle |= LogStyle.Json;
