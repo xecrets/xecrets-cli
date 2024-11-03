@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "../xecrets-net"
+		},
+		{
+			"path": "../xecrets-slip39"
 		}
 	],
 	"settings": {
