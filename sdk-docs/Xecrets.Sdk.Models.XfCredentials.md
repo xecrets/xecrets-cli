@@ -43,7 +43,7 @@ public System.Collections.Generic.IEnumerable<string> Passwords { get; }
 
 ## XfCredentials.PublicKeyEmails Property
 
-An enumeration of e-mail monikers referring to public keys
+An enumeration of email monikers referring to public keys
 
 ```csharp
 public System.Collections.Generic.IEnumerable<string> PublicKeyEmails { get; }
@@ -121,7 +121,7 @@ An enumeration of passwords to add.
 
 ## XfCredentials.AddPublicKeyEmails(IEnumerable<string>) Method
 
-Add zero or more e-mail monikers to add to the collection of credentials.
+Add zero or more email monikers to add to the collection of credentials.
 
 ```csharp
 public void AddPublicKeyEmails(System.Collections.Generic.IEnumerable<string> publicKeyEmails);
@@ -132,7 +132,7 @@ public void AddPublicKeyEmails(System.Collections.Generic.IEnumerable<string> pu
 
 `publicKeyEmails` [System.Collections.Generic.IEnumerable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')
 
-An enumeration of e-mail monikers referring to public keys.
+An enumeration of email monikers referring to public keys.
 
 <a name='Xecrets.Sdk.Models.XfCredentials.AddPublicKeyFullNames(System.Collections.Generic.IEnumerable_string_)'></a>
 
