@@ -30,8 +30,8 @@ public static System.Version SdkVersion { get; }
 [System.Version](https://docs.microsoft.com/en-us/dotnet/api/System.Version 'System.Version')
 
 ### Remarks
-Changes includes not only syntax and semantics, but also actual numerical values assigned to <seealso cref="T:Xecrets.Cli.Public.XfOpCode"/> and <seealso cref="T:Xecrets.Cli.Public.XfCliApi"/> as well as changes or  
-removals of json property names in <seealso cref="T:Xecrets.Sdk.Cli.CliMessage"/> .
+Changes includes not only syntax and semantics, but also actual numerical values assigned to <seealso cref="T:Xecrets.Sdk.Cli.XfOpCode"/> and <seealso cref="T:Xecrets.Sdk.Cli.XfCliApi"/> as well as changes or removals of json property names in  
+<seealso cref="T:Xecrets.Sdk.Cli.CliMessage"/> .
 ### Methods
 
 <a name='Xecrets.Sdk.XfSdkVersion.IsSdkCompatibleWith(System.Version)'></a>

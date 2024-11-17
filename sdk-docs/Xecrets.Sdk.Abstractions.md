@@ -408,6 +408,33 @@ string[] StartMe(string fileNameWithoutExtension);
 
 [System.InvalidOperationException](https://docs.microsoft.com/en-us/dotnet/api/System.InvalidOperationException 'System.InvalidOperationException')
 
+<a name='Xecrets.Sdk.Abstractions.IXfApi.UpdatePrivateKeysAsync(Xecrets.Sdk.Models.XfCredentials,string)'></a>
+
+## IXfApi.UpdatePrivateKeysAsync(XfCredentials, string) Method
+
+Load private keys for decryption, returning an updated version with the same keys.
+
+```csharp
+System.Threading.Tasks.Task<string> UpdatePrivateKeysAsync(Xecrets.Sdk.Models.XfCredentials credentials, string json);
+```
+#### Parameters
+
+<a name='Xecrets.Sdk.Abstractions.IXfApi.UpdatePrivateKeysAsync(Xecrets.Sdk.Models.XfCredentials,string).credentials'></a>
+
+`credentials` [XfCredentials](Xecrets.Sdk.Models.XfCredentials.md 'Xecrets.Sdk.Models.XfCredentials')
+
+One or more passwords to decrypt the private keys with.
+
+<a name='Xecrets.Sdk.Abstractions.IXfApi.UpdatePrivateKeysAsync(Xecrets.Sdk.Models.XfCredentials,string).json'></a>
+
+`json` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+
+A json serialized instance with private keys.
+
+#### Returns
+[System.Threading.Tasks.Task&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')  
+The updated encrypted keys json.
+
 <a name='Xecrets.Sdk.Abstractions.IXfApi.WipeFilesAsync(System.Collections.Generic.IEnumerable_string_,System.Action_Xecrets.Sdk.Cli.CliMessage_)'></a>
 
 ## IXfApi.WipeFilesAsync(IEnumerable<string>, Action<CliMessage>) Method
@@ -449,31 +476,24 @@ Derived
 &#8627; [XfApiFactory](Xecrets.Sdk.XfApiFactory.md 'Xecrets.Sdk.XfApiFactory')
 ### Methods
 
-<a name='Xecrets.Sdk.Abstractions.IXfApiFactory.Create()'></a>
+<a name='Xecrets.Sdk.Abstractions.IXfApiFactory.Create(System.Nullable_bool_,System.Threading.CancellationToken)'></a>
 
-## IXfApiFactory.Create() Method
-
-Create an [IXfApi](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfApi 'Xecrets.Sdk.Abstractions.IXfApi') instance without cancellation."/>
-
-```csharp
-Xecrets.Sdk.Abstractions.IXfApi Create();
-```
-
-#### Returns
-[IXfApi](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfApi 'Xecrets.Sdk.Abstractions.IXfApi')
-
-<a name='Xecrets.Sdk.Abstractions.IXfApiFactory.Create(System.Threading.CancellationToken)'></a>
-
-## IXfApiFactory.Create(CancellationToken) Method
+## IXfApiFactory.Create(Nullable<bool>, CancellationToken) Method
 
 Create an [IXfApi](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfApi 'Xecrets.Sdk.Abstractions.IXfApi') instance.
 
 ```csharp
-Xecrets.Sdk.Abstractions.IXfApi Create(System.Threading.CancellationToken ct);
+Xecrets.Sdk.Abstractions.IXfApi Create(System.Nullable<bool> debugOverride, System.Threading.CancellationToken ct);
 ```
 #### Parameters
 
-<a name='Xecrets.Sdk.Abstractions.IXfApiFactory.Create(System.Threading.CancellationToken).ct'></a>
+<a name='Xecrets.Sdk.Abstractions.IXfApiFactory.Create(System.Nullable_bool_,System.Threading.CancellationToken).debugOverride'></a>
+
+`debugOverride` [System.Nullable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Nullable-1 'System.Nullable`1')[System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Nullable-1 'System.Nullable`1')
+
+Override the global debug cli flag if non-null.
+
+<a name='Xecrets.Sdk.Abstractions.IXfApiFactory.Create(System.Nullable_bool_,System.Threading.CancellationToken).ct'></a>
 
 `ct` [System.Threading.CancellationToken](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.CancellationToken 'System.Threading.CancellationToken')
 

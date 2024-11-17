@@ -98,7 +98,7 @@ internal sealed class Decryption(Stream fromStream, IEnumerable<LogOnIdentity> i
         return document;
     }
 
-    private static List<DecryptionParameter> DecryptionParameters(IEnumerable<LogOnIdentity> identities, bool isLegacyV1)
+    private static DecryptionParameter[] DecryptionParameters(IEnumerable<LogOnIdentity> identities, bool isLegacyV1)
     {
         var decryptionParameters = new List<DecryptionParameter>();
         foreach (var identity in identities)
@@ -106,17 +106,22 @@ internal sealed class Decryption(Stream fromStream, IEnumerable<LogOnIdentity> i
             decryptionParameters.AddRange(DecryptionParameters(isLegacyV1: isLegacyV1, identity.Passphrase, identity.PrivateKeys));
         }
 
-        return decryptionParameters;
+        Guid[] cryptoIds = [.. Resolve.CryptoFactory.OrderedIds];
+        DecryptionParameter[] orderedDecryptionParameters = [.. decryptionParameters
+            .OrderBy(dp => Array.IndexOf(cryptoIds, dp.CryptoId))];
+
+        return orderedDecryptionParameters;
     }
 
     private static IEnumerable<DecryptionParameter> DecryptionParameters(bool isLegacyV1, Passphrase passphrase, IEnumerable<IAsymmetricPrivateKey?> privateKeys)
     {
-        var cryptoIds =
+        Guid[] cryptoIds =
             isLegacyV1
             ? [new V1Aes128CryptoFactory().CryptoId]
-            : Resolve.CryptoFactory.OrderedIds.Where(id => id != new V1Aes128CryptoFactory().CryptoId);
+            : [.. Resolve.CryptoFactory.OrderedIds.Where(id => id != new V1Aes128CryptoFactory().CryptoId)];
 
-        return DecryptionParameter.CreateAll([passphrase], privateKeys, cryptoIds);
+        Passphrase[] passphrases = passphrase == Passphrase.Empty ? [] : [passphrase];
+        return DecryptionParameter.CreateAll(passphrases, privateKeys, cryptoIds);
     }
 
     public void Dispose()

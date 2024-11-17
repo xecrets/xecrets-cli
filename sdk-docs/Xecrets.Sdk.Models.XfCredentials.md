@@ -39,6 +39,19 @@ public System.Collections.Generic.IEnumerable<string> Passwords { get; }
 #### Property Value
 [System.Collections.Generic.IEnumerable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')
 
+<a name='Xecrets.Sdk.Models.XfCredentials.PrivateKeyFullNames'></a>
+
+## XfCredentials.PrivateKeyFullNames Property
+
+An enumeration of full path names to encrypted private key files in the XfEncryptedKeys format
+
+```csharp
+public System.Collections.Generic.IEnumerable<string> PrivateKeyFullNames { get; }
+```
+
+#### Property Value
+[System.Collections.Generic.IEnumerable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')
+
 <a name='Xecrets.Sdk.Models.XfCredentials.PublicKeyEmails'></a>
 
 ## XfCredentials.PublicKeyEmails Property
@@ -116,6 +129,24 @@ public void AddPasswords(System.Collections.Generic.IEnumerable<string> password
 `passwords` [System.Collections.Generic.IEnumerable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')
 
 An enumeration of passwords to add.
+
+<a name='Xecrets.Sdk.Models.XfCredentials.AddPrivateKeysFullNames(System.Collections.Generic.IEnumerable_string_)'></a>
+
+## XfCredentials.AddPrivateKeysFullNames(IEnumerable<string>) Method
+
+Add zero or more full path names to encrypted private keys to add to the collection of credentials.
+
+```csharp
+public void AddPrivateKeysFullNames(System.Collections.Generic.IEnumerable<string> encryptedPrivateKeyFullNames);
+```
+#### Parameters
+
+<a name='Xecrets.Sdk.Models.XfCredentials.AddPrivateKeysFullNames(System.Collections.Generic.IEnumerable_string_).encryptedPrivateKeyFullNames'></a>
+
+`encryptedPrivateKeyFullNames` [System.Collections.Generic.IEnumerable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')
+
+An enumeration of full path names to files containing encrypted  
+            private keys.
 
 <a name='Xecrets.Sdk.Models.XfCredentials.AddPublicKeyEmails(System.Collections.Generic.IEnumerable_string_)'></a>
 

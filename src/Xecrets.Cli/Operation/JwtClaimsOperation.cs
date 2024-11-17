@@ -66,7 +66,7 @@ internal class JwtClaimsOperation : IExecutionPhases
         }
         catch (Exception ex)
         {
-            return Task.FromResult(new Status(XfStatusCode.JwtDeserializeError, ex.Message + Environment.NewLine + ex.StackTrace));
+            return Task.FromResult(new Status(XfStatusCode.DeserializeError, ex.Message + Environment.NewLine + ex.StackTrace));
         }
 
         return Task.FromResult(Status.Success);

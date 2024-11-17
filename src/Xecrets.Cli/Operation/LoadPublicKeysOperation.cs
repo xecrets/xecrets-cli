@@ -37,7 +37,7 @@ using static AxCrypt.Abstractions.TypeResolve;
 
 namespace Xecrets.Cli.Operation;
 
-internal class LoadPublicKeyOperation : IExecutionPhases
+internal class LoadPublicKeysOperation : IExecutionPhases
 {
     public Task<Status> DryAsync(Parameters parameters)
     {

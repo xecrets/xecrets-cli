@@ -45,6 +45,7 @@ public static class XfExportVersion
     /// 2.1 -> 2024-10-01 Add --sigint posix signal handling
     /// 2.2 -> 2024-10-09 Add third optional argument to --encrypt-to for original name
     /// 2.3 -> 2024-10-29 Add Slip39 support
+    /// 3.0 -> 2024-11-19 Add --load-private-keys
     /// </remarks>
-    public static Version CliVersion => new(2, 3);
+    public static Version CliVersion => new(3, 0);
 }

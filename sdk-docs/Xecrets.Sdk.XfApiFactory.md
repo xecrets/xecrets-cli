@@ -61,27 +61,34 @@ An [System.Reactive.Concurrency.IScheduler](https://docs.microsoft.com/en-us/dot
             thread.
 ### Methods
 
-<a name='Xecrets.Sdk.XfApiFactory.Create(System.Threading.CancellationToken)'></a>
+<a name='Xecrets.Sdk.XfApiFactory.Create(System.Nullable_bool_,System.Threading.CancellationToken)'></a>
 
-## XfApiFactory.Create(CancellationToken) Method
+## XfApiFactory.Create(Nullable<bool>, CancellationToken) Method
 
-Create an [IXfApi](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfApi 'Xecrets.Sdk.Abstractions.IXfApi') instance.
+Create an [IXfApi](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfApi 'Xecrets.Sdk.Abstractions.IXfApi') instance with an optional cli debugging override.
 
 ```csharp
-public Xecrets.Sdk.Abstractions.IXfApi Create(System.Threading.CancellationToken ct);
+public Xecrets.Sdk.Abstractions.IXfApi Create(System.Nullable<bool> debugOverride, System.Threading.CancellationToken ct);
 ```
 #### Parameters
 
-<a name='Xecrets.Sdk.XfApiFactory.Create(System.Threading.CancellationToken).ct'></a>
+<a name='Xecrets.Sdk.XfApiFactory.Create(System.Nullable_bool_,System.Threading.CancellationToken).debugOverride'></a>
+
+`debugOverride` [System.Nullable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Nullable-1 'System.Nullable`1')[System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Nullable-1 'System.Nullable`1')
+
+Override the global debug cli flag if non-null.
+
+<a name='Xecrets.Sdk.XfApiFactory.Create(System.Nullable_bool_,System.Threading.CancellationToken).ct'></a>
 
 `ct` [System.Threading.CancellationToken](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.CancellationToken 'System.Threading.CancellationToken')
 
 A cancellation token to cancel any long running operation.
 
-Implements [Create(CancellationToken)](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfApiFactory.Create(System.Threading.CancellationToken) 'Xecrets.Sdk.Abstractions.IXfApiFactory.Create(System.Threading.CancellationToken)')
+Implements [Create(Nullable&lt;bool&gt;, CancellationToken)](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfApiFactory.Create(System.Nullable_bool_,System.Threading.CancellationToken) 'Xecrets.Sdk.Abstractions.IXfApiFactory.Create(System.Nullable<bool>, System.Threading.CancellationToken)')
 
 #### Returns
-[IXfApi](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfApi 'Xecrets.Sdk.Abstractions.IXfApi')
+[IXfApi](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfApi 'Xecrets.Sdk.Abstractions.IXfApi')  
+An [IXfApi](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfApi 'Xecrets.Sdk.Abstractions.IXfApi') instance.
 
 <a name='Xecrets.Sdk.XfApiFactory.Safe()'></a>
 

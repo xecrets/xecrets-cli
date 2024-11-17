@@ -78,6 +78,7 @@ TypeMap.Register.Singleton(() => new UserSettingsVersion());
 TypeMap.Register.Singleton(() => new UserSettings(New<ISettingsStore>(), New<IterationCalculator>()));
 TypeMap.Register.Singleton<IRandomGenerator>(() => new RandomGenerator());
 TypeMap.Register.Singleton<IAsymmetricFactory>(() => new NetAsymmetricFactory());
+TypeMap.Register.Singleton<IProtectedData>(() => new NoProtectedDataImplementation());
 TypeMap.Register.Singleton(() => new CryptoFactory([]));
 
 TypeMap.Register.New(() => new AxCryptFactory());

@@ -94,7 +94,7 @@ public string? Message { get; set; }
 
 ## CliMessage.OpCode Property
 
-The current [Xecrets.Cli.Public.XfOpCode](https://docs.microsoft.com/en-us/dotnet/api/Xecrets.Cli.Public.XfOpCode 'Xecrets.Cli.Public.XfOpCode') for this response.
+The current [Xecrets.Sdk.Cli.XfOpCode](https://docs.microsoft.com/en-us/dotnet/api/Xecrets.Sdk.Cli.XfOpCode 'Xecrets.Sdk.Cli.XfOpCode') for this response.
 
 ```csharp
 public int OpCode { get; set; }
@@ -107,7 +107,7 @@ public int OpCode { get; set; }
 
 ## CliMessage.OpCodeName Property
 
-The name of the [Xecrets.Cli.Public.XfOpCode](https://docs.microsoft.com/en-us/dotnet/api/Xecrets.Cli.Public.XfOpCode 'Xecrets.Cli.Public.XfOpCode') for this response.
+The name of the [Xecrets.Sdk.Cli.XfOpCode](https://docs.microsoft.com/en-us/dotnet/api/Xecrets.Sdk.Cli.XfOpCode 'Xecrets.Sdk.Cli.XfOpCode') for this response.
 
 ```csharp
 public string? OpCodeName { get; set; }
