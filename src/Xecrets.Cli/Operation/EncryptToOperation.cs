@@ -125,7 +125,7 @@ internal class EncryptToOperation : IExecutionPhases
         parameters.Progress.Display = parameters.Arg1;
 
         IEnumerable<UserPublicKey> userPublicKeys = parameters.PublicKeys.Where(pk => parameters.SharingEmails.Contains(pk.Email));
-        using (var encryption = new Encryption(fromStore.OpenRead(), parameters.Identities.Where(id => id.Passphrase != Passphrase.Empty), userPublicKeys, parameters.Progress))
+        using (var encryption = new Encryption(fromStore, parameters.Identities.Where(id => id.Passphrase != Passphrase.Empty), userPublicKeys, parameters.Progress))
         {
             if (parameters.AsciiArmor)
             {

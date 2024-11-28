@@ -40,31 +40,32 @@ internal sealed class Encryption : IDisposable
 {
     private IAxCryptDocument _document;
 
-    private Stream _fromStream;
+    private readonly IStandardIoDataStore _fromStore;
 
-    public Encryption(Stream fromStream, IEnumerable<LogOnIdentity> identities, IEnumerable<UserPublicKey> publicKeys, IProgressContext progress)
+    private readonly IProgressContext _progress;
+
+    public Encryption(IStandardIoDataStore fromStore, IEnumerable<LogOnIdentity> identities, IEnumerable<UserPublicKey> publicKeys, IProgressContext progress)
     {
-        var encryptionParameters = new EncryptionParameters(new V2Aes256CryptoFactory().CryptoId, identities.First());
+        EncryptionParameters encryptionParameters = new(new V2Aes256CryptoFactory().CryptoId, identities.First());
         encryptionParameters.AddOrReplace(publicKeys);
         _document = New<AxCryptFactory>().CreateDocument(encryptionParameters);
-        _fromStream = new ProgressStream(fromStream, progress);
+        _fromStore = fromStore;
+        _progress = progress;
     }
 
     public void EncryptTo(IStandardIoDataStore toStore, string originalFileName, AxCryptOptions options)
     {
         try
         {
-            using (_fromStream)
-            {
-                using var toStream = toStore.OpenWrite();
+            using Stream fromStream = new ProgressStream(_fromStore.OpenRead(), _progress);
+            using Stream toStream = toStore.OpenWrite();
 
-                _document.FileName = originalFileName;
-                _document.CreationTimeUtc = New<INow>().Utc;
-                _document.LastAccessTimeUtc = _document.CreationTimeUtc;
-                _document.LastWriteTimeUtc = _document.CreationTimeUtc;
+            _document.FileName = originalFileName;
+            _document.CreationTimeUtc = _fromStore.CreationTimeUtc;
+            _document.LastAccessTimeUtc = _fromStore.LastAccessTimeUtc;
+            _document.LastWriteTimeUtc = _fromStore.LastWriteTimeUtc;
 
-                _document.EncryptTo(_fromStream, toStream, options);
-            }
+            _document.EncryptTo(fromStream, toStream, options);
         }
         catch
         {
@@ -83,12 +84,6 @@ internal sealed class Encryption : IDisposable
         {
             _document.Dispose();
             _document = null!;
-        }
-
-        if (_fromStream != null)
-        {
-            _fromStream.Dispose();
-            _fromStream = null!;
         }
     }
 }
