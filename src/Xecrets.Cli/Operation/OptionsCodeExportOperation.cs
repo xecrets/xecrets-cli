@@ -41,8 +41,6 @@ internal class OptionsCodeExportOperation : IExecutionPhases
     public Task<Status> RealAsync(Parameters parameters)
     {
         StringBuilder sb = new StringBuilder();
-        sb.AppendLine("namespace Xecrets.Sdk.Cli;");
-        sb.AppendLine();
 
         sb.AppendLine($"public enum {nameof(XfOpCode)}");
         sb.AppendLine("{");

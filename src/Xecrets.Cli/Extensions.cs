@@ -141,4 +141,9 @@ internal static partial class Extensions
             return Task.FromResult(new Status(XfStatusCode.Slip39Error, ex.ErrorCode.ToXfSubStatusCode(), ex.Message));
         }
     }
+
+    public static string NormalizeDirectorySeparator(this string path)
+    {
+        return path.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
+    }
 }

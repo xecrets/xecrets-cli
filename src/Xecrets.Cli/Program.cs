@@ -71,8 +71,16 @@ TypeMap.Register.New<string, IDataStore>((path) => new DataStore(path));
 TypeMap.Register.New<string, IDataContainer>((path) => new DataContainer(path));
 TypeMap.Register.New<string, IDataItem>((path) => DataItem.Create(path));
 
-string workFolderPath = Path.Combine(Path.GetTempPath(), "Axantum/XecretsCli".Replace('/', Path.DirectorySeparatorChar));
-Directory.CreateDirectory(workFolderPath);
+string workFolder;
+if (options.WorkFolder.Length > 0)
+{
+    workFolder = options.WorkFolder.NormalizeDirectorySeparator();
+}
+else
+{
+    workFolder = Path.Combine(Path.GetTempPath(), "Axantum/XecretsCli".NormalizeDirectorySeparator());
+}
+Directory.CreateDirectory(workFolder);
 
 TypeMap.Register.Singleton(() => new UserSettingsVersion());
 TypeMap.Register.Singleton(() => new UserSettings(New<ISettingsStore>(), New<IterationCalculator>()));
@@ -87,7 +95,7 @@ TypeMap.Register.New<int, Salt>((size) => new Salt(size));
 TypeMap.Register.New(() => new IterationCalculator());
 TypeMap.Register.Singleton<IStringSerializer>(() => new SystemTextJsonStringSerializer(JsonSourceGenerationContext.CreateJsonSerializerContext(New<IAsymmetricFactory>().GetConverters())));
 
-TypeMap.Register.Singleton(() => new WorkFolder(workFolderPath), () => { });
+TypeMap.Register.Singleton(() => new WorkFolder(workFolder), () => { });
 
 TypeMap.Register.Singleton(() => new FileLocker());
 TypeMap.Register.New(() => PortableFactory.AxCryptHMACSHA1());
@@ -99,12 +107,12 @@ TypeMap.Register.New<CryptoStreamBase>(() => PortableFactory.CryptoStream());
 TypeMap.Register.New(() => PortableFactory.RandomNumberGenerator());
 TypeMap.Register.New<ISystemCryptoPolicy>(() => new ProCryptoPolicy());
 
-TypeMap.Register.Singleton<IReport>(() => new Report(Resolve.WorkFolder.FileInfo.FullName, 1000000));
+TypeMap.Register.Singleton<IReport>(() => new XecretsCliReport("xecrets-cli-exceptions.txt", maxReportFileLength: 1024*1024));
 TypeMap.Register.Singleton(() => TimeProvider.System);
 TypeMap.Register.Singleton<INow>(() => new TimeProviderNow());
 
 // Avoid JSON deserialization errors when the user settings file is empty.
-IDataStore settings = Resolve.WorkFolder.FileInfo.FileItemInfo("UserSettings.txt");
+IDataStore settings = Resolve.WorkFolder.FileInfo.FileItemInfo("xecrets-cli-settings.json");
 if (settings.IsAvailable && settings.Length() == 0)
 {
     settings.Delete();

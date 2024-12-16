@@ -24,6 +24,7 @@
 #endregion Copyright and GPL License
 
 using Xecrets.Cli.Abstractions;
+using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
 
 namespace Xecrets.Cli.Operation;
@@ -32,16 +33,22 @@ internal class CliCrashLogOperation : IExecutionPhases
 {
     public Task<Status> DryAsync(Parameters parameters)
     {
-        string crashLogFullName = parameters.Arguments[0];
+        if (parameters.Parser.WorkFolder.Length == 0)
+        {
+            return Task.FromResult(new Status(XfStatusCode.NotAFolder, "No work folder specified."));
+        }
+
+        string crashLogName = parameters.Arguments[0];
+        string crashLogFullName = Path.Combine(parameters.Parser.WorkFolder, crashLogName);
         if (Directory.Exists(crashLogFullName))
         {
-            return Task.FromResult(new Status(Public.XfStatusCode.NotAFile, $"Crash log file path '{crashLogFullName}' is a folder."));
+            return Task.FromResult(new Status(XfStatusCode.NotAFile, $"Crash log file path '{crashLogFullName}' is a folder."));
         }
 
         string directory = Path.GetDirectoryName(crashLogFullName) ?? string.Empty;
         if (directory.Length > 0 && !Directory.Exists(directory))
         {
-            return Task.FromResult(new Status(Public.XfStatusCode.NotAFolder, $"Crash log file folder '{directory}' does not exist."));
+            return Task.FromResult(new Status(XfStatusCode.NotAFolder, $"Crash log file folder '{directory}' does not exist."));
         }
 
         parameters.CrashLogFile = crashLogFullName;

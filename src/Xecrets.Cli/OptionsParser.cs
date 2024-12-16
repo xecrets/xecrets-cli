@@ -158,6 +158,7 @@ internal class OptionsParser
         optionSet.Add("slip39-shares=", XfOpCode.Slip39Shares, "{share(s)}:?Add shares to combine.", (ora, op, share) => ora.AddManyRunning(op, share));
         optionSet.Add("slip39-split=", XfOpCode.Slip39Split, $"{{{nameof(XfOptionKeys.Slip39)}|{nameof(XfOptionKeys.Hex)}|{nameof(XfOptionKeys.Base64)}}} [{{file}}]:?Split the secret into shares.", (ora, op, format) => ora.AddOneRunning(op, format));
         optionSet.Add("slip39-info:", XfOpCode.Slip39Information, "[{{file}}]:?Verify the shares and output the prefix information.", (ora, op, to) => ora.AddOneRunning(op));
+        optionSet.Add("work-folder=", XfOpCode.WorkFolder, "{work-folder}:?A work folder for settings and logs (global).", (ora, op, wf) => WorkFolder = wf);
         return optionSet;
     }
 
@@ -176,6 +177,8 @@ internal class OptionsParser
     public bool IsQuiet { get; set; } = false;
 
     public bool Internal { get; set; } = false;
+
+    public string WorkFolder { get; set; } = string.Empty;
 
     public int OpLevel { get; set; } = 0;
 

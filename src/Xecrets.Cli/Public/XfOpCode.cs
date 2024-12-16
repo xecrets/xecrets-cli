@@ -103,6 +103,7 @@ public enum XfOpCode
     TextLog = 1550,
     UseKeyPair = 1560,
     UsePublicKey = 1570,
-    Wipe = 1580
+    Wipe = 1580,
+    WorkFolder = 1590,
     #endregion Possible-to-change values if API version is updated
 }

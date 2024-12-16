@@ -15,45 +15,51 @@ Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.O
 Implements [IXfApiFactory](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfApiFactory 'Xecrets.Sdk.Abstractions.IXfApiFactory')
 ### Constructors
 
-<a name='Xecrets.Sdk.XfApiFactory.XfApiFactory(string,bool,string,System.Reactive.Concurrency.IScheduler,System.Reactive.Concurrency.IScheduler)'></a>
+<a name='Xecrets.Sdk.XfApiFactory.XfApiFactory(string,bool,string,string,System.Reactive.Concurrency.IScheduler,System.Reactive.Concurrency.IScheduler)'></a>
 
-## XfApiFactory(string, bool, string, IScheduler, IScheduler) Constructor
+## XfApiFactory(string, bool, string, string, IScheduler, IScheduler) Constructor
 
 Create an [IXfApi](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfApi 'Xecrets.Sdk.Abstractions.IXfApi') instance.
 
 ```csharp
-public XfApiFactory(string license, bool debugCli, string crashLogFullName, System.Reactive.Concurrency.IScheduler taskpoolScheduler, System.Reactive.Concurrency.IScheduler mainthreadScheduler);
+public XfApiFactory(string license, bool debugCli, string workFolder, string crashLogName, System.Reactive.Concurrency.IScheduler taskpoolScheduler, System.Reactive.Concurrency.IScheduler mainthreadScheduler);
 ```
 #### Parameters
 
-<a name='Xecrets.Sdk.XfApiFactory.XfApiFactory(string,bool,string,System.Reactive.Concurrency.IScheduler,System.Reactive.Concurrency.IScheduler).license'></a>
+<a name='Xecrets.Sdk.XfApiFactory.XfApiFactory(string,bool,string,string,System.Reactive.Concurrency.IScheduler,System.Reactive.Concurrency.IScheduler).license'></a>
 
 `license` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
 
 A Xecrets license string to provide for a ready built version of XecretsCli.
 
-<a name='Xecrets.Sdk.XfApiFactory.XfApiFactory(string,bool,string,System.Reactive.Concurrency.IScheduler,System.Reactive.Concurrency.IScheduler).debugCli'></a>
+<a name='Xecrets.Sdk.XfApiFactory.XfApiFactory(string,bool,string,string,System.Reactive.Concurrency.IScheduler,System.Reactive.Concurrency.IScheduler).debugCli'></a>
 
 `debugCli` [System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')
 
 Set to [true](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/bool 'https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/bool') to cause the command line to stop on a breakpoint and  
             enable attaching a debugger. (Windows only)
 
-<a name='Xecrets.Sdk.XfApiFactory.XfApiFactory(string,bool,string,System.Reactive.Concurrency.IScheduler,System.Reactive.Concurrency.IScheduler).crashLogFullName'></a>
+<a name='Xecrets.Sdk.XfApiFactory.XfApiFactory(string,bool,string,string,System.Reactive.Concurrency.IScheduler,System.Reactive.Concurrency.IScheduler).workFolder'></a>
 
-`crashLogFullName` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+`workFolder` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
 
-The full path where the command line can write a crash log on non-zero return  
+A folder where the command line can write logs and settings.
+
+<a name='Xecrets.Sdk.XfApiFactory.XfApiFactory(string,bool,string,string,System.Reactive.Concurrency.IScheduler,System.Reactive.Concurrency.IScheduler).crashLogName'></a>
+
+`crashLogName` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+
+The file name where command line can write a crash log on non-zero return  
             status.
 
-<a name='Xecrets.Sdk.XfApiFactory.XfApiFactory(string,bool,string,System.Reactive.Concurrency.IScheduler,System.Reactive.Concurrency.IScheduler).taskpoolScheduler'></a>
+<a name='Xecrets.Sdk.XfApiFactory.XfApiFactory(string,bool,string,string,System.Reactive.Concurrency.IScheduler,System.Reactive.Concurrency.IScheduler).taskpoolScheduler'></a>
 
 `taskpoolScheduler` [System.Reactive.Concurrency.IScheduler](https://docs.microsoft.com/en-us/dotnet/api/System.Reactive.Concurrency.IScheduler 'System.Reactive.Concurrency.IScheduler')
 
 An [System.Reactive.Concurrency.IScheduler](https://docs.microsoft.com/en-us/dotnet/api/System.Reactive.Concurrency.IScheduler 'System.Reactive.Concurrency.IScheduler') instance to schedule work on the  
             taskpool.
 
-<a name='Xecrets.Sdk.XfApiFactory.XfApiFactory(string,bool,string,System.Reactive.Concurrency.IScheduler,System.Reactive.Concurrency.IScheduler).mainthreadScheduler'></a>
+<a name='Xecrets.Sdk.XfApiFactory.XfApiFactory(string,bool,string,string,System.Reactive.Concurrency.IScheduler,System.Reactive.Concurrency.IScheduler).mainthreadScheduler'></a>
 
 `mainthreadScheduler` [System.Reactive.Concurrency.IScheduler](https://docs.microsoft.com/en-us/dotnet/api/System.Reactive.Concurrency.IScheduler 'System.Reactive.Concurrency.IScheduler')
 

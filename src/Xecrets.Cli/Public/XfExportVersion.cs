@@ -46,6 +46,7 @@ public static class XfExportVersion
     /// 2.2 -> 2024-10-09 Add third optional argument to --encrypt-to for original name
     /// 2.3 -> 2024-10-29 Add Slip39 support
     /// 3.0 -> 2024-11-19 Add --load-private-keys
+    /// 4.0 -> 2024-12-16 Add --work-folder and change meaning of --cli-crash-log
     /// </remarks>
-    public static Version CliVersion => new(3, 0);
+    public static Version CliVersion => new(4, 0);
 }
