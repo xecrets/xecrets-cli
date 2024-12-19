@@ -91,6 +91,7 @@ internal class Executor(Parameters parameters) : IDisposable
             }
 
             Status status = await factory.Create(parsedOp.OpCode).DoAsync();
+            factory.Parameters.TotalsTracker.ResetLogger();
             if (skipLevel > parser.OpLevel)
             {
                 skipLevel = 0;

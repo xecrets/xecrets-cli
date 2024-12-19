@@ -148,7 +148,6 @@ internal abstract class RunFactory(Parameters parameters)
     {
         if (_operationTable.TryGetValue(opCode, out var actionFunc))
         {
-            Parameters.TotalsTracker.ResetLogger();
             return new SomeAction(this, actionFunc(), opCode);
         }
 
