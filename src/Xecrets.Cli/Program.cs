@@ -58,7 +58,7 @@ using static AxCrypt.Abstractions.TypeResolve;
 
 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-var options = new OptionsParser(Environment.CommandLine);
+OptionsParser parser = new(Environment.CommandLine);
 
 TypeMap.Register.Singleton(() => new CancelSignal());
 TypeMap.Register.Singleton<IRuntimeEnvironment>(() => new AxCrypt.Mono.RuntimeEnvironment(".axx"));
@@ -72,9 +72,9 @@ TypeMap.Register.New<string, IDataContainer>((path) => new DataContainer(path));
 TypeMap.Register.New<string, IDataItem>((path) => DataItem.Create(path));
 
 string workFolder;
-if (options.WorkFolder.Length > 0)
+if (parser.WorkFolder.Length > 0)
 {
-    workFolder = options.WorkFolder.NormalizeDirectorySeparator();
+    workFolder = parser.WorkFolder.NormalizeDirectorySeparator();
 }
 else
 {
@@ -107,7 +107,7 @@ TypeMap.Register.New<CryptoStreamBase>(() => PortableFactory.CryptoStream());
 TypeMap.Register.New(() => PortableFactory.RandomNumberGenerator());
 TypeMap.Register.New<ISystemCryptoPolicy>(() => new ProCryptoPolicy());
 
-TypeMap.Register.Singleton<IReport>(() => new XecretsCliReport("xecrets-cli-exceptions.txt", maxReportFileLength: 1024*1024));
+TypeMap.Register.Singleton<IReport>(() => new XecretsCliReport("xecrets-cli-exceptions.txt", maxReportFileLength: 1024 * 1024));
 TypeMap.Register.Singleton(() => TimeProvider.System);
 TypeMap.Register.Singleton<INow>(() => new TimeProviderNow());
 
@@ -135,12 +135,12 @@ TypeMap.Register.Singleton<IShamirsSecretSharing>(() => new ShamirsSecretSharing
 
 await New<ILicense>().LoadFromAsync(New<ILicenseCandidates>().CandidatesFromFiles(New<IBuildUtc>().IsGplBuild ? [] : Directory.GetFiles(AppContext.BaseDirectory, "*.txt")));
 
-var parameters = new Parameters(options);
+Parameters parameters = new(parser);
 
 Status status;
 try
 {
-    using (var executor = new Executor(parameters))
+    using (Executor executor = new(parameters))
     {
         status = await executor.RunAsync();
 
@@ -150,7 +150,7 @@ try
         }
     }
 
-    if (!parameters.Parser.ParseStatus.IsSuccess || !parameters.Parser.ParsedOps.Any())
+    if (!status.IsSuccess || !parser.ParsedOps.Any())
     {
         parameters.Logger.Log("Use --help to display valid options.");
     }

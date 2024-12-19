@@ -27,7 +27,6 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 
 using AxCrypt.Abstractions;
-using AxCrypt.Core.Portable;
 
 using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Public;

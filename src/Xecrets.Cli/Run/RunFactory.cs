@@ -44,6 +44,7 @@ internal abstract class RunFactory(Parameters parameters)
         { XfOpCode.CreateKeyPair, () => new CreateKeyPairOperation() },
         { XfOpCode.CliDebugBreak, () => new CliDebugBreakOperation() },
         { XfOpCode.Compress, () => new CompressOperation() },
+        { XfOpCode.Crash, () => new CrashOperation() },
         { XfOpCode.DecryptTo, () => new DecryptToOperation() },
         { XfOpCode.DecryptToFolder, () => new DecryptToFolderOperation() },
         { XfOpCode.Echo, () => new EchoOperation() },

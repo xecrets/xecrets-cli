@@ -56,6 +56,7 @@ public enum XfOpCode
     CliProgramExit = 1080,
     CliTextMessage = 1090,
     Compress = 1100,
+    Crash = 1105,
     CreateKeyPair = 1110,
     DecryptTo = 1120,
     DecryptToFolder = 1130,

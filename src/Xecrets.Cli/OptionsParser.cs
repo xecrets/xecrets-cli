@@ -138,8 +138,8 @@ internal class OptionsParser
         optionSet.Add("begin", XfOpCode.Begin, ":?Begin a sequence of operations.", (ora, op, begin) => ora.Add(op));
         optionSet.Add("cli-crash-log=", XfOpCode.CliCrashLog, "{file}:?Write crash log here (global).", (ora, op, log) => ora.Add(op, log));
         optionSet.Add("cli-license=", XfOpCode.CliLicense, "{jwt-license}:?Use this license. Overrides any others found (global).", (ora, op, license) => ora.Add(op, license));
-        optionSet.Add("options-code-export", XfOpCode.OptionsCodeExport, ":?Display C# source code for options.", (ora, op, arg) => ora.Add(arg != null ? op : XfOpCode.None));
         optionSet.Add("cli-version", XfOpCode.SdkCliVersion, ":?Display the command line tool API version.", (ora, op, arg) => ora.Add(arg != null ? op : XfOpCode.None));
+        optionSet.Add("crash=", XfOpCode.Crash, "{parse|dry|real}:?Crash during parse, dry run or real run.", (ora, op, arg) => { if (arg == "parse") HardCrash.Immediately(); else ora.Add(XfOpCode.Crash, arg); });
         optionSet.Add("end", XfOpCode.End, ":?End a sequence of operations.", (ora, op, end) => ora.Add(op));
         optionSet.Add("internal", XfOpCode.Internal, ":?Display help for internal use commands and disable splash (global).", (ora, op, @internal) => Internal = @internal != null);
         optionSet.Add("jwt-audience=", XfOpCode.JwtAudience, "{audience}:?Set audience string or URI for JWT.", (ora, op, audience) => ora.Add(op, audience));
@@ -149,6 +149,7 @@ internal class OptionsParser
         optionSet.Add("jwt-sign=", XfOpCode.JwtSign, "{signed-jwt}:?Sign and write JWT to file.", (ora, op, file) => ora.Add(op, file));
         optionSet.Add("jwt-private-key=", XfOpCode.JwtPrivateKey, "{private-pem}:?Use a private key PEM file for signing.", (ora, op, @private) => ora.Add(op, @private));
         optionSet.Add("jwt-verify={}", XfOpCode.JwtVerify, "{public-pem} {signed-jwt}:?Verify a signed JWT file using a public PEM file.", (ora, op, @public, token) => ora.Add(op, @public, token));
+        optionSet.Add("options-code-export", XfOpCode.OptionsCodeExport, ":?Display C# source code for options.", (ora, op, arg) => ora.Add(arg != null ? op : XfOpCode.None));
         optionSet.Add("sigint=", XfOpCode.SdkSigInt, "{id}:?Send a SIGINT to process id.", (ora, op, id) => ora.Add(op, id));
         optionSet.Add("slip39-combine=", XfOpCode.Slip39Combine, $"{{{nameof(XfOptionKeys.Bip39)}|{nameof(XfOptionKeys.Hex)}|{nameof(XfOptionKeys.Base64)}|{nameof(XfOptionKeys.Text)}}} [{{file}}]:?Combine shares and recover the secret.", (ora, op, format) => ora.Add(op, format));
         optionSet.Add("slip39-group={}", XfOpCode.Slip39Group, "{threshold} {count}:?Specify a group to split to.", (ora, op, threshold, count) => ora.Add(op, threshold, count));
@@ -414,7 +415,7 @@ internal class OptionsParser
         }
         catch (OptionException oe)
         {
-            ParseStatus = new Status(XfStatusCode.InvalidOption, oe.ToString());
+            ParseStatus = new Status(XfStatusCode.InvalidOption, oe.Message);
             return;
         }
     }
