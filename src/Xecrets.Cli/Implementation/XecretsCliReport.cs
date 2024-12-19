@@ -27,7 +27,10 @@ using System.Security.Cryptography;
 using System.Text;
 
 using AxCrypt.Abstractions;
+using AxCrypt.Core.Crypto.Asymmetric;
 using AxCrypt.Core.Runtime;
+
+using Xecrets.Net.Core.Crypto.Asymmetric;
 
 using static AxCrypt.Abstractions.TypeResolve;
 
@@ -67,12 +70,23 @@ internal class XecretsCliReport(string reportFileName, long maxReportFileLength)
         File.AppendAllText(fullName, sb.ToString());
     }
 
+    // NetPrivateKey is an internal type, but let's try to make future refactoring find the reference if something
+    // changes in the future. The below check works only on Windows, but this one will work on all platforms.
+    private static readonly string _rsaDecryptionStackMarker = $"at {typeof(NetAsymmetricFactory).FullName!.Replace(nameof(NetAsymmetricFactory), "NetPrivateKey")}.{nameof(IAsymmetricPrivateKey.Transform)}";
+
     private static bool IgnoreException(Exception ex)
     {
+        // Ignore simple failures to decrypt a private key
         if (ex is CryptographicException ce && ce.HResult == unchecked((int)0xc100000d))
         {
             return true;
         }
+
+        if ((ex.StackTrace ?? string.Empty).Contains(_rsaDecryptionStackMarker))
+        {
+            return true;
+        }
+
         return false;
     }
 
