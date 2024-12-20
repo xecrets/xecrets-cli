@@ -1,0 +1,43 @@
+﻿Xecrets.Cli is licensed under the GNU General Public License, version 3 or later (GPL-3.0-or-later)
+unless otherwise specified for particular components.
+
+Details
+
+Xecrets.Cli, Xecrets.Net.Cryptography, Xecrets.Cli.Test:
+
+- Licensed under GPL-3.0-or-later. Copyright © 2022-2024 Svante Seleborg.
+
+Xecrets.Slip39, Xecrets.Slip39.Test:
+
+- Licensed under the MIT license. Original work by Lucas Ontivero, modified by Svante Seleborg.
+Copyright © 2024 Lucas Ontivero, modifications Copyright © 2024 Svante Seleborg.
+
+Xecrets.Net.Abstractions, Xecrets.Net.Api, Xecrets.Net.Common, Xecrets.Net.Content, Xecrets.NetCore,
+Xecrets.Net.Implementation, Xecrets.Net.Common.Test, Xecrets.Net.Core.Test, Xecrets.Net.Fake,
+Xecrets.Net.Implementation.Test:
+
+- Licensed under GPL-3.0-or-later. Portions Copyright © 2016, 2017, 2022-2024 Svante Seleborg, other
+portions copyright according to source code notices.
+
+Xecrets.Net.BouncyCastle:
+
+- Licensed under The Bouncy Castle License. Copyright © 2000-2014 The Legion of the Bouncy Castle
+Inc. See the code for details.
+
+Notes on Contributions
+
+All contributions to this project are licensed under GPL-3.0-or-later unless explicitly stated
+otherwise.
+
+Contributors must ensure that their contributions comply with the GPL-3.0-or-later requirements,
+including the provision of source code and proper attribution to previous authors where applicable.
+
+Third-Party Software and Dependencies
+
+If any third-party libraries or dependencies are used, their licenses must be compatible with
+GPL-3.0-or-later. Refer to the individual licensing terms of those libraries for details.
+
+Attribution
+
+Proper attribution is a requirement. All original authors and contributors must be acknowledged in
+this document and/or any relevant code files.

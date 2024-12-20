@@ -117,10 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="contributors" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\contributors.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="GplBlurb" xml:space="preserve">
     <value>Please support development and buy a subscription. See https://www.axantum.com/ .</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="gpl_3_0" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\gpl-3.0.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
@@ -150,6 +153,9 @@ MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE57HBftSv6/K0Fxm+IQRAqY7E3/dr
 MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEbehILxdHBD1NG6EYAIDzEbdumyL0
 Idyr4Ko9NUmkM4V6HGk0HUD0lmIM0l1WTppDFoKfdOflwpxXqISTTjQODg==
 -----END PUBLIC KEY-----</value>
+  </data>
+  <data name="mit" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\mit.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="splash" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\splash.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
