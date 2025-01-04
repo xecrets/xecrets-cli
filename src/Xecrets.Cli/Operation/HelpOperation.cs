@@ -63,6 +63,8 @@ internal class HelpOperation : IExecutionPhases
                 descriptions.ForEach(t => m += t.Item1.PadRight(maxOptionNameLength + 1) + t.Item2 + Environment.NewLine);
 
                 m += Environment.NewLine;
+                m += "Options and actions are position dependent, except for (global), and interpreted in order.";
+                m += Environment.NewLine;
                 m += "Use additional --help options for more help, or visit https://www.axantum.com/ .";
                 break;
 

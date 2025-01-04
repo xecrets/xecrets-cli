@@ -48,6 +48,7 @@ public static class XfExportVersion
     /// 3.0 -> 2024-11-19 Add --load-private-keys
     /// 4.0 -> 2024-12-16 Add --work-folder and change meaning of --cli-crash-log
     /// 4.1 -> 2024-12-19 Add --crash
+    /// 5.0 -> 2024-12-28 Rename some options to clarify syntax, i.e. encrypt-to -> encrypt-from-to etc.
     /// </remarks>
-    public static Version CliVersion => new(4, 1);
+    public static Version CliVersion => new(5, 0);
 }

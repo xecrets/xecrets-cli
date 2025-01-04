@@ -52,17 +52,17 @@ internal class OptionsParser
             {"c|create-key-pair={}", XfOpCode.CreateKeyPair,
                 "{email} {encrypted}:Create a key pair for an email moniker, in an encrypted file.",
                 (ora, op, email, to) => ora.Add(op, email, to)},
-            {"d|decrypt-to={}", XfOpCode.DecryptTo,
+            {"d|decrypt-file-to={}", XfOpCode.DecryptTo,
                 "{encrypted} {clear}:Decrypt a file to the given file path.",
                 (ora, op, from, to) => ora.Add(op, from, to) },
-            {"e|encrypt-to={}", XfOpCode.EncryptTo,
+            {"e|encrypt-file-to={}", XfOpCode.EncryptTo,
                 "{clear} {encrypted} [{original}]:Encrypt a file to given file path w/optional original name.",
                 (ora, op, from, to) => ora.AddOneRunning(op, from, to) },
             {"f|file=", XfOpCode.OptionsFromFile,
                 "{name}:Take options from a file (programmatic).",
                 (ora, op, name) => { ora.Add(op); RecursivelyParseFromFile(name, parsed, extra); } },
-            {"g|gpl-license",XfOpCode.GplLicense,
-                ":Display the full GNU GPL license.",
+            {"g|full-license",XfOpCode.GplLicense,
+                ":Display the full licenses.",
                 (ora, op, gpl) => ora.Add(gpl != null ? op : XfOpCode.None) },
             {"h|?|help", XfOpCode.Help,
                 ":Display this helpful help message, use again for details.",
@@ -76,12 +76,12 @@ internal class OptionsParser
             {"k|use-key-pair=", XfOpCode.UseKeyPair,
                 "{encrypted}:Use a key-pair, from an encrypted file path. Password is required.",
                 (ora, op, file) => ora.Add(op, file) },
-            {"l|decrypt-to-folder=", XfOpCode.DecryptToFolder,
+            {"l|decrypt-file-to-folder=", XfOpCode.DecryptToFolder,
                 "{encrypted} [{folder}]:Decrypt a file path with it's original name to a destination folder." +
                 ":If {folder} is not provided, the {encrypted}'s folder will be used.",
                 (ora, op, from) => ora.AddOneRunning(op, from) },
             { "m|compress", XfOpCode.Compress,
-                ":Compress the file before encryption (default true).",
+                ":Compress files before encryption (default true).",
                 (ora, op, compress) => ora.Add(compress != null ? op : XfOpCode.NoCompress) },
             {"n|environment=", XfOpCode.EnvironmentOption,
                 "{variable}:Take options from environment variable (programmatic).",
@@ -153,7 +153,7 @@ internal class OptionsParser
         optionSet.Add("sigint=", XfOpCode.SdkSigInt, "{id}:?Send a SIGINT to process id.", (ora, op, id) => ora.Add(op, id));
         optionSet.Add("slip39-combine=", XfOpCode.Slip39Combine, $"{{{nameof(XfOptionKeys.Bip39)}|{nameof(XfOptionKeys.Hex)}|{nameof(XfOptionKeys.Base64)}|{nameof(XfOptionKeys.Text)}}} [{{file}}]:?Combine shares and recover the secret.", (ora, op, format) => ora.Add(op, format));
         optionSet.Add("slip39-group={}", XfOpCode.Slip39Group, "{threshold} {count}:?Specify a group to split to.", (ora, op, threshold, count) => ora.Add(op, threshold, count));
-        optionSet.Add("slip39-threshold=", XfOpCode.Slip39GroupThreshold, "{threshold}:?Specify the group threshold (default 1).", (ora, op, threshold) => ora.Add(op, threshold));
+        optionSet.Add("slip39-threshold=", XfOpCode.Slip39GroupThreshold, "{threshold}:?Specify the group threshold, default is 1.", (ora, op, threshold) => ora.Add(op, threshold));
         optionSet.Add("slip39-password=", XfOpCode.Slip39Password, "{password} [{iterations}]:?The password to use and the iteration exponent.", (ora, op, password) => ora.AddOneRunning(op, password));
         optionSet.Add("slip39-secret={}", XfOpCode.Slip39Secret, $"{{{nameof(XfOptionKeys.Bip39)}|{nameof(XfOptionKeys.Hex)}|{nameof(XfOptionKeys.Base64)}|{nameof(XfOptionKeys.Text)}}} {{secret}}:?Specify the secret to split.", (ora, op, format, secret) => ora.Add(op, format, secret));
         optionSet.Add("slip39-shares=", XfOpCode.Slip39Shares, "{share(s)}:?Add shares to combine.", (ora, op, share) => ora.AddManyRunning(op, share));

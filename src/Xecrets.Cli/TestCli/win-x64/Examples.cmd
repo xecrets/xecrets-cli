@@ -1,7 +1,7 @@
 @echo off
 echo.  
 echo === These examples are for Windows in a DOS command prompt. For other environmennts some  
-echo === adaptions are needed.  
+echo === adaptions are needed. Remember that options and actions are interpreted in order.  
   
 echo === Assume set PATH=%%PATH%%;[Path-to-executable] 
 echo === For example:  
@@ -19,12 +19,12 @@ echo.
 echo === Encrypt a file thfg(1).mp4 using just a password to thfg.axx, and then wipe the original.  
 rem --echo echoes the command line, facilitates reading output and may be useful for debugging.  
 rem The actual --echo option is not echoed.
-XecretsCli --echo --password fileSecret --encrypt-to thfg(1).mp4 thfg.axx --wipe thfg(1).mp4  
+XecretsCli --echo --password fileSecret --encrypt-file-to thfg(1).mp4 thfg.axx --wipe thfg(1).mp4  
 if errorlevel 1 goto error  
 echo.  
 echo === Decrypt a file to it's original file name, in this case thfg(1).mp4, in it's original folder  
 cd ..  
-XecretsCli --echo --password fileSecret --decrypt-to-folder win-x64/thfg.axx --wipe win-x64/thfg.axx  
+XecretsCli --echo --password fileSecret --decrypt-file-to-folder win-x64/thfg.axx --wipe win-x64/thfg.axx  
 if errorlevel 1 goto error  
 echo.   
 echo === Create a private key pair file xecrets@example.org-private.axx with password 'masterSecret'  
@@ -42,11 +42,11 @@ XecretsCli --echo --environment XFKEY --use-key-pair xecrets@example.org-private
 if errorlevel 1 goto error  
 echo.  
 echo === Encrypt the file thfg.mp4 using a password and also with a public key for xecrets@example.org  
-XecretsCli --echo --password fileSecret --load-public-key xecrets@example.org-public.txt --use-public-key xecrets@example.org --encrypt-to thfg(1).mp4 thfg.axx  
+XecretsCli --echo --password fileSecret --load-public-keys xecrets@example.org-public.txt --use-public-key xecrets@example.org --encrypt-file-to thfg(1).mp4 thfg.axx --wipe thfg(1).mp4
 if errorlevel 1 goto error  
 echo.  
 echo === Decrypt the file thfg.axx using the private key from the secret key pair instead of the password  
-XecretsCli --echo --password masterSecret --use-key-pair xecrets@example.org-private.axx --decrypt-to thfg.axx thfg(1).mp4  
+XecretsCli --echo --password masterSecret --use-key-pair xecrets@example.org-private.axx --decrypt-file-to thfg.axx thfg(1).mp4  
 if errorlevel 1 goto error  
 echo.  
 echo === Compare the decrypted with the original to ensure we got back what we had  

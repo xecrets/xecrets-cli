@@ -8,16 +8,22 @@ XecretsCli - A Cross Platform AxCrypt Compatible Command Line Tool
 SYNOPSIS
 ========
 
-XecretsCli [--use-public-key _email(s)_] [--create-key-pair _email_ _encrypted_] [--decrypt-to
-_encrypted_ _clear_] [--encrypt-to _clear_ _encrypted_] [--file _name_] [--gpl-license] [--help]
-[--id] [--json-log] [--use-key-pair _encrypted_] [--decrypt-to-folder _encrypted_ [_folder_]]
-[--environment _variable_] [--progress] [--password _secret_] [--quiet] [--dryrun] [--stdout]
-[--text-log] [--load-public-key _file(s)_] [--overwrite] [--wipe _file_] [--export-public-key
-_email_ _file_] [--platform] [--echo] [--debug-break] [--debug-break-parse] [--argument-markdown]
-[--cli-crash-log _file_] [--cli-license _jwt-license_] [--options-code-export] [--cli-version]
-[--internal] [--jwt-audience _audience_] [--jwt-claims _expiration_ _claims_] [--jwt-create-key-pair
-_private-pem_ _public-pem_] [--jwt-issuer _issuer_] [--jwt-sign _signed-jwt_] [--jwt-private-key
-_private-pem_] [--jwt-verify _public-pem_ _signed-jwt_]
+XecretsCli [--armor] [--use-public-key _email(s)_] [--create-key-pair _email_ _encrypted_]
+[--decrypt-file-to _encrypted_ _clear_] [--encrypt-file-to _clear_ _encrypted_ [_original_]] [--file
+_name_] [--full-license] [--help] [--id] [--json-log] [--use-key-pair _encrypted_]
+[--decrypt-file-to-folder _encrypted_ [_folder_]] [--compress] [--environment _variable_]
+[--progress] [--password _secret_] [--quiet] [--dryrun] [--stdout] [--text-log] [--load-public-keys
+_file(s)_] [--overwrite] [--wipe _file_] [--export-public-key _email_ _file_] [--load-private-keys
+_in-file_ [_out-file_]] [--platform] [--echo] [--debug-break] [--debug-break-parse]
+[--argument-markdown] [--begin] [--cli-crash-log _file_] [--cli-license _jwt-license_]
+[--cli-version] [--crash _parse|dry|real_] [--end] [--internal] [--jwt-audience _audience_]
+[--jwt-claims _expiration_ _claims_] [--jwt-create-key-pair _private-pem_ _public-pem_]
+[--jwt-issuer _issuer_] [--jwt-sign _signed-jwt_] [--jwt-private-key _private-pem_] [--jwt-verify
+_public-pem_ _signed-jwt_] [--options-code-export] [--sigint _id_] [--slip39-combine
+_Bip39|Hex|Base64|Text_ [_file_]] [--slip39-group _threshold_ _count_] [--slip39-threshold
+_threshold_] [--slip39-password _password_ [_iterations_]] [--slip39-secret _Bip39|Hex|Base64|Text_
+_secret_] [--slip39-shares _share(s)_] [--slip39-split _Slip39|Hex|Base64_ [_file_]] [--slip39-info
+[__file__]] [--work-folder _work-folder_]
 
 DESCRIPTION
 ===========
@@ -27,23 +33,27 @@ files.
 
 Options
 -------
+
+-a|--armor 
+:       Use ASCII armor for encryption and decryption.
+
 -b|--use-public-key _email(s)_
 :       Use selected loaded public key(s) for encryption.
 
 -c|--create-key-pair _email_ _encrypted_
 :       Create a key pair for an email moniker, in an encrypted file.
 
--d|--decrypt-to _encrypted_ _clear_
+-d|--decrypt-file-to _encrypted_ _clear_
 :       Decrypt a file to the given file path.
 
--e|--encrypt-to _clear_ _encrypted_
-:       Encrypt a file to the given file path.
+-e|--encrypt-file-to _clear_ _encrypted_ [_original_]
+:       Encrypt a file to given file path w/optional original name.
 
 -f|--file _name_
 :       Take options from a file (programmatic).
 
--g|--gpl-license 
-:       Display the full GNU GPL license.
+-g|--full-license 
+:       Display the full licenses.
 
 -h|-?|--help 
 :       Display this helpful help message, use again for details.
@@ -57,9 +67,12 @@ Options
 -k|--use-key-pair _encrypted_
 :       Use a key-pair, from an encrypted file path. Password is required.
 
--l|--decrypt-to-folder _encrypted_ [_folder_]
+-l|--decrypt-file-to-folder _encrypted_ [_folder_]
 :       Decrypt a file path with it's original name to a destination folder.
         If _folder_ is not provided, the _encrypted_'s folder will be used.
+
+-m|--compress 
+:       Compress files before encryption (default true).
 
 -n|--environment _variable_
 :       Take options from environment variable (programmatic).
@@ -82,7 +95,7 @@ Options
 -t|--text-log 
 :       Enable text console logging for interactive and simple script use.
 
--u|--load-public-key _file(s)_
+-u|--load-public-keys _file(s)_
 :       Load public key(s) from file(s).
 
 -v|--overwrite 
@@ -93,6 +106,9 @@ Options
 
 -x|--export-public-key _email_ _file_
 :       Export a public key.
+
+-y|--load-private-keys _in-file_ [_out-file_]
+:       Load private keys from file, optionally writing an update.
 
 --platform 
 :       Display the platform the program is running on.
@@ -109,17 +125,23 @@ Options
 --argument-markdown 
 :       Display help texts as markdown.
 
+--begin 
+:       Begin a sequence of operations.
+
 --cli-crash-log _file_
 :       Write crash log here (global).
 
 --cli-license _jwt-license_
 :       Use this license. Overrides any others found (global).
 
---options-code-export 
-:       Display C# source code for options.
-
 --cli-version 
 :       Display the command line tool API version.
+
+--crash _parse|dry|real_
+:       Crash during parse, dry run or real run.
+
+--end 
+:       End a sequence of operations.
 
 --internal 
 :       Display help for internal use commands and disable splash (global).
@@ -145,11 +167,44 @@ Options
 --jwt-verify _public-pem_ _signed-jwt_
 :       Verify a signed JWT file using a public PEM file.
 
-Options are processed in order and may appear multiple times, except when 'global'. Arguments such
-as _email_ are required placeholders. Flags may be negated by suffixing with '-'.; Single letter
-flags may be bundled together. '-', '--' or '/' are allowed as option prefixes. Quote special
-characters with a single backslash (\\), and enclose single values that contain spaces with quotes
-(").
+--options-code-export 
+:       Display C# source code for options.
+
+--sigint _id_
+:       Send a SIGINT to process id.
+
+--slip39-combine _Bip39|Hex|Base64|Text_ [_file_]
+:       Combine shares and recover the secret.
+
+--slip39-group _threshold_ _count_
+:       Specify a group to split to.
+
+--slip39-threshold _threshold_
+:       Specify the group threshold, default is 1.
+
+--slip39-password _password_ [_iterations_]
+:       The password to use and the iteration exponent.
+
+--slip39-secret _Bip39|Hex|Base64|Text_ _secret_
+:       Specify the secret to split.
+
+--slip39-shares _share(s)_
+:       Add shares to combine.
+
+--slip39-split _Slip39|Hex|Base64_ [_file_]
+:       Split the secret into shares.
+
+--slip39-info [__file__]
+:       Verify the shares and output the prefix information.
+
+--work-folder _work-folder_
+:       A work folder for settings and logs (global).
+
+Options and actions are processed in order and may appear multiple times, except when '(global)'.
+Arguments such as _email_ are required placeholders. Flags may be negated by suffixing with '-'.;
+Single letter flags may be bundled together. '-', '--' or '/' are allowed as option prefixes. Quote
+special characters with a single backslash (\\), and enclose single values that contain spaces with
+quotes (").
 
 Since options are accepted from the command line, from environment variables, and from files, as
 well as in different operating systems the native command line parsing is not used, instead the
@@ -232,8 +287,7 @@ I.e. the dash for standard input, followed by a : (colon), followed by the name 
 BASIC CONCEPTS
 ==============
 
-Xecrets Cli encrypts files using at least a password, and optionally with one or more public
-keys.
+Xecrets Cli encrypts files using at least one password, and optionally with one or more public keys.
 
 With Xecrets Cli, a key pair can be created with --create-key-pair, and the public part can be
 extracted and shared with other people, for example it can be published on a web site, or
@@ -244,7 +298,7 @@ information. All that is required is that the recipient of the encrypted data pr
 with their public key in such a file.
 
 It can also be used as a key recovery mechanism, if all encryption is performed using such a public
-key, the holder of the private key can always decrypt the file without known the password used by
+key, the holder of the private key can always decrypt the file without knowing the password used by
 the encrypting party. This is how AxCrypt implements key recovery.
 
 Finally, the recommendation is that encryption is never done only with a password, but always with
@@ -267,12 +321,13 @@ ENCRYPTION
 ==========
 
 To encrypt a file, a --password must be supplied. If more are given, only the first is used for
-encryption, although the others may be used to attempt decryption.
+encryption, although the others may be used to attempt decryption. Passwords are also positional, so
+they must be specified before the action that requires them.
 
 If a key pair is supplied via --use-key-pair, the file is also encrypted using that key pairs public
 key.
 
-If a list of public keys is given with --load-public-key, and --use-public-key with an email
+If a list of public keys is given with --load-public-keys, and --use-public-key with an email
 contained in the list is also given, the file will be encrypted using that public key as well.
 
 PASSWORD BASED ENCRYPTION
@@ -320,11 +375,11 @@ EXAMPLES
     @echo off
     echo.  
     echo === These examples are for Windows in a DOS command prompt. For other environmennts some  
-    echo === adaptions are needed.  
-      
+    echo === adaptions are needed. Remember that options and actions are interpreted in order.  
+  
     echo === Assume set PATH=%%PATH%%;[Path-to-executable] 
     echo === For example:  
-    echo === set PATH=%%PATH%%;"C:\Users\%UserName%\Documents\Visual Studio 2022\Projects\xecrets-cli\src\Xecrets.Cli\bin\Debug\net8.0\"  
+    echo === set PATH=%%PATH%%;"C:\Users\%UserName%\Documents\Visual Studio 2022\Projects\xecrets\xecrets-cli\src\Xecrets.Cli\bin\Debug\net8.0\"  
     echo.  
     echo === Ensure there is a file thfg.mp4 and a folder Photos with files 1.jpg ... 5.jpg  
     echo === in the current folder, named win-x64.  
@@ -338,12 +393,12 @@ EXAMPLES
     echo === Encrypt a file thfg(1).mp4 using just a password to thfg.axx, and then wipe the original.  
     rem --echo echoes the command line, facilitates reading output and may be useful for debugging.  
     rem The actual --echo option is not echoed.
-    XecretsCli --echo --password fileSecret --encrypt-to thfg(1).mp4 thfg.axx --wipe thfg(1).mp4  
+    XecretsCli --echo --password fileSecret --encrypt-file-to thfg(1).mp4 thfg.axx --wipe thfg(1).mp4  
     if errorlevel 1 goto error  
     echo.  
     echo === Decrypt a file to it's original file name, in this case thfg(1).mp4, in it's original folder  
     cd ..  
-    XecretsCli --echo --password fileSecret --decrypt-to-folder win-x64/thfg.axx --wipe win-x64/thfg.axx  
+    XecretsCli --echo --password fileSecret --decrypt-file-to-folder win-x64/thfg.axx --wipe win-x64/thfg.axx  
     if errorlevel 1 goto error  
     echo.   
     echo === Create a private key pair file xecrets@example.org-private.axx with password 'masterSecret'  
@@ -361,11 +416,11 @@ EXAMPLES
     if errorlevel 1 goto error  
     echo.  
     echo === Encrypt the file thfg.mp4 using a password and also with a public key for xecrets@example.org  
-    XecretsCli --echo --password fileSecret --load-public-key xecrets@example.org-public.txt --use-public-key xecrets@example.org --encrypt-to thfg(1).mp4 thfg.axx  
+    XecretsCli --echo --password fileSecret --load-public-keys xecrets@example.org-public.txt --use-public-key xecrets@example.org --encrypt-file-to thfg(1).mp4 thfg.axx --wipe thfg(1).mp4
     if errorlevel 1 goto error  
     echo.  
     echo === Decrypt the file thfg.axx using the private key from the secret key pair instead of the password  
-    XecretsCli --echo --password masterSecret --use-key-pair xecrets@example.org-private.axx --decrypt-to thfg.axx thfg(1).mp4  
+    XecretsCli --echo --password masterSecret --use-key-pair xecrets@example.org-private.axx --decrypt-file-to thfg.axx thfg(1).mp4  
     if errorlevel 1 goto error  
     echo.  
     echo === Compare the decrypted with the original to ensure we got back what we had  
@@ -376,14 +431,13 @@ EXAMPLES
     echo === Securely wipe intermediate files
     XecretsCli --echo --wipe thfg(1).mp4 thfg.axx xecrets@example.org-public.txt xecrets@example.org-private.axx  
     if errorlevel 1 goto error  
-      
+  
     exit /b  
-      
+  
     :error  
     echo.  
     echo ***** FAILED with error code %errorlevel%  
-    exit /b %errorlevel%
-
+    exit /b %errorlevel%  
 
 BUGS
 ====
@@ -394,15 +448,20 @@ ACKNOWLEDGEMENTS
 ================
 
 This program uses code from AxCrypt to perform high level cryptographic operations on streams and
-files, and is licensed under GNU GPL version 3. See https://www.axcrypt.net/ for details.
+files, and is licensed under GNU GPL version 3. See https://github.com/axantum/xecrets-net for
+details.
 
 This program uses code from the Legion of the Bouncy Castle, Copyright (c) 2000 \- 2017 The Legion
-of the Bouncy Castle Inc. (http://www.bouncycastle.org), to perform low level public key
-cryptography and is licensed under an adaptation of the MIT X11 License, see
+of the Bouncy Castle Inc. (http://www.bouncycastle.org), to verify compatibility with AxCrypt low
+level public key cryptography and is licensed under an adaptation of the MIT X11 License, see
 https://www.bouncycastle.org/csharp/licence.html for details.
 
 This program uses code from NDesk.Options to parse the command line and is licensed under the
 MIT/X11 license, see http://www.ndesk.org/Options for details.
+
+This program uses code from Xecrets.Split39 to split and combine secrets using the SLIP-0039
+standard, and is licensed under the MIT license, see https://github.com/xecrets/xecrets-split39 for
+details.
 
 AxCrypt is a registered trademark of AxCrypt AB, and is only used for informational purposes.
 
