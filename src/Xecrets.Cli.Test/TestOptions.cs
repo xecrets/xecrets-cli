@@ -45,7 +45,7 @@ internal class TestOptions
     [Test]
     public void TestPasswordWithEncryptOption()
     {
-        var parser = new OptionsParser("XecretsCli --password secretStuff --encrypt-to from.txt to.axx");
+        var parser = new OptionsParser("XecretsCli --password secretStuff --encrypt-file-to from.txt to.axx");
         Assert.That(parser.ParseStatus, Is.EqualTo(Status.Success));
         Assert.That(parser.ParseStatus.IsSuccess);
 
@@ -73,7 +73,7 @@ internal class TestOptions
     [Test]
     public void TestTooManyPasswordsOption()
     {
-        var parser = new OptionsParser("XecretsCli --password secretStuff moreStuff --encrypt-to from.txt to.axx");
+        var parser = new OptionsParser("XecretsCli --password secretStuff moreStuff --encrypt-file-to from.txt to.axx");
         Assert.That(parser.ParseStatus.StatusCode, Is.EqualTo(XfStatusCode.ExtraArguments));
     }
 
