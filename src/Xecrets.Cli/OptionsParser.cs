@@ -77,8 +77,8 @@ internal class OptionsParser
                 "{encrypted}:Use a key-pair, from an encrypted file path. Password is required.",
                 (ora, op, file) => ora.Add(op, file) },
             {"l|decrypt-file-to-folder=", XfOpCode.DecryptToFolder,
-                "{encrypted} [{folder}]:Decrypt a file path with it's original name to a destination folder." +
-                ":If {folder} is not provided, the {encrypted}'s folder will be used.",
+                "{encrypted} [{folder}]:Decrypt a file with it's original name to a destination folder." +
+                ":Default {folder} is the {encrypted}'s folder.",
                 (ora, op, from) => ora.AddOneRunning(op, from) },
             { "m|compress", XfOpCode.Compress,
                 ":Compress files before encryption (default true).",
@@ -96,7 +96,7 @@ internal class OptionsParser
                 ":Do not display any messages or progress (global).",
                 (ora, op, quiet) => {IsQuiet = quiet != null; ora.Add(XfOpCode.NoLog); } },
             {"r|dryrun", XfOpCode.DryRun,
-                ":Only perform a dry run without actually modifying anything (global).",
+                ":Perform a dry run without actually modifying anything (global).",
                 (ora, op, dry) => IsDryRunOnly = dry != null },
             {"s|stdout", XfOpCode.Stdout,
                 ":Write log output to stdout instead of stderr (global).",
@@ -141,7 +141,7 @@ internal class OptionsParser
         optionSet.Add("cli-version", XfOpCode.SdkCliVersion, ":?Display the command line tool API version.", (ora, op, arg) => ora.Add(arg != null ? op : XfOpCode.None));
         optionSet.Add("crash=", XfOpCode.Crash, "{parse|dry|real}:?Crash during parse, dry run or real run.", (ora, op, arg) => { if (arg == "parse") HardCrash.Immediately(); else ora.Add(XfOpCode.Crash, arg); });
         optionSet.Add("end", XfOpCode.End, ":?End a sequence of operations.", (ora, op, end) => ora.Add(op));
-        optionSet.Add("internal", XfOpCode.Internal, ":?Display help for internal use commands and disable splash (global).", (ora, op, @internal) => Internal = @internal != null);
+        optionSet.Add("internal", XfOpCode.Internal, ":?Display internal use help and disable splash (global).", (ora, op, @internal) => Internal = @internal != null);
         optionSet.Add("jwt-audience=", XfOpCode.JwtAudience, "{audience}:?Set audience string or URI for JWT.", (ora, op, audience) => ora.Add(op, audience));
         optionSet.Add("jwt-claims={}", XfOpCode.JwtClaims, "{expiration} {claims}:?Set days until expiration and claims JSON.", (ora, op, days, claims) => ora.Add(op, days, claims));
         optionSet.Add("jwt-create-key-pair={}", XfOpCode.JwtCreateKeyPair, "{private-pem} {public-pem}:?Create JWT keypair as PEM files.", (ora, op, @private, @public) => ora.Add(op, @private, @public));

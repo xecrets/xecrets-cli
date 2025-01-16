@@ -68,8 +68,8 @@ Options
 :       Use a key-pair, from an encrypted file path. Password is required.
 
 -l|--decrypt-file-to-folder _encrypted_ [_folder_]
-:       Decrypt a file path with it's original name to a destination folder.
-        If _folder_ is not provided, the _encrypted_'s folder will be used.
+:       Decrypt a file with it's original name to a destination folder.
+        Default _folder_ is the _encrypted_'s folder.
 
 -m|--compress 
 :       Compress files before encryption (default true).
@@ -87,7 +87,7 @@ Options
 :       Do not display any messages or progress (global).
 
 -r|--dryrun 
-:       Only perform a dry run without actually modifying anything (global).
+:       Perform a dry run without actually modifying anything (global).
 
 -s|--stdout 
 :       Write log output to stdout instead of stderr (global).
@@ -144,7 +144,7 @@ Options
 :       End a sequence of operations.
 
 --internal 
-:       Display help for internal use commands and disable splash (global).
+:       Display internal use help and disable splash (global).
 
 --jwt-audience _audience_
 :       Set audience string or URI for JWT.
@@ -200,7 +200,9 @@ Options
 --work-folder _work-folder_
 :       A work folder for settings and logs (global).
 
-Options and actions are processed in order and may appear multiple times, except when '(global)'.
+**Options and actions are processed strictly in order and may appear multiple times, except when
+marked as '(global)'**.
+
 Arguments such as _email_ are required placeholders. Flags may be negated by suffixing with '-'.;
 Single letter flags may be bundled together. '-', '--' or '/' are allowed as option prefixes. Quote
 special characters with a single backslash (\\), and enclose single values that contain spaces with
