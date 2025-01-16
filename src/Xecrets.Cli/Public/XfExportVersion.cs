@@ -49,6 +49,7 @@ public static class XfExportVersion
     /// 4.0 -> 2024-12-16 Add --work-folder and change meaning of --cli-crash-log
     /// 4.1 -> 2024-12-19 Add --crash
     /// 5.0 -> 2024-12-28 Rename some options to clarify syntax, i.e. encrypt-to -> encrypt-from-to etc.
+    /// 6.0 -> 2025-01-16 Add operating system status return codes
     /// </remarks>
-    public static Version CliVersion => new(5, 0);
+    public static Version CliVersion => new(6, 0);
 }
