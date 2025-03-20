@@ -5,18 +5,18 @@ Details
 
 Xecrets.Cli, Xecrets.Net.Cryptography, Xecrets.Cli.Test:
 
-- Licensed under GPL-3.0-or-later. Copyright © 2022-2024 Svante Seleborg.
+- Licensed under GPL-3.0-or-later. Copyright © 2022-2025 Svante Seleborg.
 
 Xecrets.Slip39, Xecrets.Slip39.Test:
 
 - Licensed under the MIT license. Original work by Lucas Ontivero, modified by Svante Seleborg.
-Copyright © 2024 Lucas Ontivero, modifications Copyright © 2024 Svante Seleborg.
+Copyright © 2024 Lucas Ontivero, modifications Copyright © 2024-2025 Svante Seleborg.
 
 Xecrets.Net.Abstractions, Xecrets.Net.Api, Xecrets.Net.Common, Xecrets.Net.Content, Xecrets.NetCore,
 Xecrets.Net.Implementation, Xecrets.Net.Common.Test, Xecrets.Net.Core.Test, Xecrets.Net.Fake,
 Xecrets.Net.Implementation.Test:
 
-- Licensed under GPL-3.0-or-later. Portions Copyright © 2016, 2017, 2022-2024 Svante Seleborg, other
+- Licensed under GPL-3.0-or-later. Portions Copyright © 2016, 2017, 2022-2025 Svante Seleborg, other
 portions copyright according to source code notices.
 
 Xecrets.Net.BouncyCastle:

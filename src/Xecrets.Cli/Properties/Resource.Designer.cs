@@ -68,12 +68,12 @@ namespace Xecrets.Cli.Properties {
         ///
         ///Xecrets.Cli, Xecrets.Net.Cryptography, Xecrets.Cli.Test:
         ///
-        ///- Licensed under GPL-3.0-or-later. Copyright © 2022-2024 Svante Seleborg.
+        ///- Licensed under GPL-3.0-or-later. Copyright © 2022-2025 Svante Seleborg.
         ///
         ///Xecrets.Slip39, Xecrets.Slip39.Test:
         ///
         ///- Licensed under the MIT license. Original work by Lucas Ontivero, modified by Svante Seleborg.
-        ///Copyright © 2024 Lucas Ontivero, modifications Copyright © 2024 Svante Seleborg.
+        ///Copyright © 2024 Lucas Ontivero, modifications Copyright © 2024-2025 Svante Seleborg.
         /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string contributors {
@@ -196,7 +196,7 @@ namespace Xecrets.Cli.Properties {
         ///   Looks up a localized string similar to MIT License
         ///
         ///Copyright © 2024 Lucas Ontivero
-        ///Modifications Copyright © 2024 Svante Seleborg
+        ///Modifications Copyright © 2024-2025 Svante Seleborg
         ///
         ///Permission is hereby granted, free of charge, to any person obtaining a copy
         ///of this software and associated documentation files (the &quot;Software&quot;), to deal
@@ -213,7 +213,7 @@ namespace Xecrets.Cli.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to Xecrets Cli - A cross platform AxCrypt compatible tool for applied strong cryptography.
-        ///Portions Copyright 2022-2024, Svante Seleborg, All Rights Reserved.
+        ///Portions Copyright 2022-2025 Svante Seleborg, All Rights Reserved.
         ///BETA {gpl} Version {version} {buildutc} {runtime}
         ///
         ///This program is free software; It is licensed under GNU General Public License version 3 or any

@@ -1,7 +1,7 @@
 ﻿#region Copyright and GPL License
 
 /*
- * Xecrets Cli - Copyright © 2022-2024, Svante Seleborg, All Rights Reserved.
+ * Xecrets Cli - Copyright © 2022-2025 Svante Seleborg, All Rights Reserved.
  *
  * This code file is part of Xecrets Cli, parts of which in turn are derived from AxCrypt as licensed under GPL v3 or later.
  * 
@@ -27,7 +27,7 @@
 #region Copyright and GPL License
 
 /*
- * Xecrets Cli - Copyright © 2022-2024, Svante Seleborg, All Rights Reserved.
+ * Xecrets Cli - Copyright © 2022-2025 Svante Seleborg, All Rights Reserved.
  *
  * This code file is part of Xecrets Cli, parts of which in turn are derived from AxCrypt as licensed under GPL v3 or later.
  * 
