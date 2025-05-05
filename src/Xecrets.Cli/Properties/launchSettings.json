@@ -126,6 +126,18 @@
       "workingDirectory": "TestCli",
       "remoteDebugEnabled": false,
       "hotReloadEnabled": false
+    },
+    "Decrypt Bad Guid": {
+      "commandName": "Project",
+      "commandLineArgs": "--password a --overwrite\r\n-d BadGuid-txt.axx BadGuid.txt",
+      "workingDirectory": "TestCli\\Photos",
+      "remoteDebugEnabled": true
+    },
+    "Decrypt Zero Length": {
+      "commandName": "Project",
+      "commandLineArgs": "--password a --overwrite\r\n-d ZeroLength-txt.axx ZeroLength.txt",
+      "workingDirectory": "TestCli\\Photos",
+      "remoteDebugEnabled": true
     }
   }
 }

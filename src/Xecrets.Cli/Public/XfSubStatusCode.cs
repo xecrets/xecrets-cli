@@ -69,4 +69,14 @@ internal enum XfSubStatusCode
     /// An invalid mnemonic word or set of words were input. Check the exception message for details.
     /// </summary>
     Slip39InvalidMnemonic = 1060,
+
+    /// <summary>
+    /// A file to decrypt was found to be empty. This is not a valid file to decrypt.
+    /// </summary>
+    ZeroLengthFile = 1070,
+
+    /// <summary>
+    /// A file to decrypt does not have the correct magic GUID. This probably means it's not an encrypted file.
+    /// </summary>
+    InvalidMagicGuid = 1080,
 }

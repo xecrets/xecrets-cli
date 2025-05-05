@@ -23,12 +23,14 @@
 
 #endregion Copyright and GPL License
 
+using AxCrypt.Abstractions;
 using AxCrypt.Core;
 using AxCrypt.Core.Crypto;
 using AxCrypt.Core.Crypto.Asymmetric;
 using AxCrypt.Core.Header;
 using AxCrypt.Core.IO;
 using AxCrypt.Core.Reader;
+using AxCrypt.Core.Runtime;
 using AxCrypt.Core.UI;
 
 using Xecrets.Cli.Abstractions;
@@ -49,14 +51,14 @@ internal sealed class Decryption(Stream fromStream, IEnumerable<LogOnIdentity> i
     {
         try
         {
-            using var toStream = toStore.OpenWrite();
+            using Stream toStream = toStore.OpenWrite();
             _document.DecryptTo(toStream);
         }
         catch (Exception)
         {
             if (!toStore.IsStdIo && toStore.IsAvailable)
             {
-                using var destinationLock = New<FileLocker>().Acquire(toStore);
+                using FileLock destinationLock = New<FileLocker>().Acquire(toStore);
                 new AxCryptFile().Wipe(destinationLock, new ProgressContext());
             }
             throw;
@@ -70,13 +72,18 @@ internal sealed class Decryption(Stream fromStream, IEnumerable<LogOnIdentity> i
 
     private static IAxCryptDocument CreateDocument(IEnumerable<LogOnIdentity> identities, Stream fromStream)
     {
-        var headers = new Headers();
-        AxCryptReaderBase reader = headers.CreateReader(new LookAheadStream(fromStream));
-        var isLegacyV1 = reader is V1AxCryptReader;
+        Headers headers = new();
+        LookAheadStream lookAheadStream = new(fromStream);
+        if (lookAheadStream.IsEmpty(16))
+        {
+            throw new FileFormatException("The stream contains no data, it's length is zero.", ErrorStatus.ZeroLengthFile);
+        }
+        AxCryptReaderBase reader = headers.CreateReader(lookAheadStream);
+        bool isLegacyV1 = reader is V1AxCryptReader;
 
-        var document = AxCryptReaderBase.Document(reader);
+        IAxCryptDocument document = AxCryptReaderBase.Document(reader);
 
-        foreach (var decryptionParameter in DecryptionParameters(identities, isLegacyV1: isLegacyV1))
+        foreach (DecryptionParameter decryptionParameter in DecryptionParameters(identities, isLegacyV1: isLegacyV1))
         {
             if (decryptionParameter.Passphrase != null)
             {
@@ -100,8 +107,8 @@ internal sealed class Decryption(Stream fromStream, IEnumerable<LogOnIdentity> i
 
     private static DecryptionParameter[] DecryptionParameters(IEnumerable<LogOnIdentity> identities, bool isLegacyV1)
     {
-        var decryptionParameters = new List<DecryptionParameter>();
-        foreach (var identity in identities)
+        List<DecryptionParameter> decryptionParameters = new();
+        foreach (LogOnIdentity identity in identities)
         {
             decryptionParameters.AddRange(DecryptionParameters(isLegacyV1: isLegacyV1, identity.Passphrase, identity.PrivateKeys));
         }

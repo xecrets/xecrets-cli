@@ -207,6 +207,19 @@ public string? StatusName { get; set; }
 #### Property Value
 [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
 
+<a name='Xecrets.Sdk.Cli.CliMessage.SubStatus'></a>
+
+## CliMessage.SubStatus Property
+
+The sub status of the current operation as an integer.
+
+```csharp
+public int SubStatus { get; set; }
+```
+
+#### Property Value
+[System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')
+
 <a name='Xecrets.Sdk.Cli.CliMessage.TotalDone'></a>
 
 ## CliMessage.TotalDone Property

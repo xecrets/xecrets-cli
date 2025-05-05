@@ -96,6 +96,42 @@ The message.
 
 The inner exception.
 
+<a name='Xecrets.Sdk.XfException.XfException(int,Xecrets.Sdk.Cli.XfSubStatusCode,string,System.Collections.Generic.IEnumerable_string_)'></a>
+
+## XfException(int, XfSubStatusCode, string, IEnumerable<string>) Constructor
+
+Initializes a new instance of the [XfException](Xecrets.Sdk.XfException.md 'Xecrets.Sdk.XfException') class with a specified message, exit code, files  
+and sub status code.
+
+```csharp
+public XfException(int exitCode, Xecrets.Sdk.Cli.XfSubStatusCode subStatusCode, string message, System.Collections.Generic.IEnumerable<string> files);
+```
+#### Parameters
+
+<a name='Xecrets.Sdk.XfException.XfException(int,Xecrets.Sdk.Cli.XfSubStatusCode,string,System.Collections.Generic.IEnumerable_string_).exitCode'></a>
+
+`exitCode` [System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')
+
+The command line exit code.
+
+<a name='Xecrets.Sdk.XfException.XfException(int,Xecrets.Sdk.Cli.XfSubStatusCode,string,System.Collections.Generic.IEnumerable_string_).subStatusCode'></a>
+
+`subStatusCode` [Xecrets.Sdk.Cli.XfSubStatusCode](https://docs.microsoft.com/en-us/dotnet/api/Xecrets.Sdk.Cli.XfSubStatusCode 'Xecrets.Sdk.Cli.XfSubStatusCode')
+
+The sub status code from the command line.
+
+<a name='Xecrets.Sdk.XfException.XfException(int,Xecrets.Sdk.Cli.XfSubStatusCode,string,System.Collections.Generic.IEnumerable_string_).message'></a>
+
+`message` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+
+The message.
+
+<a name='Xecrets.Sdk.XfException.XfException(int,Xecrets.Sdk.Cli.XfSubStatusCode,string,System.Collections.Generic.IEnumerable_string_).files'></a>
+
+`files` [System.Collections.Generic.IEnumerable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')
+
+The files(s) causing the exception
+
 <a name='Xecrets.Sdk.XfException.XfException(string)'></a>
 
 ## XfException(string) Constructor
@@ -162,6 +198,19 @@ public string[] Files { get; }
 
 #### Property Value
 [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[[]](https://docs.microsoft.com/en-us/dotnet/api/System.Array 'System.Array')
+
+<a name='Xecrets.Sdk.XfException.SubStatusCode'></a>
+
+## XfException.SubStatusCode Property
+
+The sub status code from the command line tool.
+
+```csharp
+public Xecrets.Sdk.Cli.XfSubStatusCode SubStatusCode { get; }
+```
+
+#### Property Value
+[Xecrets.Sdk.Cli.XfSubStatusCode](https://docs.microsoft.com/en-us/dotnet/api/Xecrets.Sdk.Cli.XfSubStatusCode 'Xecrets.Sdk.Cli.XfSubStatusCode')
 ### Methods
 
 <a name='Xecrets.Sdk.XfException.ToString()'></a>

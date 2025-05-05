@@ -110,7 +110,14 @@ internal abstract class RunFactory(Parameters parameters)
             }
             catch (AxCryptException acex)
             {
-                status = new Status(XfStatusCode.AxCryptException, acex.ToString())
+                XfSubStatusCode subStatus = acex.ErrorStatus switch
+                {
+                    ErrorStatus.Success => XfSubStatusCode.Success,
+                    ErrorStatus.ZeroLengthFile => XfSubStatusCode.ZeroLengthFile,
+                    ErrorStatus.MagicGuidMissing => XfSubStatusCode.InvalidMagicGuid,
+                    _ => XfSubStatusCode.Unknown,
+                };
+                status = new Status(XfStatusCode.AxCryptException, subStatus, acex.ToString())
                 {
                     Id = factory.Parameters.TotalsTracker.Id,
                     Arg1 = factory.Parameters.Arg1,
