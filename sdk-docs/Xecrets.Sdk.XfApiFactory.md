@@ -113,3 +113,17 @@ An instance of [IXfApi](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXf
 ### Remarks
 Should normally not be used when using Axantum ready built command line tool binaries, as no license is  
 provided. Another option to provide the license is to place it in a text file next to the executable.
+
+<a name='Xecrets.Sdk.XfApiFactory.Start()'></a>
+
+## XfApiFactory.Start() Method
+
+Create an [IXfStart](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfStart 'Xecrets.Sdk.Abstractions.IXfStart') instance providing startup information for the application.
+
+```csharp
+public static Xecrets.Sdk.Abstractions.IXfStart Start();
+```
+
+#### Returns
+[IXfStart](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfStart 'Xecrets.Sdk.Abstractions.IXfStart')  
+An IStart instance.

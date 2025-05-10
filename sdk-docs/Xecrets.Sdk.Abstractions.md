@@ -384,30 +384,6 @@ The version of the command line tool API to check.
 [System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')  
 True if this SDK can work with the provided command line tool.
 
-<a name='Xecrets.Sdk.Abstractions.IXfApi.StartMe(string)'></a>
-
-## IXfApi.StartMe(string) Method
-
-Get the start arguments necessary to start the program identified as [fileNameWithoutExtension](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfApi.StartMe(string).fileNameWithoutExtension 'Xecrets.Sdk.Abstractions.IXfApi.StartMe(string).fileNameWithoutExtension'), assuming that if we're started with "dotnet", this program should also be  
-started with "dotnet" [fileNameWithoutExtension](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfApi.StartMe(string).fileNameWithoutExtension 'Xecrets.Sdk.Abstractions.IXfApi.StartMe(string).fileNameWithoutExtension').dll, otherwise it's an executable with  
-".exe" or without depending on the current operating system.
-
-```csharp
-string[] StartMe(string fileNameWithoutExtension);
-```
-#### Parameters
-
-<a name='Xecrets.Sdk.Abstractions.IXfApi.StartMe(string).fileNameWithoutExtension'></a>
-
-`fileNameWithoutExtension` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
-
-#### Returns
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[[]](https://docs.microsoft.com/en-us/dotnet/api/System.Array 'System.Array')
-
-#### Exceptions
-
-[System.InvalidOperationException](https://docs.microsoft.com/en-us/dotnet/api/System.InvalidOperationException 'System.InvalidOperationException')
-
 <a name='Xecrets.Sdk.Abstractions.IXfApi.UpdatePrivateKeysAsync(Xecrets.Sdk.Models.XfCredentials,string)'></a>
 
 ## IXfApi.UpdatePrivateKeysAsync(XfCredentials, string) Method
@@ -500,4 +476,40 @@ Override the global debug cli flag if non-null.
 A [System.Threading.CancellationToken](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.CancellationToken 'System.Threading.CancellationToken') to cancel any long running operation.
 
 #### Returns
-[IXfApi](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfApi 'Xecrets.Sdk.Abstractions.IXfApi')
+[IXfApi](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfApi 'Xecrets.Sdk.Abstractions.IXfApi')  
+An IXfApi instance.
+
+<a name='Xecrets.Sdk.Abstractions.IXfStart'></a>
+
+## IXfStart Interface
+
+Provides start-up information for the application.
+
+```csharp
+public interface IXfStart
+```
+### Methods
+
+<a name='Xecrets.Sdk.Abstractions.IXfStart.StartArgs(string)'></a>
+
+## IXfStart.StartArgs(string) Method
+
+Get the start arguments necessary to start the program identified as [fileNameWithoutExtension](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfStart.StartArgs(string).fileNameWithoutExtension 'Xecrets.Sdk.Abstractions.IXfStart.StartArgs(string).fileNameWithoutExtension'), assuming that if we're started with "dotnet", this program should also be  
+started with "dotnet" [fileNameWithoutExtension](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfStart.StartArgs(string).fileNameWithoutExtension 'Xecrets.Sdk.Abstractions.IXfStart.StartArgs(string).fileNameWithoutExtension').dll, otherwise it's an executable with  
+".exe" or without depending on the current operating system.
+
+```csharp
+string[] StartArgs(string fileNameWithoutExtension);
+```
+#### Parameters
+
+<a name='Xecrets.Sdk.Abstractions.IXfStart.StartArgs(string).fileNameWithoutExtension'></a>
+
+`fileNameWithoutExtension` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+
+#### Returns
+[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[[]](https://docs.microsoft.com/en-us/dotnet/api/System.Array 'System.Array')
+
+#### Exceptions
+
+[System.InvalidOperationException](https://docs.microsoft.com/en-us/dotnet/api/System.InvalidOperationException 'System.InvalidOperationException')
