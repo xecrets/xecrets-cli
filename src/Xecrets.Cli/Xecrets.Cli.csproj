@@ -36,9 +36,9 @@
     <Content Include="XecretsCli.ico" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.3.0" />
-    <PackageReference Include="Xecrets.Licensing" Version="2.3.904" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.0" />
+    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.9.0" />
+    <PackageReference Include="Xecrets.Licensing" Version="2.3.968" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.5" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\xecrets-net\AxCrypt.Core\Xecrets.Net.Core.csproj" />
