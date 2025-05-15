@@ -84,16 +84,24 @@ internal class Slip39SplitOperation : IExecutionPhases
 
         IShamirsSecretSharing sss = New<IShamirsSecretSharing>();
         byte[] masterSecretBytes = parameters.Slip39.Secret.ToSecretBytes(stringEncoding);
-        Group[] groups = parameters.Slip39.Groups.Select(g => new Group(g.Threshold, g.Length)).ToArray();
+        Group[] groups = [.. parameters.Slip39.Groups.Select(g => new Group(g.Threshold, g.Length))];
 
         Share[][] shares = sss.GenerateShares(true, parameters.Slip39.Exponent, parameters.Slip39.GroupThreshold,
             groups, parameters.Slip39.Password, masterSecretBytes);
 
         Slip39Split slip39Split = new(
+            Threshold: parameters.Slip39.GroupThreshold,
             Description: $"Group threshold {parameters.Slip39.GroupThreshold}.",
-            Groups: shares.Select((g, gi) => new Slip39SplitGroup(
+            Groups: [.. shares.Select((g, gi) => new Slip39SplitGroup(
                 Description: $"Group {gi + 1} of {shares.Length} with threshold {groups[gi].GroupThreshold}.",
-                Shares: g.Select(s => new Slip39SplitShare(s.ToString(_shareFormat))).ToArray())).ToArray());
+                Threshold: groups[gi].GroupThreshold,
+                Shares: [.. g.Select(s => new Slip39SplitShare(
+                    Mnemonic: s.ToString("G"),
+                    Hex: s.ToString("X"),
+                    Base64: s.ToString("64")
+                ))]
+            ))]
+        );
 
         if (parameters.ProgrammaticUse)
         {
@@ -120,7 +128,14 @@ internal class Slip39SplitOperation : IExecutionPhases
                 stream.WriteLine(slip39Split.Groups[i].Description);
                 foreach (var share in slip39Split.Groups[i].Shares)
                 {
-                    stream.WriteLine(share.Value);
+                    string value = _shareFormat switch
+                    {
+                        "G" => share.Mnemonic,
+                        "X" => share.Hex,
+                        "64" => share.Base64,
+                        _ => throw new InvalidOperationException($"Unknown share format '{_shareFormat}'.")
+                    };
+                    stream.WriteLine(value);
                 }
             }
         }

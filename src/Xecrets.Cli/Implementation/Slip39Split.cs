@@ -28,6 +28,7 @@ using System.Text.Json.Serialization;
 namespace Xecrets.Cli.Implementation;
 
 internal record Slip39Split(
+    [property: JsonPropertyName("threshold")] int Threshold,
     [property: JsonPropertyName("description")] string Description,
     [property: JsonPropertyName("groups")] Slip39SplitGroup[] Groups
 );

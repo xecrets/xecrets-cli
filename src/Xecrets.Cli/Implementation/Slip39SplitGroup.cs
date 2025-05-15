@@ -29,5 +29,6 @@ namespace Xecrets.Cli.Implementation;
 
 public record Slip39SplitGroup(
     [property: JsonPropertyName("description")] string Description,
+    [property: JsonPropertyName("threshold")] int Threshold,
     [property: JsonPropertyName("shares")] Slip39SplitShare[] Shares
 );

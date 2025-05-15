@@ -13,6 +13,9 @@
 | [XfFilePair](Xecrets.Sdk.Models.XfFilePair.md 'Xecrets.Sdk.Models.XfFilePair') | A plain text/cipher text file pair |
 | [XfFileResult](Xecrets.Sdk.Models.XfFileResult.md 'Xecrets.Sdk.Models.XfFileResult') | Instatiate a new instance of XfFileResult |
 | [XfKeyPair](Xecrets.Sdk.Models.XfKeyPair.md 'Xecrets.Sdk.Models.XfKeyPair') | A public key pair, including optional encryption password and meta data. |
+| [XfSlip39](Xecrets.Sdk.Models.XfSlip39.md 'Xecrets.Sdk.Models.XfSlip39') | A cargo class carrying the information about a secret split into Slip39 shares |
+| [XfSlip39.Group](Xecrets.Sdk.Models.XfSlip39.Group.md 'Xecrets.Sdk.Models.XfSlip39.Group') | A cargo class carrying the information about a group of shares |
+| [XfSlip39.Group.Share](Xecrets.Sdk.Models.XfSlip39.Group.Share.md 'Xecrets.Sdk.Models.XfSlip39.Group.Share') | A cargo class carrying the information about a share |
 ### Enums
 
 <a name='Xecrets.Sdk.Models.XfEncryptedKeys.PrivateKeyPassword'></a>

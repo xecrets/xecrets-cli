@@ -27,4 +27,8 @@ using System.Text.Json.Serialization;
 
 namespace Xecrets.Cli.Implementation;
 
-public record Slip39SplitShare([property: JsonPropertyName("share")] string Value);
+public record Slip39SplitShare(
+    [property: JsonPropertyName("mnemonic")] string Mnemonic,
+    [property: JsonPropertyName("hex")] string Hex,
+    [property: JsonPropertyName("base64")] string Base64
+);
