@@ -86,3 +86,16 @@ public bool Success { get; }
 
 #### Property Value
 [System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')
+
+<a name='Xecrets.Sdk.Models.XfFileResult.Value'></a>
+
+## XfFileResult.Value Property
+
+The file content, if any, as a byte array.
+
+```csharp
+public byte[] Value { get; set; }
+```
+
+#### Property Value
+[System.Byte](https://docs.microsoft.com/en-us/dotnet/api/System.Byte 'System.Byte')[[]](https://docs.microsoft.com/en-us/dotnet/api/System.Array 'System.Array')

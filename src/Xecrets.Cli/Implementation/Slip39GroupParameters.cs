@@ -23,8 +23,6 @@
 
 #endregion Copyright and GPL License
 
-using System.Text.Json.Serialization;
-
 namespace Xecrets.Cli.Implementation;
 
-public record Slip39SplitShare([property: JsonPropertyName("share")] string Value);
+internal record Slip39GroupParameters(int Threshold, int Shares);

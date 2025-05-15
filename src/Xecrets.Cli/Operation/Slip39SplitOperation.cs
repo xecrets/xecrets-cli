@@ -30,7 +30,6 @@ using System.Text.Json;
 using AxCrypt.Abstractions;
 
 using Xecrets.Cli.Abstractions;
-using Xecrets.Cli.Implementation;
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
 using Xecrets.Slip39;
@@ -41,7 +40,7 @@ namespace Xecrets.Cli.Operation;
 
 internal class Slip39SplitOperation : IExecutionPhases
 {
-    private string _shareFormat = string.Empty;
+    private List<XfOptionKeys> _shareFormats = [];
 
     [AllowNull]
     private IStandardIoDataStore _toStore;
@@ -84,43 +83,62 @@ internal class Slip39SplitOperation : IExecutionPhases
 
         IShamirsSecretSharing sss = New<IShamirsSecretSharing>();
         byte[] masterSecretBytes = parameters.Slip39.Secret.ToSecretBytes(stringEncoding);
-        Group[] groups = parameters.Slip39.Groups.Select(g => new Group(g.Threshold, g.Length)).ToArray();
+        Group[] groups = [.. parameters.Slip39.Groups.Select(g => new Group(g.Threshold, g.Shares))];
 
         Share[][] shares = sss.GenerateShares(true, parameters.Slip39.Exponent, parameters.Slip39.GroupThreshold,
             groups, parameters.Slip39.Password, masterSecretBytes);
 
-        Slip39Split slip39Split = new(
-            Description: $"Group threshold {parameters.Slip39.GroupThreshold}.",
-            Groups: shares.Select((g, gi) => new Slip39SplitGroup(
-                Description: $"Group {gi + 1} of {shares.Length} with threshold {groups[gi].GroupThreshold}.",
-                Shares: g.Select(s => new Slip39SplitShare(s.ToString(_shareFormat))).ToArray())).ToArray());
+        XfSlip39.ShareSet shareSet = new(
+            Threshold: parameters.Slip39.GroupThreshold,
+            Description: $"{parameters.Slip39.Groups.Count} group(s) with group threshold {parameters.Slip39.GroupThreshold}.",
+            Value: null,
+            Groups: [..shares.Select((g, gi) => new XfSlip39.Group(
+                Description: $"Group {gi + 1} of {shares.Length} with share threshold {groups[gi].ShareThreshold}.",
+                Threshold: groups[gi].ShareThreshold,
+                Shares: [.. g.Select(s => new XfSlip39.Share(
+                    Slip39: _shareFormats.Contains(XfOptionKeys.Slip39) ? s.ToString("G") : null,
+                    Hex: _shareFormats.Contains(XfOptionKeys.Hex) ? s.ToString("X") : null,
+                    Base64: _shareFormats.Contains(XfOptionKeys.Base64) ? s.ToString("64") : null
+                ))]
+            ))]
+        );
 
         if (parameters.ProgrammaticUse)
         {
-            string sharesJson = JsonSerializer.Serialize(slip39Split, typeof(Slip39Split),
+            string shareSetJson = JsonSerializer.Serialize(shareSet, typeof(XfSlip39.ShareSet),
                 SourceGenerationContext.Indented);
 
             using Stream stream = _toStore.OpenWrite();
-            byte[] bytes = Encoding.UTF8.GetBytes(sharesJson);
+            byte[] bytes = Encoding.UTF8.GetBytes(shareSetJson);
             stream.Write(bytes, 0, bytes.Length);
         }
         else
         {
             using StreamWriter stream = new(_toStore.OpenWrite());
-            if (slip39Split.Groups.Length > 1)
+            if (shareSet.Groups.Length > 1)
             {
-                stream.WriteLine(slip39Split.Description);
+                stream.WriteLine(shareSet.Description);
             }
-            for (int i = 0; i < slip39Split.Groups.Length; ++i)
+            for (int i = 0; i < shareSet.Groups.Length; ++i)
             {
                 if (i > 0)
                 {
                     stream.WriteLine();
                 }
-                stream.WriteLine(slip39Split.Groups[i].Description);
-                foreach (var share in slip39Split.Groups[i].Shares)
+                stream.WriteLine(shareSet.Groups[i].Description);
+                foreach (XfOptionKeys key in _shareFormats)
                 {
-                    stream.WriteLine(share.Value);
+                    foreach (var share in shareSet.Groups[i].Shares)
+                    {
+                        string value = key switch
+                        {
+                            XfOptionKeys.Slip39 => share.Slip39!,
+                            XfOptionKeys.Hex => share.Hex!,
+                            XfOptionKeys.Base64 => share.Base64!,
+                            _ => throw new InvalidOperationException($"Unknown share format '{_shareFormats}'.")
+                        };
+                        stream.WriteLine(value);
+                    }
                 }
             }
         }
@@ -139,32 +157,22 @@ internal class Slip39SplitOperation : IExecutionPhases
             return new Status(XfStatusCode.InvalidOption, parameters, "No secret to split was specified.");
         }
 
-        string format = parameters.Arg1;
+        string arg = parameters.Arg1;
 
-        if (format.Length == 0)
+        if (arg.Length == 0)
         {
-            format = XfOptionKeys.Slip39.ToString();
+            arg = XfOptionKeys.Slip39.ToString();
         }
 
-        XfOptionKeys formatOption = XfOptionKeys.Slip39;
-        if (format.Length > 0 && !Enum.TryParse(format, ignoreCase: true, out formatOption))
+        _shareFormats.Clear();
+        string[] formats = arg.Split(',', StringSplitOptions.RemoveEmptyEntries);
+        foreach (string f in formats)
         {
-            return new Status(XfStatusCode.InvalidOption, parameters, $"Unknown format '{format}'.");
-        }
-
-        switch (formatOption)
-        {
-            case XfOptionKeys.Slip39:
-                _shareFormat = "G";
-                break;
-            case XfOptionKeys.Hex:
-                _shareFormat = "X";
-                break;
-            case XfOptionKeys.Base64:
-                _shareFormat = "64";
-                break;
-            default:
-                return new Status(XfStatusCode.InvalidOption, parameters, $"Invalid format '{format}'.");
+            if (!Enum.TryParse(f, ignoreCase: true, out XfOptionKeys formatOption))
+            {
+                return new Status(XfStatusCode.InvalidOption, parameters, $"Unknown format '{f}'.");
+            }
+            _shareFormats.Add(formatOption);
         }
 
         string toStore = parameters.Arg2.Length > 0 ? parameters.Arg2 : "+";

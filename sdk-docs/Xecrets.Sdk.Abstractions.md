@@ -84,33 +84,33 @@ The ASCII armor string to decrypt.
 [System.Threading.Tasks.Task&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')[&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.ValueTuple 'System.ValueTuple')[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[,](https://docs.microsoft.com/en-us/dotnet/api/System.ValueTuple 'System.ValueTuple')[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.ValueTuple 'System.ValueTuple')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')  
 The decrypted text, and the original file name embedded in the encrypted data.
 
-<a name='Xecrets.Sdk.Abstractions.IXfApi.DecryptFilesInPlaceAsync(Xecrets.Sdk.Models.XfCredentials,System.Collections.Generic.IEnumerable_Xecrets.Sdk.Models.XfFilePair_,System.Action_Xecrets.Sdk.Cli.CliMessage_)'></a>
+<a name='Xecrets.Sdk.Abstractions.IXfApi.DecryptFilesInPlaceAsync(Xecrets.Sdk.Models.XfCredentials,System.Collections.Generic.IEnumerable_Xecrets.Sdk.Models.XfFilePair_,System.Action_Xecrets.Sdk.Models.XfMessage_)'></a>
 
-## IXfApi.DecryptFilesInPlaceAsync(XfCredentials, IEnumerable<XfFilePair>, Action<CliMessage>) Method
+## IXfApi.DecryptFilesInPlaceAsync(XfCredentials, IEnumerable<XfFilePair>, Action<XfMessage>) Method
 
 Decrypt files in their location, using the stored original file name.
 
 ```csharp
-System.Threading.Tasks.Task<Xecrets.Sdk.Models.XfFileResult[]> DecryptFilesInPlaceAsync(Xecrets.Sdk.Models.XfCredentials credentials, System.Collections.Generic.IEnumerable<Xecrets.Sdk.Models.XfFilePair> files, System.Action<Xecrets.Sdk.Cli.CliMessage> progress);
+System.Threading.Tasks.Task<Xecrets.Sdk.Models.XfFileResult[]> DecryptFilesInPlaceAsync(Xecrets.Sdk.Models.XfCredentials credentials, System.Collections.Generic.IEnumerable<Xecrets.Sdk.Models.XfFilePair> files, System.Action<Xecrets.Sdk.Models.XfMessage> progress);
 ```
 #### Parameters
 
-<a name='Xecrets.Sdk.Abstractions.IXfApi.DecryptFilesInPlaceAsync(Xecrets.Sdk.Models.XfCredentials,System.Collections.Generic.IEnumerable_Xecrets.Sdk.Models.XfFilePair_,System.Action_Xecrets.Sdk.Cli.CliMessage_).credentials'></a>
+<a name='Xecrets.Sdk.Abstractions.IXfApi.DecryptFilesInPlaceAsync(Xecrets.Sdk.Models.XfCredentials,System.Collections.Generic.IEnumerable_Xecrets.Sdk.Models.XfFilePair_,System.Action_Xecrets.Sdk.Models.XfMessage_).credentials'></a>
 
 `credentials` [XfCredentials](Xecrets.Sdk.Models.XfCredentials.md 'Xecrets.Sdk.Models.XfCredentials')
 
 One or more passwords to encrypt with.
 
-<a name='Xecrets.Sdk.Abstractions.IXfApi.DecryptFilesInPlaceAsync(Xecrets.Sdk.Models.XfCredentials,System.Collections.Generic.IEnumerable_Xecrets.Sdk.Models.XfFilePair_,System.Action_Xecrets.Sdk.Cli.CliMessage_).files'></a>
+<a name='Xecrets.Sdk.Abstractions.IXfApi.DecryptFilesInPlaceAsync(Xecrets.Sdk.Models.XfCredentials,System.Collections.Generic.IEnumerable_Xecrets.Sdk.Models.XfFilePair_,System.Action_Xecrets.Sdk.Models.XfMessage_).files'></a>
 
 `files` [System.Collections.Generic.IEnumerable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')[XfFilePair](Xecrets.Sdk.Models.XfFilePair.md 'Xecrets.Sdk.Models.XfFilePair')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')
 
 The list of files to decrypt. Only the [SourceFullName](Xecrets.Sdk.Models.XfFilePair.md#Xecrets.Sdk.Models.XfFilePair.SourceFullName 'Xecrets.Sdk.Models.XfFilePair.SourceFullName') is  
             used.
 
-<a name='Xecrets.Sdk.Abstractions.IXfApi.DecryptFilesInPlaceAsync(Xecrets.Sdk.Models.XfCredentials,System.Collections.Generic.IEnumerable_Xecrets.Sdk.Models.XfFilePair_,System.Action_Xecrets.Sdk.Cli.CliMessage_).progress'></a>
+<a name='Xecrets.Sdk.Abstractions.IXfApi.DecryptFilesInPlaceAsync(Xecrets.Sdk.Models.XfCredentials,System.Collections.Generic.IEnumerable_Xecrets.Sdk.Models.XfFilePair_,System.Action_Xecrets.Sdk.Models.XfMessage_).progress'></a>
 
-`progress` [System.Action&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Action-1 'System.Action`1')[CliMessage](Xecrets.Sdk.Cli.CliMessage.md 'Xecrets.Sdk.Cli.CliMessage')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Action-1 'System.Action`1')
+`progress` [System.Action&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Action-1 'System.Action`1')[XfMessage](Xecrets.Sdk.Models.XfMessage.md 'Xecrets.Sdk.Models.XfMessage')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Action-1 'System.Action`1')
 
 An [System.Action](https://docs.microsoft.com/en-us/dotnet/api/System.Action 'System.Action') delegate called with progress.
 
@@ -180,39 +180,39 @@ A stream to write the clear text to.
 A [System.Threading.Tasks.Task](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task 'System.Threading.Tasks.Task') to wait for and the original file name as a string, or an empty string if the  
             credentials were invalid.
 
-<a name='Xecrets.Sdk.Abstractions.IXfApi.DecryptToAndKeepFileAsync(Xecrets.Sdk.Models.XfCredentials,System.IO.FileInfo,System.IO.DirectoryInfo,System.Action_Xecrets.Sdk.Cli.CliMessage_)'></a>
+<a name='Xecrets.Sdk.Abstractions.IXfApi.DecryptToAndKeepFileAsync(Xecrets.Sdk.Models.XfCredentials,System.IO.FileInfo,System.IO.DirectoryInfo,System.Action_Xecrets.Sdk.Models.XfMessage_)'></a>
 
-## IXfApi.DecryptToAndKeepFileAsync(XfCredentials, FileInfo, DirectoryInfo, Action<CliMessage>) Method
+## IXfApi.DecryptToAndKeepFileAsync(XfCredentials, FileInfo, DirectoryInfo, Action<XfMessage>) Method
 
 Decrypt a file using the provided credentials, to a specified directory, returning the resulting original  
 filename and decrypted file represented by a [System.IO.FileInfo](https://docs.microsoft.com/en-us/dotnet/api/System.IO.FileInfo 'System.IO.FileInfo') instance.
 
 ```csharp
-System.Threading.Tasks.Task<Xecrets.Sdk.Models.XfFileResult[]> DecryptToAndKeepFileAsync(Xecrets.Sdk.Models.XfCredentials credentials, System.IO.FileInfo file, System.IO.DirectoryInfo directory, System.Action<Xecrets.Sdk.Cli.CliMessage> progress);
+System.Threading.Tasks.Task<Xecrets.Sdk.Models.XfFileResult[]> DecryptToAndKeepFileAsync(Xecrets.Sdk.Models.XfCredentials credentials, System.IO.FileInfo file, System.IO.DirectoryInfo directory, System.Action<Xecrets.Sdk.Models.XfMessage> progress);
 ```
 #### Parameters
 
-<a name='Xecrets.Sdk.Abstractions.IXfApi.DecryptToAndKeepFileAsync(Xecrets.Sdk.Models.XfCredentials,System.IO.FileInfo,System.IO.DirectoryInfo,System.Action_Xecrets.Sdk.Cli.CliMessage_).credentials'></a>
+<a name='Xecrets.Sdk.Abstractions.IXfApi.DecryptToAndKeepFileAsync(Xecrets.Sdk.Models.XfCredentials,System.IO.FileInfo,System.IO.DirectoryInfo,System.Action_Xecrets.Sdk.Models.XfMessage_).credentials'></a>
 
 `credentials` [XfCredentials](Xecrets.Sdk.Models.XfCredentials.md 'Xecrets.Sdk.Models.XfCredentials')
 
 One or more passwords to encrypt with.
 
-<a name='Xecrets.Sdk.Abstractions.IXfApi.DecryptToAndKeepFileAsync(Xecrets.Sdk.Models.XfCredentials,System.IO.FileInfo,System.IO.DirectoryInfo,System.Action_Xecrets.Sdk.Cli.CliMessage_).file'></a>
+<a name='Xecrets.Sdk.Abstractions.IXfApi.DecryptToAndKeepFileAsync(Xecrets.Sdk.Models.XfCredentials,System.IO.FileInfo,System.IO.DirectoryInfo,System.Action_Xecrets.Sdk.Models.XfMessage_).file'></a>
 
 `file` [System.IO.FileInfo](https://docs.microsoft.com/en-us/dotnet/api/System.IO.FileInfo 'System.IO.FileInfo')
 
 The file to decrypt.
 
-<a name='Xecrets.Sdk.Abstractions.IXfApi.DecryptToAndKeepFileAsync(Xecrets.Sdk.Models.XfCredentials,System.IO.FileInfo,System.IO.DirectoryInfo,System.Action_Xecrets.Sdk.Cli.CliMessage_).directory'></a>
+<a name='Xecrets.Sdk.Abstractions.IXfApi.DecryptToAndKeepFileAsync(Xecrets.Sdk.Models.XfCredentials,System.IO.FileInfo,System.IO.DirectoryInfo,System.Action_Xecrets.Sdk.Models.XfMessage_).directory'></a>
 
 `directory` [System.IO.DirectoryInfo](https://docs.microsoft.com/en-us/dotnet/api/System.IO.DirectoryInfo 'System.IO.DirectoryInfo')
 
 The location to decrypt to.
 
-<a name='Xecrets.Sdk.Abstractions.IXfApi.DecryptToAndKeepFileAsync(Xecrets.Sdk.Models.XfCredentials,System.IO.FileInfo,System.IO.DirectoryInfo,System.Action_Xecrets.Sdk.Cli.CliMessage_).progress'></a>
+<a name='Xecrets.Sdk.Abstractions.IXfApi.DecryptToAndKeepFileAsync(Xecrets.Sdk.Models.XfCredentials,System.IO.FileInfo,System.IO.DirectoryInfo,System.Action_Xecrets.Sdk.Models.XfMessage_).progress'></a>
 
-`progress` [System.Action&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Action-1 'System.Action`1')[CliMessage](Xecrets.Sdk.Cli.CliMessage.md 'Xecrets.Sdk.Cli.CliMessage')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Action-1 'System.Action`1')
+`progress` [System.Action&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Action-1 'System.Action`1')[XfMessage](Xecrets.Sdk.Models.XfMessage.md 'Xecrets.Sdk.Models.XfMessage')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Action-1 'System.Action`1')
 
 An [System.Action](https://docs.microsoft.com/en-us/dotnet/api/System.Action 'System.Action') delegate called with progress.
 
@@ -220,46 +220,46 @@ An [System.Action](https://docs.microsoft.com/en-us/dotnet/api/System.Action 'Sy
 [System.Threading.Tasks.Task&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')[XfFileResult](Xecrets.Sdk.Models.XfFileResult.md 'Xecrets.Sdk.Models.XfFileResult')[[]](https://docs.microsoft.com/en-us/dotnet/api/System.Array 'System.Array')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')  
 An array of results, with excactly 1 element.
 
-<a name='Xecrets.Sdk.Abstractions.IXfApi.EncryptFilesAsync(Xecrets.Sdk.Models.XfCredentials,bool,bool,System.Collections.Generic.IEnumerable_Xecrets.Sdk.Models.XfFilePair_,System.Action_Xecrets.Sdk.Cli.CliMessage_)'></a>
+<a name='Xecrets.Sdk.Abstractions.IXfApi.EncryptFilesAsync(Xecrets.Sdk.Models.XfCredentials,bool,bool,System.Collections.Generic.IEnumerable_Xecrets.Sdk.Models.XfFilePair_,System.Action_Xecrets.Sdk.Models.XfMessage_)'></a>
 
-## IXfApi.EncryptFilesAsync(XfCredentials, bool, bool, IEnumerable<XfFilePair>, Action<CliMessage>) Method
+## IXfApi.EncryptFilesAsync(XfCredentials, bool, bool, IEnumerable<XfFilePair>, Action<XfMessage>) Method
 
 Encrypt plain text files as encrypted files, keeping or wiping the originals.
 
 ```csharp
-System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<System.IO.FileInfo>> EncryptFilesAsync(Xecrets.Sdk.Models.XfCredentials credentials, bool overwrite, bool wipe, System.Collections.Generic.IEnumerable<Xecrets.Sdk.Models.XfFilePair> pairs, System.Action<Xecrets.Sdk.Cli.CliMessage> progress);
+System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<System.IO.FileInfo>> EncryptFilesAsync(Xecrets.Sdk.Models.XfCredentials credentials, bool overwrite, bool wipe, System.Collections.Generic.IEnumerable<Xecrets.Sdk.Models.XfFilePair> pairs, System.Action<Xecrets.Sdk.Models.XfMessage> progress);
 ```
 #### Parameters
 
-<a name='Xecrets.Sdk.Abstractions.IXfApi.EncryptFilesAsync(Xecrets.Sdk.Models.XfCredentials,bool,bool,System.Collections.Generic.IEnumerable_Xecrets.Sdk.Models.XfFilePair_,System.Action_Xecrets.Sdk.Cli.CliMessage_).credentials'></a>
+<a name='Xecrets.Sdk.Abstractions.IXfApi.EncryptFilesAsync(Xecrets.Sdk.Models.XfCredentials,bool,bool,System.Collections.Generic.IEnumerable_Xecrets.Sdk.Models.XfFilePair_,System.Action_Xecrets.Sdk.Models.XfMessage_).credentials'></a>
 
 `credentials` [XfCredentials](Xecrets.Sdk.Models.XfCredentials.md 'Xecrets.Sdk.Models.XfCredentials')
 
 The credentials to use when encrypting the files.
 
-<a name='Xecrets.Sdk.Abstractions.IXfApi.EncryptFilesAsync(Xecrets.Sdk.Models.XfCredentials,bool,bool,System.Collections.Generic.IEnumerable_Xecrets.Sdk.Models.XfFilePair_,System.Action_Xecrets.Sdk.Cli.CliMessage_).overwrite'></a>
+<a name='Xecrets.Sdk.Abstractions.IXfApi.EncryptFilesAsync(Xecrets.Sdk.Models.XfCredentials,bool,bool,System.Collections.Generic.IEnumerable_Xecrets.Sdk.Models.XfFilePair_,System.Action_Xecrets.Sdk.Models.XfMessage_).overwrite'></a>
 
 `overwrite` [System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')
 
 Set to 'false' if overwriting the target should be disallowed, and instead use an  
             alternate non-colliding name.
 
-<a name='Xecrets.Sdk.Abstractions.IXfApi.EncryptFilesAsync(Xecrets.Sdk.Models.XfCredentials,bool,bool,System.Collections.Generic.IEnumerable_Xecrets.Sdk.Models.XfFilePair_,System.Action_Xecrets.Sdk.Cli.CliMessage_).wipe'></a>
+<a name='Xecrets.Sdk.Abstractions.IXfApi.EncryptFilesAsync(Xecrets.Sdk.Models.XfCredentials,bool,bool,System.Collections.Generic.IEnumerable_Xecrets.Sdk.Models.XfFilePair_,System.Action_Xecrets.Sdk.Models.XfMessage_).wipe'></a>
 
 `wipe` [System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')
 
 Set to 'true' to also wipe the original plain text.
 
-<a name='Xecrets.Sdk.Abstractions.IXfApi.EncryptFilesAsync(Xecrets.Sdk.Models.XfCredentials,bool,bool,System.Collections.Generic.IEnumerable_Xecrets.Sdk.Models.XfFilePair_,System.Action_Xecrets.Sdk.Cli.CliMessage_).pairs'></a>
+<a name='Xecrets.Sdk.Abstractions.IXfApi.EncryptFilesAsync(Xecrets.Sdk.Models.XfCredentials,bool,bool,System.Collections.Generic.IEnumerable_Xecrets.Sdk.Models.XfFilePair_,System.Action_Xecrets.Sdk.Models.XfMessage_).pairs'></a>
 
 `pairs` [System.Collections.Generic.IEnumerable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')[XfFilePair](Xecrets.Sdk.Models.XfFilePair.md 'Xecrets.Sdk.Models.XfFilePair')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')
 
 File name pairs, providing source and target names as well as original name to include  
             in the encrypted file.
 
-<a name='Xecrets.Sdk.Abstractions.IXfApi.EncryptFilesAsync(Xecrets.Sdk.Models.XfCredentials,bool,bool,System.Collections.Generic.IEnumerable_Xecrets.Sdk.Models.XfFilePair_,System.Action_Xecrets.Sdk.Cli.CliMessage_).progress'></a>
+<a name='Xecrets.Sdk.Abstractions.IXfApi.EncryptFilesAsync(Xecrets.Sdk.Models.XfCredentials,bool,bool,System.Collections.Generic.IEnumerable_Xecrets.Sdk.Models.XfFilePair_,System.Action_Xecrets.Sdk.Models.XfMessage_).progress'></a>
 
-`progress` [System.Action&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Action-1 'System.Action`1')[CliMessage](Xecrets.Sdk.Cli.CliMessage.md 'Xecrets.Sdk.Cli.CliMessage')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Action-1 'System.Action`1')
+`progress` [System.Action&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Action-1 'System.Action`1')[XfMessage](Xecrets.Sdk.Models.XfMessage.md 'Xecrets.Sdk.Models.XfMessage')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Action-1 'System.Action`1')
 
 An [System.Action](https://docs.microsoft.com/en-us/dotnet/api/System.Action 'System.Action') delegate that will be called reporting progress of the  
             operation.
@@ -384,6 +384,60 @@ The version of the command line tool API to check.
 [System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')  
 True if this SDK can work with the provided command line tool.
 
+<a name='Xecrets.Sdk.Abstractions.IXfApi.Slip39CombineAsync(System.Collections.Generic.IEnumerable_string_)'></a>
+
+## IXfApi.Slip39CombineAsync(IEnumerable<string>) Method
+
+Try to combine shares and recover the secret.
+
+```csharp
+System.Threading.Tasks.Task<Xecrets.Sdk.Models.XfSlip39.ShareSet?> Slip39CombineAsync(System.Collections.Generic.IEnumerable<string> shares);
+```
+#### Parameters
+
+<a name='Xecrets.Sdk.Abstractions.IXfApi.Slip39CombineAsync(System.Collections.Generic.IEnumerable_string_).shares'></a>
+
+`shares` [System.Collections.Generic.IEnumerable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')
+
+#### Returns
+[System.Threading.Tasks.Task&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')[Xecrets.Sdk.Models.XfSlip39.ShareSet](https://docs.microsoft.com/en-us/dotnet/api/Xecrets.Sdk.Models.XfSlip39.ShareSet 'Xecrets.Sdk.Models.XfSlip39.ShareSet')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')  
+The shares, grouped and interpreted as well as the secret if possible. Returns null if there's  
+            something wrong with one or more of the shares.
+
+<a name='Xecrets.Sdk.Abstractions.IXfApi.Slip39SplitAsync(string,int,int)'></a>
+
+## IXfApi.Slip39SplitAsync(string, int, int) Method
+
+Split a secret into shares using the SLIP39 scheme.
+
+```csharp
+System.Threading.Tasks.Task<Xecrets.Sdk.Models.XfSlip39.ShareSet> Slip39SplitAsync(string secret, int shares, int threshold);
+```
+#### Parameters
+
+<a name='Xecrets.Sdk.Abstractions.IXfApi.Slip39SplitAsync(string,int,int).secret'></a>
+
+`secret` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+
+The secret to split.
+
+<a name='Xecrets.Sdk.Abstractions.IXfApi.Slip39SplitAsync(string,int,int).shares'></a>
+
+`shares` [System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')
+
+The number of shares to split it into.
+
+<a name='Xecrets.Sdk.Abstractions.IXfApi.Slip39SplitAsync(string,int,int).threshold'></a>
+
+`threshold` [System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')
+
+The number of shares required to recover the secret.  
+Must be greater than 1 and less than or equal the number of shares.
+
+#### Returns
+[System.Threading.Tasks.Task&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')[Xecrets.Sdk.Models.XfSlip39.ShareSet](https://docs.microsoft.com/en-us/dotnet/api/Xecrets.Sdk.Models.XfSlip39.ShareSet 'Xecrets.Sdk.Models.XfSlip39.ShareSet')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')  
+The shares
+
 <a name='Xecrets.Sdk.Abstractions.IXfApi.UpdatePrivateKeysAsync(Xecrets.Sdk.Models.XfCredentials,string)'></a>
 
 ## IXfApi.UpdatePrivateKeysAsync(XfCredentials, string) Method
@@ -411,26 +465,26 @@ A json serialized instance with private keys.
 [System.Threading.Tasks.Task&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')  
 The updated encrypted keys json.
 
-<a name='Xecrets.Sdk.Abstractions.IXfApi.WipeFilesAsync(System.Collections.Generic.IEnumerable_string_,System.Action_Xecrets.Sdk.Cli.CliMessage_)'></a>
+<a name='Xecrets.Sdk.Abstractions.IXfApi.WipeFilesAsync(System.Collections.Generic.IEnumerable_string_,System.Action_Xecrets.Sdk.Models.XfMessage_)'></a>
 
-## IXfApi.WipeFilesAsync(IEnumerable<string>, Action<CliMessage>) Method
+## IXfApi.WipeFilesAsync(IEnumerable<string>, Action<XfMessage>) Method
 
 Wipe files.
 
 ```csharp
-System.Threading.Tasks.Task WipeFilesAsync(System.Collections.Generic.IEnumerable<string> fullNames, System.Action<Xecrets.Sdk.Cli.CliMessage> progress);
+System.Threading.Tasks.Task WipeFilesAsync(System.Collections.Generic.IEnumerable<string> fullNames, System.Action<Xecrets.Sdk.Models.XfMessage> progress);
 ```
 #### Parameters
 
-<a name='Xecrets.Sdk.Abstractions.IXfApi.WipeFilesAsync(System.Collections.Generic.IEnumerable_string_,System.Action_Xecrets.Sdk.Cli.CliMessage_).fullNames'></a>
+<a name='Xecrets.Sdk.Abstractions.IXfApi.WipeFilesAsync(System.Collections.Generic.IEnumerable_string_,System.Action_Xecrets.Sdk.Models.XfMessage_).fullNames'></a>
 
 `fullNames` [System.Collections.Generic.IEnumerable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')
 
 The list of full path names to wipe.
 
-<a name='Xecrets.Sdk.Abstractions.IXfApi.WipeFilesAsync(System.Collections.Generic.IEnumerable_string_,System.Action_Xecrets.Sdk.Cli.CliMessage_).progress'></a>
+<a name='Xecrets.Sdk.Abstractions.IXfApi.WipeFilesAsync(System.Collections.Generic.IEnumerable_string_,System.Action_Xecrets.Sdk.Models.XfMessage_).progress'></a>
 
-`progress` [System.Action&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Action-1 'System.Action`1')[CliMessage](Xecrets.Sdk.Cli.CliMessage.md 'Xecrets.Sdk.Cli.CliMessage')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Action-1 'System.Action`1')
+`progress` [System.Action&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Action-1 'System.Action`1')[XfMessage](Xecrets.Sdk.Models.XfMessage.md 'Xecrets.Sdk.Models.XfMessage')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Action-1 'System.Action`1')
 
 An [System.Action](https://docs.microsoft.com/en-us/dotnet/api/System.Action 'System.Action') delegate called with progress.
 

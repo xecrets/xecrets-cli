@@ -30,6 +30,7 @@ using AxCrypt.Api.Model;
 
 using Xecrets.Cli.Implementation;
 using Xecrets.Cli.Log;
+using Xecrets.Cli.Public;
 
 namespace Xecrets.Cli;
 
@@ -37,11 +38,10 @@ namespace Xecrets.Cli;
 [JsonSerializable(typeof(CliMessage))]
 [JsonSerializable(typeof(UserAccounts))]
 [JsonSerializable(typeof(Dictionary<string, object>))]
-[JsonSerializable(typeof(Slip39Split))]
-[JsonSerializable(typeof(Slip39Combined))]
-[JsonSerializable(typeof(Slip39Prefixes))]
+[JsonSerializable(typeof(XfSlip39.ShareSet))]
+[JsonSerializable(typeof(XfSlip39.Prefixes))]
 internal partial class SourceGenerationContext : JsonSerializerContext
 {
     public static SourceGenerationContext Indented { get; } =
-        new SourceGenerationContext(new JsonSerializerOptions() { WriteIndented = true,});
+        new SourceGenerationContext(new JsonSerializerOptions() { WriteIndented = true, DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull });
 }

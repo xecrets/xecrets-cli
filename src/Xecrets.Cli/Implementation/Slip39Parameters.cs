@@ -29,7 +29,7 @@ namespace Xecrets.Cli.Implementation;
 
 internal class Slip39Parameters
 {
-    public IList<Slip39Group> Groups { get; } = [];
+    public IList<Slip39GroupParameters> Groups { get; } = [];
 
     public int GroupThreshold { get; set; } = 1;
 

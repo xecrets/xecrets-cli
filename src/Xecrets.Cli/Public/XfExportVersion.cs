@@ -50,6 +50,7 @@ public static class XfExportVersion
     /// 4.1 -> 2024-12-19 Add --crash
     /// 5.0 -> 2024-12-28 Rename some options to clarify syntax, i.e. encrypt-to -> encrypt-from-to etc.
     /// 6.0 -> 2025-01-16 Add operating system status return codes
+    /// 6.1 -> 2025-05-23 Extend/change support for Slip39
     /// </remarks>
-    public static Version CliVersion => new(6, 0);
+    public static Version CliVersion => new(6, 1);
 }

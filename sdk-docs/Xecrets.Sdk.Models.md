@@ -2,6 +2,12 @@
 
 ## Xecrets.Sdk.Models Namespace
 
+The three classes [Xecrets.Sdk.Models.XfOpCode](https://docs.microsoft.com/en-us/dotnet/api/Xecrets.Sdk.Models.XfOpCode 'Xecrets.Sdk.Models.XfOpCode'), [Xecrets.Sdk.Models.XfStatusCode](https://docs.microsoft.com/en-us/dotnet/api/Xecrets.Sdk.Models.XfStatusCode 'Xecrets.Sdk.Models.XfStatusCode') and [Xecrets.Sdk.Models.XfCliApi](https://docs.microsoft.com/en-us/dotnet/api/Xecrets.Sdk.Models.XfCliApi 'Xecrets.Sdk.Models.XfCliApi') are imported  
+from XecretsCli using the --cli-options-code-export argument and copy/pasted here to be available for use  
+without needing an actual reference to the XecretsCli-assembly. If XfCliVersion is updated, then the  
+corresponding code changes must be made to maintain compatibility and [XfSdkVersion](Xecrets.Sdk.XfSdkVersion.md 'Xecrets.Sdk.XfSdkVersion')  
+must be updated to reflect the updated compatibility.
+
 | Classes | |
 | :--- | :--- |
 | [XfCredentials](Xecrets.Sdk.Models.XfCredentials.md 'Xecrets.Sdk.Models.XfCredentials') | A cargo class carrying all the various possible credentials used for encryption or decryption. When it's not supported<br/>or doesn't make sense, only the first will be used. |
@@ -13,6 +19,7 @@
 | [XfFilePair](Xecrets.Sdk.Models.XfFilePair.md 'Xecrets.Sdk.Models.XfFilePair') | A plain text/cipher text file pair |
 | [XfFileResult](Xecrets.Sdk.Models.XfFileResult.md 'Xecrets.Sdk.Models.XfFileResult') | Instatiate a new instance of XfFileResult |
 | [XfKeyPair](Xecrets.Sdk.Models.XfKeyPair.md 'Xecrets.Sdk.Models.XfKeyPair') | A public key pair, including optional encryption password and meta data. |
+| [XfMessage](Xecrets.Sdk.Models.XfMessage.md 'Xecrets.Sdk.Models.XfMessage') | Log output and progress from the command line tool. |
 ### Enums
 
 <a name='Xecrets.Sdk.Models.XfEncryptedKeys.PrivateKeyPassword'></a>

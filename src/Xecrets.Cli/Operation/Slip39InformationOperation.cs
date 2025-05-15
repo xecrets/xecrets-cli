@@ -58,12 +58,12 @@ internal class Slip39InformationOperation : IExecutionPhases
             return status;
         }
 
-        List<Slip39Prefix> prefixes = [];
+        List<XfSlip39.Prefix> prefixes = [];
         foreach (string shareString in parameters.Slip39.Shares)
         {
             Share share = Share.Parse(shareString);
 
-            Slip39Prefix prefix = new(
+            XfSlip39.Prefix prefix = new(
                 Id: share.Prefix.Id,
                 Extendable: share.Prefix.Extendable,
                 IterationExponent: share.Prefix.IterationExponent,
@@ -75,15 +75,15 @@ internal class Slip39InformationOperation : IExecutionPhases
             );
             prefixes.Add(prefix);
         }
-        OutputVerification(new Slip39Prefixes([.. prefixes]), parameters, _toStore);
+        OutputVerification(new XfSlip39.Prefixes([.. prefixes]), parameters, _toStore);
         return Status.Success;
     }
 
-    private static void OutputVerification(Slip39Prefixes prefixes, Parameters parameters, IStandardIoDataStore toStore)
+    private static void OutputVerification(XfSlip39.Prefixes prefixes, Parameters parameters, IStandardIoDataStore toStore)
     {
         if (parameters.ProgrammaticUse)
         {
-            string sharesJson = JsonSerializer.Serialize(prefixes, typeof(Slip39Prefixes),
+            string sharesJson = JsonSerializer.Serialize(prefixes, typeof(XfSlip39.Prefixes),
                 SourceGenerationContext.Indented);
 
             using Stream stream = toStore.OpenWrite();
@@ -93,7 +93,7 @@ internal class Slip39InformationOperation : IExecutionPhases
         else
         {
             using StreamWriter stream = new(toStore.OpenWrite());
-            foreach (Slip39Prefix prefix in prefixes.Prefixes)
+            foreach (XfSlip39.Prefix prefix in prefixes.Values)
             {
                 string info =
                     $"Id: {prefix.Id}" +

@@ -24,13 +24,12 @@
 #endregion Copyright and GPL License
 
 using System.Diagnostics.CodeAnalysis;
-using System.Text.Json;
 using System.Text;
+using System.Text.Json;
 
 using AxCrypt.Abstractions;
 
 using Xecrets.Cli.Abstractions;
-using Xecrets.Cli.Implementation;
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
 using Xecrets.Slip39;
@@ -59,33 +58,54 @@ internal class Slip39CombineOperation : IExecutionPhases
         }
 
         IShamirsSecretSharing sss = New<IShamirsSecretSharing>();
-        byte[] masterSecret = sss.CombineShares(parameters.Slip39.Shares.Select(Share.Parse).ToArray(),
+        GroupedShares groupedShares = sss.CombineShares([.. parameters.Slip39.Shares.Select(Share.Parse)],
             parameters.Slip39.Password);
 
-        string secretString = parameters.Slip39.CombineFormat switch
-        {
-            XfOptionKeys.Bip39 => masterSecret.ToBip39(),
-            XfOptionKeys.Base64 => masterSecret.ToUrlSafeBase64(),
-            XfOptionKeys.Text => masterSecret.ToSecretString(),
-            XfOptionKeys.Hex => masterSecret.ToHex(),
-            _ => throw new InvalidOperationException($"Unknown format '{parameters.Slip39.CombineFormat}'.")
-        };
-
-        Slip39Combined combined = new(secretString);
         if (parameters.ProgrammaticUse)
         {
-            string combinedJson = JsonSerializer.Serialize(combined, typeof(Slip39Combined),
+            XfSlip39.ShareSet shareSet = new(
+                Description: $"{groupedShares.ShareGroups.Length} groups, with threshold {groupedShares.ShareGroups[0][0].Prefix.GroupThreshold}",
+                Threshold: groupedShares.ShareGroups[0][0].Prefix.GroupThreshold,
+                Value: groupedShares.Secret.Length > 0
+                    ? new(
+                        Bip39: groupedShares.Secret.ToBip39(),
+                        Hex: groupedShares.Secret.ToHex(),
+                        Base64: groupedShares.Secret.ToHex(),
+                        Text: groupedShares.Secret.ToSecretString())
+                    : null,
+                Groups: [.. groupedShares.ShareGroups.Select((g, gi) => new XfSlip39.Group(
+                    Description: $"Group {gi + 1} of {groupedShares.ShareGroups.Length} with threshold {g[0].Prefix.MemberThreshold}.",
+                    Threshold: g[0].Prefix.MemberThreshold,
+                    Shares: [.. g.Select(s => new XfSlip39.Share(
+                        Slip39: s.ToString("G"),
+                        Hex: s.ToString("X"),
+                        Base64: s.ToString("64")
+                        ))]
+                    ))]
+                );
+
+            string shareSetJson = JsonSerializer.Serialize(shareSet, typeof(XfSlip39.ShareSet),
                 SourceGenerationContext.Indented);
 
             using Stream stream = _toStore.OpenWrite();
-            byte[] bytes = Encoding.UTF8.GetBytes(combinedJson);
+            byte[] bytes = Encoding.UTF8.GetBytes(shareSetJson);
             stream.Write(bytes, 0, bytes.Length);
         }
         else
         {
+            byte[] masterSecret = groupedShares.Secret;
+            string secretString = parameters.Slip39.CombineFormat switch
+            {
+                XfOptionKeys.Bip39 => masterSecret.ToBip39(),
+                XfOptionKeys.Base64 => masterSecret.ToUrlSafeBase64(),
+                XfOptionKeys.Text => masterSecret.ToSecretString(),
+                XfOptionKeys.Hex => masterSecret.ToHex(),
+                _ => throw new InvalidOperationException($"Unknown format '{parameters.Slip39.CombineFormat}'.")
+            };
+
             using StreamWriter stream = new(_toStore.OpenWrite());
 
-            stream.WriteLine(combined.Secret);
+            stream.WriteLine(secretString);
         }
         return Status.Success;
     }

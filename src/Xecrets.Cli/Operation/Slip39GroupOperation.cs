@@ -44,23 +44,23 @@ internal class Slip39GroupOperation : IExecutionPhases
             return new Status(XfStatusCode.InvalidOption,
                 parameters, $"Threshold '{parameters.Arg1}' must be an integer.");
         }
-        if (!int.TryParse(parameters.Arg2, out int length))
+        if (!int.TryParse(parameters.Arg2, out int shares))
         {
             return new Status(XfStatusCode.InvalidOption,
                 parameters, $"The number of group shares '{parameters.Arg2}' must be an integer.");
         }
-        if (threshold < 1 || threshold > 16 || threshold > length || length < 1)
+        if (threshold < 1 || threshold > 16 || threshold > shares || shares < 1)
         {
             return new Status(XfStatusCode.InvalidOption, parameters,
-                $"Member threshold '{threshold}' must be between 1 and 16, and <= '{length}' which must be >= 1.");
+                $"The group threshold {threshold} must be between 1 and 16, and <= shares ({shares}) which must be >= 1.");
         }
-        if (threshold == 1 && length > 1)
+        if (threshold == 1 && shares > 1)
         {
             return new Status(XfStatusCode.InvalidOption, parameters,
                 $"When there are > 1 member in a group, the member threshold must be > 1");
         }
 
-        parameters.Slip39.Groups.Add(new(Threshold: threshold, Length: length));
+        parameters.Slip39.Groups.Add(new(Threshold: threshold, Shares: shares));
 
         return Status.Success;
     }
