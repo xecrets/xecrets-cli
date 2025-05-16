@@ -41,7 +41,7 @@ namespace Xecrets.Cli.Operation;
 
 internal class Slip39SplitOperation : IExecutionPhases
 {
-    private string _shareFormat = string.Empty;
+    private List<XfOptionKeys> _shareFormats = [];
 
     [AllowNull]
     private IStandardIoDataStore _toStore;
@@ -96,9 +96,9 @@ internal class Slip39SplitOperation : IExecutionPhases
                 Description: $"Group {gi + 1} of {shares.Length} with threshold {groups[gi].GroupThreshold}.",
                 Threshold: groups[gi].GroupThreshold,
                 Shares: [.. g.Select(s => new Slip39SplitShare(
-                    Mnemonic: s.ToString("G"),
-                    Hex: s.ToString("X"),
-                    Base64: s.ToString("64")
+                    Mnemonic: _shareFormats.Contains(XfOptionKeys.Slip39) ? s.ToString("G") : null,
+                    Hex: _shareFormats.Contains(XfOptionKeys.Hex) ? s.ToString("X") : null,
+                    Base64: _shareFormats.Contains(XfOptionKeys.Base64) ? s.ToString("64") : null
                 ))]
             ))]
         );
@@ -126,16 +126,19 @@ internal class Slip39SplitOperation : IExecutionPhases
                     stream.WriteLine();
                 }
                 stream.WriteLine(slip39Split.Groups[i].Description);
-                foreach (var share in slip39Split.Groups[i].Shares)
+                foreach (XfOptionKeys key in _shareFormats)
                 {
-                    string value = _shareFormat switch
+                    foreach (var share in slip39Split.Groups[i].Shares)
                     {
-                        "G" => share.Mnemonic,
-                        "X" => share.Hex,
-                        "64" => share.Base64,
-                        _ => throw new InvalidOperationException($"Unknown share format '{_shareFormat}'.")
-                    };
-                    stream.WriteLine(value);
+                        string value = key switch
+                        {
+                            XfOptionKeys.Slip39 => share.Mnemonic!,
+                            XfOptionKeys.Hex => share.Hex!,
+                            XfOptionKeys.Base64 => share.Base64!,
+                            _ => throw new InvalidOperationException($"Unknown share format '{_shareFormats}'.")
+                        };
+                        stream.WriteLine(value);
+                    }
                 }
             }
         }
@@ -154,33 +157,38 @@ internal class Slip39SplitOperation : IExecutionPhases
             return new Status(XfStatusCode.InvalidOption, parameters, "No secret to split was specified.");
         }
 
-        string format = parameters.Arg1;
+        string arg = parameters.Arg1;
 
-        if (format.Length == 0)
+        if (arg.Length == 0)
         {
-            format = XfOptionKeys.Slip39.ToString();
+            arg = XfOptionKeys.Slip39.ToString();
         }
 
-        XfOptionKeys formatOption = XfOptionKeys.Slip39;
-        if (format.Length > 0 && !Enum.TryParse(format, ignoreCase: true, out formatOption))
+        _shareFormats.Clear();
+        string[] formats = arg.Split(',', StringSplitOptions.RemoveEmptyEntries);
+        foreach (string f in formats)
         {
-            return new Status(XfStatusCode.InvalidOption, parameters, $"Unknown format '{format}'.");
+            if (!Enum.TryParse(f, ignoreCase: true, out XfOptionKeys formatOption))
+            {
+                return new Status(XfStatusCode.InvalidOption, parameters, $"Unknown format '{f}'.");
+            }
+            _shareFormats.Add(formatOption);
         }
 
-        switch (formatOption)
-        {
-            case XfOptionKeys.Slip39:
-                _shareFormat = "G";
-                break;
-            case XfOptionKeys.Hex:
-                _shareFormat = "X";
-                break;
-            case XfOptionKeys.Base64:
-                _shareFormat = "64";
-                break;
-            default:
-                return new Status(XfStatusCode.InvalidOption, parameters, $"Invalid format '{format}'.");
-        }
+        //switch (formatOption)
+        //{
+        //    case XfOptionKeys.Slip39:
+        //        _shareFormats = "G";
+        //        break;
+        //    case XfOptionKeys.Hex:
+        //        _shareFormats = "X";
+        //        break;
+        //    case XfOptionKeys.Base64:
+        //        _shareFormats = "64";
+        //        break;
+        //    default:
+        //        return new Status(XfStatusCode.InvalidOption, parameters, $"Invalid format '{format}'.");
+        //}
 
         string toStore = parameters.Arg2.Length > 0 ? parameters.Arg2 : "+";
         _toStore = New<IStandardIoDataStore>(toStore);

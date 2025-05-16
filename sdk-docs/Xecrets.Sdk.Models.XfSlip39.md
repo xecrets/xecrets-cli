@@ -40,3 +40,16 @@ public System.Collections.Generic.List<Xecrets.Sdk.Models.XfSlip39.Group> Groups
 
 #### Property Value
 [System.Collections.Generic.List&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.List-1 'System.Collections.Generic.List`1')[Group](Xecrets.Sdk.Models.XfSlip39.Group.md 'Xecrets.Sdk.Models.XfSlip39.Group')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.List-1 'System.Collections.Generic.List`1')
+
+<a name='Xecrets.Sdk.Models.XfSlip39.Threshold'></a>
+
+## XfSlip39.Threshold Property
+
+The group threshold if more than one group is used
+
+```csharp
+public int Threshold { get; set; }
+```
+
+#### Property Value
+[System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')

@@ -43,5 +43,5 @@ namespace Xecrets.Cli;
 internal partial class SourceGenerationContext : JsonSerializerContext
 {
     public static SourceGenerationContext Indented { get; } =
-        new SourceGenerationContext(new JsonSerializerOptions() { WriteIndented = true,});
+        new SourceGenerationContext(new JsonSerializerOptions() { WriteIndented = true, DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull });
 }

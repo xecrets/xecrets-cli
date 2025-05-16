@@ -384,6 +384,40 @@ The version of the command line tool API to check.
 [System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')  
 True if this SDK can work with the provided command line tool.
 
+<a name='Xecrets.Sdk.Abstractions.IXfApi.Slip39SplitAsync(string,int,int)'></a>
+
+## IXfApi.Slip39SplitAsync(string, int, int) Method
+
+Split a secret into shares using the SLIP39 scheme.
+
+```csharp
+System.Threading.Tasks.Task<Xecrets.Sdk.Models.XfSlip39> Slip39SplitAsync(string secret, int shares, int threshold);
+```
+#### Parameters
+
+<a name='Xecrets.Sdk.Abstractions.IXfApi.Slip39SplitAsync(string,int,int).secret'></a>
+
+`secret` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+
+The secret to split.
+
+<a name='Xecrets.Sdk.Abstractions.IXfApi.Slip39SplitAsync(string,int,int).shares'></a>
+
+`shares` [System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')
+
+The number of shares to split it into.
+
+<a name='Xecrets.Sdk.Abstractions.IXfApi.Slip39SplitAsync(string,int,int).threshold'></a>
+
+`threshold` [System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')
+
+The number of shares required to recover the secret.  
+Must be greater than 1 and less than or equal the number of shares.
+
+#### Returns
+[System.Threading.Tasks.Task&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')[XfSlip39](Xecrets.Sdk.Models.XfSlip39.md 'Xecrets.Sdk.Models.XfSlip39')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')  
+The shares
+
 <a name='Xecrets.Sdk.Abstractions.IXfApi.UpdatePrivateKeysAsync(Xecrets.Sdk.Models.XfCredentials,string)'></a>
 
 ## IXfApi.UpdatePrivateKeysAsync(XfCredentials, string) Method

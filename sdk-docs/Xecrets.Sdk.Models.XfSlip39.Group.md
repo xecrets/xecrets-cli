@@ -40,3 +40,16 @@ public System.Collections.Generic.List<Xecrets.Sdk.Models.XfSlip39.Group.Share> 
 
 #### Property Value
 [System.Collections.Generic.List&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.List-1 'System.Collections.Generic.List`1')[Share](Xecrets.Sdk.Models.XfSlip39.Group.Share.md 'Xecrets.Sdk.Models.XfSlip39.Group.Share')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.List-1 'System.Collections.Generic.List`1')
+
+<a name='Xecrets.Sdk.Models.XfSlip39.Group.Threshold'></a>
+
+## XfSlip39.Group.Threshold Property
+
+The share threshold for this group
+
+```csharp
+public int Threshold { get; set; }
+```
+
+#### Property Value
+[System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')

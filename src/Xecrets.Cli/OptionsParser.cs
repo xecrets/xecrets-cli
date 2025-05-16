@@ -157,7 +157,7 @@ internal class OptionsParser
         optionSet.Add("slip39-password=", XfOpCode.Slip39Password, "{password} [{iterations}]:?The password to use and the iteration exponent.", (ora, op, password) => ora.AddOneRunning(op, password));
         optionSet.Add("slip39-secret={}", XfOpCode.Slip39Secret, $"{{{nameof(XfOptionKeys.Bip39)}|{nameof(XfOptionKeys.Hex)}|{nameof(XfOptionKeys.Base64)}|{nameof(XfOptionKeys.Text)}}} {{secret}}:?Specify the secret to split.", (ora, op, format, secret) => ora.Add(op, format, secret));
         optionSet.Add("slip39-shares=", XfOpCode.Slip39Shares, "{share(s)}:?Add shares to combine.", (ora, op, share) => ora.AddManyRunning(op, share));
-        optionSet.Add("slip39-split=", XfOpCode.Slip39Split, $"{{{nameof(XfOptionKeys.Slip39)}|{nameof(XfOptionKeys.Hex)}|{nameof(XfOptionKeys.Base64)}}} [{{file}}]:?Split the secret into shares.", (ora, op, format) => ora.AddOneRunning(op, format));
+        optionSet.Add("slip39-split=", XfOpCode.Slip39Split, $"{{{nameof(XfOptionKeys.Slip39)}|{nameof(XfOptionKeys.Hex)}|{nameof(XfOptionKeys.Base64)}}}[,...] [{{file}}]:?Split the secret into shares.", (ora, op, format) => ora.AddOneRunning(op, format));
         optionSet.Add("slip39-info:", XfOpCode.Slip39Information, "[{{file}}]:?Verify the shares and output the prefix information.", (ora, op, to) => ora.AddOneRunning(op));
         optionSet.Add("work-folder=", XfOpCode.WorkFolder, "{work-folder}:?A work folder for settings and logs (global).", (ora, op, wf) => WorkFolder = wf);
         return optionSet;
