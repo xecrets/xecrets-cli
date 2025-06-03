@@ -7,7 +7,7 @@
 
 ## IXfApi Interface
 
-The main SDK interface to use when calling the command line for operations. Use [XfApiFactory](Xecrets.Sdk.XfApiFactory.md 'Xecrets.Sdk.XfApiFactory') to  
+The main SDK interface to use when calling the command line for operations. Use [XfApiFactory](Xecrets.Sdk.XfApiFactory.md 'Xecrets.Sdk.XfApiFactory') to
 create instances of the interface.
 
 ```csharp
@@ -33,7 +33,7 @@ The information requested by calling the command line.
 
 ## IXfApi.CreateKeyPairAsync(string, string) Method
 
-Create an asymmetric key pair [XfEncryptedKeyPair](Xecrets.Sdk.Models.XfEncryptedKeyPair.md 'Xecrets.Sdk.Models.XfEncryptedKeyPair') as an encrypted blob, using the provided  
+Create an asymmetric key pair [XfEncryptedKeyPair](Xecrets.Sdk.Models.XfEncryptedKeyPair.md 'Xecrets.Sdk.Models.XfEncryptedKeyPair') as an encrypted blob, using the provided
 password.
 
 ```csharp
@@ -105,7 +105,7 @@ One or more passwords to encrypt with.
 
 `files` [System.Collections.Generic.IEnumerable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')[XfFilePair](Xecrets.Sdk.Models.XfFilePair.md 'Xecrets.Sdk.Models.XfFilePair')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')
 
-The list of files to decrypt. Only the [SourceFullName](Xecrets.Sdk.Models.XfFilePair.md#Xecrets.Sdk.Models.XfFilePair.SourceFullName 'Xecrets.Sdk.Models.XfFilePair.SourceFullName') is  
+The list of files to decrypt. Only the [SourceFullName](Xecrets.Sdk.Models.XfFilePair.md#Xecrets.Sdk.Models.XfFilePair.SourceFullName 'Xecrets.Sdk.Models.XfFilePair.SourceFullName') is
             used.
 
 <a name='Xecrets.Sdk.Abstractions.IXfApi.DecryptFilesInPlaceAsync(Xecrets.Sdk.Models.XfCredentials,System.Collections.Generic.IEnumerable_Xecrets.Sdk.Models.XfFilePair_,System.Action_Xecrets.Sdk.Models.XfMessage_).progress'></a>
@@ -122,7 +122,7 @@ An array of [XfFileResult](Xecrets.Sdk.Models.XfFileResult.md 'Xecrets.Sdk.Model
 
 ## IXfApi.DecryptKeyPairAsync(string, IEnumerable<XfEncryptedKeyPair>) Method
 
-Attempt to decrypt key pairs using the provided password. The first one possible to decrypt in the given  
+Attempt to decrypt key pairs using the provided password. The first one possible to decrypt in the given
 enumerable will be returned.
 
 ```csharp
@@ -177,14 +177,14 @@ A stream to write the clear text to.
 
 #### Returns
 [System.Threading.Tasks.Task&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')  
-A [System.Threading.Tasks.Task](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task 'System.Threading.Tasks.Task') to wait for and the original file name as a string, or an empty string if the  
+A [System.Threading.Tasks.Task](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task 'System.Threading.Tasks.Task') to wait for and the original file name as a string, or an empty string if the
             credentials were invalid.
 
 <a name='Xecrets.Sdk.Abstractions.IXfApi.DecryptToAndKeepFileAsync(Xecrets.Sdk.Models.XfCredentials,System.IO.FileInfo,System.IO.DirectoryInfo,System.Action_Xecrets.Sdk.Models.XfMessage_)'></a>
 
 ## IXfApi.DecryptToAndKeepFileAsync(XfCredentials, FileInfo, DirectoryInfo, Action<XfMessage>) Method
 
-Decrypt a file using the provided credentials, to a specified directory, returning the resulting original  
+Decrypt a file using the provided credentials, to a specified directory, returning the resulting original
 filename and decrypted file represented by a [System.IO.FileInfo](https://docs.microsoft.com/en-us/dotnet/api/System.IO.FileInfo 'System.IO.FileInfo') instance.
 
 ```csharp
@@ -241,7 +241,7 @@ The credentials to use when encrypting the files.
 
 `overwrite` [System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')
 
-Set to 'false' if overwriting the target should be disallowed, and instead use an  
+Set to 'false' if overwriting the target should be disallowed, and instead use an
             alternate non-colliding name.
 
 <a name='Xecrets.Sdk.Abstractions.IXfApi.EncryptFilesAsync(Xecrets.Sdk.Models.XfCredentials,bool,bool,System.Collections.Generic.IEnumerable_Xecrets.Sdk.Models.XfFilePair_,System.Action_Xecrets.Sdk.Models.XfMessage_).wipe'></a>
@@ -254,14 +254,14 @@ Set to 'true' to also wipe the original plain text.
 
 `pairs` [System.Collections.Generic.IEnumerable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')[XfFilePair](Xecrets.Sdk.Models.XfFilePair.md 'Xecrets.Sdk.Models.XfFilePair')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')
 
-File name pairs, providing source and target names as well as original name to include  
+File name pairs, providing source and target names as well as original name to include
             in the encrypted file.
 
 <a name='Xecrets.Sdk.Abstractions.IXfApi.EncryptFilesAsync(Xecrets.Sdk.Models.XfCredentials,bool,bool,System.Collections.Generic.IEnumerable_Xecrets.Sdk.Models.XfFilePair_,System.Action_Xecrets.Sdk.Models.XfMessage_).progress'></a>
 
 `progress` [System.Action&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Action-1 'System.Action`1')[XfMessage](Xecrets.Sdk.Models.XfMessage.md 'Xecrets.Sdk.Models.XfMessage')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Action-1 'System.Action`1')
 
-An [System.Action](https://docs.microsoft.com/en-us/dotnet/api/System.Action 'System.Action') delegate that will be called reporting progress of the  
+An [System.Action](https://docs.microsoft.com/en-us/dotnet/api/System.Action 'System.Action') delegate that will be called reporting progress of the
             operation.
 
 #### Returns
@@ -271,7 +271,7 @@ An [System.Action](https://docs.microsoft.com/en-us/dotnet/api/System.Action 'Sy
 
 ## IXfApi.EncryptKeyPairAsync(XfKeyPair) Method
 
-Encrypt a [XfKeyPair](Xecrets.Sdk.Models.XfKeyPair.md 'Xecrets.Sdk.Models.XfKeyPair') into a [XfEncryptedKeyPair](Xecrets.Sdk.Models.XfEncryptedKeyPair.md 'Xecrets.Sdk.Models.XfEncryptedKeyPair') using the provided password in the  
+Encrypt a [XfKeyPair](Xecrets.Sdk.Models.XfKeyPair.md 'Xecrets.Sdk.Models.XfKeyPair') into a [XfEncryptedKeyPair](Xecrets.Sdk.Models.XfEncryptedKeyPair.md 'Xecrets.Sdk.Models.XfEncryptedKeyPair') using the provided password in the
 [XfKeyPair](Xecrets.Sdk.Models.XfKeyPair.md 'Xecrets.Sdk.Models.XfKeyPair') instance.
 
 ```csharp
@@ -365,8 +365,8 @@ The string encrypted, packaged as an ASCII armor string.
 
 ## IXfApi.IsSdkCompatibleWith(Version) Method
 
-Determine if the consumer, using this version of the SDK and the provided [cliApiVersion](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfApi.IsSdkCompatibleWith(System.Version).cliApiVersion 'Xecrets.Sdk.Abstractions.IXfApi.IsSdkCompatibleWith(System.Version).cliApiVersion')  
-version are compatible, i.e. if the caller having a command line tool of the given version can use this  
+Determine if the consumer, using this version of the SDK and the provided [cliApiVersion](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfApi.IsSdkCompatibleWith(System.Version).cliApiVersion 'Xecrets.Sdk.Abstractions.IXfApi.IsSdkCompatibleWith(System.Version).cliApiVersion')
+version are compatible, i.e. if the caller having a command line tool of the given version can use this
 version of the SDK.
 
 ```csharp
@@ -401,7 +401,7 @@ System.Threading.Tasks.Task<Xecrets.Sdk.Models.XfSlip39.ShareSet?> Slip39Combine
 
 #### Returns
 [System.Threading.Tasks.Task&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')[Xecrets.Sdk.Models.XfSlip39.ShareSet](https://docs.microsoft.com/en-us/dotnet/api/Xecrets.Sdk.Models.XfSlip39.ShareSet 'Xecrets.Sdk.Models.XfSlip39.ShareSet')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')  
-The shares, grouped and interpreted as well as the secret if possible. Returns null if there's  
+The shares, grouped and interpreted as well as the secret if possible. Returns null if there's
             something wrong with one or more of the shares.
 
 <a name='Xecrets.Sdk.Abstractions.IXfApi.Slip39SplitAsync(string,int,int)'></a>
@@ -431,7 +431,7 @@ The number of shares to split it into.
 
 `threshold` [System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')
 
-The number of shares required to recover the secret.  
+The number of shares required to recover the secret.
 Must be greater than 1 and less than or equal the number of shares.
 
 #### Returns
@@ -548,8 +548,8 @@ public interface IXfStart
 
 ## IXfStart.StartArgs(string) Method
 
-Get the start arguments necessary to start the program identified as [fileNameWithoutExtension](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfStart.StartArgs(string).fileNameWithoutExtension 'Xecrets.Sdk.Abstractions.IXfStart.StartArgs(string).fileNameWithoutExtension'), assuming that if we're started with "dotnet", this program should also be  
-started with "dotnet" [fileNameWithoutExtension](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfStart.StartArgs(string).fileNameWithoutExtension 'Xecrets.Sdk.Abstractions.IXfStart.StartArgs(string).fileNameWithoutExtension').dll, otherwise it's an executable with  
+Get the start arguments necessary to start the program identified as [fileNameWithoutExtension](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfStart.StartArgs(string).fileNameWithoutExtension 'Xecrets.Sdk.Abstractions.IXfStart.StartArgs(string).fileNameWithoutExtension'), assuming that if we're started with "dotnet", this program should also be
+started with "dotnet" [fileNameWithoutExtension](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfStart.StartArgs(string).fileNameWithoutExtension 'Xecrets.Sdk.Abstractions.IXfStart.StartArgs(string).fileNameWithoutExtension').dll, otherwise it's an executable with
 ".exe" or without depending on the current operating system.
 
 ```csharp

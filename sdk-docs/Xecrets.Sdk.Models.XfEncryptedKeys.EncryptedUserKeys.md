@@ -6,8 +6,7 @@
 A collection of encrypted private keys for a user, where a user is arbitrarily defined as an email address.
 
 ```csharp
-public class XfEncryptedKeys.EncryptedUserKeys :
-System.IEquatable<Xecrets.Sdk.Models.XfEncryptedKeys.EncryptedUserKeys>
+public record XfEncryptedKeys.EncryptedUserKeys : System.IEquatable<Xecrets.Sdk.Models.XfEncryptedKeys.EncryptedUserKeys>
 ```
 
 Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object') &#129106; EncryptedUserKeys
@@ -15,7 +14,7 @@ Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.O
 Implements [System.IEquatable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.IEquatable-1 'System.IEquatable`1')[EncryptedUserKeys](Xecrets.Sdk.Models.XfEncryptedKeys.EncryptedUserKeys.md 'Xecrets.Sdk.Models.XfEncryptedKeys.EncryptedUserKeys')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.IEquatable-1 'System.IEquatable`1')
 
 ### Remarks
-Normally all the keys belong to the same physical user, but due to email changes etc the keys may be  
+Normally all the keys belong to the same physical user, but due to email changes etc the keys may be
 associated with different email addresses.
 ### Properties
 
@@ -26,7 +25,7 @@ associated with different email addresses.
 The email address identifier for this list of keys.
 
 ```csharp
-public string Email { get; set; }
+public string Email { get; init; }
 ```
 
 #### Property Value
@@ -39,7 +38,7 @@ public string Email { get; set; }
 A list of encrypted keys for this email.
 
 ```csharp
-public System.Collections.Generic.IList<Xecrets.Sdk.Models.XfEncryptedKeys.EncryptedKey> EncryptedKeys { get; set; }
+public System.Collections.Generic.IList<Xecrets.Sdk.Models.XfEncryptedKeys.EncryptedKey> EncryptedKeys { get; init; }
 ```
 
 #### Property Value

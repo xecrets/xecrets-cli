@@ -6,8 +6,7 @@
 Extra, possibly imported, encrypted private keys for a user.
 
 ```csharp
-public class XfEncryptedKeys :
-System.IEquatable<Xecrets.Sdk.Models.XfEncryptedKeys>
+public record XfEncryptedKeys : System.IEquatable<Xecrets.Sdk.Models.XfEncryptedKeys>
 ```
 
 Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object') &#129106; XfEncryptedKeys
@@ -15,8 +14,8 @@ Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.O
 Implements [System.IEquatable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.IEquatable-1 'System.IEquatable`1')[XfEncryptedKeys](Xecrets.Sdk.Models.XfEncryptedKeys.md 'Xecrets.Sdk.Models.XfEncryptedKeys')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.IEquatable-1 'System.IEquatable`1')
 
 ### Remarks
-This type is used for interoperability with AxCrypt, so the JSON property names and structure cannot be changed  
-without breaking compatibility with AxCrypt. It's intended to be used for importing of private keys, typically  
+This type is used for interoperability with AxCrypt, so the JSON property names and structure cannot be changed
+without breaking compatibility with AxCrypt. It's intended to be used for importing of private keys, typically
 from AxCrypt, but could also be from another instance or installation of Xecrets Ez.
 ### Properties
 
@@ -37,11 +36,11 @@ public static Xecrets.Sdk.Models.XfEncryptedKeys Empty { get; }
 
 ## XfEncryptedKeys.UserKeys Property
 
-A list of encrypted private keys for a physical user, possibly with multiple email addresses, possibly with  
+A list of encrypted private keys for a physical user, possibly with multiple email addresses, possibly with
 multiple keys for each email address.
 
 ```csharp
-public System.Collections.Generic.IList<Xecrets.Sdk.Models.XfEncryptedKeys.EncryptedUserKeys> UserKeys { get; set; }
+public System.Collections.Generic.IList<Xecrets.Sdk.Models.XfEncryptedKeys.EncryptedUserKeys> UserKeys { get; init; }
 ```
 
 #### Property Value

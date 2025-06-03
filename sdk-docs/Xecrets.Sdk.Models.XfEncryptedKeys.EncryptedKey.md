@@ -6,8 +6,7 @@
 An encrypted private key with additional metadata.
 
 ```csharp
-public class XfEncryptedKeys.EncryptedKey :
-System.IEquatable<Xecrets.Sdk.Models.XfEncryptedKeys.EncryptedKey>
+public record XfEncryptedKeys.EncryptedKey : System.IEquatable<Xecrets.Sdk.Models.XfEncryptedKeys.EncryptedKey>
 ```
 
 Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object') &#129106; EncryptedKey
@@ -22,7 +21,7 @@ Implements [System.IEquatable&lt;](https://docs.microsoft.com/en-us/dotnet/api/S
 The email address of the user this key belongs to.
 
 ```csharp
-public string Email { get; set; }
+public string Email { get; init; }
 ```
 
 #### Property Value
@@ -35,7 +34,7 @@ public string Email { get; set; }
 The key pair, with the private key encrypted.
 
 ```csharp
-public Xecrets.Sdk.Models.XfEncryptedKeys.EncryptedKeyPair EncryptedKeyPair { get; set; }
+public Xecrets.Sdk.Models.XfEncryptedKeys.EncryptedKeyPair EncryptedKeyPair { get; init; }
 ```
 
 #### Property Value
@@ -48,11 +47,11 @@ public Xecrets.Sdk.Models.XfEncryptedKeys.EncryptedKeyPair EncryptedKeyPair { ge
 Wether the private key password was known or unknown when last serialized.
 
 ```csharp
-public Xecrets.Sdk.Models.XfEncryptedKeys.PrivateKeyPassword PrivateKeyStatus { get; set; }
+public Xecrets.Sdk.Models.XfEncryptedKeys.PrivateKeyPassword PrivateKeyStatus { get; init; }
 ```
 
 #### Property Value
-[PrivateKeyPassword](Xecrets.Sdk.Models.XfEncryptedKeys.md#Xecrets.Sdk.Models.XfEncryptedKeys.PrivateKeyPassword 'Xecrets.Sdk.Models.XfEncryptedKeys.PrivateKeyPassword')
+[PrivateKeyPassword](Xecrets.Sdk.Models.XfEncryptedKeys.PrivateKeyPassword.md 'Xecrets.Sdk.Models.XfEncryptedKeys.PrivateKeyPassword')
 
 <a name='Xecrets.Sdk.Models.XfEncryptedKeys.EncryptedKey.Thumbprint'></a>
 
@@ -61,7 +60,7 @@ public Xecrets.Sdk.Models.XfEncryptedKeys.PrivateKeyPassword PrivateKeyStatus { 
 The thumbprint of the key, used to identify it if required.
 
 ```csharp
-public string Thumbprint { get; set; }
+public string Thumbprint { get; init; }
 ```
 
 #### Property Value
@@ -74,7 +73,7 @@ public string Thumbprint { get; set; }
 The timestamp when the key was created.
 
 ```csharp
-public System.DateTime Timestamp { get; set; }
+public System.DateTime Timestamp { get; init; }
 ```
 
 #### Property Value

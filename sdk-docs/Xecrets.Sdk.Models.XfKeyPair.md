@@ -47,7 +47,7 @@ The key pair to copy
 Meta data specifying when it was created (UTC)
 
 ```csharp
-public System.DateTime Created { get; set; }
+public System.DateTime Created { get; init; }
 ```
 
 #### Property Value
@@ -60,7 +60,7 @@ public System.DateTime Created { get; set; }
 The email moniker used to identify the key pair
 
 ```csharp
-public string Email { get; set; }
+public string Email { get; init; }
 ```
 
 #### Property Value
@@ -86,7 +86,7 @@ public static Xecrets.Sdk.Models.XfKeyPair Empty { get; }
 The full path and name to the encrypted blob, or an empty string./>
 
 ```csharp
-public string FullName { get; set; }
+public string FullName { get; init; }
 ```
 
 #### Property Value
@@ -99,7 +99,7 @@ public string FullName { get; set; }
 The password to use when encrypting the key pair
 
 ```csharp
-public string Password { get; set; }
+public string Password { get; init; }
 ```
 
 #### Property Value
@@ -112,7 +112,7 @@ public string Password { get; set; }
 The private key PEM
 
 ```csharp
-public string PrivateKey { get; set; }
+public string PrivateKey { get; init; }
 ```
 
 #### Property Value
@@ -125,7 +125,7 @@ public string PrivateKey { get; set; }
 The public key PEM
 
 ```csharp
-public string PublicKey { get; set; }
+public string PublicKey { get; init; }
 ```
 
 #### Property Value

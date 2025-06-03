@@ -3,12 +3,11 @@
 
 ## XfEncryptedKeys.EncryptedKeyPair Class
 
-A key pair with a public and an encrypted private key pem. Then encryption is done with a password  
+A key pair with a public and an encrypted private key pem. Then encryption is done with a password
 using Xecrets Ez/AxCrypt and then the encrypted file is base64 encoded.
 
 ```csharp
-public class XfEncryptedKeys.EncryptedKeyPair :
-System.IEquatable<Xecrets.Sdk.Models.XfEncryptedKeys.EncryptedKeyPair>
+public record XfEncryptedKeys.EncryptedKeyPair : System.IEquatable<Xecrets.Sdk.Models.XfEncryptedKeys.EncryptedKeyPair>
 ```
 
 Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object') &#129106; EncryptedKeyPair
@@ -23,7 +22,7 @@ Implements [System.IEquatable&lt;](https://docs.microsoft.com/en-us/dotnet/api/S
 The encrypted private key pem.
 
 ```csharp
-public string EncryptedPrivateKey { get; set; }
+public string EncryptedPrivateKey { get; init; }
 ```
 
 #### Property Value
@@ -36,7 +35,7 @@ public string EncryptedPrivateKey { get; set; }
 The public key pem.
 
 ```csharp
-public string PublicKey { get; set; }
+public string PublicKey { get; init; }
 ```
 
 #### Property Value

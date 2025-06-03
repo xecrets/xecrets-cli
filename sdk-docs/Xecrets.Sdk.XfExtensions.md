@@ -222,7 +222,7 @@ An enumeration of the files that do not match the pattern for encrypted files.
 
 ## XfExtensions.ToEncryptedName(this string, string) Method
 
-Build an encrypted file name from the original file name, i.e. according to the pattern: filename.ext =>  
+Build an encrypted file name from the original file name, i.e. according to the pattern: filename.ext =>
 filename-ext.axx
 
 ```csharp

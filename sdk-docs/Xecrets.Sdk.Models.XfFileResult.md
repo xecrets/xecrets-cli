@@ -94,7 +94,7 @@ public bool Success { get; }
 The file content, if any, as a byte array.
 
 ```csharp
-public byte[] Value { get; set; }
+public byte[] Value { get; init; }
 ```
 
 #### Property Value

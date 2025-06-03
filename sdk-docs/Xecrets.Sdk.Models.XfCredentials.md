@@ -3,7 +3,7 @@
 
 ## XfCredentials Class
 
-A cargo class carrying all the various possible credentials used for encryption or decryption. When it's not supported  
+A cargo class carrying all the various possible credentials used for encryption or decryption. When it's not supported
 or doesn't make sense, only the first will be used.
 
 ```csharp
@@ -145,7 +145,7 @@ public void AddPrivateKeysFullNames(System.Collections.Generic.IEnumerable<strin
 
 `encryptedPrivateKeyFullNames` [System.Collections.Generic.IEnumerable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')
 
-An enumeration of full path names to files containing encrypted  
+An enumeration of full path names to files containing encrypted
             private keys.
 
 <a name='Xecrets.Sdk.Models.XfCredentials.AddPublicKeyEmails(System.Collections.Generic.IEnumerable_string_)'></a>

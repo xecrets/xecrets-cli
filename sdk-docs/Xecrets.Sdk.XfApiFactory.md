@@ -6,8 +6,7 @@
 Create an [IXfApi](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfApi 'Xecrets.Sdk.Abstractions.IXfApi') instance.
 
 ```csharp
-public class XfApiFactory :
-Xecrets.Sdk.Abstractions.IXfApiFactory
+public class XfApiFactory : Xecrets.Sdk.Abstractions.IXfApiFactory
 ```
 
 Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object') &#129106; XfApiFactory
@@ -36,7 +35,7 @@ A Xecrets license string to provide for a ready built version of XecretsCli.
 
 `debugCli` [System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')
 
-Set to [true](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/bool 'https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/bool') to cause the command line to stop on a breakpoint and  
+Set to [true](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/bool 'https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/bool') to cause the command line to stop on a breakpoint and
             enable attaching a debugger. (Windows only)
 
 <a name='Xecrets.Sdk.XfApiFactory.XfApiFactory(string,bool,string,string,System.Reactive.Concurrency.IScheduler,System.Reactive.Concurrency.IScheduler).workFolder'></a>
@@ -49,21 +48,21 @@ A folder where the command line can write logs and settings.
 
 `crashLogName` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
 
-The file name where command line can write a crash log on non-zero return  
+The file name where command line can write a crash log on non-zero return
             status.
 
 <a name='Xecrets.Sdk.XfApiFactory.XfApiFactory(string,bool,string,string,System.Reactive.Concurrency.IScheduler,System.Reactive.Concurrency.IScheduler).taskpoolScheduler'></a>
 
 `taskpoolScheduler` [System.Reactive.Concurrency.IScheduler](https://docs.microsoft.com/en-us/dotnet/api/System.Reactive.Concurrency.IScheduler 'System.Reactive.Concurrency.IScheduler')
 
-An [System.Reactive.Concurrency.IScheduler](https://docs.microsoft.com/en-us/dotnet/api/System.Reactive.Concurrency.IScheduler 'System.Reactive.Concurrency.IScheduler') instance to schedule work on the  
+An [System.Reactive.Concurrency.IScheduler](https://docs.microsoft.com/en-us/dotnet/api/System.Reactive.Concurrency.IScheduler 'System.Reactive.Concurrency.IScheduler') instance to schedule work on the
             taskpool.
 
 <a name='Xecrets.Sdk.XfApiFactory.XfApiFactory(string,bool,string,string,System.Reactive.Concurrency.IScheduler,System.Reactive.Concurrency.IScheduler).mainthreadScheduler'></a>
 
 `mainthreadScheduler` [System.Reactive.Concurrency.IScheduler](https://docs.microsoft.com/en-us/dotnet/api/System.Reactive.Concurrency.IScheduler 'System.Reactive.Concurrency.IScheduler')
 
-An [System.Reactive.Concurrency.IScheduler](https://docs.microsoft.com/en-us/dotnet/api/System.Reactive.Concurrency.IScheduler 'System.Reactive.Concurrency.IScheduler') instance to schedule work on the main (GUI)  
+An [System.Reactive.Concurrency.IScheduler](https://docs.microsoft.com/en-us/dotnet/api/System.Reactive.Concurrency.IScheduler 'System.Reactive.Concurrency.IScheduler') instance to schedule work on the main (GUI)
             thread.
 ### Methods
 
@@ -111,7 +110,7 @@ public static Xecrets.Sdk.Abstractions.IXfApi Safe();
 An instance of [IXfApi](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfApi 'Xecrets.Sdk.Abstractions.IXfApi') ready to use.
 
 ### Remarks
-Should normally not be used when using Axantum ready built command line tool binaries, as no license is  
+Should normally not be used when using Axantum ready built command line tool binaries, as no license is
 provided. Another option to provide the license is to place it in a text file next to the executable.
 
 <a name='Xecrets.Sdk.XfApiFactory.Start()'></a>

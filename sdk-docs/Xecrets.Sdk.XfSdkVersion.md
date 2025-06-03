@@ -16,10 +16,10 @@ Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.O
 
 ## XfSdkVersion.SdkVersion Property
 
-The API version is to be updated when the command line options are updated in an incompatible way. The minor  
-version is increased if changes do not change the meaning or syntax of any pre-existing options, i.e. purely new  
-additional capabilities. The major version is increased if changes in any way changes an existing option so it  
-may not work as expected by an older consumer. The consumer should thus only accept an export version that has  
+The API version is to be updated when the command line options are updated in an incompatible way. The minor
+version is increased if changes do not change the meaning or syntax of any pre-existing options, i.e. purely new
+additional capabilities. The major version is increased if changes in any way changes an existing option so it
+may not work as expected by an older consumer. The consumer should thus only accept an export version that has
 the same Major version, and a minor version greather than or equal to it's known version.
 
 ```csharp
@@ -30,8 +30,8 @@ public static System.Version SdkVersion { get; }
 [System.Version](https://docs.microsoft.com/en-us/dotnet/api/System.Version 'System.Version')
 
 ### Remarks
-Changes includes not only syntax and semantics, but also actual numerical values assigned to <seealso cref="T:Xecrets.Sdk.Models.XfOpCode"/>, <seealso cref="T:Xecrets.Sdk.Models.XfStatusCode"> and </seealso>and <seealso cref="T:Xecrets.Sdk.Models.XfCliApi"/> as well as changes  
-or removals of json property names in  
+Changes includes not only syntax and semantics, but also actual numerical values assigned to <seealso cref="T:Xecrets.Sdk.Models.XfOpCode"/>, <seealso cref="T:Xecrets.Sdk.Models.XfStatusCode"> and </seealso>and <seealso cref="T:Xecrets.Sdk.Models.XfCliApi"/> as well as changes
+or removals of json property names in
 <seealso cref="T:Xecrets.Sdk.Models.XfMessage"/> .
 ### Methods
 

@@ -3,9 +3,9 @@
 
 ## XfException Class
 
-The exception type thrown when something goes wrong calling the command line tool. In addition to the base class  
-[System.Exception](https://docs.microsoft.com/en-us/dotnet/api/System.Exception 'System.Exception') there is an [ExitCode](Xecrets.Sdk.XfException.md#Xecrets.Sdk.XfException.ExitCode 'Xecrets.Sdk.XfException.ExitCode') property containing the actual exit code from the  
-tool. Exit codes are [System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32') but they are mapped to enum [Xecrets.Sdk.Models.XfStatusCode](https://docs.microsoft.com/en-us/dotnet/api/Xecrets.Sdk.Models.XfStatusCode 'Xecrets.Sdk.Models.XfStatusCode') here. To ensure  
+The exception type thrown when something goes wrong calling the command line tool. In addition to the base class
+[System.Exception](https://docs.microsoft.com/en-us/dotnet/api/System.Exception 'System.Exception') there is an [ExitCode](Xecrets.Sdk.XfException.md#Xecrets.Sdk.XfException.ExitCode 'Xecrets.Sdk.XfException.ExitCode') property containing the actual exit code from the
+tool. Exit codes are [System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32') but they are mapped to enum [Xecrets.Sdk.Models.XfStatusCode](https://docs.microsoft.com/en-us/dotnet/api/Xecrets.Sdk.Models.XfStatusCode 'Xecrets.Sdk.Models.XfStatusCode') here. To ensure
 that the mapping is correct, call [IsSdkCompatibleWith(Version)](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfApi.IsSdkCompatibleWith(System.Version) 'Xecrets.Sdk.Abstractions.IXfApi.IsSdkCompatibleWith(System.Version)') ./>
 
 ```csharp
@@ -100,7 +100,7 @@ The inner exception.
 
 ## XfException(int, XfSubStatusCode, string, IEnumerable<string>) Constructor
 
-Initializes a new instance of the [XfException](Xecrets.Sdk.XfException.md 'Xecrets.Sdk.XfException') class with a specified message, exit code, files  
+Initializes a new instance of the [XfException](Xecrets.Sdk.XfException.md 'Xecrets.Sdk.XfException') class with a specified message, exit code, files
 and sub status code.
 
 ```csharp

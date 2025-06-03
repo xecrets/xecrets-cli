@@ -30,7 +30,7 @@ public XfEncryptedKeyPair(string fullName, string email, byte[] data);
 
 `fullName` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
 
-The full path and name to the encrypted [Data](Xecrets.Sdk.Models.XfEncryptedKeyPair.md#Xecrets.Sdk.Models.XfEncryptedKeyPair.Data 'Xecrets.Sdk.Models.XfEncryptedKeyPair.Data') blob, or an empty  
+The full path and name to the encrypted [Data](Xecrets.Sdk.Models.XfEncryptedKeyPair.md#Xecrets.Sdk.Models.XfEncryptedKeyPair.Data 'Xecrets.Sdk.Models.XfEncryptedKeyPair.Data') blob, or an empty
             string./>
 
 <a name='Xecrets.Sdk.Models.XfEncryptedKeyPair.XfEncryptedKeyPair(string,string,byte[]).email'></a>
