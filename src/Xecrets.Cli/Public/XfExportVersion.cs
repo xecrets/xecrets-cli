@@ -51,6 +51,7 @@ public static class XfExportVersion
     /// 5.0 -> 2024-12-28 Rename some options to clarify syntax, i.e. encrypt-to -> encrypt-from-to etc.
     /// 6.0 -> 2025-01-16 Add operating system status return codes
     /// 6.1 -> 2025-05-23 Extend/change support for Slip39
+    /// 6.2 -> 2025-07-29 Add --encrypt-like option to re-encrypt files with existing passphrase and/or recipients
     /// </remarks>
-    public static Version CliVersion => new(6, 1);
+    public static Version CliVersion => new(6, 2);
 }

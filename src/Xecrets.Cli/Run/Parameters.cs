@@ -70,6 +70,8 @@ internal class Parameters(OptionsParser parser) : IDisposable
 
     public KnownPublicKeys LoadedPublicKeys { get; } = new KnownPublicKeys();
 
+    public EncryptLikeCredentials? EncryptLikeCredentials { get; set; } = null;
+
     public OptionsParser Parser { get; } = parser;
 
     public IList<LogOnIdentity> Identities { get; } = [];

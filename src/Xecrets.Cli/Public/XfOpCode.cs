@@ -63,6 +63,7 @@ public enum XfOpCode
     DefaultInternal = 1150,
     DryRun = 1160,
     Echo = 1170,
+    EncryptLike = 1175,
     EncryptTo = 1180,
     End = 1190,
     EnvironmentOption = 1200,

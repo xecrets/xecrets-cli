@@ -112,20 +112,19 @@ internal class EncryptToOperation : IExecutionPhases
         return true;
     }
 
-    public Task<Status> RealAsync(Parameters parameters)
+    public async Task<Status> RealAsync(Parameters parameters)
     {
         IStandardIoDataStore toFreeStore = parameters.Arg2.FindFree(parameters);
         if (!toFreeStore.VerifyCanWrite(parameters, out Status status))
         {
-            return Task.FromResult(status);
+            return status;
         }
 
         IStandardIoDataStore fromStore = New<IStandardIoDataStore>(parameters.Arg1);
 
         parameters.Progress.Display = parameters.Arg1;
 
-        IEnumerable<UserPublicKey> userPublicKeys = parameters.PublicKeys.Where(pk => parameters.SharingEmails.Contains(pk.Email));
-        using (var encryption = new Encryption(fromStore, parameters.Identities.Where(id => id.Passphrase != Passphrase.Empty), userPublicKeys, parameters.Progress))
+        using (var encryption = await Encryption.CreateAsync(fromStore, parameters))
         {
             if (parameters.AsciiArmor)
             {
@@ -138,6 +137,6 @@ internal class EncryptToOperation : IExecutionPhases
 
         string freeTo = Path.Combine(Path.GetDirectoryName(parameters.Arg2) ?? string.Empty, toFreeStore.Name);
         parameters.Logger.Log(new Status(parameters, "Encrypted '{0}' to '{1}'.".Format(parameters.Arg1, freeTo)));
-        return Task.FromResult(Status.Success);
+        return Status.Success;
     }
 }

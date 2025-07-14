@@ -44,13 +44,46 @@ internal sealed class Encryption : IDisposable
 
     private readonly IProgressContext _progress;
 
-    public Encryption(IStandardIoDataStore fromStore, IEnumerable<LogOnIdentity> identities, IEnumerable<UserPublicKey> publicKeys, IProgressContext progress)
+    private Encryption(IStandardIoDataStore fromStore, EncryptionParameters encryptionParameters, IProgressContext progress)
     {
-        EncryptionParameters encryptionParameters = new(new V2Aes256CryptoFactory().CryptoId, identities.First());
-        encryptionParameters.AddOrReplace(publicKeys);
         _document = New<AxCryptFactory>().CreateDocument(encryptionParameters);
         _fromStore = fromStore;
         _progress = progress;
+    }
+
+    public static async Task<Encryption> CreateAsync(IStandardIoDataStore fromStore, Parameters parameters)
+    {
+        if (parameters.EncryptLikeCredentials == null)
+        {
+            IEnumerable<UserPublicKey> userPublicKeys = parameters.PublicKeys.Where(pk => parameters.SharingEmails.Contains(pk.Email));
+
+            return Create(fromStore, parameters.Identities, userPublicKeys, parameters.Progress);
+        }
+
+        EncryptLikeCredentials likeCredentials = parameters.EncryptLikeCredentials;
+
+        List<Passphrase> passphrases = [likeCredentials.Passphrase];
+        passphrases.AddRange(parameters.Identities.Select(id => id.Passphrase));
+        EncryptionParameters encryptionParameters = new(new V2Aes256CryptoFactory().CryptoId, passphrases.First(p => p != Passphrase.Empty));
+        
+        encryptionParameters.AddOrReplace(likeCredentials.Recipients);
+        encryptionParameters.AddOrReplace(parameters.PublicKeys.Where(pk => parameters.SharingEmails.Contains(pk.Email)));
+        if (likeCredentials.MasterKeys.Any())
+        {
+            encryptionParameters.MasterPublicKey = likeCredentials.MasterKeys.First();
+            await encryptionParameters.AddMasterPublicKeyAsync(likeCredentials.MasterKeys);
+        }
+
+        parameters.EncryptLikeCredentials = null;
+        return new(fromStore, encryptionParameters, parameters.Progress);
+    }
+
+    private static Encryption Create(IStandardIoDataStore fromStore, IEnumerable<LogOnIdentity> identities, IEnumerable<UserPublicKey> publicKeys, IProgressContext progress)
+    {
+        EncryptionParameters encryptionParameters = new(new V2Aes256CryptoFactory().CryptoId, identities.First(id => id.Passphrase != Passphrase.Empty));
+        encryptionParameters.AddOrReplace(publicKeys);
+
+        return new(fromStore, encryptionParameters, progress);
     }
 
     public void EncryptTo(IStandardIoDataStore toStore, string originalFileName, AxCryptOptions options)

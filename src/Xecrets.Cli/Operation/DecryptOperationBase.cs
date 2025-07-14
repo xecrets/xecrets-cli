@@ -78,7 +78,7 @@ internal abstract class DecryptOperationBase : IExecutionPhases
         }
         using (var decryption = new Decryption(fromStore.OpenRead(), parameters.Identities, parameters.Progress))
         {
-            if (!decryption.HasValidPassphrase)
+            if (!decryption.IsDecryptable)
             {
                 return Task.FromResult(new Status(XfStatusCode.InvalidPassword, parameters, "Could not decrypt '{0}', no suitable password or private key.".Format(parameters.Arg1)));
             }

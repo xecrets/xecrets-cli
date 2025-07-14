@@ -99,7 +99,6 @@ internal class TestOptions
     [Test]
     public void TestUnknownOption()
     {
-        // --password a --text-progress --encrypt-as big.aax big.axx
         OptionsParser parser;
 
         parser = new OptionsParser("XecretsCli --password a --text-log --environment AVALUE big.axx");

@@ -34,6 +34,7 @@ using AxCrypt.Core.Runtime;
 using AxCrypt.Core.UI;
 
 using Xecrets.Cli.Abstractions;
+using Xecrets.Cli.Implementation;
 
 using static AxCrypt.Abstractions.TypeResolve;
 
@@ -43,7 +44,26 @@ internal sealed class Decryption(Stream fromStream, IEnumerable<LogOnIdentity> i
 {
     private IAxCryptDocument _document = CreateDocument(identities, new ProgressStream(fromStream, progress));
 
-    public bool HasValidPassphrase => _document.PassphraseIsValid;
+    // The IAxCryptDocument property PassphraseIsValid is misnamed,
+    // it indicates whether the document has been successfully decrypted with the passphrase or a private key.
+    public bool IsDecryptable => _document.PassphraseIsValid;
+
+    public IEnumerable<IAsymmetricPublicKey> MasterKeys => MasterKeysInternal();
+
+    private List<IAsymmetricPublicKey> MasterKeysInternal()
+    {
+        List<IAsymmetricPublicKey> masterKeys = [];
+        if (_document.AsymmetricMasterKey != null)
+        {
+            masterKeys.Add(_document.AsymmetricMasterKey);
+        }
+        masterKeys.AddRange(_document.AsymmetricMasterKeys);
+        return masterKeys;
+    }
+
+    public Passphrase Passphrase => _document.DecryptionParameter?.Passphrase ?? Passphrase.Empty;
+
+    public IAsymmetricPrivateKey? PrivateKey => _document.DecryptionParameter?.PrivateKey;
 
     public string OriginalFileName => _document.FileName;
 
@@ -69,6 +89,18 @@ internal sealed class Decryption(Stream fromStream, IEnumerable<LogOnIdentity> i
             toStore.SetFileTimes(_document.CreationTimeUtc, _document.LastAccessTimeUtc, _document.LastWriteTimeUtc);
         }
     }
+
+    public EncryptLikeCredentials ExtractEncryptionCredentials()
+    {
+        if (!IsDecryptable)
+        {
+            return new(Passphrase.Empty, [], []);
+        }
+
+        return new(Passphrase, AsymmetricRecipients, MasterKeys);
+    }
+
+    public IEnumerable<UserPublicKey> AsymmetricRecipients => _document.AsymmetricRecipients;
 
     private static IAxCryptDocument CreateDocument(IEnumerable<LogOnIdentity> identities, Stream fromStream)
     {
@@ -107,17 +139,21 @@ internal sealed class Decryption(Stream fromStream, IEnumerable<LogOnIdentity> i
 
     private static DecryptionParameter[] DecryptionParameters(IEnumerable<LogOnIdentity> identities, bool isLegacyV1)
     {
-        List<DecryptionParameter> decryptionParameters = new();
+        List<DecryptionParameter> decryptionParameters = [];
         foreach (LogOnIdentity identity in identities)
         {
             decryptionParameters.AddRange(DecryptionParameters(isLegacyV1: isLegacyV1, identity.Passphrase, identity.PrivateKeys));
         }
 
+        List<DecryptionParameter> passwordsFirstDecryptionParameters = [.. decryptionParameters.Where(dp => dp.Passphrase != null && dp.Passphrase != Passphrase.Empty)];
+        passwordsFirstDecryptionParameters.AddRange(decryptionParameters.Where(dp => dp.Passphrase == null || dp.Passphrase == Passphrase.Empty));
+
         Guid[] cryptoIds = [.. Resolve.CryptoFactory.OrderedIds];
-        DecryptionParameter[] orderedDecryptionParameters = [.. decryptionParameters
+        DecryptionParameter[] orderedDecryptionParameters = [.. passwordsFirstDecryptionParameters
             .OrderBy(dp => Array.IndexOf(cryptoIds, dp.CryptoId))];
 
-        return orderedDecryptionParameters;
+
+        return [.. orderedDecryptionParameters];
     }
 
     private static IEnumerable<DecryptionParameter> DecryptionParameters(bool isLegacyV1, Passphrase passphrase, IEnumerable<IAsymmetricPrivateKey?> privateKeys)
