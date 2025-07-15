@@ -9,7 +9,7 @@ A plain text/cipher text file pair
 public class XfFilePair
 ```
 
-Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object') &#129106; XfFilePair
+Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') &#129106; XfFilePair
 
 ### Remarks
 Create a new instance.
@@ -28,13 +28,13 @@ public XfFilePair(string sourceFullName, string targetFullName);
 
 <a name='Xecrets.Sdk.Models.XfFilePair.XfFilePair(string,string).sourceFullName'></a>
 
-`sourceFullName` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+`sourceFullName` [System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 The full path and name of the source, cipher text.
 
 <a name='Xecrets.Sdk.Models.XfFilePair.XfFilePair(string,string).targetFullName'></a>
 
-`targetFullName` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+`targetFullName` [System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 The full path and name of the target, plain text.
 
@@ -51,25 +51,25 @@ public XfFilePair(string sourceFullName, string targetFullName, string originalF
 
 <a name='Xecrets.Sdk.Models.XfFilePair.XfFilePair(string,string,string,bool).sourceFullName'></a>
 
-`sourceFullName` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+`sourceFullName` [System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 The full path and name of the source, plain text.
 
 <a name='Xecrets.Sdk.Models.XfFilePair.XfFilePair(string,string,string,bool).targetFullName'></a>
 
-`targetFullName` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+`targetFullName` [System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 The full path and name of the target, cipher text.
 
 <a name='Xecrets.Sdk.Models.XfFilePair.XfFilePair(string,string,string,bool).originalFileName'></a>
 
-`originalFileName` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+`originalFileName` [System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 The original file name to use when encrypting.
 
 <a name='Xecrets.Sdk.Models.XfFilePair.XfFilePair(string,string,string,bool).compressBeforeEncrypt'></a>
 
-`compressBeforeEncrypt` [System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')
+`compressBeforeEncrypt` [System.Boolean](https://learn.microsoft.com/en-us/dotnet/api/system.boolean 'System.Boolean')
 
 True if the file should be compressed before encryption.
 
@@ -88,7 +88,7 @@ public bool CompressBeforeEncrypt { get; set; }
 ```
 
 #### Property Value
-[System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')
+[System.Boolean](https://learn.microsoft.com/en-us/dotnet/api/system.boolean 'System.Boolean')
 
 <a name='Xecrets.Sdk.Models.XfFilePair.OriginalFileName'></a>
 
@@ -101,7 +101,7 @@ public string OriginalFileName { get; }
 ```
 
 #### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 <a name='Xecrets.Sdk.Models.XfFilePair.SourceFullName'></a>
 
@@ -114,7 +114,7 @@ public string SourceFullName { get; }
 ```
 
 #### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 <a name='Xecrets.Sdk.Models.XfFilePair.SourceLength'></a>
 
@@ -127,7 +127,7 @@ public long SourceLength { get; }
 ```
 
 #### Property Value
-[System.Int64](https://docs.microsoft.com/en-us/dotnet/api/System.Int64 'System.Int64')
+[System.Int64](https://learn.microsoft.com/en-us/dotnet/api/system.int64 'System.Int64')
 
 <a name='Xecrets.Sdk.Models.XfFilePair.TargetFullName'></a>
 
@@ -140,4 +140,4 @@ public string TargetFullName { get; }
 ```
 
 #### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')

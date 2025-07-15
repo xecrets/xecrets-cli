@@ -9,7 +9,7 @@ A public key pair, including optional encryption password and meta data.
 public class XfKeyPair
 ```
 
-Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object') &#129106; XfKeyPair
+Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') &#129106; XfKeyPair
 ### Constructors
 
 <a name='Xecrets.Sdk.Models.XfKeyPair.XfKeyPair()'></a>
@@ -51,7 +51,7 @@ public System.DateTime Created { get; init; }
 ```
 
 #### Property Value
-[System.DateTime](https://docs.microsoft.com/en-us/dotnet/api/System.DateTime 'System.DateTime')
+[System.DateTime](https://learn.microsoft.com/en-us/dotnet/api/system.datetime 'System.DateTime')
 
 <a name='Xecrets.Sdk.Models.XfKeyPair.Email'></a>
 
@@ -64,7 +64,7 @@ public string Email { get; init; }
 ```
 
 #### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 <a name='Xecrets.Sdk.Models.XfKeyPair.Empty'></a>
 
@@ -90,7 +90,7 @@ public string FullName { get; init; }
 ```
 
 #### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 <a name='Xecrets.Sdk.Models.XfKeyPair.Password'></a>
 
@@ -103,7 +103,7 @@ public string Password { get; init; }
 ```
 
 #### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 <a name='Xecrets.Sdk.Models.XfKeyPair.PrivateKey'></a>
 
@@ -116,7 +116,7 @@ public string PrivateKey { get; init; }
 ```
 
 #### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 <a name='Xecrets.Sdk.Models.XfKeyPair.PublicKey'></a>
 
@@ -129,4 +129,4 @@ public string PublicKey { get; init; }
 ```
 
 #### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')

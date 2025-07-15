@@ -9,9 +9,9 @@ An encrypted private key with additional metadata.
 public record XfEncryptedKeys.EncryptedKey : System.IEquatable<Xecrets.Sdk.Models.XfEncryptedKeys.EncryptedKey>
 ```
 
-Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object') &#129106; EncryptedKey
+Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') &#129106; EncryptedKey
 
-Implements [System.IEquatable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.IEquatable-1 'System.IEquatable`1')[EncryptedKey](Xecrets.Sdk.Models.XfEncryptedKeys.EncryptedKey.md 'Xecrets.Sdk.Models.XfEncryptedKeys.EncryptedKey')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.IEquatable-1 'System.IEquatable`1')
+Implements [System.IEquatable&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.iequatable-1 'System.IEquatable`1')[EncryptedKey](Xecrets.Sdk.Models.XfEncryptedKeys.EncryptedKey.md 'Xecrets.Sdk.Models.XfEncryptedKeys.EncryptedKey')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.iequatable-1 'System.IEquatable`1')
 ### Properties
 
 <a name='Xecrets.Sdk.Models.XfEncryptedKeys.EncryptedKey.Email'></a>
@@ -25,7 +25,7 @@ public string Email { get; init; }
 ```
 
 #### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 <a name='Xecrets.Sdk.Models.XfEncryptedKeys.EncryptedKey.EncryptedKeyPair'></a>
 
@@ -64,7 +64,7 @@ public string Thumbprint { get; init; }
 ```
 
 #### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 <a name='Xecrets.Sdk.Models.XfEncryptedKeys.EncryptedKey.Timestamp'></a>
 
@@ -77,4 +77,4 @@ public System.DateTime Timestamp { get; init; }
 ```
 
 #### Property Value
-[System.DateTime](https://docs.microsoft.com/en-us/dotnet/api/System.DateTime 'System.DateTime')
+[System.DateTime](https://learn.microsoft.com/en-us/dotnet/api/system.datetime 'System.DateTime')

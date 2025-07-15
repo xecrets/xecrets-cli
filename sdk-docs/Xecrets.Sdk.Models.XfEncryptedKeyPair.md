@@ -9,7 +9,7 @@ An encrypted key pair blob with some meta data.
 public class XfEncryptedKeyPair
 ```
 
-Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object') &#129106; XfEncryptedKeyPair
+Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') &#129106; XfEncryptedKeyPair
 
 ### Remarks
 Create a new instance.
@@ -28,20 +28,20 @@ public XfEncryptedKeyPair(string fullName, string email, byte[] data);
 
 <a name='Xecrets.Sdk.Models.XfEncryptedKeyPair.XfEncryptedKeyPair(string,string,byte[]).fullName'></a>
 
-`fullName` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+`fullName` [System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 The full path and name to the encrypted [Data](Xecrets.Sdk.Models.XfEncryptedKeyPair.md#Xecrets.Sdk.Models.XfEncryptedKeyPair.Data 'Xecrets.Sdk.Models.XfEncryptedKeyPair.Data') blob, or an empty
             string./>
 
 <a name='Xecrets.Sdk.Models.XfEncryptedKeyPair.XfEncryptedKeyPair(string,string,byte[]).email'></a>
 
-`email` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+`email` [System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 The email moniker that this key pair is associated with.
 
 <a name='Xecrets.Sdk.Models.XfEncryptedKeyPair.XfEncryptedKeyPair(string,string,byte[]).data'></a>
 
-`data` [System.Byte](https://docs.microsoft.com/en-us/dotnet/api/System.Byte 'System.Byte')[[]](https://docs.microsoft.com/en-us/dotnet/api/System.Array 'System.Array')
+`data` [System.Byte](https://learn.microsoft.com/en-us/dotnet/api/system.byte 'System.Byte')[[]](https://learn.microsoft.com/en-us/dotnet/api/system.array 'System.Array')
 
 The encrypted key pair blob.
 
@@ -60,7 +60,7 @@ public byte[] Data { get; }
 ```
 
 #### Property Value
-[System.Byte](https://docs.microsoft.com/en-us/dotnet/api/System.Byte 'System.Byte')[[]](https://docs.microsoft.com/en-us/dotnet/api/System.Array 'System.Array')
+[System.Byte](https://learn.microsoft.com/en-us/dotnet/api/system.byte 'System.Byte')[[]](https://learn.microsoft.com/en-us/dotnet/api/system.array 'System.Array')
 
 <a name='Xecrets.Sdk.Models.XfEncryptedKeyPair.Email'></a>
 
@@ -73,7 +73,7 @@ public string Email { get; }
 ```
 
 #### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 <a name='Xecrets.Sdk.Models.XfEncryptedKeyPair.FullName'></a>
 
@@ -86,4 +86,4 @@ public string FullName { get; }
 ```
 
 #### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')

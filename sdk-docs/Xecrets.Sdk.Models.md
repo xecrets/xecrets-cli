@@ -2,7 +2,7 @@
 
 ## Xecrets.Sdk.Models Namespace
 
-The three classes [Xecrets.Sdk.Models.XfOpCode](https://docs.microsoft.com/en-us/dotnet/api/Xecrets.Sdk.Models.XfOpCode 'Xecrets.Sdk.Models.XfOpCode'), [Xecrets.Sdk.Models.XfStatusCode](https://docs.microsoft.com/en-us/dotnet/api/Xecrets.Sdk.Models.XfStatusCode 'Xecrets.Sdk.Models.XfStatusCode') and [Xecrets.Sdk.Models.XfCliApi](https://docs.microsoft.com/en-us/dotnet/api/Xecrets.Sdk.Models.XfCliApi 'Xecrets.Sdk.Models.XfCliApi') are imported
+The three classes [Xecrets.Sdk.Models.XfOpCode](https://learn.microsoft.com/en-us/dotnet/api/xecrets.sdk.models.xfopcode 'Xecrets.Sdk.Models.XfOpCode'), [Xecrets.Sdk.Models.XfStatusCode](https://learn.microsoft.com/en-us/dotnet/api/xecrets.sdk.models.xfstatuscode 'Xecrets.Sdk.Models.XfStatusCode') and [Xecrets.Sdk.Models.XfCliApi](https://learn.microsoft.com/en-us/dotnet/api/xecrets.sdk.models.xfcliapi 'Xecrets.Sdk.Models.XfCliApi') are imported
 from XecretsCli using the --cli-options-code-export argument and copy/pasted here to be available for use
 without needing an actual reference to the XecretsCli-assembly. If XfCliVersion is updated, then the
 corresponding code changes must be made to maintain compatibility and [XfSdkVersion](Xecrets.Sdk.XfSdkVersion.md 'Xecrets.Sdk.XfSdkVersion')

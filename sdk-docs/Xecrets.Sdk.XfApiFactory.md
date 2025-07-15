@@ -9,7 +9,7 @@ Create an [IXfApi](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfApi '
 public class XfApiFactory : Xecrets.Sdk.Abstractions.IXfApiFactory
 ```
 
-Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object') &#129106; XfApiFactory
+Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') &#129106; XfApiFactory
 
 Implements [IXfApiFactory](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfApiFactory 'Xecrets.Sdk.Abstractions.IXfApiFactory')
 ### Constructors
@@ -27,42 +27,42 @@ public XfApiFactory(string license, bool debugCli, string workFolder, string cra
 
 <a name='Xecrets.Sdk.XfApiFactory.XfApiFactory(string,bool,string,string,System.Reactive.Concurrency.IScheduler,System.Reactive.Concurrency.IScheduler).license'></a>
 
-`license` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+`license` [System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 A Xecrets license string to provide for a ready built version of XecretsCli.
 
 <a name='Xecrets.Sdk.XfApiFactory.XfApiFactory(string,bool,string,string,System.Reactive.Concurrency.IScheduler,System.Reactive.Concurrency.IScheduler).debugCli'></a>
 
-`debugCli` [System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')
+`debugCli` [System.Boolean](https://learn.microsoft.com/en-us/dotnet/api/system.boolean 'System.Boolean')
 
 Set to [true](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/bool 'https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/bool') to cause the command line to stop on a breakpoint and
             enable attaching a debugger. (Windows only)
 
 <a name='Xecrets.Sdk.XfApiFactory.XfApiFactory(string,bool,string,string,System.Reactive.Concurrency.IScheduler,System.Reactive.Concurrency.IScheduler).workFolder'></a>
 
-`workFolder` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+`workFolder` [System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 A folder where the command line can write logs and settings.
 
 <a name='Xecrets.Sdk.XfApiFactory.XfApiFactory(string,bool,string,string,System.Reactive.Concurrency.IScheduler,System.Reactive.Concurrency.IScheduler).crashLogName'></a>
 
-`crashLogName` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+`crashLogName` [System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 The file name where command line can write a crash log on non-zero return
             status.
 
 <a name='Xecrets.Sdk.XfApiFactory.XfApiFactory(string,bool,string,string,System.Reactive.Concurrency.IScheduler,System.Reactive.Concurrency.IScheduler).taskpoolScheduler'></a>
 
-`taskpoolScheduler` [System.Reactive.Concurrency.IScheduler](https://docs.microsoft.com/en-us/dotnet/api/System.Reactive.Concurrency.IScheduler 'System.Reactive.Concurrency.IScheduler')
+`taskpoolScheduler` [System.Reactive.Concurrency.IScheduler](https://learn.microsoft.com/en-us/dotnet/api/system.reactive.concurrency.ischeduler 'System.Reactive.Concurrency.IScheduler')
 
-An [System.Reactive.Concurrency.IScheduler](https://docs.microsoft.com/en-us/dotnet/api/System.Reactive.Concurrency.IScheduler 'System.Reactive.Concurrency.IScheduler') instance to schedule work on the
+An [System.Reactive.Concurrency.IScheduler](https://learn.microsoft.com/en-us/dotnet/api/system.reactive.concurrency.ischeduler 'System.Reactive.Concurrency.IScheduler') instance to schedule work on the
             taskpool.
 
 <a name='Xecrets.Sdk.XfApiFactory.XfApiFactory(string,bool,string,string,System.Reactive.Concurrency.IScheduler,System.Reactive.Concurrency.IScheduler).mainthreadScheduler'></a>
 
-`mainthreadScheduler` [System.Reactive.Concurrency.IScheduler](https://docs.microsoft.com/en-us/dotnet/api/System.Reactive.Concurrency.IScheduler 'System.Reactive.Concurrency.IScheduler')
+`mainthreadScheduler` [System.Reactive.Concurrency.IScheduler](https://learn.microsoft.com/en-us/dotnet/api/system.reactive.concurrency.ischeduler 'System.Reactive.Concurrency.IScheduler')
 
-An [System.Reactive.Concurrency.IScheduler](https://docs.microsoft.com/en-us/dotnet/api/System.Reactive.Concurrency.IScheduler 'System.Reactive.Concurrency.IScheduler') instance to schedule work on the main (GUI)
+An [System.Reactive.Concurrency.IScheduler](https://learn.microsoft.com/en-us/dotnet/api/system.reactive.concurrency.ischeduler 'System.Reactive.Concurrency.IScheduler') instance to schedule work on the main (GUI)
             thread.
 ### Methods
 
@@ -79,13 +79,13 @@ public Xecrets.Sdk.Abstractions.IXfApi Create(System.Nullable<bool> debugOverrid
 
 <a name='Xecrets.Sdk.XfApiFactory.Create(System.Nullable_bool_,System.Threading.CancellationToken).debugOverride'></a>
 
-`debugOverride` [System.Nullable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Nullable-1 'System.Nullable`1')[System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Nullable-1 'System.Nullable`1')
+`debugOverride` [System.Nullable&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.nullable-1 'System.Nullable`1')[System.Boolean](https://learn.microsoft.com/en-us/dotnet/api/system.boolean 'System.Boolean')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.nullable-1 'System.Nullable`1')
 
 Override the global debug cli flag if non-null.
 
 <a name='Xecrets.Sdk.XfApiFactory.Create(System.Nullable_bool_,System.Threading.CancellationToken).ct'></a>
 
-`ct` [System.Threading.CancellationToken](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.CancellationToken 'System.Threading.CancellationToken')
+`ct` [System.Threading.CancellationToken](https://learn.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken 'System.Threading.CancellationToken')
 
 A cancellation token to cancel any long running operation.
 

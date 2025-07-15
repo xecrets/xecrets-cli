@@ -9,7 +9,7 @@ Instatiate a new instance of XfFileResult
 public class XfFileResult
 ```
 
-Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object') &#129106; XfFileResult
+Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') &#129106; XfFileResult
 
 ### Remarks
 If the operation was not successful, the reason for the failure should be implied by the context.
@@ -28,21 +28,21 @@ public XfFileResult(string? fileName, string? originalFileName, bool success);
 
 <a name='Xecrets.Sdk.Models.XfFileResult.XfFileResult(string,string,bool).fileName'></a>
 
-`fileName` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+`fileName` [System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 The subject file name.
 
 <a name='Xecrets.Sdk.Models.XfFileResult.XfFileResult(string,string,bool).originalFileName'></a>
 
-`originalFileName` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+`originalFileName` [System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 The original file name, when relevant after decryption
 
 <a name='Xecrets.Sdk.Models.XfFileResult.XfFileResult(string,string,bool).success'></a>
 
-`success` [System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')
+`success` [System.Boolean](https://learn.microsoft.com/en-us/dotnet/api/system.boolean 'System.Boolean')
 
-A [System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean') indicating if the operation on the file was successful or not.
+A [System.Boolean](https://learn.microsoft.com/en-us/dotnet/api/system.boolean 'System.Boolean') indicating if the operation on the file was successful or not.
 
 ### Remarks
 If the operation was not successful, the reason for the failure should be implied by the context.
@@ -59,7 +59,7 @@ public string FileName { get; }
 ```
 
 #### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 <a name='Xecrets.Sdk.Models.XfFileResult.OriginalFileName'></a>
 
@@ -72,20 +72,20 @@ public string OriginalFileName { get; }
 ```
 
 #### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 <a name='Xecrets.Sdk.Models.XfFileResult.Success'></a>
 
 ## XfFileResult.Success Property
 
-A [System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean') indicating if the operation on the file was successful or not.
+A [System.Boolean](https://learn.microsoft.com/en-us/dotnet/api/system.boolean 'System.Boolean') indicating if the operation on the file was successful or not.
 
 ```csharp
 public bool Success { get; }
 ```
 
 #### Property Value
-[System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')
+[System.Boolean](https://learn.microsoft.com/en-us/dotnet/api/system.boolean 'System.Boolean')
 
 <a name='Xecrets.Sdk.Models.XfFileResult.Value'></a>
 
@@ -98,4 +98,4 @@ public byte[] Value { get; init; }
 ```
 
 #### Property Value
-[System.Byte](https://docs.microsoft.com/en-us/dotnet/api/System.Byte 'System.Byte')[[]](https://docs.microsoft.com/en-us/dotnet/api/System.Array 'System.Array')
+[System.Byte](https://learn.microsoft.com/en-us/dotnet/api/system.byte 'System.Byte')[[]](https://learn.microsoft.com/en-us/dotnet/api/system.array 'System.Array')

@@ -9,7 +9,7 @@ Information about the command line tool found and used by the SDK
 public class CliToolInformation
 ```
 
-Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object') &#129106; CliToolInformation
+Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') &#129106; CliToolInformation
 
 ### Remarks
 Create a new instance.
@@ -28,19 +28,19 @@ public CliToolInformation(string apiVersion, string splash, string fullName);
 
 <a name='Xecrets.Sdk.Cli.Models.CliToolInformation.CliToolInformation(string,string,string).apiVersion'></a>
 
-`apiVersion` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+`apiVersion` [System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 An API version string, for example "1.0" (not the tool version).
 
 <a name='Xecrets.Sdk.Cli.Models.CliToolInformation.CliToolInformation(string,string,string).splash'></a>
 
-`splash` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+`splash` [System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 The "splash" text displayed by the tool, will include the tool version.
 
 <a name='Xecrets.Sdk.Cli.Models.CliToolInformation.CliToolInformation(string,string,string).fullName'></a>
 
-`fullName` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+`fullName` [System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 The full path and name of the tool found and used.
 
@@ -59,7 +59,7 @@ public string CliToolApiVersion { get; }
 ```
 
 #### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 <a name='Xecrets.Sdk.Cli.Models.CliToolInformation.CliToolFullName'></a>
 
@@ -72,7 +72,7 @@ public string CliToolFullName { get; }
 ```
 
 #### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 <a name='Xecrets.Sdk.Cli.Models.CliToolInformation.CliToolSplash'></a>
 
@@ -85,4 +85,4 @@ public string CliToolSplash { get; }
 ```
 
 #### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')

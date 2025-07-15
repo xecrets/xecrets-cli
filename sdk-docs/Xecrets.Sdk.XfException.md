@@ -4,15 +4,15 @@
 ## XfException Class
 
 The exception type thrown when something goes wrong calling the command line tool. In addition to the base class
-[System.Exception](https://docs.microsoft.com/en-us/dotnet/api/System.Exception 'System.Exception') there is an [ExitCode](Xecrets.Sdk.XfException.md#Xecrets.Sdk.XfException.ExitCode 'Xecrets.Sdk.XfException.ExitCode') property containing the actual exit code from the
-tool. Exit codes are [System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32') but they are mapped to enum [Xecrets.Sdk.Models.XfStatusCode](https://docs.microsoft.com/en-us/dotnet/api/Xecrets.Sdk.Models.XfStatusCode 'Xecrets.Sdk.Models.XfStatusCode') here. To ensure
+[System.Exception](https://learn.microsoft.com/en-us/dotnet/api/system.exception 'System.Exception') there is an [ExitCode](Xecrets.Sdk.XfException.md#Xecrets.Sdk.XfException.ExitCode 'Xecrets.Sdk.XfException.ExitCode') property containing the actual exit code from the
+tool. Exit codes are [System.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System.Int32') but they are mapped to enum [Xecrets.Sdk.Models.XfStatusCode](https://learn.microsoft.com/en-us/dotnet/api/xecrets.sdk.models.xfstatuscode 'Xecrets.Sdk.Models.XfStatusCode') here. To ensure
 that the mapping is correct, call [IsSdkCompatibleWith(Version)](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfApi.IsSdkCompatibleWith(System.Version) 'Xecrets.Sdk.Abstractions.IXfApi.IsSdkCompatibleWith(System.Version)') ./>
 
 ```csharp
 public class XfException : System.Exception
 ```
 
-Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object') &#129106; [System.Exception](https://docs.microsoft.com/en-us/dotnet/api/System.Exception 'System.Exception') &#129106; XfException
+Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') &#129106; [System.Exception](https://learn.microsoft.com/en-us/dotnet/api/system.exception 'System.Exception') &#129106; XfException
 ### Constructors
 
 <a name='Xecrets.Sdk.XfException.XfException(int,string)'></a>
@@ -28,13 +28,13 @@ public XfException(int exitCode, string message);
 
 <a name='Xecrets.Sdk.XfException.XfException(int,string).exitCode'></a>
 
-`exitCode` [System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')
+`exitCode` [System.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System.Int32')
 
 The command line exit code.
 
 <a name='Xecrets.Sdk.XfException.XfException(int,string).message'></a>
 
-`message` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+`message` [System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 The message.
 
@@ -51,19 +51,19 @@ public XfException(int exitCode, string message, System.Collections.Generic.IEnu
 
 <a name='Xecrets.Sdk.XfException.XfException(int,string,System.Collections.Generic.IEnumerable_string_).exitCode'></a>
 
-`exitCode` [System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')
+`exitCode` [System.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System.Int32')
 
 The command line exit code.
 
 <a name='Xecrets.Sdk.XfException.XfException(int,string,System.Collections.Generic.IEnumerable_string_).message'></a>
 
-`message` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+`message` [System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 The message.
 
 <a name='Xecrets.Sdk.XfException.XfException(int,string,System.Collections.Generic.IEnumerable_string_).args'></a>
 
-`args` [System.Collections.Generic.IEnumerable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')
+`args` [System.Collections.Generic.IEnumerable&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.ienumerable-1 'System.Collections.Generic.IEnumerable`1')[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.ienumerable-1 'System.Collections.Generic.IEnumerable`1')
 
 The arguments(s) causing the exception
 
@@ -80,19 +80,19 @@ public XfException(int exitCode, string message, System.Exception ex);
 
 <a name='Xecrets.Sdk.XfException.XfException(int,string,System.Exception).exitCode'></a>
 
-`exitCode` [System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')
+`exitCode` [System.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System.Int32')
 
 The command line tool exit code.
 
 <a name='Xecrets.Sdk.XfException.XfException(int,string,System.Exception).message'></a>
 
-`message` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+`message` [System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 The message.
 
 <a name='Xecrets.Sdk.XfException.XfException(int,string,System.Exception).ex'></a>
 
-`ex` [System.Exception](https://docs.microsoft.com/en-us/dotnet/api/System.Exception 'System.Exception')
+`ex` [System.Exception](https://learn.microsoft.com/en-us/dotnet/api/system.exception 'System.Exception')
 
 The inner exception.
 
@@ -110,25 +110,25 @@ public XfException(int exitCode, Xecrets.Sdk.Models.XfSubStatusCode subStatusCod
 
 <a name='Xecrets.Sdk.XfException.XfException(int,Xecrets.Sdk.Models.XfSubStatusCode,string,System.Collections.Generic.IEnumerable_string_).exitCode'></a>
 
-`exitCode` [System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')
+`exitCode` [System.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System.Int32')
 
 The command line exit code.
 
 <a name='Xecrets.Sdk.XfException.XfException(int,Xecrets.Sdk.Models.XfSubStatusCode,string,System.Collections.Generic.IEnumerable_string_).subStatusCode'></a>
 
-`subStatusCode` [Xecrets.Sdk.Models.XfSubStatusCode](https://docs.microsoft.com/en-us/dotnet/api/Xecrets.Sdk.Models.XfSubStatusCode 'Xecrets.Sdk.Models.XfSubStatusCode')
+`subStatusCode` [Xecrets.Sdk.Models.XfSubStatusCode](https://learn.microsoft.com/en-us/dotnet/api/xecrets.sdk.models.xfsubstatuscode 'Xecrets.Sdk.Models.XfSubStatusCode')
 
 The sub status code from the command line.
 
 <a name='Xecrets.Sdk.XfException.XfException(int,Xecrets.Sdk.Models.XfSubStatusCode,string,System.Collections.Generic.IEnumerable_string_).message'></a>
 
-`message` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+`message` [System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 The message.
 
 <a name='Xecrets.Sdk.XfException.XfException(int,Xecrets.Sdk.Models.XfSubStatusCode,string,System.Collections.Generic.IEnumerable_string_).files'></a>
 
-`files` [System.Collections.Generic.IEnumerable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')
+`files` [System.Collections.Generic.IEnumerable&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.ienumerable-1 'System.Collections.Generic.IEnumerable`1')[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.ienumerable-1 'System.Collections.Generic.IEnumerable`1')
 
 The files(s) causing the exception
 
@@ -145,7 +145,7 @@ public XfException(string message);
 
 <a name='Xecrets.Sdk.XfException.XfException(string).message'></a>
 
-`message` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+`message` [System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 The message.
 
@@ -162,13 +162,13 @@ public XfException(string message, System.Exception ex);
 
 <a name='Xecrets.Sdk.XfException.XfException(string,System.Exception).message'></a>
 
-`message` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+`message` [System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 The message.
 
 <a name='Xecrets.Sdk.XfException.XfException(string,System.Exception).ex'></a>
 
-`ex` [System.Exception](https://docs.microsoft.com/en-us/dotnet/api/System.Exception 'System.Exception')
+`ex` [System.Exception](https://learn.microsoft.com/en-us/dotnet/api/system.exception 'System.Exception')
 
 The inner exception.
 ### Properties
@@ -184,7 +184,7 @@ public string[] Args { get; }
 ```
 
 #### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[[]](https://docs.microsoft.com/en-us/dotnet/api/System.Array 'System.Array')
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')[[]](https://learn.microsoft.com/en-us/dotnet/api/system.array 'System.Array')
 
 <a name='Xecrets.Sdk.XfException.ExitCode'></a>
 
@@ -197,7 +197,7 @@ public int ExitCode { get; }
 ```
 
 #### Property Value
-[System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')
+[System.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System.Int32')
 
 <a name='Xecrets.Sdk.XfException.SubStatusCode'></a>
 
@@ -210,7 +210,7 @@ public Xecrets.Sdk.Models.XfSubStatusCode SubStatusCode { get; }
 ```
 
 #### Property Value
-[Xecrets.Sdk.Models.XfSubStatusCode](https://docs.microsoft.com/en-us/dotnet/api/Xecrets.Sdk.Models.XfSubStatusCode 'Xecrets.Sdk.Models.XfSubStatusCode')
+[Xecrets.Sdk.Models.XfSubStatusCode](https://learn.microsoft.com/en-us/dotnet/api/xecrets.sdk.models.xfsubstatuscode 'Xecrets.Sdk.Models.XfSubStatusCode')
 ### Methods
 
 <a name='Xecrets.Sdk.XfException.ToString()'></a>
@@ -224,4 +224,4 @@ public override string ToString();
 ```
 
 #### Returns
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')

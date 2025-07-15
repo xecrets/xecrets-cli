@@ -9,7 +9,7 @@ Log output and progress from the command line tool.
 public class XfMessage
 ```
 
-Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object') &#129106; XfMessage
+Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') &#129106; XfMessage
 ### Properties
 
 <a name='Xecrets.Sdk.Models.XfMessage.Arg1'></a>
@@ -23,7 +23,7 @@ public string? Arg1 { get; set; }
 ```
 
 #### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 <a name='Xecrets.Sdk.Models.XfMessage.Arg2'></a>
 
@@ -36,7 +36,7 @@ public string? Arg2 { get; set; }
 ```
 
 #### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 <a name='Xecrets.Sdk.Models.XfMessage.CliApiVersion'></a>
 
@@ -49,7 +49,7 @@ public string? CliApiVersion { get; set; }
 ```
 
 #### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 <a name='Xecrets.Sdk.Models.XfMessage.Display'></a>
 
@@ -62,7 +62,7 @@ public string? Display { get; set; }
 ```
 
 #### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 <a name='Xecrets.Sdk.Models.XfMessage.Id'></a>
 
@@ -75,7 +75,7 @@ public string? Id { get; set; }
 ```
 
 #### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 <a name='Xecrets.Sdk.Models.XfMessage.Message'></a>
 
@@ -88,33 +88,33 @@ public string? Message { get; set; }
 ```
 
 #### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 <a name='Xecrets.Sdk.Models.XfMessage.OpCode'></a>
 
 ## XfMessage.OpCode Property
 
-The current [Xecrets.Sdk.Models.XfOpCode](https://docs.microsoft.com/en-us/dotnet/api/Xecrets.Sdk.Models.XfOpCode 'Xecrets.Sdk.Models.XfOpCode') for this response.
+The current [Xecrets.Sdk.Models.XfOpCode](https://learn.microsoft.com/en-us/dotnet/api/xecrets.sdk.models.xfopcode 'Xecrets.Sdk.Models.XfOpCode') for this response.
 
 ```csharp
 public int OpCode { get; set; }
 ```
 
 #### Property Value
-[System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')
+[System.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System.Int32')
 
 <a name='Xecrets.Sdk.Models.XfMessage.OpCodeName'></a>
 
 ## XfMessage.OpCodeName Property
 
-The name of the [Xecrets.Sdk.Models.XfOpCode](https://docs.microsoft.com/en-us/dotnet/api/Xecrets.Sdk.Models.XfOpCode 'Xecrets.Sdk.Models.XfOpCode') for this response.
+The name of the [Xecrets.Sdk.Models.XfOpCode](https://learn.microsoft.com/en-us/dotnet/api/xecrets.sdk.models.xfopcode 'Xecrets.Sdk.Models.XfOpCode') for this response.
 
 ```csharp
 public string? OpCodeName { get; set; }
 ```
 
 #### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 <a name='Xecrets.Sdk.Models.XfMessage.OriginalFileName'></a>
 
@@ -127,7 +127,7 @@ public string? OriginalFileName { get; set; }
 ```
 
 #### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 <a name='Xecrets.Sdk.Models.XfMessage.Percent'></a>
 
@@ -140,7 +140,7 @@ public int Percent { get; set; }
 ```
 
 #### Property Value
-[System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')
+[System.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System.Int32')
 
 <a name='Xecrets.Sdk.Models.XfMessage.Platform'></a>
 
@@ -153,7 +153,7 @@ public string? Platform { get; set; }
 ```
 
 #### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 <a name='Xecrets.Sdk.Models.XfMessage.ProgramVersion'></a>
 
@@ -166,7 +166,7 @@ public string? ProgramVersion { get; set; }
 ```
 
 #### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 <a name='Xecrets.Sdk.Models.XfMessage.Result'></a>
 
@@ -179,7 +179,7 @@ public string? Result { get; set; }
 ```
 
 #### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 <a name='Xecrets.Sdk.Models.XfMessage.Status'></a>
 
@@ -192,7 +192,7 @@ public int Status { get; set; }
 ```
 
 #### Property Value
-[System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')
+[System.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System.Int32')
 
 <a name='Xecrets.Sdk.Models.XfMessage.StatusName'></a>
 
@@ -205,7 +205,7 @@ public string? StatusName { get; set; }
 ```
 
 #### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 <a name='Xecrets.Sdk.Models.XfMessage.SubStatus'></a>
 
@@ -218,7 +218,7 @@ public int SubStatus { get; set; }
 ```
 
 #### Property Value
-[System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')
+[System.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System.Int32')
 
 <a name='Xecrets.Sdk.Models.XfMessage.TotalDone'></a>
 
@@ -231,7 +231,7 @@ public long TotalDone { get; set; }
 ```
 
 #### Property Value
-[System.Int64](https://docs.microsoft.com/en-us/dotnet/api/System.Int64 'System.Int64')
+[System.Int64](https://learn.microsoft.com/en-us/dotnet/api/system.int64 'System.Int64')
 
 <a name='Xecrets.Sdk.Models.XfMessage.TotalPercent'></a>
 
@@ -244,7 +244,7 @@ public int TotalPercent { get; set; }
 ```
 
 #### Property Value
-[System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')
+[System.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System.Int32')
 
 <a name='Xecrets.Sdk.Models.XfMessage.TotalWork'></a>
 
@@ -257,7 +257,7 @@ public long TotalWork { get; set; }
 ```
 
 #### Property Value
-[System.Int64](https://docs.microsoft.com/en-us/dotnet/api/System.Int64 'System.Int64')
+[System.Int64](https://learn.microsoft.com/en-us/dotnet/api/system.int64 'System.Int64')
 
 <a name='Xecrets.Sdk.Models.XfMessage.Utc'></a>
 
@@ -270,4 +270,4 @@ public System.DateTime Utc { get; set; }
 ```
 
 #### Property Value
-[System.DateTime](https://docs.microsoft.com/en-us/dotnet/api/System.DateTime 'System.DateTime')
+[System.DateTime](https://learn.microsoft.com/en-us/dotnet/api/system.datetime 'System.DateTime')

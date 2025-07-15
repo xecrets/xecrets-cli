@@ -9,9 +9,9 @@ Extra, possibly imported, encrypted private keys for a user.
 public record XfEncryptedKeys : System.IEquatable<Xecrets.Sdk.Models.XfEncryptedKeys>
 ```
 
-Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object') &#129106; XfEncryptedKeys
+Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') &#129106; XfEncryptedKeys
 
-Implements [System.IEquatable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.IEquatable-1 'System.IEquatable`1')[XfEncryptedKeys](Xecrets.Sdk.Models.XfEncryptedKeys.md 'Xecrets.Sdk.Models.XfEncryptedKeys')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.IEquatable-1 'System.IEquatable`1')
+Implements [System.IEquatable&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.iequatable-1 'System.IEquatable`1')[XfEncryptedKeys](Xecrets.Sdk.Models.XfEncryptedKeys.md 'Xecrets.Sdk.Models.XfEncryptedKeys')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.iequatable-1 'System.IEquatable`1')
 
 ### Remarks
 This type is used for interoperability with AxCrypt, so the JSON property names and structure cannot be changed
@@ -44,7 +44,7 @@ public System.Collections.Generic.IList<Xecrets.Sdk.Models.XfEncryptedKeys.Encry
 ```
 
 #### Property Value
-[System.Collections.Generic.IList&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IList-1 'System.Collections.Generic.IList`1')[EncryptedUserKeys](Xecrets.Sdk.Models.XfEncryptedKeys.EncryptedUserKeys.md 'Xecrets.Sdk.Models.XfEncryptedKeys.EncryptedUserKeys')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IList-1 'System.Collections.Generic.IList`1')
+[System.Collections.Generic.IList&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.ilist-1 'System.Collections.Generic.IList`1')[EncryptedUserKeys](Xecrets.Sdk.Models.XfEncryptedKeys.EncryptedUserKeys.md 'Xecrets.Sdk.Models.XfEncryptedKeys.EncryptedUserKeys')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.ilist-1 'System.Collections.Generic.IList`1')
 ### Methods
 
 <a name='Xecrets.Sdk.Models.XfEncryptedKeys.Deserialize(string)'></a>
@@ -60,7 +60,7 @@ public static Xecrets.Sdk.Models.XfEncryptedKeys Deserialize(string json);
 
 <a name='Xecrets.Sdk.Models.XfEncryptedKeys.Deserialize(string).json'></a>
 
-`json` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+`json` [System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 The json to deserialize
 
@@ -86,5 +86,5 @@ public static string Serialize(Xecrets.Sdk.Models.XfEncryptedKeys xfEncryptedKey
 The instance to serialize.
 
 #### Returns
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')  
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')  
 A JSON string

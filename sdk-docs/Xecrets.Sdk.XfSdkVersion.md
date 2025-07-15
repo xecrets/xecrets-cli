@@ -9,7 +9,7 @@ Helper to determine if the current SDK version is compatible with a given comman
 public static class XfSdkVersion
 ```
 
-Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object') &#129106; XfSdkVersion
+Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') &#129106; XfSdkVersion
 ### Properties
 
 <a name='Xecrets.Sdk.XfSdkVersion.SdkVersion'></a>
@@ -27,7 +27,7 @@ public static System.Version SdkVersion { get; }
 ```
 
 #### Property Value
-[System.Version](https://docs.microsoft.com/en-us/dotnet/api/System.Version 'System.Version')
+[System.Version](https://learn.microsoft.com/en-us/dotnet/api/system.version 'System.Version')
 
 ### Remarks
 Changes includes not only syntax and semantics, but also actual numerical values assigned to <seealso cref="T:Xecrets.Sdk.Models.XfOpCode"/>, <seealso cref="T:Xecrets.Sdk.Models.XfStatusCode"> and </seealso>and <seealso cref="T:Xecrets.Sdk.Models.XfCliApi"/> as well as changes
@@ -48,10 +48,10 @@ public static bool IsSdkCompatibleWith(System.Version cliApiVersion);
 
 <a name='Xecrets.Sdk.XfSdkVersion.IsSdkCompatibleWith(System.Version).cliApiVersion'></a>
 
-`cliApiVersion` [System.Version](https://docs.microsoft.com/en-us/dotnet/api/System.Version 'System.Version')
+`cliApiVersion` [System.Version](https://learn.microsoft.com/en-us/dotnet/api/system.version 'System.Version')
 
 The command line tool API version
 
 #### Returns
-[System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')  
+[System.Boolean](https://learn.microsoft.com/en-us/dotnet/api/system.boolean 'System.Boolean')  
 [true](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/bool 'https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/bool') if this SDK is compatible with the command line tool, [false](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/bool 'https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/bool') otherwise.

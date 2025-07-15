@@ -9,7 +9,7 @@ Useful extension methods for file names
 public static class XfExtensions
 ```
 
-Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object') &#129106; XfExtensions
+Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') &#129106; XfExtensions
 ### Methods
 
 <a name='Xecrets.Sdk.XfExtensions.AddEncryptedExtension(thisstring)'></a>
@@ -25,12 +25,12 @@ public static string AddEncryptedExtension(this string file);
 
 <a name='Xecrets.Sdk.XfExtensions.AddEncryptedExtension(thisstring).file'></a>
 
-`file` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+`file` [System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 A file name, presumably without extension
 
 #### Returns
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')  
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')  
 The file parameter with the extension for encrypted files concatented.
 
 <a name='Xecrets.Sdk.XfExtensions.AddKeyPairFullName(thisXecrets.Sdk.Models.XfCredentials,string)'></a>
@@ -52,7 +52,7 @@ The [XfCredentials](Xecrets.Sdk.Models.XfCredentials.md 'Xecrets.Sdk.Models.XfCr
 
 <a name='Xecrets.Sdk.XfExtensions.AddKeyPairFullName(thisXecrets.Sdk.Models.XfCredentials,string).keyPairFullName'></a>
 
-`keyPairFullName` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+`keyPairFullName` [System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 The key pair full path and name.
 
@@ -75,7 +75,7 @@ The [XfCredentials](Xecrets.Sdk.Models.XfCredentials.md 'Xecrets.Sdk.Models.XfCr
 
 <a name='Xecrets.Sdk.XfExtensions.AddPassword(thisXecrets.Sdk.Models.XfCredentials,string).password'></a>
 
-`password` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+`password` [System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 The password to add to the collection.
 
@@ -104,12 +104,12 @@ The [XfCredentials](Xecrets.Sdk.Models.XfCredentials.md 'Xecrets.Sdk.Models.XfCr
 
 <a name='Xecrets.Sdk.XfExtensions.DecryptFileAsync(thisXecrets.Sdk.Abstractions.IXfApi,Xecrets.Sdk.Models.XfCredentials,string).fileFullName'></a>
 
-`fileFullName` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+`fileFullName` [System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 The destination full path and name.
 
 #### Returns
-[System.Threading.Tasks.Task&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')[System.Byte](https://docs.microsoft.com/en-us/dotnet/api/System.Byte 'System.Byte')[[]](https://docs.microsoft.com/en-us/dotnet/api/System.Array 'System.Array')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task-1 'System.Threading.Tasks.Task`1')
+[System.Threading.Tasks.Task&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task-1 'System.Threading.Tasks.Task`1')[System.Byte](https://learn.microsoft.com/en-us/dotnet/api/system.byte 'System.Byte')[[]](https://learn.microsoft.com/en-us/dotnet/api/system.array 'System.Array')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task-1 'System.Threading.Tasks.Task`1')
 
 <a name='Xecrets.Sdk.XfExtensions.Encrypted(thisSystem.Collections.Generic.IEnumerable_string_)'></a>
 
@@ -124,12 +124,12 @@ public static string[] Encrypted(this System.Collections.Generic.IEnumerable<str
 
 <a name='Xecrets.Sdk.XfExtensions.Encrypted(thisSystem.Collections.Generic.IEnumerable_string_).files'></a>
 
-`files` [System.Collections.Generic.IEnumerable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')
+`files` [System.Collections.Generic.IEnumerable&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.ienumerable-1 'System.Collections.Generic.IEnumerable`1')[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.ienumerable-1 'System.Collections.Generic.IEnumerable`1')
 
 File names to filter
 
 #### Returns
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[[]](https://docs.microsoft.com/en-us/dotnet/api/System.Array 'System.Array')  
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')[[]](https://learn.microsoft.com/en-us/dotnet/api/system.array 'System.Array')  
 An array of the files that match the pattern for encrypted files.
 
 <a name='Xecrets.Sdk.XfExtensions.EncryptFileAsync(thisXecrets.Sdk.Abstractions.IXfApi,Xecrets.Sdk.Models.XfCredentials,string,byte[],string)'></a>
@@ -157,24 +157,24 @@ The [XfCredentials](Xecrets.Sdk.Models.XfCredentials.md 'Xecrets.Sdk.Models.XfCr
 
 <a name='Xecrets.Sdk.XfExtensions.EncryptFileAsync(thisXecrets.Sdk.Abstractions.IXfApi,Xecrets.Sdk.Models.XfCredentials,string,byte[],string).originalFileName'></a>
 
-`originalFileName` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+`originalFileName` [System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 The original file name to embed in the encrypted file.
 
 <a name='Xecrets.Sdk.XfExtensions.EncryptFileAsync(thisXecrets.Sdk.Abstractions.IXfApi,Xecrets.Sdk.Models.XfCredentials,string,byte[],string).clearBytes'></a>
 
-`clearBytes` [System.Byte](https://docs.microsoft.com/en-us/dotnet/api/System.Byte 'System.Byte')[[]](https://docs.microsoft.com/en-us/dotnet/api/System.Array 'System.Array')
+`clearBytes` [System.Byte](https://learn.microsoft.com/en-us/dotnet/api/system.byte 'System.Byte')[[]](https://learn.microsoft.com/en-us/dotnet/api/system.array 'System.Array')
 
 The data blob to encrypt.
 
 <a name='Xecrets.Sdk.XfExtensions.EncryptFileAsync(thisXecrets.Sdk.Abstractions.IXfApi,Xecrets.Sdk.Models.XfCredentials,string,byte[],string).fileFullName'></a>
 
-`fileFullName` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+`fileFullName` [System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 The destination full path and name.
 
 #### Returns
-[System.Threading.Tasks.Task](https://docs.microsoft.com/en-us/dotnet/api/System.Threading.Tasks.Task 'System.Threading.Tasks.Task')
+[System.Threading.Tasks.Task](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task 'System.Threading.Tasks.Task')
 
 <a name='Xecrets.Sdk.XfExtensions.IsEncrypted(thisstring)'></a>
 
@@ -189,12 +189,12 @@ public static bool IsEncrypted(this string file);
 
 <a name='Xecrets.Sdk.XfExtensions.IsEncrypted(thisstring).file'></a>
 
-`file` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+`file` [System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 A possibly full path and name of a file.
 
 #### Returns
-[System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')  
+[System.Boolean](https://learn.microsoft.com/en-us/dotnet/api/system.boolean 'System.Boolean')  
 [true](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/bool 'https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/bool') if the name ends with the encrypted extension.
 
 <a name='Xecrets.Sdk.XfExtensions.NotEncrypted(thisSystem.Collections.Generic.IEnumerable_string_)'></a>
@@ -210,12 +210,12 @@ public static System.Collections.Generic.IEnumerable<string> NotEncrypted(this S
 
 <a name='Xecrets.Sdk.XfExtensions.NotEncrypted(thisSystem.Collections.Generic.IEnumerable_string_).files'></a>
 
-`files` [System.Collections.Generic.IEnumerable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')
+`files` [System.Collections.Generic.IEnumerable&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.ienumerable-1 'System.Collections.Generic.IEnumerable`1')[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.ienumerable-1 'System.Collections.Generic.IEnumerable`1')
 
 File names to filter
 
 #### Returns
-[System.Collections.Generic.IEnumerable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')  
+[System.Collections.Generic.IEnumerable&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.ienumerable-1 'System.Collections.Generic.IEnumerable`1')[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.ienumerable-1 'System.Collections.Generic.IEnumerable`1')  
 An enumeration of the files that do not match the pattern for encrypted files.
 
 <a name='Xecrets.Sdk.XfExtensions.ToEncryptedName(thisstring,string)'></a>
@@ -232,16 +232,16 @@ public static string ToEncryptedName(this string fullName, string destinationFil
 
 <a name='Xecrets.Sdk.XfExtensions.ToEncryptedName(thisstring,string).fullName'></a>
 
-`fullName` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+`fullName` [System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 The full path and name of a plain text file, possibly with an extension.
 
 <a name='Xecrets.Sdk.XfExtensions.ToEncryptedName(thisstring,string).destinationFileFullFolder'></a>
 
-`destinationFileFullFolder` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+`destinationFileFullFolder` [System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
 The full path to an optional destination folder. Set to empty string if same as source.
 
 #### Returns
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')  
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')  
 The suggested name for it when encrypted.
