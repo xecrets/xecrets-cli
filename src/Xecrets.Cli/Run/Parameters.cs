@@ -23,6 +23,8 @@
 
 #endregion Copyright and GPL License
 
+using System.Globalization;
+
 using AxCrypt.Core.Crypto;
 using AxCrypt.Core.Crypto.Asymmetric;
 using AxCrypt.Core.Session;
@@ -47,6 +49,8 @@ internal class Parameters(OptionsParser parser) : IDisposable
     public bool AsciiArmor { get; set; } = false;
 
     public string CrashLogFile { get; set; } = string.Empty;
+
+    public CultureInfo Culture { get; set; } = CultureInfo.InvariantCulture;
 
     public TotalsTracker TotalsTracker { get; } = new TotalsTracker();
 

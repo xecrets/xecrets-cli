@@ -142,6 +142,7 @@ internal class OptionsParser
         optionSet.Add("cli-crash-log=", XfOpCode.CliCrashLog, "{file}:?Write crash log here (global).", (ora, op, log) => ora.Add(op, log));
         optionSet.Add("cli-license=", XfOpCode.CliLicense, "{jwt-license}:?Use this license. Overrides any others found (global).", (ora, op, license) => ora.Add(op, license));
         optionSet.Add("cli-version", XfOpCode.SdkCliVersion, ":?Display the command line tool API version.", (ora, op, arg) => ora.Add(arg != null ? op : XfOpCode.None));
+        optionSet.Add("date-pattern=", XfOpCode.DatePattern, "{culture}:?Set the display date pattern, e.g. 'M/d/yyyy h:mm tt'.", (ora, op, culture) => ora.Add(op, culture));
         optionSet.Add("crash=", XfOpCode.Crash, "{parse|dry|real}:?Crash during parse, dry run or real run.", (ora, op, arg) => { if (arg == "parse") HardCrash.Immediately(); else ora.Add(XfOpCode.Crash, arg); });
         optionSet.Add("end", XfOpCode.End, ":?End a sequence of operations.", (ora, op, end) => ora.Add(op));
         optionSet.Add("internal", XfOpCode.Internal, ":?Display internal use help and disable splash (global).", (ora, op, @internal) => Internal = @internal != null);

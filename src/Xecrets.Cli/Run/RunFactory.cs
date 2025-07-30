@@ -45,6 +45,7 @@ internal abstract class RunFactory(Parameters parameters)
         { XfOpCode.CliDebugBreak, () => new CliDebugBreakOperation() },
         { XfOpCode.Compress, () => new CompressOperation() },
         { XfOpCode.Crash, () => new CrashOperation() },
+        { XfOpCode.DatePattern, () => new DatePatternOperation() },
         { XfOpCode.EncryptLike, () => new EncryptLikeOperation() },
         { XfOpCode.DecryptTo, () => new DecryptToOperation() },
         { XfOpCode.DecryptToFolder, () => new DecryptToFolderOperation() },

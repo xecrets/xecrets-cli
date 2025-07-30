@@ -58,6 +58,7 @@ public enum XfOpCode
     Compress = 1100,
     Crash = 1110,
     CreateKeyPair = 1120,
+    DatePattern = 1125,
     DecryptTo = 1130,
     DecryptToFolder = 1140,
     DefaultInternal = 1150,
