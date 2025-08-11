@@ -46,7 +46,7 @@ internal class CliLicenseOperation : IExecutionPhases
         }
 
         ILicense license = New<ILicense>();
-        license.LoadFromAsync([parameters.Arguments[0]]);
+        license.LoadFromAsync([candidate]);
 
         if (license.Status() == LicenseStatus.Unlicensed)
         {
