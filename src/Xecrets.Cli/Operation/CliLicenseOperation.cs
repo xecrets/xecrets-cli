@@ -40,7 +40,7 @@ internal class CliLicenseOperation : IExecutionPhases
     {
         ILicenseCandidates licenseCandidates = New<ILicenseCandidates>();
         string candidate = parameters.Arguments[0];
-        if (!licenseCandidates.IsCandidate(candidate))
+        if (licenseCandidates.ExtractCandidate(candidate).Length == 0)
         {
             return Task.FromResult(new Status(Public.XfStatusCode.InvalidLicenseFormat, "A license must look like a JWT string."));
         }
