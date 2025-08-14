@@ -1,71 +1,75 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "build",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "build",
-                "${workspaceFolder}/src/Xecrets.Cli.sln",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
-            ],
-            "problemMatcher": "$msCompile"
-        },
-        {
-            "label": "publish-osx",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "publish",
-                "${workspaceFolder}/src/Xecrets.Cli/Xecrets.Cli.csproj",
-                "/property:Configuration=Release",
-                "/property:PublishProfile=${workspaceFolder}/src/Xecrets.Cli/Properties/PublishProfiles/osx-x64.pubxml",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
-            ],
-            "problemMatcher": "$msCompile"
-        },
-        {
-            "label": "publish-linux",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "publish",
-                "${workspaceFolder}/src/Xecrets.Cli/Xecrets.Cli.csproj",
-                "/property:Configuration=Release",
-                "/property:PublishProfile=${workspaceFolder}/src/Xecrets.Cli/Properties/PublishProfiles/linux-x64.pubxml",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
-            ],
-            "problemMatcher": "$msCompile"
-        },
-        {
-            "label": "publish-windows",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "publish",
-                "${workspaceFolder}/src/Xecrets.Cli/Xecrets.Cli.csproj",
-                "/property:Configuration=Release",
-                "/property:PublishProfile=${workspaceFolder}/src/Xecrets.Cli/Properties/PublishProfiles/win-x64.pubxml",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
-            ],
-            "problemMatcher": "$msCompile"
-        },
-        {
-            "label": "watch",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "watch",
-                "run",
-                "--project",
-                "${workspaceFolder}/src/Xecrets.Cli.sln",
-            ],
-            "problemMatcher": "$msCompile"
-        }
-    ]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build Xecrets.Cli",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "build",
+        "${workspaceFolder}/src/Xecrets.Cli.sln",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary"
+      ],
+      "problemMatcher": "$msCompile",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "publish-osx",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "publish",
+        "${workspaceFolder}/src/Xecrets.Cli/Xecrets.Cli.csproj",
+        "/property:Configuration=Release",
+        "/property:PublishProfile=${workspaceFolder}/src/Xecrets.Cli/Properties/PublishProfiles/osx-x64.pubxml",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "publish-linux",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "publish",
+        "${workspaceFolder}/src/Xecrets.Cli/Xecrets.Cli.csproj",
+        "/property:Configuration=Release",
+        "/property:PublishProfile=${workspaceFolder}/src/Xecrets.Cli/Properties/PublishProfiles/linux-x64.pubxml",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "publish-windows",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "publish",
+        "${workspaceFolder}/src/Xecrets.Cli/Xecrets.Cli.csproj",
+        "/property:Configuration=Release",
+        "/property:PublishProfile=${workspaceFolder}/src/Xecrets.Cli/Properties/PublishProfiles/win-x64.pubxml",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "watch",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "watch",
+        "run",
+        "--project",
+        "${workspaceFolder}/src/Xecrets.Cli.sln"
+      ],
+      "problemMatcher": "$msCompile"
+    }
+  ]
 }
