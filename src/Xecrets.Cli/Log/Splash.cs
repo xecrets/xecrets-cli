@@ -23,6 +23,7 @@
 
 #endregion Copyright and GPL License
 
+using System.Runtime.InteropServices;
 using Xecrets.Licensing;
 using Xecrets.Licensing.Abstractions;
 using Xecrets.Licensing.Implementation;
@@ -39,13 +40,24 @@ internal class Splash
 
     public Splash(string splash)
     {
-        string runtime = OperatingSystem.IsLinux()
-            ? "linux-x64"
-            : OperatingSystem.IsMacOS()
-                ? "macos-x64"
-                : OperatingSystem.IsWindows()
-                    ? "win-x64"
-                    : "unknown";
+        string runtime;
+        string archString = RuntimeInformation.OSArchitecture.ToString().ToLowerInvariant();
+        if (OperatingSystem.IsMacOS())
+        {
+            runtime = $"macos-{archString}";
+        }
+        else if (OperatingSystem.IsLinux())
+        {
+            runtime = $"linux-{archString}";
+        }
+        else if (OperatingSystem.IsWindows())
+        {
+            runtime = $"win-{archString}";
+        }
+        else
+        {
+            runtime = $"unknown-{archString}";
+        }
         string buildUtc = New<IBuildUtc>().BuildUtcText;
         _splash = splash
             .Replace("{gpl} ", New<IBuildUtc>().IsGplBuild ? "GPL " : string.Empty)

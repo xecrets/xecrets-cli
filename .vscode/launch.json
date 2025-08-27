@@ -8,11 +8,11 @@
             "name": ".NET Core Launch (console)",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build",
+            "preLaunchTask": "Build Xecrets.Cli",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/Xecrets.Cli/bin/Debug/net6.0/XecretsCli.dll",
+            "program": "${workspaceFolder}/src/Xecrets.Cli/bin/Debug/net8.0/XecretsCli.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/Xecrets.Cli",
+            "cwd": "${workspaceFolder}/src/Xecrets.Cli",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",
             "stopAtEntry": false
