@@ -14,3 +14,4 @@ obj
 /src/Xecrets.Cli/TestCli/test.mp4
 /src/Xecrets.Cli/TestCli/test.mp4.axx
 .DS_Store
+.idea/
