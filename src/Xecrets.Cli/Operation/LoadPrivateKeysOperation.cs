@@ -23,6 +23,7 @@
 
 #endregion Copyright and GPL License
 
+using AxCrypt.Abstractions;
 using AxCrypt.Api.Model;
 using AxCrypt.Core.Crypto;
 using AxCrypt.Core.Extensions;
@@ -71,11 +72,13 @@ internal class LoadPrivateKeysOperation : IExecutionPhases
     {
         var store = New<IStandardIoDataStore>(parameters.Arg1);
         UserAccounts? userAccounts;
+        string json;
         using (StreamReader reader = new StreamReader(store.OpenRead()))
         {
+            json = reader.ReadToEnd();
             try
             {
-                userAccounts = UserAccounts.DeserializeFrom(reader);
+                userAccounts = New<IStringSerializer>().Deserialize<UserAccounts>(json);
             }
             catch (Exception ex)
             {
@@ -97,9 +100,18 @@ internal class LoadPrivateKeysOperation : IExecutionPhases
         }
 
         store = New<IStandardIoDataStore>(parameters.Arg2);
+
         using (StreamWriter writer = new StreamWriter(store.OpenWrite()))
         {
-            reEncryptedAccounts.SerializeTo(writer);
+            // Ensure this operation is idempotent
+            if (object.ReferenceEquals(userAccounts, reEncryptedAccounts))
+            {
+                writer.Write(json);
+            }
+            else
+            {
+                reEncryptedAccounts.SerializeTo(writer);
+            }
         }
         return Status.Success;
     }
@@ -111,35 +123,56 @@ internal class LoadPrivateKeysOperation : IExecutionPhases
             return userAccounts;
         }
 
-        List<Passphrase> passphrases = [.. parameters.Identities
-            .Where(i => i.Passphrase != Passphrase.Empty)
-            .Select(i => i.Passphrase)];
+        Passphrase reEncryptionPassphrase = parameters.Identities.First(i => i.Passphrase != Passphrase.Empty).Passphrase;
 
-        List<UserKeyPair> userKeyPairs = [];
-        List<AccountKey> nonDecryptableAccountKeys = [];
-        foreach (AccountKey key in userAccounts.Accounts.Select(a => a.AccountKeys).SelectMany(a => a))
-        {
-            if (TryDecryptKey(key, passphrases, out UserKeyPair? userKeyPair))
-            {
-                userKeyPairs.Add(userKeyPair!);
-                continue;
-            }
-            nonDecryptableAccountKeys.Add(key);
-        }
-        userKeyPairs = [.. userKeyPairs.OrderByDescending(k => k.Timestamp)];
-        if (userKeyPairs.Count != 0)
-        {
-            parameters.Identities.Add(new LogOnIdentity(userKeyPairs, Passphrase.Empty));
-        }
-        if (parameters.Arg2.Length == 0)
-        {
-            return null;
-        }
+        List<Passphrase> passphrases = [.. parameters.Identities
+            .Where(i => i.Passphrase != Passphrase.Empty && i.Passphrase != reEncryptionPassphrase)
+            .Select(i => i.Passphrase)];
 
         EmailAddress mainUserEmail = parameters.Identities
             .FirstOrDefault(i => i.UserEmail != EmailAddress.Empty)?.UserEmail ?? EmailAddress.Empty;
         string userEmail = mainUserEmail == EmailAddress.Empty
             ? userAccounts.Accounts.First().UserName : mainUserEmail.Address;
+
+        List<UserKeyPair> decryptedKeyPairs = [];
+        List<AccountKey> nonDecryptableAccountKeys = [];
+        bool statusChanged = userAccounts.Accounts.Where(a => a.UserName != userEmail).Any();
+        foreach (AccountKey key in userAccounts.Accounts.Select(a => a.AccountKeys).SelectMany(a => a))
+        {
+            statusChanged |= key.User != userEmail;
+            if (TryDecryptKey(key, [reEncryptionPassphrase], out UserKeyPair? userKeyPair))
+            {
+                decryptedKeyPairs.Add(userKeyPair!);
+                statusChanged |= key.Status != PrivateKeyStatus.PassphraseKnown;
+                continue;
+            }
+
+            if (TryDecryptKey(key, passphrases, out userKeyPair))
+            {
+                decryptedKeyPairs.Add(userKeyPair!);
+                statusChanged = true;
+                continue;
+            }
+
+            nonDecryptableAccountKeys.Add(key);
+            statusChanged |= key.Status != PrivateKeyStatus.PassphraseUnknown;
+        }
+
+        decryptedKeyPairs = [.. decryptedKeyPairs.OrderByDescending(k => k.Timestamp)];
+        if (decryptedKeyPairs.Count != 0)
+        {
+            parameters.Identities.Add(new LogOnIdentity(decryptedKeyPairs, Passphrase.Empty));
+        }
+
+        if (parameters.Arg2.Length == 0)
+        {
+            return null;
+        }
+        if (!statusChanged)
+        {
+            // Ensure idempotency
+            return userAccounts;
+        }
 
         UserAccount reEncryptedAccount = new UserAccount(userEmail)
         {
@@ -149,14 +182,14 @@ internal class LoadPrivateKeysOperation : IExecutionPhases
             Tag = null!,
             Signature = null!,
         };
-        Passphrase firstPassphrase = parameters.Identities.First(i => i.Passphrase != Passphrase.Empty).Passphrase;
-        foreach (UserKeyPair keyPair in userKeyPairs)
+        foreach (UserKeyPair keyPair in decryptedKeyPairs)
         {
-            reEncryptedAccount.AccountKeys.Add(keyPair.ToAccountKey(firstPassphrase));
+            reEncryptedAccount.AccountKeys.Add(keyPair.ToAccountKey(reEncryptionPassphrase));
         }
         foreach (AccountKey key in nonDecryptableAccountKeys)
         {
             key.Status = PrivateKeyStatus.PassphraseUnknown;
+            key.User = userEmail;
             reEncryptedAccount.AccountKeys.Add(key);
         }
         UserAccounts reEncryptedAccounts = new()
