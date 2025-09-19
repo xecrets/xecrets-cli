@@ -51,6 +51,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{C83C1962-C
 		..\docs\AxCryptVersion1AlgorithmsandFileFormat.pdf = ..\docs\AxCryptVersion1AlgorithmsandFileFormat.pdf
 		..\docs\AxCryptVersion2AlgorithmsandFileFormat.pdf = ..\docs\AxCryptVersion2AlgorithmsandFileFormat.pdf
 		..\docs\index.md = ..\docs\index.md
+		..\docs\AxCrypt-2-1.1-specification.md = ..\docs\AxCrypt-2-1.1-specification.md
+		..\docs\AxCrypt-1-0.4-specification.md = ..\docs\AxCrypt-1-0.4-specification.md
+		..\docs\AxCrypt-2-1.0-specification.md = ..\docs\AxCrypt-2-1.0-specification.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sdk-docs", "sdk-docs", "{A957E117-F0E2-45DC-8563-E87451FA55F5}"
