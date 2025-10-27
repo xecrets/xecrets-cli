@@ -14,14 +14,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\.editorconfig = ..\.editorconfig
 		..\.gitignore = ..\.gitignore
 		..\global.json = ..\global.json
-		..\linux-arm64-zip.ps1 = ..\linux-arm64-zip.ps1
-		..\linux-x64-zip.ps1 = ..\linux-x64-zip.ps1
-		..\macos-arm64-zip.ps1 = ..\macos-arm64-zip.ps1
-		..\macos-x64-zip.ps1 = ..\macos-x64-zip.ps1
 		..\README.md = ..\README.md
 		..\SECURITY.md = ..\SECURITY.md
-		..\win-x64-zip.ps1 = ..\win-x64-zip.ps1
 		..\xecrets-cli-wer.reg = ..\xecrets-cli-wer.reg
+		..\nix-zip.ps1 = ..\nix-zip.ps1
+		..\win-zip.ps1 = ..\win-zip.ps1
+		..\xecrets-cli.code-workspace = ..\xecrets-cli.code-workspace
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xecrets.Net.Common", "..\..\xecrets-net\AxCrypt.Common\Xecrets.Net.Common.csproj", "{4C18EBBA-EF5F-4CAE-9101-368129372E17}"
