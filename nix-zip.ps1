@@ -5,7 +5,7 @@
 )
 
 $ErrorActionPreference = 'Stop'
-Push-Location -Path "src\Xecrets.Cli\bin\Release\net8.0\publish\$Directory"
+Push-Location -Path "src\Xecrets.Cli\bin\Release\net10.0\publish\$Directory"
 try {
     $cmd = @(
         "exec {BASH_XTRACEFD}>&1"
