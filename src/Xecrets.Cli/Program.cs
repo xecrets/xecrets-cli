@@ -131,6 +131,15 @@ TypeMap.Register.Singleton<ILicenseCandidates>(() => new LicenseCandidates());
 TypeMap.Register.Singleton<ILicenseExpiration>(() => new LicenseExpirationByBuildTime(new NewLocator()));
 TypeMap.Register.Singleton(() => new LicenseBlurb(new NewLocator(), Resource.GplBlurb, Resource.UnlicensedBlurb, Resource.LicensedExpiredDownloadBlurb, Resource.LicensedDownloadBlurb, Resource.LicenseNotValidForProductBlurb));
 
+if (OperatingSystem.IsWindows())
+{
+    TypeMap.Register.Singleton<IInUseBy>(() => new InUseByWindows());
+}
+else
+{
+    TypeMap.Register.Singleton<IInUseBy>(() => new InUseByUnsupported());
+}
+
 TypeMap.Register.Singleton<IShamirsSecretSharing>(() => new ShamirsSecretSharing(new StrongRandom()));
 
 await New<ILicense>().LoadFromAsync(New<ILicenseCandidates>().CandidatesFromFiles(New<IBuildUtc>().IsGplBuild ? [] : Directory.GetFiles(AppContext.BaseDirectory, "*.txt")));

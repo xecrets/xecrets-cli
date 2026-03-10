@@ -23,6 +23,8 @@
 
 #endregion Copyright and GPL License
 
+using System.Text.RegularExpressions;
+
 using AxCrypt.Abstractions;
 
 using Xecrets.Cli.Abstractions;
@@ -31,8 +33,10 @@ using Xecrets.Cli.Public;
 
 namespace Xecrets.Cli.Run;
 
-internal abstract class RunFactory(Parameters parameters)
+internal abstract partial class RunFactory(Parameters parameters)
 {
+    const int ERROR_SHARING_VIOLATION = 32;
+
     readonly Dictionary<XfOpCode, Func<IExecutionPhases>> _operationTable = new()
     {
         { XfOpCode.ArgumentMarkdown, () => new ArgumentMarkdownOperation() },
@@ -138,6 +142,26 @@ internal abstract class RunFactory(Parameters parameters)
             {
                 throw;
             }
+            catch (IOException ioex) when ((ioex.HResult & 0xFFFF) == ERROR_SHARING_VIOLATION)
+            {
+                Match match = PathInMessageRegex().Match(ioex.Message);
+                string path = match.Success ? match.Groups[1].Value : string.Empty;
+                string lockedBy = string.Empty;
+                if (path.Length > 0)
+                {
+                    lockedBy = new InUseByWindows().Path(path);
+                }
+                if (lockedBy.Length > 0)
+                {
+                    lockedBy += Environment.NewLine;
+                }
+                status = new Status(XfStatusCode.UnhandledOperationException, lockedBy + ioex.ToString())
+                {
+                    Id = factory.Parameters.TotalsTracker.Id,
+                    Arg1 = factory.Parameters.Arg1,
+                    Arg2 = factory.Parameters.Arg2,
+                };
+            }
             catch (Exception ex)
             {
                 status = new Status(XfStatusCode.UnhandledOperationException, ex.ToString())
@@ -162,4 +186,7 @@ internal abstract class RunFactory(Parameters parameters)
 
         return new SomeAction(this, new ErrorOperation($"Can't create the appropriate action for {opCode}."), XfOpCode.SdkCliError);
     }
+
+    [GeneratedRegex(@"'([^']+)'", RegexOptions.CultureInvariant)]
+    private static partial Regex PathInMessageRegex();
 }
