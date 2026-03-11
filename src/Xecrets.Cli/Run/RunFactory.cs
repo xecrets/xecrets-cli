@@ -31,6 +31,8 @@ using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Operation;
 using Xecrets.Cli.Public;
 
+using static AxCrypt.Abstractions.TypeResolve;
+
 namespace Xecrets.Cli.Run;
 
 internal abstract partial class RunFactory(Parameters parameters)
@@ -149,7 +151,7 @@ internal abstract partial class RunFactory(Parameters parameters)
                 string lockedBy = string.Empty;
                 if (path.Length > 0)
                 {
-                    lockedBy = new InUseByWindows().Path(path);
+                    lockedBy = New<IInUseBy>().Path(path);
                 }
                 if (lockedBy.Length > 0)
                 {
