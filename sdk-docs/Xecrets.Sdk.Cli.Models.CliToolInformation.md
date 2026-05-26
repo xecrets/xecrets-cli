@@ -9,7 +9,7 @@ Information about the command line tool found and used by the SDK
 public class CliToolInformation
 ```
 
-Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') &#129106; CliToolInformation
+Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') → CliToolInformation
 
 ### Remarks
 Create a new instance.

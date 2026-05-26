@@ -9,7 +9,7 @@ Extra, possibly imported, encrypted private keys for a user.
 public record XfEncryptedKeys : System.IEquatable<Xecrets.Sdk.Models.XfEncryptedKeys>
 ```
 
-Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') &#129106; XfEncryptedKeys
+Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') → XfEncryptedKeys
 
 Implements [System.IEquatable&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.iequatable-1 'System.IEquatable`1')[XfEncryptedKeys](Xecrets.Sdk.Models.XfEncryptedKeys.md 'Xecrets.Sdk.Models.XfEncryptedKeys')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.iequatable-1 'System.IEquatable`1')
 

@@ -12,7 +12,7 @@ that the mapping is correct, call [IsSdkCompatibleWith(Version)](Xecrets.Sdk.Abs
 public class XfException : System.Exception
 ```
 
-Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') &#129106; [System.Exception](https://learn.microsoft.com/en-us/dotnet/api/system.exception 'System.Exception') &#129106; XfException
+Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') → [System.Exception](https://learn.microsoft.com/en-us/dotnet/api/system.exception 'System.Exception') → XfException
 ### Constructors
 
 <a name='Xecrets.Sdk.XfException.XfException(int,string)'></a>

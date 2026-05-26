@@ -9,7 +9,7 @@ Useful extension methods for file names
 public static class XfExtensions
 ```
 
-Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') &#129106; XfExtensions
+Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') → XfExtensions
 ### Methods
 
 <a name='Xecrets.Sdk.XfExtensions.AddEncryptedExtension(thisstring)'></a>

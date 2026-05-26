@@ -9,7 +9,7 @@ A collection of encrypted private keys for a user, where a user is arbitrarily d
 public record XfEncryptedKeys.EncryptedUserKeys : System.IEquatable<Xecrets.Sdk.Models.XfEncryptedKeys.EncryptedUserKeys>
 ```
 
-Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') &#129106; EncryptedUserKeys
+Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') → EncryptedUserKeys
 
 Implements [System.IEquatable&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.iequatable-1 'System.IEquatable`1')[EncryptedUserKeys](Xecrets.Sdk.Models.XfEncryptedKeys.EncryptedUserKeys.md 'Xecrets.Sdk.Models.XfEncryptedKeys.EncryptedUserKeys')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.iequatable-1 'System.IEquatable`1')
 

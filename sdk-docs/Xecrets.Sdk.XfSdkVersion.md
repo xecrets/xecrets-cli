@@ -9,7 +9,7 @@ Helper to determine if the current SDK version is compatible with a given comman
 public static class XfSdkVersion
 ```
 
-Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') &#129106; XfSdkVersion
+Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') → XfSdkVersion
 ### Properties
 
 <a name='Xecrets.Sdk.XfSdkVersion.SdkVersion'></a>

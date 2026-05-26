@@ -9,7 +9,7 @@ An encrypted key pair blob with some meta data.
 public class XfEncryptedKeyPair
 ```
 
-Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') &#129106; XfEncryptedKeyPair
+Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') → XfEncryptedKeyPair
 
 ### Remarks
 Create a new instance.

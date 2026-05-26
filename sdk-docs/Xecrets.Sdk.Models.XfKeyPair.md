@@ -9,7 +9,7 @@ A public key pair, including optional encryption password and meta data.
 public class XfKeyPair
 ```
 
-Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') &#129106; XfKeyPair
+Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') → XfKeyPair
 ### Constructors
 
 <a name='Xecrets.Sdk.Models.XfKeyPair.XfKeyPair()'></a>

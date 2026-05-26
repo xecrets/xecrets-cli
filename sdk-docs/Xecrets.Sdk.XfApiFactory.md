@@ -9,7 +9,7 @@ Create an [IXfApi](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfApi '
 public class XfApiFactory : Xecrets.Sdk.Abstractions.IXfApiFactory
 ```
 
-Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') &#129106; XfApiFactory
+Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') → XfApiFactory
 
 Implements [IXfApiFactory](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfApiFactory 'Xecrets.Sdk.Abstractions.IXfApiFactory')
 ### Constructors

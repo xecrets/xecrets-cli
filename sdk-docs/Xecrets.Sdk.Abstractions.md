@@ -503,7 +503,7 @@ public interface IXfApiFactory
 ```
 
 Derived  
-&#8627; [XfApiFactory](Xecrets.Sdk.XfApiFactory.md 'Xecrets.Sdk.XfApiFactory')
+↳ [XfApiFactory](Xecrets.Sdk.XfApiFactory.md 'Xecrets.Sdk.XfApiFactory')
 ### Methods
 
 <a name='Xecrets.Sdk.Abstractions.IXfApiFactory.Create(System.Nullable_bool_,System.Threading.CancellationToken)'></a>

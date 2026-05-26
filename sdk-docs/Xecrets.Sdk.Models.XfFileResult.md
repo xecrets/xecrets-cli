@@ -9,7 +9,7 @@ Instatiate a new instance of XfFileResult
 public class XfFileResult
 ```
 
-Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') &#129106; XfFileResult
+Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') → XfFileResult
 
 ### Remarks
 If the operation was not successful, the reason for the failure should be implied by the context.

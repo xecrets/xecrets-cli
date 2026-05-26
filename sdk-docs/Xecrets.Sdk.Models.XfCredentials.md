@@ -10,7 +10,7 @@ or doesn't make sense, only the first will be used.
 public class XfCredentials
 ```
 
-Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') &#129106; XfCredentials
+Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') → XfCredentials
 ### Properties
 
 <a name='Xecrets.Sdk.Models.XfCredentials.KeyPairFullNames'></a>

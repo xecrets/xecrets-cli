@@ -9,7 +9,7 @@ Log output and progress from the command line tool.
 public class XfMessage
 ```
 
-Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') &#129106; XfMessage
+Inheritance [System.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System.Object') → XfMessage
 ### Properties
 
 <a name='Xecrets.Sdk.Models.XfMessage.Arg1'></a>
