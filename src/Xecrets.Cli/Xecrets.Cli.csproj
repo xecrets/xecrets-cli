@@ -44,6 +44,9 @@
     <TrimmerSingleWarn>false</TrimmerSingleWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Content Remove="C:\Users\Svante\.nuget\packages\xecrets.licensing\2.3.1347\contentFiles\any\net10.0\global.json" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="XecretsCli.ico" />
   </ItemGroup>
   <ItemGroup>
