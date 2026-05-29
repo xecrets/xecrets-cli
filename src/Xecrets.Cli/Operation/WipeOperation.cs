@@ -23,6 +23,8 @@
 
 #endregion Copyright and GPL License
 
+using System.Net.Sockets;
+
 using AxCrypt.Abstractions;
 using AxCrypt.Core;
 using AxCrypt.Core.IO;
@@ -44,7 +46,12 @@ internal class WipeOperation : IExecutionPhases
             var fileStore = New<IStandardIoDataStore>(file);
             if (!New<IFileVerify>().CanDeleteFile(fileStore))
             {
-                return Task.FromResult(new Status(XfStatusCode.CannotDelete, parameters, "Can't delete '{0}'.".Format(fileStore.Name)));
+                string lockedBy = New<IInUseBy>().Path(fileStore.FullName);
+                string reason = lockedBy.Length > 0
+                    ? "because it is locked by '{0}'".Format(lockedBy)
+                    : "for unknown reasons";
+                string msg = "Can't delete '{0}' {1}.".Format(fileStore.Name, reason);
+                return Task.FromResult(new Status(XfStatusCode.CannotDelete, parameters, msg));
             }
 
             parameters.TotalsTracker.AddWorkItem(fileStore.Length());
