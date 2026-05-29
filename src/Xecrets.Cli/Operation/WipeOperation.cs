@@ -1,7 +1,7 @@
 ﻿#region Copyright and GPL License
 
 /*
- * Xecrets Cli - Copyright © 2022-2025 Svante Seleborg, All Rights Reserved.
+ * Xecrets Cli - Copyright © 2022-2026 Svante Seleborg, All Rights Reserved.
  *
  * This code file is part of Xecrets Cli, parts of which in turn are derived from AxCrypt as licensed under GPL v3 or later.
  * 
@@ -26,6 +26,7 @@
 using AxCrypt.Abstractions;
 using AxCrypt.Core;
 using AxCrypt.Core.IO;
+using AxCrypt.Core.UI;
 
 using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Public;
@@ -37,22 +38,33 @@ namespace Xecrets.Cli.Operation;
 
 internal class WipeOperation : IExecutionPhases
 {
-    public Task<Status> DryAsync(Parameters parameters)
+    public async Task<Status> DryAsync(Parameters parameters)
     {
         foreach (string file in parameters.Arguments)
         {
             var fileStore = New<IStandardIoDataStore>(file);
-            if (!New<IFileVerify>().CanDeleteFile(fileStore))
+            if (!await DoWithRetry(() => New<IFileVerify>().CanReadFromFile(fileStore)))
             {
-                return Task.FromResult(new Status(XfStatusCode.CannotDelete, parameters, "Can't delete '{0}'.".Format(fileStore.Name)));
+                return StatusWithLockedByCheck(parameters, fileStore);
             }
 
             parameters.TotalsTracker.AddWorkItem(fileStore.Length());
         }
-        return Task.FromResult(Status.Success);
+
+        return Status.Success;
+
+        static Status StatusWithLockedByCheck(Parameters parameters, IStandardIoDataStore fileStore)
+        {
+            string lockedBy = New<IInUseBy>().Path(fileStore.FullName);
+            string reason = lockedBy.Length > 0
+                ? "because it is locked by '{0}'".Format(lockedBy)
+                : "for unknown reasons";
+            string msg = "Can't delete '{0}' {1}.".Format(fileStore.Name, reason);
+            return new Status(XfStatusCode.CannotDelete, parameters, msg);
+        }
     }
 
-    public Task<Status> RealAsync(Parameters parameters)
+    public async Task<Status> RealAsync(Parameters parameters)
     {
         var progress = parameters.Logger.Progress;
         progress.NotifyLevelStart();
@@ -67,10 +79,7 @@ internal class WipeOperation : IExecutionPhases
 
                 using (FileLock fileLock = New<FileLocker>().Acquire(fileStore))
                 {
-                    // The design of the Wipe() method is unfortunate, and causes the complication with
-                    // the progress levels etc. Should either be rewritten in the original code base or
-                    // just reimplemented independently in a more flexible way.
-                    New<AxCryptFile>().Wipe(fileLock, progress);
+                    await DoWithRetry(() => TryWipe(fileLock, progress));
                 }
 
                 if (i != parameters.Arguments.Count - 1)
@@ -86,6 +95,46 @@ internal class WipeOperation : IExecutionPhases
 
         parameters.Logger.Log(new Status(parameters, $"Securely wiped '{parameters.Arguments.Last()}'."));
 
-        return Task.FromResult(Status.Success);
+        return Status.Success;
+        
+        static bool TryWipe(FileLock fileLock, IProgressContext progress)
+        {
+            const int errorSharingViolation = 32;
+
+            try
+            {
+                // The design of the Wipe() method is unfortunate, and causes the complication with
+                // the progress levels etc. Should either be rewritten in the original code base or
+                // just reimplemented independently in a more flexible way.
+                New<AxCryptFile>().Wipe(fileLock, progress);
+            }
+            catch (IOException ioex) when ((ioex.HResult & 0xFFFF) == errorSharingViolation)
+            {
+                return false;
+            }
+
+            return true;
+        }
+    }
+
+    private static async Task<bool> DoWithRetry(Func<bool> toDo)
+    {
+        int totalDelay = 0;
+        int millisecondsDelay = 10;
+        do
+        {
+            if (toDo())
+            {
+                return true;
+            }
+            
+            await Task.Delay(millisecondsDelay);
+            totalDelay += millisecondsDelay;
+
+            millisecondsDelay += millisecondsDelay;
+        }
+        while (totalDelay + millisecondsDelay < 100) ;
+
+        return false;
     }
 }

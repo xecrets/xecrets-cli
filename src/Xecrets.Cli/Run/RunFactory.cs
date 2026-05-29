@@ -153,11 +153,10 @@ internal abstract partial class RunFactory(Parameters parameters)
                 {
                     lockedBy = New<IInUseBy>().Path(path);
                 }
-                if (lockedBy.Length > 0)
-                {
-                    lockedBy += Environment.NewLine;
-                }
-                status = new Status(XfStatusCode.UnhandledOperationException, lockedBy + ioex.ToString())
+                string msg = lockedBy.Length > 0 ? $"Locked by '{lockedBy}'" : "Locked by unknown process";
+                msg += Environment.NewLine;
+                
+                status = new Status(XfStatusCode.UnhandledOperationException, msg + ioex.ToString())
                 {
                     Id = factory.Parameters.TotalsTracker.Id,
                     Arg1 = factory.Parameters.Arg1,
