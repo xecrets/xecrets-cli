@@ -23,8 +23,6 @@
 
 #endregion Copyright and GPL License
 
-using System.Net.Sockets;
-
 using AxCrypt.Abstractions;
 using AxCrypt.Core;
 using AxCrypt.Core.IO;
@@ -39,24 +37,43 @@ namespace Xecrets.Cli.Operation;
 
 internal class WipeOperation : IExecutionPhases
 {
-    public Task<Status> DryAsync(Parameters parameters)
+    public async Task<Status> DryAsync(Parameters parameters)
     {
         foreach (string file in parameters.Arguments)
         {
             var fileStore = New<IStandardIoDataStore>(file);
-            if (!New<IFileVerify>().CanDeleteFile(fileStore))
+            if (!await CanDelete(fileStore))
             {
                 string lockedBy = New<IInUseBy>().Path(fileStore.FullName);
                 string reason = lockedBy.Length > 0
                     ? "because it is locked by '{0}'".Format(lockedBy)
                     : "for unknown reasons";
                 string msg = "Can't delete '{0}' {1}.".Format(fileStore.Name, reason);
-                return Task.FromResult(new Status(XfStatusCode.CannotDelete, parameters, msg));
+                return new Status(XfStatusCode.CannotDelete, parameters, msg);
             }
 
             parameters.TotalsTracker.AddWorkItem(fileStore.Length());
         }
-        return Task.FromResult(Status.Success);
+        return Status.Success;
+
+        async Task<bool> CanDelete(IStandardIoDataStore file)
+        {
+            int totalDelay = 0;
+            int thisDelay = 10;
+            while (totalDelay < 100)
+            {
+                if (New<IFileVerify>().CanDeleteFile(file))
+                {
+                    return true;
+                }
+
+                await Task.Delay(thisDelay);
+                totalDelay += thisDelay;
+                thisDelay += thisDelay;
+            }
+
+            return false;
+        }
     }
 
     public Task<Status> RealAsync(Parameters parameters)
