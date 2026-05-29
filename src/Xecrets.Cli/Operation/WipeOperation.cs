@@ -37,46 +37,54 @@ namespace Xecrets.Cli.Operation;
 
 internal class WipeOperation : IExecutionPhases
 {
+    const int ERROR_SHARING_VIOLATION = 32;
+
+    private async Task<bool> TryWithRetry(Func<bool> action)
+    {
+        int totalDelay = 0;
+        int thisDelay = 10;
+        while (totalDelay < 100)
+        {
+            if (action())
+            {
+                return true;
+            }
+
+            await Task.Delay(thisDelay);
+            totalDelay += thisDelay;
+            thisDelay += thisDelay;
+        }
+
+        return false;
+
+    }
+    
     public async Task<Status> DryAsync(Parameters parameters)
     {
         foreach (string file in parameters.Arguments)
         {
             var fileStore = New<IStandardIoDataStore>(file);
-            if (!await CanDelete(fileStore))
+            if (!await TryWithRetry(() => New<IFileVerify>().CanReadFromFile(fileStore)))
             {
-                string lockedBy = New<IInUseBy>().Path(fileStore.FullName);
-                string reason = lockedBy.Length > 0
-                    ? "because it is locked by '{0}'".Format(lockedBy)
-                    : "for unknown reasons";
-                string msg = "Can't delete '{0}' {1}.".Format(fileStore.Name, reason);
-                return new Status(XfStatusCode.CannotDelete, parameters, msg);
+                return StatusWithLockedByCheck(parameters, fileStore);
             }
 
             parameters.TotalsTracker.AddWorkItem(fileStore.Length());
         }
         return Status.Success;
-
-        async Task<bool> CanDelete(IStandardIoDataStore file)
-        {
-            int totalDelay = 0;
-            int thisDelay = 10;
-            while (totalDelay < 100)
-            {
-                if (New<IFileVerify>().CanDeleteFile(file))
-                {
-                    return true;
-                }
-
-                await Task.Delay(thisDelay);
-                totalDelay += thisDelay;
-                thisDelay += thisDelay;
-            }
-
-            return false;
-        }
     }
 
-    public Task<Status> RealAsync(Parameters parameters)
+    private static Status StatusWithLockedByCheck(Parameters parameters, IStandardIoDataStore fileStore)
+    {
+        string lockedBy = New<IInUseBy>().Path(fileStore.FullName);
+        string reason = lockedBy.Length > 0
+            ? "because it is locked by '{0}'".Format(lockedBy)
+            : "for unknown reasons";
+        string msg = "Can't delete '{0}' {1}.".Format(fileStore.Name, reason);
+        return new Status(XfStatusCode.CannotDelete, parameters, msg);
+    }
+
+    public async Task<Status> RealAsync(Parameters parameters)
     {
         var progress = parameters.Logger.Progress;
         progress.NotifyLevelStart();
@@ -91,10 +99,7 @@ internal class WipeOperation : IExecutionPhases
 
                 using (FileLock fileLock = New<FileLocker>().Acquire(fileStore))
                 {
-                    // The design of the Wipe() method is unfortunate, and causes the complication with
-                    // the progress levels etc. Should either be rewritten in the original code base or
-                    // just reimplemented independently in a more flexible way.
-                    New<AxCryptFile>().Wipe(fileLock, progress);
+                    await TryWithRetry(() => TryWipe(fileLock));
                 }
 
                 if (i != parameters.Arguments.Count - 1)
@@ -110,6 +115,23 @@ internal class WipeOperation : IExecutionPhases
 
         parameters.Logger.Log(new Status(parameters, $"Securely wiped '{parameters.Arguments.Last()}'."));
 
-        return Task.FromResult(Status.Success);
+        return Status.Success;
+        
+        bool TryWipe(FileLock fileLock)
+        {
+            try
+            {
+                // The design of the Wipe() method is unfortunate, and causes the complication with
+                // the progress levels etc. Should either be rewritten in the original code base or
+                // just reimplemented independently in a more flexible way.
+                New<AxCryptFile>().Wipe(fileLock, progress);
+            }
+            catch (IOException ioex) when ((ioex.HResult & 0xFFFF) == ERROR_SHARING_VIOLATION)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }
