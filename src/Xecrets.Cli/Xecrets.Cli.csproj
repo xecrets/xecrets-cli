@@ -51,7 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.18.0" />
-    <PackageReference Include="Xecrets.Licensing" Version="2.3.1347" />
+    <PackageReference Include="Xecrets.Licensing" Version="2.3.1507" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\xecrets-net\AxCrypt.Core\Xecrets.Net.Core.csproj" />
