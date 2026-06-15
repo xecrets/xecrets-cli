@@ -53,7 +53,7 @@ internal class Slip39PasswordOperation : IExecutionPhases
         if (exponent is < 0 or > 15)
         {
             return new Status(XfStatusCode.InvalidOption, parameters,
-                $"The iteration exponent '{exponent}' must be between 1 and 15.");
+                $"The iteration exponent '{exponent}' must be between 0 and 15.");
         }
 
         parameters.Slip39.Password = password;
