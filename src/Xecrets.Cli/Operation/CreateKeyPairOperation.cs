@@ -23,19 +23,9 @@
 
 #endregion Copyright and GPL License
 
-using AxCrypt.Abstractions;
-using AxCrypt.Core;
-using AxCrypt.Core.Crypto;
-using AxCrypt.Core.Crypto.Asymmetric;
-using AxCrypt.Core.IO;
-using AxCrypt.Core.Service;
-using AxCrypt.Core.UI;
-
 using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
-
-using static AxCrypt.Abstractions.TypeResolve;
 
 namespace Xecrets.Cli.Operation;
 
@@ -48,39 +38,40 @@ internal class CreateKeyPairOperation : IExecutionPhases
             return Task.FromResult(new Status(XfStatusCode.NoPassword, parameters, "A password must be provided to create a key pair."));
         }
 
-        if (!EmailAddress.TryParse(parameters.Arg1, out EmailAddress _))
+        if (!parameters.CoreServices.TryParseEmail(parameters.Arg1, out string? _))
         {
             return Task.FromResult(new Status(XfStatusCode.InvalidEmail, parameters, "'{0}' is not a valid email address.".Format(parameters.Arg1)));
         }
 
-        var toStore = New<IStandardIoDataStore>(parameters.Arg2);
-        if (!New<IFileVerify>().CanWriteToFile(toStore))
+        IFile toFile = parameters.DesktopServices.StandardIoFile(parameters.Arg2);
+        if (!parameters.DesktopServices.CanWriteToFile(toFile))
         {
-            return Task.FromResult(new Status(XfStatusCode.CannotWrite, parameters, "The file path '{0}' cannot be written to.".Format(toStore.Name)));
+            return Task.FromResult(new Status(XfStatusCode.CannotWrite, parameters, "The file path '{0}' cannot be written to.".Format(toFile.Name)));
         }
 
         return Task.FromResult(Status.Success);
     }
 
-    public Task<Status> RealAsync(Parameters parameters)
+    public async Task<Status> RealAsync(Parameters parameters)
     {
         parameters.Logger.Log(XfOpCode.Progressing, new Status(parameters, "Generating a key pair may take some time, please be patient."));
 
-        EmailAddress email = EmailAddress.Parse(parameters.CurrentOp.Arg1);
-        IAsymmetricKeyPair keyPair = Resolve.AsymmetricFactory.CreateKeyPair(4096);
-        UserKeyPair userKeyPair = new UserKeyPair(email, New<INow>().Utc, keyPair);
-        byte[] encryptedBytes = userKeyPair.ToArray(parameters.Identities.First().Passphrase);
-        IDataStore destination = New<IStandardIoDataStore>(parameters.CurrentOp.Arg2);
-        using (Stream stream = destination.OpenWrite())
+        Identity identity = parameters.Identities.First(i => i.Passphrase.Length > 0);
+        KeyPair keyPair = await parameters.CoreServices.CreateKeyPairAsync(
+            parameters.CurrentOp.Arg1,
+            identity.Passphrase,
+            parameters.CliServices.TimeProvider.GetUtcNow());
+        IFile destination = parameters.DesktopServices.StandardIoFile(parameters.CurrentOp.Arg2);
+        await using (Stream stream = destination.OpenWrite())
         {
-            stream.Write(encryptedBytes, 0, encryptedBytes.Length);
+            await stream.WriteAsync(keyPair.EncryptedBytes.AsMemory(0, keyPair.EncryptedBytes.Length));
         }
 
-        LogOnIdentity identity = parameters.Identities[0];
-        parameters.Identities[0] = new LogOnIdentity(identity.KeyPairs.Concat([userKeyPair]), identity.Passphrase);
+        int index = parameters.Identities.IndexOf(identity);
+        parameters.Identities[index] = identity with { KeyPairs = [.. identity.KeyPairs.Concat([keyPair])] };
 
         parameters.Logger.Log(new Status(parameters, $"Created a key pair for '{parameters.CurrentOp.Arg1}' in '{parameters.CurrentOp.Arg2}'."));
 
-        return Task.FromResult(Status.Success);
+        return Status.Success;
     }
 }

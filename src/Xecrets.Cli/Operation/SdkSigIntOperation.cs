@@ -25,9 +25,11 @@
 
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 
 using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Run;
+using Xecrets.Core.Public;
 
 namespace Xecrets.Cli.Operation;
 
@@ -61,10 +63,10 @@ internal partial class SdkSigIntOperation : IExecutionPhases
 
         switch (true)
         {
-            case var _ when OperatingSystem.IsWindows():
+            case var _ when Platform.IsWindows:
                 SignalOnWindows(id);
                 break;
-            case var _ when OperatingSystem.IsLinux() || OperatingSystem.IsMacOS():
+            case var _ when Platform.IsLinux || Platform.IsMacOS:
                 SignalOnUnixLike(id);
                 break;
             default:
@@ -74,15 +76,33 @@ internal partial class SdkSigIntOperation : IExecutionPhases
         return Task.FromResult(Status.Success);
     }
 
-    private static void SignalOnUnixLike(uint id)
+    [SupportedOSPlatform("linux")]
+    [SupportedOSPlatform("macos")]
+    private static partial class NativeMethods
     {
-        Process.Start(new ProcessStartInfo("kill", $"-s SIGINT {id}") { UseShellExecute = true })?.WaitForExit();
+        [LibraryImport("libc", EntryPoint = "kill")]
+        public static partial int Kill(int pid, int sig);
+
+        public enum UnixSignal
+        {
+            SIGINT = 2,
+            SIGTERM = 15,
+            SIGKILL = 9,
+        }
     }
 
+    [SupportedOSPlatform("linux")]
+    [SupportedOSPlatform("macos")]
+    private static void SignalOnUnixLike(uint id)
+    {
+        _ = NativeMethods.Kill((int)id, (int)NativeMethods.UnixSignal.SIGINT);
+    }
+
+    [SupportedOSPlatform("windows")]
     private static void SignalOnWindows(uint id)
     {
-        FreeConsole();
-        AttachConsole((uint)id);
-        GenerateConsoleCtrlEvent(0, 0);
+        _ = FreeConsole();
+        _ = AttachConsole(id);
+        _ = GenerateConsoleCtrlEvent(0, 0);
     }
 }

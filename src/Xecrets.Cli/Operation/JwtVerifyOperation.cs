@@ -25,8 +25,6 @@
 
 using System.Security.Cryptography;
 
-using AxCrypt.Abstractions;
-
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 
@@ -34,30 +32,28 @@ using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
 
-using static AxCrypt.Abstractions.TypeResolve;
-
 namespace Xecrets.Cli.Operation;
 
-/// <summary>
-/// Arguments[0] => The public key, i.e. 'public.pem'
-/// Arguments[1] => The signed token, i.e. 'license.txt'.
-/// </summary>
-/// <param name="parameters"></param>
-/// <returns></returns>
 internal class JwtVerifyOperation : IExecutionPhases
 {
+    /// <summary>
+    /// Arguments[0] => The public key, i.e. 'public.pem'
+    /// Arguments[1] => The signed token, i.e. 'license.txt'.
+    /// </summary>
+    /// <param name="parameters"></param>
+    /// <returns></returns>
     public Task<Status> DryAsync(Parameters parameters)
     {
-        var publicPemStore = New<IStandardIoDataStore>(parameters.Arguments[0]);
-        if (!New<IFileVerify>().CanReadFromFile(publicPemStore))
+        IFile publicPemFile = parameters.DesktopServices.StandardIoFile(parameters.Arguments[0]);
+        if (!parameters.DesktopServices.CanReadFromFile(publicPemFile, out string? reason))
         {
-            return Task.FromResult(new Status(XfStatusCode.CannotRead, "Can't read from file '{0}'.".Format(publicPemStore.Name)));
+            return Task.FromResult(new Status(XfStatusCode.CannotRead, $"Can't read public pem from file '{publicPemFile.Name}'. [{reason}]"));
         }
 
-        var signedTokenStore = New<IStandardIoDataStore>(parameters.Arguments[1]);
-        if (!New<IFileVerify>().CanReadFromFile(signedTokenStore))
+        IFile signedTokenFile = parameters.DesktopServices.StandardIoFile(parameters.Arguments[1]);
+        if (!parameters.DesktopServices.CanReadFromFile(signedTokenFile, out reason))
         {
-            return Task.FromResult(new Status(XfStatusCode.CannotRead, "Can't read from file '{0}'.".Format(signedTokenStore.Name)));
+            return Task.FromResult(new Status(XfStatusCode.CannotRead, $"Can't read signed token from file '{signedTokenFile.Name}'. [{reason}]"));
         }
 
         return Task.FromResult(Status.Success);
@@ -75,18 +71,18 @@ internal class JwtVerifyOperation : IExecutionPhases
             return new Status(XfStatusCode.MissingArgument, "The audience of the signed token is required.");
         }
 
-        var publicPemStore = New<IStandardIoDataStore>(parameters.Arguments[0]);
+        IFile publicPemFile = parameters.DesktopServices.StandardIoFile(parameters.Arguments[0]);
         string publicPem;
-        using (StreamReader reader = new StreamReader(publicPemStore.OpenRead()))
+        using (StreamReader reader = new StreamReader(publicPemFile.OpenRead()))
         {
-            publicPem = reader.ReadToEnd();
+            publicPem = await reader.ReadToEndAsync();
         }
 
-        var signedTokenStore = New<IStandardIoDataStore>(parameters.Arguments[1]);
+        IFile signedTokenFile = parameters.DesktopServices.StandardIoFile(parameters.Arguments[1]);
         string signedToken;
-        using (StreamReader reader = new StreamReader(signedTokenStore.OpenRead()))
+        using (StreamReader reader = new StreamReader(signedTokenFile.OpenRead()))
         {
-            signedToken = reader.ReadToEnd();
+            signedToken = await reader.ReadToEndAsync();
         }
 
         var handler = new JsonWebTokenHandler();

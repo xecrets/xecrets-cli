@@ -23,16 +23,9 @@
 
 #endregion Copyright and GPL License
 
-using AxCrypt.Abstractions;
-using AxCrypt.Core;
-using AxCrypt.Core.IO;
-using AxCrypt.Core.UI;
-
 using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
-
-using static AxCrypt.Abstractions.TypeResolve;
 
 namespace Xecrets.Cli.Operation;
 
@@ -42,44 +35,35 @@ internal class WipeOperation : IExecutionPhases
     {
         foreach (string file in parameters.Arguments)
         {
-            var fileStore = New<IStandardIoDataStore>(file);
-            if (!await DoWithRetry(() => New<IFileVerify>().CanReadFromFile(fileStore)))
+            IFile fileStore = parameters.DesktopServices.StandardIoFile(file);
+            if (!await DoWithRetryAsync(() => Task.FromResult(parameters.DesktopServices.CanReadFromFile(fileStore, out string? _))))
             {
-                return StatusWithLockedByCheck(parameters, fileStore);
+                return StatusWithLockedByCheck(parameters, fileStore, fileStore.IsAvailable ? string.Empty : "File doesn't exist");
             }
 
-            parameters.TotalsTracker.AddWorkItem(fileStore.Length());
+            parameters.TotalsTracker.AddWorkItem(fileStore.Length);
         }
 
         return Status.Success;
-
-        static Status StatusWithLockedByCheck(Parameters parameters, IStandardIoDataStore fileStore)
-        {
-            string lockedBy = New<IInUseBy>().Path(fileStore.FullName);
-            string reason = lockedBy.Length > 0
-                ? "because it is locked by '{0}'".Format(lockedBy)
-                : "for unknown reasons";
-            string msg = "Can't delete '{0}' {1}.".Format(fileStore.Name, reason);
-            return new Status(XfStatusCode.CannotDelete, parameters, msg);
-        }
     }
 
     public async Task<Status> RealAsync(Parameters parameters)
     {
-        var progress = parameters.Logger.Progress;
-        progress.NotifyLevelStart();
+        parameters.Progress.Report(Progress.LevelStarted());
         try
         {
             for (int i = 0; i < parameters.Arguments.Count; ++i)
             {
                 string file = parameters.Arguments[i];
-                IDataStore fileStore = New<IDataStore>(file);
+                IFile fileStore = parameters.DesktopServices.StandardIoFile(file);
 
-                progress.Display = file;
+                parameters.Progress.Display = file;
+                parameters.Progress.Report(Progress.TotalAdded(fileStore.Length));
 
-                using (FileLock fileLock = New<FileLocker>().Acquire(fileStore))
+                bool wiped = await DoWithRetryAsync(() => parameters.DesktopServices.WipeAsync(file, parameters.Progress));
+                if (!wiped)
                 {
-                    await DoWithRetry(() => TryWipe(fileLock, progress));
+                    return StatusWithLockedByCheck(parameters, fileStore, string.Empty);
                 }
 
                 if (i != parameters.Arguments.Count - 1)
@@ -90,50 +74,42 @@ internal class WipeOperation : IExecutionPhases
         }
         finally
         {
-            progress.NotifyLevelFinished();
+            parameters.Progress.Report(Progress.LevelFinished());
         }
 
         parameters.Logger.Log(new Status(parameters, $"Securely wiped '{parameters.Arguments.Last()}'."));
 
         return Status.Success;
-        
-        static bool TryWipe(FileLock fileLock, IProgressContext progress)
-        {
-            const int errorSharingViolation = 32;
-
-            try
-            {
-                // The design of the Wipe() method is unfortunate, and causes the complication with
-                // the progress levels etc. Should either be rewritten in the original code base or
-                // just reimplemented independently in a more flexible way.
-                New<AxCryptFile>().Wipe(fileLock, progress);
-            }
-            catch (IOException ioex) when ((ioex.HResult & 0xFFFF) == errorSharingViolation)
-            {
-                return false;
-            }
-
-            return true;
-        }
     }
 
-    private static async Task<bool> DoWithRetry(Func<bool> toDo)
+    private static Status StatusWithLockedByCheck(Parameters parameters, IFile fileStore, string reason)
+    {
+        string lockedBy = parameters.CliServices.InUseBy.Path(fileStore.FullName);
+        string because = lockedBy.Length > 0
+            ? $"because it is locked by '{lockedBy}'"
+            : "for unknown reasons";
+        reason = reason.Length > 0 ? $" [{reason}]" : string.Empty;
+        string msg = $"Can't delete '{fileStore.Name}' {because}.{reason}";
+        return new Status(XfStatusCode.CannotDelete, parameters, msg);
+    }
+
+    private static async Task<bool> DoWithRetryAsync(Func<Task<bool>> toDo)
     {
         int totalDelay = 0;
         int millisecondsDelay = 10;
         do
         {
-            if (toDo())
+            if (await toDo())
             {
                 return true;
             }
-            
+
             await Task.Delay(millisecondsDelay);
             totalDelay += millisecondsDelay;
 
             millisecondsDelay += millisecondsDelay;
         }
-        while (totalDelay + millisecondsDelay < 100) ;
+        while (totalDelay + millisecondsDelay < 100);
 
         return false;
     }

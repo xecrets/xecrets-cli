@@ -23,8 +23,7 @@
 
 #endregion Copyright and GPL License
 
-using AxCrypt.Core.UI;
-
+using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Implementation;
 using Xecrets.Cli.Public;
 
@@ -32,7 +31,7 @@ namespace Xecrets.Cli.Log;
 
 internal class NoLogger(TotalsTracker totalsTracker) : ILogger
 {
-    public IProgressContext Progress { get; } = new TotalsProgressContext(new NoProgressContext(), totalsTracker);
+    public IProgressContext TotalsProgress { get; } = new TotalsProgressContext(new NoProgressContext(), totalsTracker);
 
     public void Log(XfOpCode opCode, Status status)
     {
@@ -44,10 +43,6 @@ internal class NoLogger(TotalsTracker totalsTracker) : ILogger
     }
 
     public void Log(string message)
-    {
-    }
-
-    public void FlushPending()
     {
     }
 }

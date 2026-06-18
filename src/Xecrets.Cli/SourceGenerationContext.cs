@@ -26,9 +26,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-using AxCrypt.Api.Model;
-
-using Xecrets.Cli.Implementation;
 using Xecrets.Cli.Log;
 using Xecrets.Cli.Public;
 
@@ -36,7 +33,6 @@ namespace Xecrets.Cli;
 
 [JsonSourceGenerationOptions(WriteIndented = false)]
 [JsonSerializable(typeof(CliMessage))]
-[JsonSerializable(typeof(UserAccounts))]
 [JsonSerializable(typeof(Dictionary<string, object>))]
 [JsonSerializable(typeof(XfSlip39.ShareSet))]
 [JsonSerializable(typeof(XfSlip39.Prefixes))]

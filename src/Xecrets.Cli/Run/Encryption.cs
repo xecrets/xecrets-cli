@@ -23,100 +23,71 @@
 
 #endregion Copyright and GPL License
 
-using AxCrypt.Abstractions;
-using AxCrypt.Core;
-using AxCrypt.Core.Crypto;
-using AxCrypt.Core.Crypto.Asymmetric;
-using AxCrypt.Core.IO;
-using AxCrypt.Core.UI;
-
-using Xecrets.Cli.Abstractions;
-
-using static AxCrypt.Abstractions.TypeResolve;
-
 namespace Xecrets.Cli.Run;
 
 internal sealed class Encryption : IDisposable
 {
-    private IAxCryptDocument _document;
+    private readonly IFile _fromFile;
 
-    private readonly IStandardIoDataStore _fromStore;
+    private readonly EncryptRequest _request;
 
-    private readonly IProgressContext _progress;
+    private readonly ICoreServices _coreServices;
 
-    private Encryption(IStandardIoDataStore fromStore, EncryptionParameters encryptionParameters, IProgressContext progress)
+    private Encryption(IFile fromFile, EncryptRequest request, ICoreServices coreServices)
     {
-        _document = New<AxCryptFactory>().CreateDocument(encryptionParameters);
-        _fromStore = fromStore;
-        _progress = progress;
+        _fromFile = fromFile;
+        _request = request;
+        _coreServices = coreServices;
     }
 
-    public static async Task<Encryption> CreateAsync(IStandardIoDataStore fromStore, Parameters parameters)
+    public static Task<Encryption> CreateAsync(IFile fromFile, Parameters parameters)
     {
-        if (parameters.EncryptLikeCredentials == null)
+        string passphrase;
+        IReadOnlyList<PublicKey> recipients;
+        IReadOnlyList<PublicKey> masterKeys;
+        if (parameters.EncryptedWithParameters == EncryptedWithParameters.Empty)
         {
-            IEnumerable<UserPublicKey> userPublicKeys = parameters.PublicKeys.Where(pk => parameters.SharingEmails.Contains(pk.Email));
-
-            return Create(fromStore, parameters.Identities, userPublicKeys, parameters.Progress);
+            passphrase = parameters.Identities.First(id => id.Passphrase.Length > 0).Passphrase;
+            recipients = [.. parameters.PublicKeys.Where(pk => parameters.SharingEmails.Contains(pk.Email))];
+            masterKeys = [];
+        }
+        else
+        {
+            EncryptedWithParameters encryptedWith = parameters.EncryptedWithParameters;
+            passphrase = encryptedWith.Passphrase.Length > 0
+                ? encryptedWith.Passphrase
+                : parameters.Identities.First(id => id.Passphrase.Length > 0).Passphrase;
+            recipients = [.. encryptedWith.Recipients.Concat(parameters.PublicKeys.Where(pk => parameters.SharingEmails.Contains(pk.Email)))];
+            masterKeys = encryptedWith.MasterKeys;
+            parameters.EncryptedWithParameters = EncryptedWithParameters.Empty;
         }
 
-        EncryptLikeCredentials likeCredentials = parameters.EncryptLikeCredentials;
-
-        List<Passphrase> passphrases = [likeCredentials.Passphrase];
-        passphrases.AddRange(parameters.Identities.Select(id => id.Passphrase));
-        EncryptionParameters encryptionParameters = new(new V2Aes256CryptoFactory().CryptoId, passphrases.First(p => p != Passphrase.Empty));
-        
-        encryptionParameters.AddOrReplace(likeCredentials.Recipients);
-        encryptionParameters.AddOrReplace(parameters.PublicKeys.Where(pk => parameters.SharingEmails.Contains(pk.Email)));
-        if (likeCredentials.MasterKeys.Any())
-        {
-            encryptionParameters.MasterPublicKey = likeCredentials.MasterKeys.First();
-            await encryptionParameters.AddMasterPublicKeyAsync(likeCredentials.MasterKeys);
-        }
-
-        parameters.EncryptLikeCredentials = null;
-        return new(fromStore, encryptionParameters, parameters.Progress);
+        EncryptRequest request = new(
+            passphrase,
+            recipients,
+            masterKeys,
+            string.Empty,
+            fromFile.CreationTimeUtc,
+            fromFile.LastAccessTimeUtc,
+            fromFile.LastWriteTimeUtc,
+            Compress: true,
+            Progress: parameters.Progress);
+        return Task.FromResult(new Encryption(fromFile, request, parameters.CoreServices));
     }
 
-    private static Encryption Create(IStandardIoDataStore fromStore, IEnumerable<LogOnIdentity> identities, IEnumerable<UserPublicKey> publicKeys, IProgressContext progress)
+    public async Task EncryptToAsync(Stream toStream, string originalFileName, bool compress)
     {
-        EncryptionParameters encryptionParameters = new(new V2Aes256CryptoFactory().CryptoId, identities.First(id => id.Passphrase != Passphrase.Empty));
-        encryptionParameters.AddOrReplace(publicKeys);
+        await using Stream fromStream = _fromFile.OpenRead();
 
-        return new(fromStore, encryptionParameters, progress);
-    }
-
-    public void EncryptTo(IStandardIoDataStore toStore, string originalFileName, AxCryptOptions options)
-    {
-        try
+        EncryptRequest request = _request with
         {
-            using Stream fromStream = new ProgressStream(_fromStore.OpenRead(), _progress);
-            using Stream toStream = toStore.OpenWrite();
-
-            _document.FileName = originalFileName;
-            _document.CreationTimeUtc = _fromStore.CreationTimeUtc;
-            _document.LastAccessTimeUtc = _fromStore.LastAccessTimeUtc;
-            _document.LastWriteTimeUtc = _fromStore.LastWriteTimeUtc;
-
-            _document.EncryptTo(fromStream, toStream, options);
-        }
-        catch
-        {
-            if (!toStore.IsStdIo && toStore.IsAvailable)
-            {
-                using var destinationLock = New<FileLocker>().Acquire(toStore);
-                new AxCryptFile().Wipe(destinationLock, new ProgressContext());
-            }
-            throw;
-        }
+            OriginalFileName = originalFileName,
+            Compress = compress,
+        };
+        await _coreServices.EncryptAsync(fromStream, toStream, request);
     }
 
     public void Dispose()
     {
-        if (_document != null)
-        {
-            _document.Dispose();
-            _document = null!;
-        }
     }
 }

@@ -23,19 +23,14 @@
 
 #endregion Copyright and GPL License
 
-using AxCrypt.Abstractions;
-
-using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
-
-using static AxCrypt.Abstractions.TypeResolve;
 
 namespace Xecrets.Cli.Operation;
 
 internal class DecryptToFolderOperation : DecryptOperationBase
 {
-    protected override (Status, IStandardIoDataStore) ToStore(Parameters parameters, string originalFileName)
+    protected override (Status, IFile) ToStore(Parameters parameters, string originalFileName)
     {
         Status status;
         string toFolder = ToFolder(parameters.Arg1, parameters.Arg2);
@@ -45,7 +40,7 @@ internal class DecryptToFolderOperation : DecryptOperationBase
             return (status, null!);
         }
 
-        IStandardIoDataStore toFolderStore = New<IStandardIoDataStore>(toFolder);
+        IFile toFolderStore = parameters.DesktopServices.StandardIoFile(toFolder);
         if (toFolderStore.IsStdIo)
         {
             status = new Status(XfStatusCode.NotSupported, parameters, "Decryption to a stream {0} is not supported when decrypting to a folder.".Format(toFolderStore.Name));
@@ -53,7 +48,7 @@ internal class DecryptToFolderOperation : DecryptOperationBase
         }
 
         string toPath = Path.Combine(toFolder, originalFileName);
-        IStandardIoDataStore toFreeStore = toPath.FindFree(parameters);
+        IFile toFreeStore = toPath.FindFreeFile(parameters);
         if (!toFreeStore.VerifyCanWrite(parameters, out status))
         {
             return (status, null!);

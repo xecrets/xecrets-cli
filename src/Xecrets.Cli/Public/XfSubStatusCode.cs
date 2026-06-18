@@ -46,7 +46,7 @@ internal enum XfSubStatusCode
     Slip39InvalidChecksum = 1010,
 
     /// <summary>
-    /// Group specification or actual group meta data is invalid. Check the exception message for details.
+    /// Group specification or actual group metadata is invalid. Check the exception message for details.
     /// </summary>
     Slip39InvalidGroups = 1020,
 
@@ -56,7 +56,7 @@ internal enum XfSubStatusCode
     Slip39InsufficientShares = 1030,
 
     /// <summary>
-    /// The set of shares have inconsistent meta data. Check the exception message for details.
+    /// The set of shares have inconsistent metadata. Check the exception message for details.
     /// </summary>
     Slip39InconsistentShares = 1040,
 

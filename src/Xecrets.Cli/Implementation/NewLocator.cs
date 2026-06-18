@@ -4,7 +4,7 @@
  * Xecrets Cli - Copyright © 2022-2025 Svante Seleborg, All Rights Reserved.
  *
  * This code file is part of Xecrets Cli, parts of which in turn are derived from AxCrypt as licensed under GPL v3 or later.
- * 
+ *
  * However, this code is not derived from AxCrypt and is separately copyrighted and only licensed as follows unless
  * explicitly licensed otherwise. If you use any part of this code in your software, please see https://www.gnu.org/licenses/
  * for details of what this means for you.
@@ -19,20 +19,32 @@
  *
  * The source repository can be found at https://github.com/ please go there for more information, suggestions and
  * contributions. You may also visit https://www.axantum.com for more information about the author.
-*/
+ */
 
 #endregion Copyright and GPL License
 
-using AxCrypt.Abstractions;
+using Microsoft.Extensions.DependencyInjection;
 
 using Xecrets.Licensing.Abstractions;
 
 namespace Xecrets.Cli.Implementation;
 
-internal class NewLocator : INewLocator
+internal sealed class NewLocator(IServiceProvider serviceProvider) : INewLocator
 {
+    private ILicenseExpiration? _licenseExpirationOverride;
+
+    public void UseLicenseExpiration(ILicenseExpiration licenseExpiration)
+    {
+        _licenseExpirationOverride = licenseExpiration;
+    }
+
     public T New<T>() where T : class
     {
-        return TypeResolve.New<T>();
+        if (typeof(T) == typeof(ILicenseExpiration) && _licenseExpirationOverride != null)
+        {
+            return (T)_licenseExpirationOverride;
+        }
+
+        return serviceProvider.GetRequiredService<T>();
     }
 }

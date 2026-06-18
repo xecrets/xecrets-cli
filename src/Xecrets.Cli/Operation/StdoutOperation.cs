@@ -23,10 +23,7 @@
 
 #endregion Copyright and GPL License
 
-using AxCrypt.Abstractions;
-
 using Xecrets.Cli.Abstractions;
-using Xecrets.Cli.Log;
 using Xecrets.Cli.Run;
 
 namespace Xecrets.Cli.Operation;
@@ -36,7 +33,7 @@ internal class StdoutOperation : IExecutionPhases
     public Task<Status> DryAsync(Parameters parameters)
     {
         TextWriter writer = parameters.Flag ? Console.Out : Console.Error;
-        TypeMap.Register.Singleton(() => new ConsoleOut(writer));
+        parameters.CliServices.UseConsoleOut(writer);
         parameters.IsStdoutLog = true;
         return Task.FromResult(Status.Success);
     }

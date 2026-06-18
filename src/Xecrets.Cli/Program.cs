@@ -4,7 +4,7 @@
  * Xecrets Cli - Copyright © 2022-2025 Svante Seleborg, All Rights Reserved.
  *
  * This code file is part of Xecrets Cli, parts of which in turn are derived from AxCrypt as licensed under GPL v3 or later.
- * 
+ *
  * However, this code is not derived from AxCrypt and is separately copyrighted and only licensed as follows unless
  * explicitly licensed otherwise. If you use any part of this code in your software, please see https://www.gnu.org/licenses/
  * for details of what this means for you.
@@ -19,24 +19,14 @@
  *
  * The source repository can be found at https://github.com/ please go there for more information, suggestions and
  * contributions. You may also visit https://www.axantum.com for more information about the author.
-*/
+ */
 
 #endregion Copyright and GPL License
 
 using System.Runtime.CompilerServices;
 using System.Text;
 
-using AxCrypt.Abstractions;
-using AxCrypt.Abstractions.Algorithm;
-using AxCrypt.Core;
-using AxCrypt.Core.Crypto;
-using AxCrypt.Core.Crypto.Asymmetric;
-using AxCrypt.Core.IO;
-using AxCrypt.Core.Portable;
-using AxCrypt.Core.Runtime;
-using AxCrypt.Core.UI;
-using AxCrypt.Mono;
-using AxCrypt.Mono.Portable;
+using Microsoft.Extensions.DependencyInjection;
 
 using Xecrets.Cli;
 using Xecrets.Cli.Abstractions;
@@ -45,14 +35,11 @@ using Xecrets.Cli.Log;
 using Xecrets.Cli.Properties;
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
+using Xecrets.Core.Desktop;
+using Xecrets.Core.Public;
 using Xecrets.Licensing.Abstractions;
 using Xecrets.Licensing.Implementation;
-using Xecrets.Net.Api.Implementation;
-using Xecrets.Net.Core;
-using Xecrets.Net.Core.Crypto.Asymmetric;
 using Xecrets.Slip39;
-
-using static AxCrypt.Abstractions.TypeResolve;
 
 [assembly: InternalsVisibleTo("Xecrets.Cli.Test")]
 
@@ -60,91 +47,30 @@ Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
 OptionsParser parser = new(Environment.CommandLine);
 
-TypeMap.Register.Singleton(() => new CancelSignal());
-TypeMap.Register.Singleton<IRuntimeEnvironment>(() => new AxCrypt.Mono.RuntimeEnvironment(".axx"));
-TypeMap.Register.Singleton<IPortableFactory>(() => new PortableFactory());
-TypeMap.Register.Singleton<ILogging>(() => new Logging());
-TypeMap.Register.Singleton<IPlatform>(() => new MonoPlatform());
-TypeMap.Register.Singleton<IPath>(() => new PortablePath());
+var workFolder = parser.WorkFolder.Length > 0
+    ? parser.WorkFolder.NormalizeDirectorySeparator()
+    : Path.Combine(Path.GetTempPath(), "Axantum/XecretsCli".NormalizeDirectorySeparator());
 
-TypeMap.Register.New<string, IDataStore>((path) => new DataStore(path));
-TypeMap.Register.New<string, IDataContainer>((path) => new DataContainer(path));
-TypeMap.Register.New<string, IDataItem>((path) => DataItem.Create(path));
-
-string workFolder;
-if (parser.WorkFolder.Length > 0)
-{
-    workFolder = parser.WorkFolder.NormalizeDirectorySeparator();
-}
-else
-{
-    workFolder = Path.Combine(Path.GetTempPath(), "Axantum/XecretsCli".NormalizeDirectorySeparator());
-}
 Directory.CreateDirectory(workFolder);
 
-TypeMap.Register.Singleton(() => new UserSettingsVersion());
-TypeMap.Register.Singleton(() => new UserSettings(New<ISettingsStore>(), New<IterationCalculator>()));
-TypeMap.Register.Singleton<IRandomGenerator>(() => new RandomGenerator());
-TypeMap.Register.Singleton<IAsymmetricFactory>(() => new NetAsymmetricFactory());
-TypeMap.Register.Singleton<IProtectedData>(() => new NoProtectedDataImplementation());
-TypeMap.Register.Singleton(() => new CryptoFactory([]));
+await using ServiceProvider serviceProvider = new ServiceCollection()
+    .AddXecretsCore()
+    .AddXecretsCoreDesktop(workFolder, "xecrets-cli-settings.json", "xecrets-cli-exceptions.txt",
+        maxReportFileLength: 1024 * 1024)
+    .AddLicensing()
+    .AddSingleton(TimeProvider.System)
+    .AddSingleton<CancelSignal>()
+    .AddSingleton(_ => new ConsoleOut(Console.Error))
+    .AddSingleton<IInUseBy>(_ => Platform.IsWindows ? new InUseByWindows() : new InUseByUnsupported())
+    .AddSingleton<IShamirsSecretSharing>(_ => new ShamirsSecretSharing(new StrongRandom()))
+    .AddSingleton<CliServices>()
+    .BuildServiceProvider();
 
-TypeMap.Register.New(() => new AxCryptFactory());
-TypeMap.Register.New(() => new AxCryptFile());
-TypeMap.Register.New<int, Salt>((size) => new Salt(size));
-TypeMap.Register.New(() => new IterationCalculator());
-TypeMap.Register.Singleton<IStringSerializer>(() => new SystemTextJsonStringSerializer(JsonSourceGenerationContext.CreateJsonSerializerContext(New<IAsymmetricFactory>().GetConverters())));
+CliServices cliServices = serviceProvider.GetRequiredService<CliServices>();
+await cliServices.License.LoadFromAsync(cliServices.LicenseCandidates.CandidatesFromFiles(
+    cliServices.BuildUtc.IsGplBuild ? [] : Directory.GetFiles(AppContext.BaseDirectory, "*.txt")));
 
-TypeMap.Register.Singleton(() => new WorkFolder(workFolder), () => { });
-
-TypeMap.Register.Singleton(() => new FileLocker());
-TypeMap.Register.New(() => PortableFactory.AxCryptHMACSHA1());
-TypeMap.Register.New<HMACSHA512>(() => new AxCrypt.Mono.Cryptography.HMACSHA512Wrapper(new AxCrypt.Desktop.Cryptography.HMACSHA512CryptoServiceProvider()));
-TypeMap.Register.New<Aes>(() => new AxCrypt.Mono.Cryptography.AesWrapper(System.Security.Cryptography.Aes.Create()));
-TypeMap.Register.New<Sha1>(() => PortableFactory.SHA1Managed());
-TypeMap.Register.New<Sha256>(() => PortableFactory.SHA256Managed());
-TypeMap.Register.New<CryptoStreamBase>(() => PortableFactory.CryptoStream());
-TypeMap.Register.New(() => PortableFactory.RandomNumberGenerator());
-TypeMap.Register.New<ISystemCryptoPolicy>(() => new ProCryptoPolicy());
-
-TypeMap.Register.Singleton<IReport>(() => new XecretsCliReport("xecrets-cli-exceptions.txt", maxReportFileLength: 1024 * 1024));
-TypeMap.Register.Singleton(() => TimeProvider.System);
-TypeMap.Register.Singleton<INow>(() => new TimeProviderNow());
-
-// Avoid JSON deserialization errors when the user settings file is empty.
-IDataStore settings = Resolve.WorkFolder.FileInfo.FileItemInfo("xecrets-cli-settings.json");
-if (settings.IsAvailable && settings.Length() == 0)
-{
-    settings.Delete();
-}
-TypeMap.Register.Singleton<ISettingsStore>(() => new SettingsStore(settings));
-
-TypeMap.Register.Singleton(() => new ConsoleOut(Console.Error));
-TypeMap.Register.Singleton<IEmailParser>(() => new EmailParser());
-TypeMap.Register.Singleton(() => new Splash(Resource.splash));
-TypeMap.Register.Singleton(() => new RewindableStdinStream());
-TypeMap.Register.New<string, IStandardIoDataStore>((path) => new StandardIoDataStore(path));
-TypeMap.Register.Singleton<IFileVerify>(() => new FileVerify());
-TypeMap.Register.Singleton<IBuildUtc>(() => new BuildUtc(typeof(Program)));
-TypeMap.Register.Singleton<ILicense>(() => new License(new NewLocator(), issuer: "xecrets@axantum.com", claim: "xflic.axantum.com", [Resource.LicensePublicKeyProduction, Resource.LicensePublicKeyTest], ["cli", "sdk"]));
-TypeMap.Register.Singleton<ILicenseCandidates>(() => new LicenseCandidates());
-TypeMap.Register.Singleton<ILicenseExpiration>(() => new LicenseExpirationByBuildTime(new NewLocator()));
-TypeMap.Register.Singleton(() => new LicenseBlurb(new NewLocator(), Resource.GplBlurb, Resource.UnlicensedBlurb, Resource.LicensedExpiredDownloadBlurb, Resource.LicensedDownloadBlurb, Resource.LicenseNotValidForProductBlurb));
-
-if (OperatingSystem.IsWindows())
-{
-    TypeMap.Register.Singleton<IInUseBy>(() => new InUseByWindows());
-}
-else
-{
-    TypeMap.Register.Singleton<IInUseBy>(() => new InUseByUnsupported());
-}
-
-TypeMap.Register.Singleton<IShamirsSecretSharing>(() => new ShamirsSecretSharing(new StrongRandom()));
-
-await New<ILicense>().LoadFromAsync(New<ILicenseCandidates>().CandidatesFromFiles(New<IBuildUtc>().IsGplBuild ? [] : Directory.GetFiles(AppContext.BaseDirectory, "*.txt")));
-
-Parameters parameters = new(parser);
+Parameters parameters = new(parser, cliServices);
 
 Status status;
 try
@@ -175,9 +101,13 @@ catch (Exception ex)
 if (status != Status.Success && parameters.CrashLogFile.Length > 0)
 {
     File.WriteAllText(parameters.CrashLogFile, $"Cli status code: '{status.StatusCode}' ({(int)status.StatusCode})." +
-        (status.Arg1.Length == 0 ? string.Empty : $"{Environment.NewLine}Arg1 = '{status.Arg1}'") +
-        (status.Arg2.Length == 0 ? string.Empty : $"{Environment.NewLine}Arg2 = '{status.Arg2}'") +
-        Environment.NewLine + Environment.NewLine + status.Message);
+                                               (status.Arg1.Length == 0
+                                                   ? string.Empty
+                                                   : $"{Environment.NewLine}Arg1 = '{status.Arg1}'") +
+                                               (status.Arg2.Length == 0
+                                                   ? string.Empty
+                                                   : $"{Environment.NewLine}Arg2 = '{status.Arg2}'") +
+                                               Environment.NewLine + Environment.NewLine + status.Message);
 }
 
 await WaitForKeyPressedOrTimeoutWhenStartedWithoutArguments(args, status);
@@ -201,4 +131,27 @@ static async Task WaitForKeyPressedOrTimeoutWhenStartedWithoutArguments(string[]
             totalMsWait += 100;
         }
     });
+}
+
+static file class Extensions
+{
+    public static IServiceCollection AddLicensing(this IServiceCollection services)
+    {
+        services
+            .AddSingleton<IBuildUtc>(_ => new BuildUtc(typeof(Program)))
+            .AddSingleton<ILicenseCandidates, LicenseCandidates>()
+            .AddSingleton<NewLocator>() // Needed for the ILicenseExpiration override, as it is used in the NewLocator constructor
+            .AddSingleton<INewLocator>(sp => sp.GetRequiredService<NewLocator>())
+            .AddSingleton<ILicenseExpiration>(sp => new LicenseExpirationByBuildTime(sp.GetRequiredService<INewLocator>()))
+            .AddSingleton<ILicense>(sp => new License(sp.GetRequiredService<INewLocator>(), issuer: "xecrets@axantum.com",
+                claim: "xflic.axantum.com", [Resource.LicensePublicKeyProduction, Resource.LicensePublicKeyTest],
+                ["cli", "sdk"]))
+            .AddSingleton(sp => new LicenseBlurb(sp.GetRequiredService<INewLocator>(), Resource.GplBlurb,
+                Resource.UnlicensedBlurb, Resource.LicensedExpiredDownloadBlurb, Resource.LicensedDownloadBlurb,
+                Resource.LicenseNotValidForProductBlurb))
+            .AddSingleton(sp =>
+                new Splash(Resource.splash, sp.GetRequiredService<IBuildUtc>(), sp.GetRequiredService<LicenseBlurb>()));
+
+        return services;
+    }
 }

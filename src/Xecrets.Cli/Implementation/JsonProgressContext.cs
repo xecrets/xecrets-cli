@@ -25,11 +25,8 @@
 
 using System.Text.Json;
 
-using AxCrypt.Core.UI;
 using Xecrets.Cli.Log;
 using Xecrets.Cli.Public;
-
-using static AxCrypt.Abstractions.TypeResolve;
 
 namespace Xecrets.Cli.Implementation;
 
@@ -43,19 +40,19 @@ internal class JsonProgressContext : NoProgressContext
 
     protected override void OnProgressing(ProgressEventArgs e)
     {
-        New<Splash>().Write(m => JsonConsoleOut(new CliMessage() { OpCode = (int)XfOpCode.SdkCliSplash, OpCodeName = XfOpCode.SdkCliSplash.ToString(), Message = m, }));
+        TotalsTracker.CliServices.Splash.Write(m => JsonConsoleOut(new CliMessage() { OpCode = (int)XfOpCode.SdkCliSplash, OpCodeName = nameof(XfOpCode.SdkCliSplash), Message = m, }));
 
         var progressMessage = new CliMessage()
         {
             OpCode = (int)XfOpCode.Progressing,
-            OpCodeName = XfOpCode.Progressing.ToString(),
+            OpCodeName = nameof(XfOpCode.Progressing),
             Display = e.Display,
             Percent = e.Percent,
             TotalWork = TotalsTracker.TotalWork,
             TotalDone = TotalsTracker.TotalDone,
             TotalPercent = TotalsTracker.TotalWork == 0 ? 0 : (int)(TotalsTracker.TotalDone * 100 / TotalsTracker.TotalWork),
             Status = (int)XfStatusCode.Success,
-            StatusName = XfStatusCode.Success.ToString(),
+            StatusName = nameof(XfStatusCode.Success),
             Id = TotalsTracker.Id.Length > 0 ? TotalsTracker.Id : null,
         };
         JsonConsoleOut(progressMessage);
@@ -63,9 +60,9 @@ internal class JsonProgressContext : NoProgressContext
         base.OnProgressing(e);
     }
 
-    private static void JsonConsoleOut(CliMessage jsonMessage)
+    private void JsonConsoleOut(CliMessage jsonMessage)
     {
         var json = JsonSerializer.Serialize(jsonMessage, typeof(CliMessage), SourceGenerationContext.Default);
-        New<ConsoleOut>().WriteLine(json);
+        TotalsTracker.CliServices.ConsoleOut.WriteLine(json);
     }
 }

@@ -36,12 +36,12 @@ internal class GplLicenseOperation : IExecutionPhases
         return Task.FromResult(Status.Success);
     }
 
-    private static readonly string _sep = Environment.NewLine + Environment.NewLine;
+    private static readonly string Sep = Environment.NewLine + Environment.NewLine;
 
     public Task<Status> RealAsync(Parameters parameters)
     {
         parameters.Logger.Log(new Status(parameters,
-            Resource.contributors + _sep + Resource.gpl_3_0 + _sep + Resource.mit));
+            Resource.contributors + Sep + Resource.gpl_3_0 + Sep + Resource.mit));
         parameters.Logger.Log(string.Empty);
 
         return Task.FromResult(Status.Success);

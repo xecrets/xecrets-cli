@@ -27,22 +27,17 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Text.Json;
 
-using AxCrypt.Abstractions;
-
 using Xecrets.Cli.Abstractions;
-using Xecrets.Cli.Implementation;
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
 using Xecrets.Slip39;
-
-using static AxCrypt.Abstractions.TypeResolve;
 
 namespace Xecrets.Cli.Operation;
 
 internal class Slip39InformationOperation : IExecutionPhases
 {
     [AllowNull]
-    private IStandardIoDataStore _toStore;
+    private IFile _toStore;
 
     public Task<Status> DryAsync(Parameters parameters) =>
         Extensions.Slip39Safe(() => VerifyOperationInternal(parameters));
@@ -79,7 +74,7 @@ internal class Slip39InformationOperation : IExecutionPhases
         return Status.Success;
     }
 
-    private static void OutputVerification(XfSlip39.Prefixes prefixes, Parameters parameters, IStandardIoDataStore toStore)
+    private static void OutputVerification(XfSlip39.Prefixes prefixes, Parameters parameters, IFile toStore)
     {
         if (parameters.ProgrammaticUse)
         {
@@ -117,8 +112,8 @@ internal class Slip39InformationOperation : IExecutionPhases
         }
 
         string toStore = parameters.Arg1.Length > 0 ? parameters.Arg1 : "+";
-        _toStore = New<IStandardIoDataStore>(toStore);
-        if (!New<IFileVerify>().CanWriteToFile(_toStore))
+        _toStore = parameters.DesktopServices.StandardIoFile(toStore);
+        if (!parameters.DesktopServices.CanWriteToFile(_toStore))
         {
             return new Status(XfStatusCode.CannotWrite, parameters,
                 "The file path '{0}' cannot be written to.".Format(_toStore.Name));

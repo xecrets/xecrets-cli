@@ -24,11 +24,11 @@
 #endregion Copyright and GPL License
 
 using System.Runtime.InteropServices;
+
+using Xecrets.Core.Public;
 using Xecrets.Licensing;
 using Xecrets.Licensing.Abstractions;
 using Xecrets.Licensing.Implementation;
-
-using static AxCrypt.Abstractions.TypeResolve;
 
 namespace Xecrets.Cli.Log;
 
@@ -38,19 +38,19 @@ internal class Splash
 
     private bool _written;
 
-    public Splash(string splash)
+    public Splash(string splash, IBuildUtc buildUtc, LicenseBlurb licenseBlurb)
     {
         string runtime;
         string archString = RuntimeInformation.OSArchitecture.ToString().ToLowerInvariant();
-        if (OperatingSystem.IsMacOS())
+        if (Platform.IsMacOS)
         {
             runtime = $"macos-{archString}";
         }
-        else if (OperatingSystem.IsLinux())
+        else if (Platform.IsLinux)
         {
             runtime = $"linux-{archString}";
         }
-        else if (OperatingSystem.IsWindows())
+        else if (Platform.IsWindows)
         {
             runtime = $"win-{archString}";
         }
@@ -58,13 +58,13 @@ internal class Splash
         {
             runtime = $"unknown-{archString}";
         }
-        string buildUtc = New<IBuildUtc>().BuildUtcText;
+        string buildUtcText = buildUtc.BuildUtcText;
         _splash = splash
-            .Replace("{gpl} ", New<IBuildUtc>().IsGplBuild ? "GPL " : string.Empty)
+            .Replace("{gpl} ", buildUtc.IsGplBuild ? "GPL " : string.Empty)
             .Replace("{version}", GetType().Assembly.GetName().Version?.ToString() ?? "0.0.0.0")
-            .Replace("{buildutc}", buildUtc.FromUtc().ToLocal())
+            .Replace("{buildutc}", buildUtcText.FromUtc().ToLocal())
             .Replace("{runtime}", runtime)
-            .Replace("{blurb}", New<LicenseBlurb>().ToString());
+            .Replace("{blurb}", licenseBlurb.ToString());
     }
 
     public void Write(Action<string> splashWriter)

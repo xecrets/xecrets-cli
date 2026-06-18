@@ -23,11 +23,7 @@
 
 #endregion Copyright and GPL License
 
-using AxCrypt.Core.UI;
-
 using Xecrets.Cli.Log;
-
-using static AxCrypt.Abstractions.TypeResolve;
 
 namespace Xecrets.Cli.Implementation;
 
@@ -40,15 +36,15 @@ internal class TextProgressContext : NoProgressContext
 
     protected override void OnProgressing(ProgressEventArgs e)
     {
-        New<Splash>().Write(m => { New<ConsoleOut>().WriteLine(m); New<ConsoleOut>().BlankLinePending = true; });
+        TotalsTracker.CliServices.Splash.Write(m => { TotalsTracker.CliServices.ConsoleOut.WriteLine(m); TotalsTracker.CliServices.ConsoleOut.BlankLinePending = true; });
 
         int workingItem = e.Percent < 100 && TotalsTracker.ItemsDone < TotalsTracker.ItemsTotal ? TotalsTracker.ItemsDone + 1 : TotalsTracker.ItemsDone;
         long current100 = TotalsTracker.TotalDone * 100;
         int totalPercent = TotalsTracker.TotalWork == 0 ? 0 : (int)(current100 / TotalsTracker.TotalWork);
 
-        var m = $"{Display} {e.Percent}% - {workingItem}({TotalsTracker.ItemsTotal}) {totalPercent}%";
+        string m = $"{Display} {e.Percent}% - {workingItem}({TotalsTracker.ItemsTotal}) {totalPercent}%";
 
-        New<ConsoleOut>().WriteReturn(m);
+        TotalsTracker.CliServices.ConsoleOut.WriteReturn(m);
 
         base.OnProgressing(e);
     }

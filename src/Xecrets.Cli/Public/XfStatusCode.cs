@@ -28,11 +28,11 @@ namespace Xecrets.Cli.Public;
 /// <summary>
 /// Status codes for messages and also exit codes. They must be fixed since
 /// external programs may need to interpret them correctly and not be
-/// confused by changes. The maximum code must be <= 127 to accomodate Linux/macOS
+/// confused by changes. The maximum code must be l.e. 127 to accomodate Linux and macOS
 /// restrictions.
 /// </summary>
 /// <remarks>
-/// Uses an 'Xf' prefix to distinguish itself, since its name is very generic.
+/// Uses a 'Xf' prefix to distinguish itself, since its name is very generic.
 /// </remarks>
 public enum XfStatusCode
 {

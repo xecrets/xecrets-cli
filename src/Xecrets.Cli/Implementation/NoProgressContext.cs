@@ -25,16 +25,14 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-using AxCrypt.Core.UI;
-
 using Xecrets.Cli.Log;
+using Xecrets.Core.Implementation;
 
 namespace Xecrets.Cli.Implementation;
 
 internal class NoProgressContext(TimeSpan timeToFirstProgress, TimeSpan progressTimeInterval) : ProgressContext(timeToFirstProgress, progressTimeInterval)
 {
-    [AllowNull]
-    public TotalsTracker TotalsTracker { get; set; }
+    [AllowNull] protected TotalsTracker TotalsTracker { get; init; }
 
     public NoProgressContext()
         : this(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1))

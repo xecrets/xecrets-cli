@@ -23,13 +23,9 @@
 
 #endregion Copyright and GPL License
 
-using AxCrypt.Abstractions;
-using AxCrypt.Core.Runtime;
-
 using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Run;
-
-using static AxCrypt.Abstractions.TypeResolve;
+using Xecrets.Core.Public;
 
 namespace Xecrets.Cli.Operation;
 
@@ -43,7 +39,14 @@ internal class CliPlatformOperation : IExecutionPhases
     public Task<Status> RealAsync(Parameters parameters)
     {
         string version = GetType().Assembly.GetName().Version?.ToString() ?? "0.0.0.0";
-        string platform = New<IRuntimeEnvironment>().Platform.ToString();
+        string platform = Platform.IsWindows
+            ? "Windows"
+            : Platform.IsMacOS
+                ? "macOS"
+                : Platform.IsLinux
+                    ? "Linux"
+                    : "Unknown";
+        
         parameters.Logger.Log(new Status(parameters, "'{0}' version {1}".Format(platform, version))
         {
             Platform = platform,

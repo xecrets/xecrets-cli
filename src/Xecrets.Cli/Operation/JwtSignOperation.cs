@@ -25,16 +25,12 @@
 
 using System.Security.Cryptography;
 
-using AxCrypt.Abstractions;
-
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 
 using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
-
-using static AxCrypt.Abstractions.TypeResolve;
 
 namespace Xecrets.Cli.Operation;
 
@@ -47,10 +43,10 @@ internal class JwtSignOperation : IExecutionPhases
     /// <returns></returns>
     public Task<Status> DryAsync(Parameters parameters)
     {
-        var signedTokenStore = New<IStandardIoDataStore>(parameters.Arg1);
-        if (!New<IFileVerify>().CanWriteToFile(signedTokenStore))
+        IFile signedTokenFile = parameters.DesktopServices.StandardIoFile(parameters.Arg1);
+        if (!parameters.DesktopServices.CanWriteToFile(signedTokenFile))
         {
-            return Task.FromResult(new Status(XfStatusCode.CannotWrite, parameters, "Can't write to '{0}'.".Format(signedTokenStore.Name)));
+            return Task.FromResult(new Status(XfStatusCode.CannotWrite, parameters, "Can't write to '{0}'.".Format(signedTokenFile.Name)));
         }
 
         return Task.FromResult(Status.Success);
@@ -78,10 +74,10 @@ internal class JwtSignOperation : IExecutionPhases
             return Task.FromResult(new Status(XfStatusCode.MissingArgument, "You must specify the claims of the signed token before the signing operation."));
         }
 
-        var now = New<INow>().Utc;
-        var handler = new JsonWebTokenHandler();
+        DateTime now = parameters.CliServices.TimeProvider.GetUtcNow().UtcDateTime;
+        JsonWebTokenHandler handler = new();
 
-        var key = ECDsa.Create();
+        ECDsa key = ECDsa.Create();
         key.ImportFromPem(parameters.JwtPrivateKeyPem.Replace("\\n", Environment.NewLine));
         string token = handler.CreateToken(new SecurityTokenDescriptor
         {
@@ -94,8 +90,8 @@ internal class JwtSignOperation : IExecutionPhases
             SigningCredentials = new SigningCredentials(new ECDsaSecurityKey(key), SecurityAlgorithms.EcdsaSha256)
         });
 
-        var signedTokenStore = New<IStandardIoDataStore>(parameters.Arg1);
-        using (TextWriter writer = new StreamWriter(signedTokenStore.OpenWrite()))
+        IFile signedTokenFile = parameters.DesktopServices.StandardIoFile(parameters.Arg1);
+        using (TextWriter writer = new StreamWriter(signedTokenFile.OpenWrite()))
         {
             writer.Write(token);
         }

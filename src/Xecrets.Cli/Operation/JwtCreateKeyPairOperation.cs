@@ -40,7 +40,7 @@ internal class JwtCreateKeyPairOperation : IExecutionPhases
     /// <returns></returns>
     public Task<Status> DryAsync(Parameters parameters)
     {
-        IStandardIoDataStore privateFreeStore = parameters.Arg1.FindFree(parameters);
+        IFile privateFreeStore = parameters.Arg1.FindFreeFile(parameters);
         if (!privateFreeStore.VerifyCanWrite(parameters, out Status status))
         {
             return Task.FromResult(status);
@@ -51,7 +51,7 @@ internal class JwtCreateKeyPairOperation : IExecutionPhases
             return Task.FromResult(Status.Success);
         }
 
-        IStandardIoDataStore publicFreeStore = parameters.Arguments[1].FindFree(parameters);
+        IFile publicFreeStore = parameters.Arguments[1].FindFreeFile(parameters);
         if (!publicFreeStore.VerifyCanWrite(parameters, out status))
         {
             return Task.FromResult(status);
@@ -62,7 +62,7 @@ internal class JwtCreateKeyPairOperation : IExecutionPhases
 
     public Task<Status> RealAsync(Parameters parameters)
     {
-        IStandardIoDataStore privateFreeStore = parameters.Arg1.FindFree(parameters);
+        IFile privateFreeStore = parameters.Arg1.FindFreeFile(parameters);
         if (!privateFreeStore.VerifyCanWrite(parameters, out Status status))
         {
             return Task.FromResult(status);
@@ -85,7 +85,7 @@ internal class JwtCreateKeyPairOperation : IExecutionPhases
             return Task.FromResult(Status.Success);
         }
 
-        IStandardIoDataStore publicFreeStore = parameters.Arguments[1].FindFree(parameters);
+        IFile publicFreeStore = parameters.Arguments[1].FindFreeFile(parameters);
         if (!publicFreeStore.VerifyCanWrite(parameters, out status))
         {
             return Task.FromResult(status);

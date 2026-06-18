@@ -25,19 +25,16 @@
 
 using System.Text.RegularExpressions;
 
-using AxCrypt.Abstractions;
-
 using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Operation;
 using Xecrets.Cli.Public;
-
-using static AxCrypt.Abstractions.TypeResolve;
+using Xecrets.Core.Public;
 
 namespace Xecrets.Cli.Run;
 
 internal abstract partial class RunFactory(Parameters parameters)
 {
-    const int ERROR_SHARING_VIOLATION = 32;
+    const int ErrorSharingViolation = 32;
 
     readonly Dictionary<XfOpCode, Func<IExecutionPhases>> _operationTable = new()
     {
@@ -112,20 +109,20 @@ internal abstract partial class RunFactory(Parameters parameters)
             {
                 status = factory.Parameters.IsDryRun ? await methods.DryAsync(factory.Parameters) : await methods.RealAsync(factory.Parameters);
             }
-            catch (XecretsCliException xfcex)
+            catch (CliException cex)
             {
-                status = new Status(xfcex.Status.StatusCode, xfcex.ToString());
+                status = new Status(cex.Status.StatusCode, cex.ToString());
             }
-            catch (AxCryptException acex)
+            catch (XecretsCoreException xcex)
             {
-                XfSubStatusCode subStatus = acex.ErrorStatus switch
+                XfSubStatusCode subStatus = xcex.ErrorCode switch
                 {
-                    ErrorStatus.Success => XfSubStatusCode.Success,
-                    ErrorStatus.ZeroLengthFile => XfSubStatusCode.ZeroLengthFile,
-                    ErrorStatus.MagicGuidMissing => XfSubStatusCode.InvalidMagicGuid,
+                    ErrorCode.Success => XfSubStatusCode.Success,
+                    ErrorCode.ZeroLengthFile => XfSubStatusCode.ZeroLengthFile,
+                    ErrorCode.MagicGuidMissing => XfSubStatusCode.InvalidMagicGuid,
                     _ => XfSubStatusCode.Unknown,
                 };
-                status = new Status(XfStatusCode.AxCryptException, subStatus, acex.ToString())
+                status = new Status(XfStatusCode.AxCryptException, subStatus, xcex.ToString())
                 {
                     Id = factory.Parameters.TotalsTracker.Id,
                     Arg1 = factory.Parameters.Arg1,
@@ -144,19 +141,19 @@ internal abstract partial class RunFactory(Parameters parameters)
             {
                 throw;
             }
-            catch (IOException ioex) when ((ioex.HResult & 0xFFFF) == ERROR_SHARING_VIOLATION)
+            catch (IOException ioex) when ((ioex.HResult & 0xFFFF) == ErrorSharingViolation)
             {
                 Match match = PathInMessageRegex().Match(ioex.Message);
                 string path = match.Success ? match.Groups[1].Value : string.Empty;
                 string lockedBy = string.Empty;
                 if (path.Length > 0)
                 {
-                    lockedBy = New<IInUseBy>().Path(path);
+                    lockedBy = factory.Parameters.CliServices.InUseBy.Path(path);
                 }
                 string msg = lockedBy.Length > 0 ? $"Locked by '{lockedBy}'" : "Locked by unknown process";
                 msg += Environment.NewLine;
                 
-                status = new Status(XfStatusCode.UnhandledOperationException, msg + ioex.ToString())
+                status = new Status(XfStatusCode.UnhandledOperationException, msg + ioex)
                 {
                     Id = factory.Parameters.TotalsTracker.Id,
                     Arg1 = factory.Parameters.Arg1,

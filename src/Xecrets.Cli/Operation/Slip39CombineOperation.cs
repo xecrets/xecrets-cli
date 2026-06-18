@@ -27,21 +27,17 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Text.Json;
 
-using AxCrypt.Abstractions;
-
 using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
 using Xecrets.Slip39;
-
-using static AxCrypt.Abstractions.TypeResolve;
 
 namespace Xecrets.Cli.Operation;
 
 internal class Slip39CombineOperation : IExecutionPhases
 {
     [AllowNull]
-    private IStandardIoDataStore _toStore;
+    private IFile _toStore;
 
     public Task<Status> DryAsync(Parameters parameters) =>
         Extensions.Slip39Safe(() => CombineOperationInternal(parameters));
@@ -57,7 +53,7 @@ internal class Slip39CombineOperation : IExecutionPhases
             return status;
         }
 
-        IShamirsSecretSharing sss = New<IShamirsSecretSharing>();
+        IShamirsSecretSharing sss = parameters.CliServices.ShamirsSecretSharing;
         GroupedShares groupedShares = sss.CombineShares([.. parameters.Slip39.Shares.Select(Share.Parse)],
             parameters.Slip39.Password);
 
@@ -140,8 +136,8 @@ internal class Slip39CombineOperation : IExecutionPhases
         parameters.Slip39.CombineFormat = formatOption;
 
         string toStore = parameters.Arg2.Length > 0 ? parameters.Arg2 : "+";
-        _toStore = New<IStandardIoDataStore>(toStore);
-        if (!New<IFileVerify>().CanWriteToFile(_toStore))
+        _toStore = parameters.DesktopServices.StandardIoFile(toStore);
+        if (!parameters.DesktopServices.CanWriteToFile(_toStore))
         {
             return new Status(XfStatusCode.CannotWrite, parameters,
                 "The file path '{0}' cannot be written to.".Format(_toStore.Name));

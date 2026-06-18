@@ -30,33 +30,33 @@ namespace Xecrets.Cli;
 
 internal class Status(XfStatusCode code, string message)
 {
-    public static Status Success = new(XfStatusCode.Success, string.Empty);
+    public static readonly Status Success = new(XfStatusCode.Success, string.Empty);
 
     public XfStatusCode StatusCode { get; } = code;
 
     public XfSubStatusCode SubStatusCode { get; } = XfSubStatusCode.Success;
 
-    public string Message { get; set; } = message ?? throw new ArgumentNullException(nameof(message));
+    public string Message { get; } = message ?? throw new ArgumentNullException(nameof(message));
 
     public XfOpCode OpCode { get; set; } = XfOpCode.None;
 
-    public string Id { get; set; } = string.Empty;
+    public string Id { get; init; } = string.Empty;
 
-    public string Arg1 { get; set; } = string.Empty;
+    public string Arg1 { get; init; } = string.Empty;
 
-    public string Arg2 { get; set; } = string.Empty;
+    public string Arg2 { get; init; } = string.Empty;
 
-    public string CliVersion { get; set; } = string.Empty;
+    public string CliVersion { get; init; } = string.Empty;
 
-    public string ProgramVersion { get; set; } = string.Empty;
+    public string ProgramVersion { get; init; } = string.Empty;
 
-    public string Platform { get; set; } = string.Empty;
+    public string Platform { get; init; } = string.Empty;
 
-    public string OriginalFileName { get; set; } = string.Empty;
+    public string OriginalFileName { get; init; } = string.Empty;
 
-    public string Result { get; set; } = string.Empty;
+    public string Result { get; init; } = string.Empty;
 
-    public DateTime Utc { get; set; }
+    public DateTime Utc { get; init; }
 
     public bool IsSuccess { get { return StatusCode == XfStatusCode.Success; } }
 

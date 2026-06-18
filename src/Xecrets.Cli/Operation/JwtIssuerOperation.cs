@@ -23,10 +23,6 @@
 
 #endregion Copyright and GPL License
 
-using AxCrypt.Abstractions;
-
-using AxCrypt.Core.UI;
-
 using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
@@ -37,9 +33,9 @@ internal class JwtIssuerOperation : IExecutionPhases
 {
     public Task<Status> DryAsync(Parameters parameters)
     {
-        if (!EmailAddress.TryParse(parameters.Arg1, out EmailAddress _))
+        if (!parameters.CoreServices.TryParseEmail(parameters.Arg1, out string? _))
         {
-            return Task.FromResult(new Status(XfStatusCode.InvalidEmail, "'{0}' is not a valid email.".Format(parameters.Arg1)));
+            return Task.FromResult(new Status(XfStatusCode.InvalidEmail, $"'{parameters.Arg1}' is not a valid email."));
         }
 
         return Task.FromResult(Status.Success);
@@ -47,7 +43,12 @@ internal class JwtIssuerOperation : IExecutionPhases
 
     public Task<Status> RealAsync(Parameters parameters)
     {
-        parameters.JwtIssuer = parameters.Arg1;
+        if (!parameters.CoreServices.TryParseEmail(parameters.Arg1, out string? email))
+        {
+            return Task.FromResult(new Status(XfStatusCode.InvalidEmail, $"'{parameters.Arg1}' is not a valid email."));
+        }
+
+        parameters.JwtIssuer = email;
 
         return Task.FromResult(Status.Success);
     }

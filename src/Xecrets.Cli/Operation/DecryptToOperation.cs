@@ -23,16 +23,15 @@
 
 #endregion Copyright and GPL License
 
-using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Run;
 
 namespace Xecrets.Cli.Operation;
 
 internal class DecryptToOperation : DecryptOperationBase
 {
-    protected override (Status, IStandardIoDataStore) ToStore(Parameters parameters, string originalFileName)
+    protected override (Status, IFile) ToStore(Parameters parameters, string originalFileName)
     {
-        IStandardIoDataStore toFreeStore = parameters.Arg2.FindFree(parameters);
+        IFile toFreeStore = parameters.Arg2.FindFreeFile(parameters);
         if (!toFreeStore.VerifyCanWrite(parameters, out Status status))
         {
             return (status, null!);

@@ -59,6 +59,11 @@
       "commandLineArgs": "--json-log\r\n--password b\r\n--password a\r\n--id 33 --decrypt thfg-mp4.axx",
       "workingDirectory": "TestCli\\win-x64"
     },
+    "Encrypt bigfile.bin": {
+      "commandName": "Project",
+      "commandLineArgs": "--password a --encrypt-file-to bigfile.bin bigfile-bin.axx",
+      "workingDirectory": "/Users/svante/Documents/My Xecrets"
+    },
     "Encrypt thfg.mp4 to thfg-mp4.axx and decrypt to thfg(2).mp4": {
       "commandName": "Project",
       "commandLineArgs": "--password a --progress\r\n--json-log\r\n--id 1 --encrypt-to thfg.mp4 thfg-mp4.axx\r\n--id 2 --decrypt-to thfg-mp4.axx thfg(2).mp4",

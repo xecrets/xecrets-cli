@@ -25,6 +25,7 @@
 
 using System.Reflection;
 using System.Resources;
+using System.Runtime.CompilerServices;
 
 [assembly: AssemblyVersion("2.3.0.0")]
 [assembly: AssemblyFileVersion("2.3.0.0")]
@@ -43,5 +44,6 @@ using System.Resources;
 [assembly: AssemblyTitle("Xecrets Cli BETA GPL main executable")]
 [assembly: AssemblyMetadata("RepositoryUrl", "https://github.com/xecrets/xecrets-cli")]
 [assembly: NeutralResourcesLanguage("en-US")]
+[assembly: DisableRuntimeMarshalling]
 [assembly: CLSCompliant(true)]
 

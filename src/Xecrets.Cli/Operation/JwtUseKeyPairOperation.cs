@@ -23,30 +23,25 @@
 
 #endregion Copyright and GPL License
 
-using AxCrypt.Abstractions;
-
 using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
 
-using static AxCrypt.Abstractions.TypeResolve;
-
 namespace Xecrets.Cli.Operation;
 
-/// <summary>
-/// Arguments[0] => Private key file PEM, i.e. 'private.pem'
-/// </summary>
-/// <param name="parameters"></param>
-/// <returns></returns>
-/// <exception cref="InvalidOperationException"></exception>
 internal class JwtUseKeyPairOperation : IExecutionPhases
 {
+    /// <summary>
+    /// Arguments[0] => Private key file PEM, i.e. 'private.pem'
+    /// </summary>
+    /// <param name="parameters"></param>
+    /// <returns></returns>
     public Task<Status> DryAsync(Parameters parameters)
     {
-        var privatePemStore = New<IStandardIoDataStore>(parameters.Arg1);
-        if (!New<IFileVerify>().CanReadFromFile(privatePemStore))
+        IFile privatePemFile = parameters.DesktopServices.StandardIoFile(parameters.Arg1);
+        if (!parameters.DesktopServices.CanReadFromFile(privatePemFile, out string? reason))
         {
-            return Task.FromResult(new Status(XfStatusCode.CannotRead, "Can't read from file '{0}'.".Format(privatePemStore.Name)));
+            return Task.FromResult(new Status(XfStatusCode.CannotRead, $"Can't read private pem from file '{privatePemFile.Name}'. [{reason}]"));
         }
 
         return Task.FromResult(Status.Success);
@@ -54,9 +49,9 @@ internal class JwtUseKeyPairOperation : IExecutionPhases
 
     public Task<Status> RealAsync(Parameters parameters)
     {
-        var privatePemStore = New<IStandardIoDataStore>(parameters.Arg1);
+        IFile privatePemFile = parameters.DesktopServices.StandardIoFile(parameters.Arg1);
         string privatePem;
-        using (StreamReader reader = new StreamReader(privatePemStore.OpenRead()))
+        using (StreamReader reader = new StreamReader(privatePemFile.OpenRead()))
         {
             privatePem = reader.ReadToEnd();
         }

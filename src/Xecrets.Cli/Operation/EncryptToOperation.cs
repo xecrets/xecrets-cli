@@ -23,18 +23,11 @@
 
 #endregion Copyright and GPL License
 
-using AxCrypt.Abstractions;
-using AxCrypt.Core;
-using AxCrypt.Core.Crypto;
-using AxCrypt.Core.Crypto.Asymmetric;
-
 using Xecrets.Cli.Abstractions;
-using Xecrets.Cli.Implementation;
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
 using Xecrets.Licensing.Abstractions;
-
-using static AxCrypt.Abstractions.TypeResolve;
+using Xecrets.Core.Public;
 
 namespace Xecrets.Cli.Operation;
 
@@ -42,28 +35,28 @@ internal class EncryptToOperation : IExecutionPhases
 {
     public Task<Status> DryAsync(Parameters parameters)
     {
-        if (!parameters.Identities.Where(id => id.Passphrase != Passphrase.Empty).Any())
+        if (!parameters.Identities.Any(id => id.Passphrase.Length > 0))
         {
             return Task.FromResult(new Status(XfStatusCode.NoPassword, "A password must be provided to encrypt files."));
         }
 
-        IStandardIoDataStore toFreeStore = parameters.Arg2.FindFree(parameters);
+        IFile toFreeStore = parameters.Arg2.FindFreeFile(parameters);
         if (!toFreeStore.VerifyCanWrite(parameters, out Status status))
         {
             return Task.FromResult(status);
         }
 
-        IStandardIoDataStore fromStore = New<IStandardIoDataStore>(parameters.Arg1);
-        if (fromStore.IsStdIo && !fromStore.IsNamedStdIo)
+        IFile fromStore = parameters.DesktopServices.StandardIoFile(parameters.Arg1);
+        if (fromStore is { IsStdIo: true, IsNamedStdIo: false })
         {
             return Task.FromResult(new Status(XfStatusCode.InvalidOption,
                 "Encryption is not supported from an unnamed standard input stream."));
         }
 
-        if (!New<IFileVerify>().CanReadFromFile(fromStore))
+        if (!parameters.DesktopServices.CanReadFromFile(fromStore, out string? reason))
         {
             return Task.FromResult(new Status(XfStatusCode.CannotRead,
-                "Can't read from '{0}'.".Format(fromStore.Name)));
+                $"Can't read from '{fromStore.Name}'. [{reason}]"));
         }
         if (!fromStore.IsEncryptable)
         {
@@ -76,18 +69,18 @@ internal class EncryptToOperation : IExecutionPhases
                 $"Cannot specify both original name '{parameters.Arg3}' and stdin alias '{fromStore.AliasName}'."));
         }
 
-        if (parameters.ProgrammaticUse && FileLargerThanLicenseLimit(fromStore))
+        if (parameters.ProgrammaticUse && FileLargerThanLicenseLimit(fromStore, parameters.CliServices.License))
         {
             return Task.FromResult(new Status(XfStatusCode.Unlicensed,
                 "'{0}' is too large for encryption. When using options for programmatic use, a valid maintenance " +
                 "subscription is required for files > 1 MB, or use a GPL build.".Format(parameters.CurrentOp.Arg1)));
         }
 
-        parameters.TotalsTracker.AddWorkItem(fromStore.Length());
+        parameters.TotalsTracker.AddWorkItem(fromStore.Length);
         return Task.FromResult(Status.Success);
     }
 
-    private static bool FileLargerThanLicenseLimit(IStandardIoDataStore fromStore)
+    private static bool FileLargerThanLicenseLimit(IFile fromStore, ILicense license)
     {
         long length;
         if (fromStore.IsStdIo)
@@ -97,14 +90,14 @@ internal class EncryptToOperation : IExecutionPhases
         }
         else
         {
-            length = fromStore.Length();
+            length = fromStore.Length;
         }
 
         if (length <= 1024 * 1024)
         {
             return false;
         }
-        LicenseStatus licenseStatus = New<ILicense>().Status();
+        LicenseStatus licenseStatus = license.Status();
         if (licenseStatus is LicenseStatus.Gpl or LicenseStatus.Valid)
         {
             return false;
@@ -114,25 +107,34 @@ internal class EncryptToOperation : IExecutionPhases
 
     public async Task<Status> RealAsync(Parameters parameters)
     {
-        IStandardIoDataStore toFreeStore = parameters.Arg2.FindFree(parameters);
+        IFile toFreeStore = parameters.Arg2.FindFreeFile(parameters);
         if (!toFreeStore.VerifyCanWrite(parameters, out Status status))
         {
             return status;
         }
 
-        IStandardIoDataStore fromStore = New<IStandardIoDataStore>(parameters.Arg1);
+        IFile fromStore = parameters.DesktopServices.StandardIoFile(parameters.Arg1);
 
         parameters.Progress.Display = parameters.Arg1;
+        parameters.Progress.Report(Progress.TotalAdded(fromStore.Length));
 
-        using (var encryption = await Encryption.CreateAsync(fromStore, parameters))
+        try
         {
-            if (parameters.AsciiArmor)
-            {
-                toFreeStore = new AsciiArmorDataStore(toFreeStore);
-            }
+            using var encryption = await Encryption.CreateAsync(fromStore, parameters);
+            
             string originalName = parameters.Arg3.Length > 0 ? parameters.Arg3 : fromStore.AliasName;
-            encryption.EncryptTo(toFreeStore, originalName,
-                parameters.Compress ? AxCryptOptions.EncryptWithCompression : AxCryptOptions.EncryptWithoutCompression);
+            await using Stream toStream = parameters.AsciiArmor
+                ? new AsciiArmorStream(toFreeStore.OpenWrite())
+                : toFreeStore.OpenWrite();
+            await encryption.EncryptToAsync(toStream, originalName, parameters.Compress);
+        }
+        catch
+        {
+            if (toFreeStore is { IsStdIo: false, IsAvailable: true })
+            {
+                toFreeStore.DeleteIfAvailable();
+            }
+            throw;
         }
 
         string freeTo = Path.Combine(Path.GetDirectoryName(parameters.Arg2) ?? string.Empty, toFreeStore.Name);

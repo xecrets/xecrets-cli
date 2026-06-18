@@ -23,35 +23,17 @@
 
 #endregion Copyright and GPL License
 
-using AxCrypt.Abstractions;
-
 using Xecrets.Cli.Public;
 
-namespace Xecrets.Cli.Implementation;
+namespace Xecrets.Cli.Abstractions;
 
-internal class UIThread : IUIThread
+internal interface ILogger
 {
-    public bool Blocked { get; set; } = false;
+    public IProgressContext TotalsProgress { get; }
 
-    public bool IsOn { get; } = true;
+    public void Log(XfOpCode opCode, Status status);
 
-    public void ExitApplication()
-    {
-        Environment.Exit((int)XfStatusCode.Success);
-    }
+    public void Log(Status status);
 
-    public void PostTo(System.Action action) => action();
-
-    public void RestartApplication()
-    {
-        Environment.Exit((int)XfStatusCode.Success);
-    }
-
-    public void SendTo(System.Action action) => action();
-
-    public Task SendToAsync(Func<Task> action) => action();
-
-    public void Yield()
-    {
-    }
+    public void Log(string message);
 }

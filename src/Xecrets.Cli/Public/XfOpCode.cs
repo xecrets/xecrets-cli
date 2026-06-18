@@ -30,7 +30,7 @@ namespace Xecrets.Cli.Public;
 /// program that needs to be able to interpret the action codes correctly.
 /// </summary>
 /// <remarks>
-/// Uses an 'Xf' prefix to distinguish itself, since its name is very generic.
+/// Uses a 'Xf' prefix to distinguish itself, since its name is very generic.
 /// </remarks>
 public enum XfOpCode
 {

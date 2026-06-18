@@ -23,8 +23,6 @@
 
 #endregion Copyright and GPL License
 
-using AxCrypt.Core.Crypto;
-
 using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Run;
 
@@ -34,7 +32,7 @@ internal class PasswordOperation : IExecutionPhases
 {
     public Task<Status> DryAsync(Parameters parameters)
     {
-        parameters.Identities.Add(new LogOnIdentity(new Passphrase(parameters.CurrentOp.Arguments[0])));
+        parameters.Identities.Add(new Identity(parameters.CurrentOp.Arguments[0], []));
         return Task.FromResult(Status.Success);
     }
 

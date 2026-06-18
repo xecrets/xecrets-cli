@@ -27,11 +27,9 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
-using AxCrypt.Abstractions;
-
-using NDesk.Options;
-
 using Xecrets.Cli.Public;
+using Xecrets.Core.Desktop.CommandLine;
+using Xecrets.Core.Public;
 
 namespace Xecrets.Cli;
 
@@ -48,10 +46,10 @@ internal class OptionsParser
                 (ora, op, armor) => ora.Add(armor != null ? op : XfOpCode.NoAsciiArmor) },
             {"b|use-public-key=", XfOpCode.UsePublicKey,
                 "{email(s)}:Use selected loaded public key(s) for encryption.",
-                (ora, op, email) => ora.AddManyRunning(op, email)},
+                (ora, op, email) => ora.AddManyRunning(op, email?.ToLowerInvariant())},
             {"c|create-key-pair={}", XfOpCode.CreateKeyPair,
                 "{email} {encrypted}:Create a key pair for an email moniker, in an encrypted file.",
-                (ora, op, email, to) => ora.Add(op, email, to)},
+                (ora, op, email, to) => ora.Add(op, email?.ToLowerInvariant(), to)},
             {"d|decrypt-file-to={}", XfOpCode.DecryptTo,
                 "{encrypted} {clear}:Decrypt a file to the given file path.",
                 (ora, op, from, to) => ora.Add(op, from, to) },
@@ -60,7 +58,7 @@ internal class OptionsParser
                 (ora, op, from, to) => ora.AddOneRunning(op, from, to) },
             {"f|file=", XfOpCode.OptionsFromFile,
                 "{name}:Take options from a file (programmatic).",
-                (ora, op, name) => { ora.Add(op); RecursivelyParseFromFile(name, parsed, extra); } },
+                (ora, op, name) => { ora.Add(op); RecursivelyParseFromFile(name!, parsed, extra); } },
             {"g|full-license",XfOpCode.GplLicense,
                 ":Display the full licenses.",
                 (ora, op, gpl) => ora.Add(gpl != null ? op : XfOpCode.None) },
@@ -85,7 +83,7 @@ internal class OptionsParser
                 (ora, op, compress) => ora.Add(compress != null ? op : XfOpCode.NoCompress) },
             {"n|environment=", XfOpCode.EnvironmentOption,
                 "{variable}:Take options from environment variable (programmatic).",
-                (ora, op, variable) => { ora.Add(op); RecursivelyParseFromString(variable, parsed, extra); } },
+                (ora, op, variable) => { ora.Add(op); RecursivelyParseFromString(variable!, parsed, extra); } },
             {"o|progress", XfOpCode.ProgressLog,
                 ":Continuously log progress.",
                 (ora, op, progress) => ora.Add(progress != null ? op : XfOpCode.NoProgress) },
@@ -94,28 +92,28 @@ internal class OptionsParser
                 (ora, op, pw) => ora.Add(op, pw) },
             {"q|quiet", XfOpCode.Quiet,
                 ":Do not display any messages or progress (global).",
-                (ora, op, quiet) => {IsQuiet = quiet != null; ora.Add(XfOpCode.NoLog); } },
+                (ora, _, quiet) => {IsQuiet = quiet != null; ora.Add(XfOpCode.NoLog); } },
             {"r|dryrun", XfOpCode.DryRun,
                 ":Perform a dry run without actually modifying anything (global).",
-                (ora, op, dry) => IsDryRunOnly = dry != null },
+                (_, _, dry) => IsDryRunOnly = dry != null },
             {"s|stdout", XfOpCode.Stdout,
                 ":Write log output to stdout instead of stderr (global).",
                 (ora, op, text) => ora.Add(op, text != null) },
             {"t|text-log",XfOpCode.TextLog,
                 ":Enable text console logging for interactive and simple script use.",
-                (ora, op, text) => ora.Add(text != null ? XfOpCode.TextLog : XfOpCode.NoLog) },
+                (ora, _, text) => ora.Add(text != null ? XfOpCode.TextLog : XfOpCode.NoLog) },
             {"u|load-public-keys=", XfOpCode.LoadPublicKeys,
                 "{file(s)}:Load public key(s) from file(s).",
                 (ora, op, pks) => ora.AddManyRunning(op, pks) },
             {"v|overwrite", XfOpCode.Overwrite,
                 ":Overwrite files instead of using alternate target name.",
-                (ora, op, ow) => ora.Add(ow != null ? XfOpCode.Overwrite : XfOpCode.NoOverwrite) },
+                (ora, _, ow) => ora.Add(ow != null ? XfOpCode.Overwrite : XfOpCode.NoOverwrite) },
             {"w|wipe=", XfOpCode.Wipe,
                 "{file}:Securely wipe and delete a file.",
-                (ora, op, wipe) => ora.AddManyRunning(XfOpCode.Wipe, wipe) },
+                (ora, _, wipe) => ora.AddManyRunning(XfOpCode.Wipe, wipe) },
             {"x|export-public-key=", XfOpCode.ExportPublicKey,
                 "{email} {file}:Export a public key.",
-                (ora, op, email, file) => ora.Add(op, email, file) },
+                (ora, op, email, file) => ora.Add(op, email?.ToLowerInvariant(), file) },
             {"y|load-private-keys=", XfOpCode.LoadPrivateKeys,
                 "{in-file} [{out-file}]:Load private keys from file, optionally writing an update.",
                 (ora, op, inf) => ora.AddOneRunning(op, inf) },
@@ -128,28 +126,28 @@ internal class OptionsParser
             {"echo", XfOpCode.Echo,
                 ":Display the command line received by the program.",
                 (ora, op, echo) => {if (echo != null) ora.Add(op, CleanCommandLineProgramName("echo", _commandLine)); } },
-            { "<>", XfOpCode.DefaultInternal, (ora, op, v) => ora.RunningAction(v) },
+            { "<>", XfOpCode.DefaultInternal, (ora, _, v) => ora.RunningAction(v!) },
         };
 
-        if (OperatingSystem.IsWindows())
+        if (Platform.IsWindows)
         {
             optionSet.Add("debug-break", XfOpCode.CliDebugBreak, ":?Break into debugger when executing this argument.", (ora, op, dbg) => ora.Add(dbg != null ? op : XfOpCode.None));
             optionSet.Add("debug-break-parse", XfOpCode.CliDebugBreakParse, ":?Break into debugger when parsing this argument.", (ora, op, dbg) => { if (dbg != null) _ = Debugger.Launch(); });
         }
 
         optionSet.Add("argument-markdown", XfOpCode.ArgumentMarkdown, ":?Display help texts as markdown.", (ora, op, arg) => ora.Add(arg != null ? op : XfOpCode.None));
-        optionSet.Add("begin", XfOpCode.Begin, ":?Begin a sequence of operations.", (ora, op, begin) => ora.Add(op));
+        optionSet.Add("begin", XfOpCode.Begin, ":?Begin a sequence of operations.", (ora, op, _) => ora.Add(op));
         optionSet.Add("cli-crash-log=", XfOpCode.CliCrashLog, "{file}:?Write crash log here (global).", (ora, op, log) => ora.Add(op, log));
         optionSet.Add("cli-license=", XfOpCode.CliLicense, "{jwt-license}:?Use this license. Overrides any others found (global).", (ora, op, license) => ora.Add(op, license));
         optionSet.Add("cli-version", XfOpCode.SdkCliVersion, ":?Display the command line tool API version.", (ora, op, arg) => ora.Add(arg != null ? op : XfOpCode.None));
         optionSet.Add("date-pattern=", XfOpCode.DatePattern, "{culture}:?Set the display date pattern, e.g. 'M/d/yyyy h:mm tt'.", (ora, op, culture) => ora.Add(op, culture));
-        optionSet.Add("crash=", XfOpCode.Crash, "{parse|dry|real}:?Crash during parse, dry run or real run.", (ora, op, arg) => { if (arg == "parse") HardCrash.Immediately(); else ora.Add(XfOpCode.Crash, arg); });
-        optionSet.Add("end", XfOpCode.End, ":?End a sequence of operations.", (ora, op, end) => ora.Add(op));
-        optionSet.Add("internal", XfOpCode.Internal, ":?Display internal use help and disable splash (global).", (ora, op, @internal) => Internal = @internal != null);
+        optionSet.Add("crash=", XfOpCode.Crash, "{parse|dry|real}:?Crash during parse, dry run or real run.", (ora, _, arg) => { if (arg == "parse") HardCrash.Immediately(); else ora.Add(XfOpCode.Crash, arg); });
+        optionSet.Add("end", XfOpCode.End, ":?End a sequence of operations.", (ora, op, _) => ora.Add(op));
+        optionSet.Add("internal", XfOpCode.Internal, ":?Display internal use help and disable splash (global).", (_, _, @internal) => Internal = @internal != null);
         optionSet.Add("jwt-audience=", XfOpCode.JwtAudience, "{audience}:?Set audience string or URI for JWT.", (ora, op, audience) => ora.Add(op, audience));
         optionSet.Add("jwt-claims={}", XfOpCode.JwtClaims, "{expiration} {claims}:?Set days until expiration and claims JSON.", (ora, op, days, claims) => ora.Add(op, days, claims));
         optionSet.Add("jwt-create-key-pair={}", XfOpCode.JwtCreateKeyPair, "{private-pem} {public-pem}:?Create JWT keypair as PEM files.", (ora, op, @private, @public) => ora.Add(op, @private, @public));
-        optionSet.Add("jwt-issuer=", XfOpCode.JwtIssuer, "{issuer}:?Set issuer email for JWT.", (ora, op, issuer) => ora.Add(op, issuer));
+        optionSet.Add("jwt-issuer=", XfOpCode.JwtIssuer, "{issuer}:?Set issuer email for JWT.", (ora, op, issuer) => ora.Add(op, issuer?.ToLowerInvariant()));
         optionSet.Add("jwt-sign=", XfOpCode.JwtSign, "{signed-jwt}:?Sign and write JWT to file.", (ora, op, file) => ora.Add(op, file));
         optionSet.Add("jwt-private-key=", XfOpCode.JwtPrivateKey, "{private-pem}:?Use a private key PEM file for signing.", (ora, op, @private) => ora.Add(op, @private));
         optionSet.Add("jwt-verify={}", XfOpCode.JwtVerify, "{public-pem} {signed-jwt}:?Verify a signed JWT file using a public PEM file.", (ora, op, @public, token) => ora.Add(op, @public, token));
@@ -162,8 +160,8 @@ internal class OptionsParser
         optionSet.Add("slip39-secret={}", XfOpCode.Slip39Secret, $"{{{nameof(XfOptionKeys.Bip39)}|{nameof(XfOptionKeys.Hex)}|{nameof(XfOptionKeys.Base64)}|{nameof(XfOptionKeys.Text)}}} {{secret}}:?Specify the secret to split.", (ora, op, format, secret) => ora.Add(op, format, secret));
         optionSet.Add("slip39-shares=", XfOpCode.Slip39Shares, "{share(s)}:?Add shares to combine.", (ora, op, share) => ora.AddManyRunning(op, share));
         optionSet.Add("slip39-split=", XfOpCode.Slip39Split, $"{{{nameof(XfOptionKeys.Slip39)}|{nameof(XfOptionKeys.Hex)}|{nameof(XfOptionKeys.Base64)}}}[,...] [{{file}}]:?Split the secret into shares.", (ora, op, format) => ora.AddOneRunning(op, format));
-        optionSet.Add("slip39-info:", XfOpCode.Slip39Information, "[{{file}}]:?Verify the shares and output the prefix information.", (ora, op, to) => ora.AddOneRunning(op));
-        optionSet.Add("work-folder=", XfOpCode.WorkFolder, "{work-folder}:?A work folder for settings and logs (global).", (ora, op, wf) => WorkFolder = wf);
+        optionSet.Add("slip39-info:", XfOpCode.Slip39Information, "[{{file}}]:?Verify the shares and output the prefix information.", (ora, op, _) => ora.AddOneRunning(op));
+        optionSet.Add("work-folder=", XfOpCode.WorkFolder, "{work-folder}:?A work folder for settings and logs (global).", (_, _, wf) => WorkFolder = wf ?? throw new InvalidOperationException("A required option value was null."));
         return optionSet;
     }
 
@@ -177,15 +175,15 @@ internal class OptionsParser
 
     public IEnumerable<ParsedOp> ParsedOps { get; set; }
 
-    public bool IsDryRunOnly { get; set; } = false;
+    public bool IsDryRunOnly { get; private set; }
 
-    public bool IsQuiet { get; set; } = false;
+    public bool IsQuiet { get; private set; }
 
-    public bool Internal { get; set; } = false;
+    public bool Internal { get; private set; }
 
-    public string WorkFolder { get; set; } = string.Empty;
+    public string WorkFolder { get; private set; } = string.Empty;
 
-    public int OpLevel { get; set; } = 0;
+    public int OpLevel { get; set; }
 
     public IEnumerable<string> Extra { get; set; }
 
@@ -198,7 +196,7 @@ internal class OptionsParser
         get
         {
             var descriptions = new List<string[]>();
-            foreach (OptionBase option in _definitions)
+            foreach (Option option in _definitions)
             {
                 var split = SplitDescription(option);
                 if (split.Length > 0)
@@ -213,8 +211,9 @@ internal class OptionsParser
 #if DEBUG
     [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Can't be static in Release builds.")]
     [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "It's not unnecessary in Release mode.")]
+    [SuppressMessage("ReSharper", "ConditionalAccessQualifierIsNonNullableAccordingToAPIContract")]
 #endif
-    private string[] SplitDescription(OptionBase option)
+    private string[] SplitDescription(Option option)
     {
 #if !DEBUG
         if (!Internal && (option.Description == null || option.Description.Contains(":?")))
@@ -227,7 +226,7 @@ internal class OptionsParser
         {
             split[1] = split[1].Substring(1);
         }
-        string options = string.Join('|', option.GetNames().Select(n => n.Length == 1 ? $"-{n}" : $"--{n}").ToArray());
+        string options = string.Join('|', option.Names.Select(n => n.Length == 1 ? $"-{n}" : $"--{n}").ToArray());
         if (options == "--<>")
         {
             return [];
@@ -245,7 +244,7 @@ internal class OptionsParser
         List<ParsedOp> parsedOps = [];
         List<string> extra = [];
 
-        string[] args = SplitArgs(commandLine).Skip(1).ToArray();
+        string[] args = [.. SplitArgs(commandLine).Skip(1)];
 
         RecursivleyParseArguments(args, parsedOps, extra);
 
@@ -254,19 +253,16 @@ internal class OptionsParser
 
     private class RunningArguments
     {
-        private readonly IList<string> _extra;
-
         private readonly IList<ParsedOp> _parsed;
+
+        private readonly Action<string> _noop;
 
         public RunningArguments(IList<ParsedOp> parsed, IList<string> extra)
         {
-            _extra = extra;
             _parsed = parsed;
-            _noop = (s) => _extra.Add(s);
+            _noop = extra.Add;
             RunningAction = _noop;
         }
-
-        private readonly Action<string> _noop;
 
         public Action<string> RunningAction { get; private set; }
 
@@ -276,9 +272,14 @@ internal class OptionsParser
             RunningAction = _noop;
         }
 
-        public void Add(XfOpCode opCode, string p1)
+        private static string Required(string? value)
         {
-            _parsed.Add(new ParsedOp(opCode, p1));
+            return value ?? throw new InvalidOperationException("A required option value was null.");
+        }
+
+        public void Add(XfOpCode opCode, string? p1)
+        {
+            _parsed.Add(new ParsedOp(opCode, Required(p1)));
             RunningAction = _noop;
         }
 
@@ -288,15 +289,16 @@ internal class OptionsParser
             RunningAction = _noop;
         }
 
-        public void Add(XfOpCode opCode, string p1, string p2)
+        public void Add(XfOpCode opCode, string? p1, string? p2)
         {
-            _parsed.Add(new ParsedOp(opCode, p1, p2));
+            _parsed.Add(new ParsedOp(opCode, Required(p1), Required(p2)));
             RunningAction = _noop;
         }
 
-        public void Add(XfOpCode opCode, string p1, string p2, string p3)
+        // ReSharper disable once UnusedMember.Local
+        public void Add(XfOpCode opCode, string? p1, string? p2, string? p3)
         {
-            _parsed.Add(new ParsedOp(opCode, p1, p2, p3));
+            _parsed.Add(new ParsedOp(opCode, Required(p1), Required(p2), Required(p3)));
             RunningAction = _noop;
         }
 
@@ -307,40 +309,29 @@ internal class OptionsParser
             RunningAction = (s) => { op.Arguments.Add(s); RunningAction = _noop; };
         }
 
-        public void AddOneRunning(XfOpCode opCode, string first)
+        public void AddOneRunning(XfOpCode opCode, string? first)
         {
-            var op = new ParsedOp(opCode, first);
+            var op = new ParsedOp(opCode, Required(first));
             _parsed.Add(op);
             RunningAction = (s) => { op.Arguments.Add(s); RunningAction = _noop; };
         }
 
-        public void AddOneRunning(XfOpCode opCode, string first, string second)
+        public void AddOneRunning(XfOpCode opCode, string? first, string? second)
         {
-            ParsedOp op = new(opCode, first, second);
+            ParsedOp op = new(opCode, Required(first), Required(second));
             _parsed.Add(op);
             RunningAction = (s) => { op.Arguments.Add(s); RunningAction = _noop; };
         }
 
-        public void AddManyRunning(XfOpCode opCode, string first)
+        public void AddManyRunning(XfOpCode opCode, string? first)
         {
-            var op = new ParsedOp(opCode, first);
+            var op = new ParsedOp(opCode, Required(first));
             _parsed.Add(op);
             RunningAction = (s) => op.Arguments.Add(s);
         }
     }
 
-    private sealed class MyActionOption(string prototype, string description, int count,
-        Action<OptionValueCollection> action) : OptionBase(prototype, description, count)
-    {
-        protected override void OnParseComplete(OptionContext c)
-        {
-            ArgumentNullException.ThrowIfNull(c);
-
-            action(c.OptionValues);
-        }
-    }
-
-    private class ExportableOptionCollection(Version cliVersion, RunningArguments ora) : OptionSetCollection
+    private class ExportableOptionCollection(Version cliVersion, RunningArguments ora) : OptionSet(cliVersion)
     {
         /// <summary>
         /// This must be updated when the options are updated in an incompatible way.
@@ -349,48 +340,44 @@ internal class OptionsParser
         /// Increase the major version, if changes in any way changes an existing option
         /// so it may not work as expected by an older consumer.
         /// </summary>
-        public Version CliVersion { get; } = cliVersion;
+        public Version CliVersion => Version;
 
         public class ExportableOption(int item1, string item2, string item3) : Tuple<int, string, string>(item1, item2, item3)
         {
         }
 
-        public List<ExportableOption> Export = [];
+        public readonly List<ExportableOption> Export = [];
 
-        public void Add(string prototype, XfOpCode opCode, Action<RunningArguments, XfOpCode, string> action)
+        public void Add(string prototype, XfOpCode opCode, Action<RunningArguments, XfOpCode, string?> action)
         {
-            _ = Add(prototype, (p1) => action(ora, opCode, p1));
+            Add(prototype, (p1) => action(ora, opCode, p1));
             Export.Add(new ExportableOption((int)opCode, prototype, string.Empty));
         }
 
-        public void Add(string prototype, XfOpCode opCode, Action<RunningArguments, XfOpCode, string, string> action)
+        // ReSharper disable once UnusedMember.Local
+        public void Add(string prototype, XfOpCode opCode, Action<RunningArguments, XfOpCode, string?, string?> action)
         {
-            _ = Add(prototype, (p1, p2) => action(ora, opCode, p1, p2));
+            Add(prototype, (p1, p2) => action(ora, opCode, p1, p2));
             Export.Add(new ExportableOption((int)opCode, prototype, string.Empty));
         }
 
-        public void Add(string prototype, XfOpCode opCode, string description, Action<RunningArguments, XfOpCode, string> action)
+        [SuppressMessage("ReSharper", "ConditionalAccessQualifierIsNonNullableAccordingToAPIContract")]
+        public void Add(string prototype, XfOpCode opCode, string description, Action<RunningArguments, XfOpCode, string?> action)
         {
-            _ = Add(prototype, description, (p1) => action(ora, opCode, p1));
+            Add(prototype, description, (p1) => action(ora, opCode, p1));
             Export.Add(new ExportableOption((int)opCode, prototype, string.Join(':', (description?.Split(':').Skip(1).ToArray() ?? []))));
         }
 
-        public void Add(string prototype, XfOpCode opCode, string description, Action<RunningArguments, XfOpCode, string, string> action)
+        [SuppressMessage("ReSharper", "ConditionalAccessQualifierIsNonNullableAccordingToAPIContract")]
+        public void Add(string prototype, XfOpCode opCode, string description, Action<RunningArguments, XfOpCode, string?, string?> action)
         {
-            _ = Add(prototype, description, (p1, p2) => action(ora, opCode, p1, p2));
+            Add(prototype, description, (p1, p2) => action(ora, opCode, p1, p2));
             Export.Add(new ExportableOption((int)opCode, prototype, string.Join(':', (description?.Split(':').Skip(1).ToArray() ?? []))));
         }
 
-        public void Add(string prototype, string description, Action<string, string, string> action)
-        {
-            ArgumentNullException.ThrowIfNull(action);
-            
-            OptionBase p = new MyActionOption(prototype, description, 3,
-                    delegate (OptionValueCollection v) { action(v[0], v[1], v[2]); });
-            Add(p);
-        }
-
-        public void Add(string prototype, XfOpCode opCode, string description, Action<RunningArguments, XfOpCode, string, string, string> action)
+        // ReSharper disable once UnusedMember.Local
+        [SuppressMessage("ReSharper", "ConditionalAccessQualifierIsNonNullableAccordingToAPIContract")]
+        public void Add(string prototype, XfOpCode opCode, string description, Action<RunningArguments, XfOpCode, string?, string?, string?> action)
         {
             Add(prototype, description, (p1, p2, p3) => action(ora, opCode, p1, p2, p3));
             Export.Add(new ExportableOption((int)opCode, prototype, string.Join(':', (description?.Split(':').Skip(1).ToArray() ?? []))));
@@ -412,21 +399,17 @@ internal class OptionsParser
             if (extra.Count != 0)
             {
                 ParseStatus = new Status(XfStatusCode.ExtraArguments, "Extra unprocessed arguments '{0}' were found.".Format(string.Join(',', extra)));
-                return;
             }
-
-            return;
         }
         catch (OptionException oe)
         {
             ParseStatus = new Status(XfStatusCode.InvalidOption, oe.Message);
-            return;
         }
     }
 
     private void RecursivelyParseFromFile(string path, List<ParsedOp> parsed, List<string> extra)
     {
-        foreach (string line in System.IO.File.ReadAllLines(path))
+        foreach (string line in File.ReadAllLines(path))
         {
             string trimmed = line.Trim();
             if (trimmed.Length == 0 || trimmed.StartsWith('#'))
@@ -434,7 +417,7 @@ internal class OptionsParser
                 continue;
             }
 
-            string[] argv = SplitArgs(trimmed).ToArray();
+            string[] argv = [.. SplitArgs(trimmed)];
             RecursivleyParseArguments(argv, parsed, extra);
         }
     }
@@ -448,16 +431,16 @@ internal class OptionsParser
             return;
         }
 
-        string[] argv = SplitArgs(value).ToArray();
+        string[] argv = [.. SplitArgs(value)];
 
         RecursivleyParseArguments(argv, parsed, extra);
     }
 
     private static string CleanCommandLineProgramName(string echoOptionName, string commandLine)
     {
-        string[] args = SplitArgs(commandLine).ToArray();
+        string[] args = [.. SplitArgs(commandLine)];
         string programName = Path.GetFileNameWithoutExtension(args[0]);
-        string commandLineWithoutProgramName = commandLine.Substring(commandLine.IndexOf(args[0]) + args[0].Length);
+        string commandLineWithoutProgramName = commandLine[(commandLine.IndexOf(args[0], StringComparison.Ordinal) + args[0].Length)..];
         if (commandLine.StartsWith('"') || commandLine.StartsWith('\''))
         {
             commandLineWithoutProgramName = commandLineWithoutProgramName.Substring(1);

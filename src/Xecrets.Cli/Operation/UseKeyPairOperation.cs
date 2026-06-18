@@ -23,18 +23,9 @@
 
 #endregion Copyright and GPL License
 
-using AxCrypt.Abstractions;
-using AxCrypt.Core.Crypto;
-using AxCrypt.Core.Crypto.Asymmetric;
-using AxCrypt.Core.Extensions;
-using AxCrypt.Core.IO;
-using AxCrypt.Core.Service;
-
 using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
-
-using static AxCrypt.Abstractions.TypeResolve;
 
 namespace Xecrets.Cli.Operation;
 
@@ -46,49 +37,35 @@ internal class UseKeyPairOperation : IExecutionPhases
         {
             return Task.FromResult(new Status(XfStatusCode.NoPassword, "A password must be provided to access an encrypted key pair file."));
         }
-        var fromStore = New<IStandardIoDataStore>(parameters.Arg1);
-        if (!New<IFileVerify>().CanReadFromFile(fromStore))
+        IFile fromFile = parameters.DesktopServices.StandardIoFile(parameters.Arg1);
+        if (!parameters.DesktopServices.CanReadFromFile(fromFile, out string? reason))
         {
-            return Task.FromResult(new Status(XfStatusCode.CannotRead, "Can't read from file '{0}'.".Format(fromStore.Name)));
+            return Task.FromResult(new Status(XfStatusCode.CannotRead, $"Can't read key pair from file '{fromFile.Name}'. [{reason}]"));
         }
         return Task.FromResult(Status.Success);
     }
 
     public Task<Status> RealAsync(Parameters parameters)
     {
-        byte[] keyPairFile = New<IDataStore>(parameters.Arg1).ToArray();
-        UserKeyPair? keyPair = null;
-
-        IList<LogOnIdentity> identities = parameters.Identities;
-        LogOnIdentity? identity = null;
-        int index;
-
-        for (index = 0; index < identities.Count; ++index)
-        {
-            identity = identities[index];
-            if (identity.Passphrase != Passphrase.Empty && UserKeyPair.TryLoad(keyPairFile, identity.Passphrase, out keyPair))
-            {
-                break;
-            }
-        }
-
-        if (keyPair == null)
+        byte[] keyPairFile = parameters.DesktopServices.File(parameters.Arg1).ReadAllBytes();
+        
+        if (!parameters.CoreServices.TryLoadKeyPair(keyPairFile, [.. parameters.Identities.Select(i => i.Passphrase)], out LoadedKeyPair? loaded))
         {
             return Task.FromResult(new Status(XfStatusCode.InvalidPassword, parameters, "No valid password was provided to decrypt the key pair."));
         }
 
-        identities[index] = new LogOnIdentity(identity!.KeyPairs.Concat([keyPair]), identity!.Passphrase);
+        Identity identity = parameters.Identities[loaded.Index];
+        parameters.Identities[loaded.Index] = identity with { KeyPairs = [.. identity.KeyPairs.Concat([loaded.KeyPair])] };
 
-        parameters.Logger.Log(new Status(parameters, "Loaded a key pair created {3} with tag '{2}' for '{1}' from '{0}'".Format(parameters.CurrentOp.Arg1, keyPair.UserEmail, keyPair.KeyPair.PublicKey.Tag, keyPair.Timestamp.ToLocalTime()))
+        parameters.Logger.Log(new Status(parameters, "Loaded a key pair created {3} with tag '{2}' for '{1}' from '{0}'".Format(parameters.CurrentOp.Arg1, loaded.KeyPair.Email, loaded.KeyPair.PublicKey.Tag ?? string.Empty, loaded.KeyPair.CreatedUtc.ToLocalTime()))
         {
-            Utc = keyPair.Timestamp,
+            Utc = loaded.KeyPair.CreatedUtc.UtcDateTime,
         });
 
-        UserPublicKey userPublicKey = new UserPublicKey(keyPair.UserEmail, keyPair.KeyPair.PublicKey);
-        parameters.LoadedPublicKeys.AddOrReplace(userPublicKey);
-        parameters.Logger.Log(new Status(parameters, "Loaded a public key for '{0}' from '{1}'.".Format(userPublicKey.Email, parameters.Arg1)));
+        parameters.LoadedPublicKeys.AddOrReplace(loaded.KeyPair.PublicKey);
+        parameters.SharingEmails.Add(loaded.KeyPair.PublicKey.Email);
 
-        parameters.SharingEmails.Add(userPublicKey.Email);
+        parameters.Logger.Log(new Status(parameters, "Loaded a public key for '{0}' from '{1}'.".Format(loaded.KeyPair.PublicKey.Email, parameters.Arg1)));
 
         return Task.FromResult(Status.Success);
     }

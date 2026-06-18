@@ -31,7 +31,7 @@ internal class ConsoleOut(TextWriter writer)
 
     private bool _newLinePending;
 
-    public void Write(object text)
+    private void Write(object text)
     {
         WritePending();
         string m = NormalizeNewLines(text.ToString() ?? string.Empty);
@@ -52,7 +52,7 @@ internal class ConsoleOut(TextWriter writer)
         _lastLineLength = 0;
     }
 
-    private int _lastLineLength = 0;
+    private int _lastLineLength;
 
     public void WriteReturn(object value)
     {

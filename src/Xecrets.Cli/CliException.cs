@@ -23,19 +23,33 @@
 
 #endregion Copyright and GPL License
 
-namespace Xecrets.Cli.Public;
+using Xecrets.Cli.Public;
 
-/// <summary>
-/// Publically exposed values.
-/// </summary>
-/// <remarks>
-/// Uses an 'Xf' prefix to distinguish itself, since its name is very generic.
-/// </remarks>
-public static class XfNameOf
+namespace Xecrets.Cli;
+
+internal class CliException : Exception
 {
-    public static string StdinAlias { get; } = "-";
+    public Status Status { get; }
 
-    public static string StdoutAlias { get; } = "+";
+    public CliException()
+    {
+        Status = new Status(XfStatusCode.ExceptionError, "An exception occurred.");
+    }
+    public CliException(Status status)
+        : this(status.Message)
+    {
+        Status = status;
+    }
 
-    public static string StdIoNameSeparator { get; } = ":"; 
+    public CliException(string message)
+        : base(message)
+    {
+        Status = new Status(XfStatusCode.ExceptionError, message);
+    }
+
+    public CliException(string message, Exception inner)
+        : base(message, inner)
+    {
+        Status = new Status(XfStatusCode.ExceptionError, message);
+    }
 }

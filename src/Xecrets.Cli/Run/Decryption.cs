@@ -23,156 +23,58 @@
 
 #endregion Copyright and GPL License
 
-using AxCrypt.Abstractions;
-using AxCrypt.Core;
-using AxCrypt.Core.Crypto;
-using AxCrypt.Core.Crypto.Asymmetric;
-using AxCrypt.Core.Header;
-using AxCrypt.Core.IO;
-using AxCrypt.Core.Reader;
-using AxCrypt.Core.Runtime;
-using AxCrypt.Core.UI;
-
-using Xecrets.Cli.Abstractions;
-using Xecrets.Cli.Implementation;
-
-using static AxCrypt.Abstractions.TypeResolve;
-
 namespace Xecrets.Cli.Run;
 
-internal sealed class Decryption(Stream fromStream, IEnumerable<LogOnIdentity> identities, IProgressContext progress) : IDisposable
+internal sealed class Decryption : IDisposable
 {
-    private IAxCryptDocument _document = CreateDocument(identities, new ProgressStream(fromStream, progress));
+    private readonly IDecryptionSession _session;
 
-    // The IAxCryptDocument property PassphraseIsValid is misnamed,
-    // it indicates whether the document has been successfully decrypted with the passphrase or a private key.
-    public bool IsDecryptable => _document.PassphraseIsValid;
-
-    public IEnumerable<IAsymmetricPublicKey> MasterKeys => MasterKeysInternal();
-
-    private List<IAsymmetricPublicKey> MasterKeysInternal()
+    private Decryption(IDecryptionSession session)
     {
-        List<IAsymmetricPublicKey> masterKeys = [];
-        if (_document.AsymmetricMasterKey != null)
-        {
-            masterKeys.Add(_document.AsymmetricMasterKey);
-        }
-        masterKeys.AddRange(_document.AsymmetricMasterKeys);
-        return masterKeys;
+        _session = session;
     }
 
-    public Passphrase Passphrase => _document.DecryptionParameter?.Passphrase ?? Passphrase.Empty;
+    public bool IsDecryptable => _session.IsDecryptable;
 
-    public IAsymmetricPrivateKey? PrivateKey => _document.DecryptionParameter?.PrivateKey;
+    public string OriginalFileName => _session.OriginalFileName;
 
-    public string OriginalFileName => _document.FileName;
+    public static async Task<Decryption> CreateAsync(Stream fromStream, IEnumerable<Identity> identities, IProgress<Progress> progress, ICoreServices coreServices)
+    {
+        DecryptRequest request = new([.. identities], progress);
+        IDecryptionSession session = await coreServices.OpenDecryptionAsync(fromStream, request);
+        return new Decryption(session);
+    }
 
-    public void DecryptTo(IStandardIoDataStore toStore)
+    public async Task DecryptToAsync(IFile toFile, IDesktopServices desktopServices)
     {
         try
         {
-            using Stream toStream = toStore.OpenWrite();
-            _document.DecryptTo(toStream);
+            await using Stream toStream = toFile.OpenWrite();
+            await _session.DecryptAsync(toStream);
+            if (!_session.IsDecryptable)
+            {
+                return;
+            }
+
+            if (!toFile.IsStdIo)
+            {
+                toFile.SetFileTimes(_session.CreationTimeUtc, _session.LastAccessTimeUtc, _session.LastWriteTimeUtc);
+            }
         }
         catch (Exception)
         {
-            if (!toStore.IsStdIo && toStore.IsAvailable)
+            if (toFile is { IsStdIo: false, IsAvailable: true })
             {
-                using FileLock destinationLock = New<FileLocker>().Acquire(toStore);
-                new AxCryptFile().Wipe(destinationLock, new ProgressContext());
+                await desktopServices.WipeAsync(toFile.FullName, new Progress<Progress>());
             }
             throw;
         }
-
-        if (!toStore.IsStdIo)
-        {
-            toStore.SetFileTimes(_document.CreationTimeUtc, _document.LastAccessTimeUtc, _document.LastWriteTimeUtc);
-        }
     }
 
-    public EncryptLikeCredentials ExtractEncryptionCredentials()
-    {
-        if (!IsDecryptable)
-        {
-            return new(Passphrase.Empty, [], []);
-        }
-
-        return new(Passphrase, AsymmetricRecipients, MasterKeys);
-    }
-
-    public IEnumerable<UserPublicKey> AsymmetricRecipients => _document.AsymmetricRecipients;
-
-    private static IAxCryptDocument CreateDocument(IEnumerable<LogOnIdentity> identities, Stream fromStream)
-    {
-        Headers headers = new();
-        LookAheadStream lookAheadStream = new(fromStream);
-        if (lookAheadStream.IsEmpty(16))
-        {
-            throw new FileFormatException("The stream contains no data, it's length is zero.", ErrorStatus.ZeroLengthFile);
-        }
-        AxCryptReaderBase reader = headers.CreateReader(lookAheadStream);
-        bool isLegacyV1 = reader is V1AxCryptReader;
-
-        IAxCryptDocument document = AxCryptReaderBase.Document(reader);
-
-        foreach (DecryptionParameter decryptionParameter in DecryptionParameters(identities, isLegacyV1: isLegacyV1))
-        {
-            if (decryptionParameter.Passphrase != null)
-            {
-                if (document.Load(decryptionParameter.Passphrase, decryptionParameter.CryptoId, headers))
-                {
-                    document.DecryptionParameter = decryptionParameter;
-                    return document;
-                }
-            }
-            if (decryptionParameter.PrivateKey != null)
-            {
-                if (document.Load(decryptionParameter.PrivateKey, decryptionParameter.CryptoId, headers))
-                {
-                    document.DecryptionParameter = decryptionParameter;
-                    return document;
-                }
-            }
-        }
-        return document;
-    }
-
-    private static DecryptionParameter[] DecryptionParameters(IEnumerable<LogOnIdentity> identities, bool isLegacyV1)
-    {
-        List<DecryptionParameter> decryptionParameters = [];
-        foreach (LogOnIdentity identity in identities)
-        {
-            decryptionParameters.AddRange(DecryptionParameters(isLegacyV1: isLegacyV1, identity.Passphrase, identity.PrivateKeys));
-        }
-
-        List<DecryptionParameter> passwordsFirstDecryptionParameters = [.. decryptionParameters.Where(dp => dp.Passphrase != null && dp.Passphrase != Passphrase.Empty)];
-        passwordsFirstDecryptionParameters.AddRange(decryptionParameters.Where(dp => dp.Passphrase == null || dp.Passphrase == Passphrase.Empty));
-
-        Guid[] cryptoIds = [.. Resolve.CryptoFactory.OrderedIds];
-        DecryptionParameter[] orderedDecryptionParameters = [.. passwordsFirstDecryptionParameters
-            .OrderBy(dp => Array.IndexOf(cryptoIds, dp.CryptoId))];
-
-
-        return [.. orderedDecryptionParameters];
-    }
-
-    private static IEnumerable<DecryptionParameter> DecryptionParameters(bool isLegacyV1, Passphrase passphrase, IEnumerable<IAsymmetricPrivateKey?> privateKeys)
-    {
-        Guid[] cryptoIds =
-            isLegacyV1
-            ? [new V1Aes128CryptoFactory().CryptoId]
-            : [.. Resolve.CryptoFactory.OrderedIds.Where(id => id != new V1Aes128CryptoFactory().CryptoId)];
-
-        Passphrase[] passphrases = passphrase == Passphrase.Empty ? [] : [passphrase];
-        return DecryptionParameter.CreateAll(passphrases, privateKeys, cryptoIds);
-    }
+    public EncryptedWithParameters EncryptedWithParameters => _session.EncryptedWithParameters;
 
     public void Dispose()
     {
-        if (_document != null)
-        {
-            _document.Dispose();
-            _document = null!;
-        }
+        _session.Dispose();
     }
 }

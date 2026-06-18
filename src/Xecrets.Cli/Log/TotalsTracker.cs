@@ -23,10 +23,10 @@
 
 #endregion Copyright and GPL License
 
+using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
-
-using static AxCrypt.Abstractions.TypeResolve;
+using Xecrets.Cli.Implementation;
 
 namespace Xecrets.Cli.Log;
 
@@ -48,13 +48,16 @@ internal class TotalsTracker
 
     public ILogger Logger { get; private set; }
 
+    public CliServices CliServices { get; }
+
     public string Id { get; set; } = string.Empty;
 
     private readonly CancelSignal _cancelSignal;
 
-    public TotalsTracker()
+    public TotalsTracker(CliServices cliServices)
     {
-        _cancelSignal = New<CancelSignal>();
+        CliServices = cliServices;
+        _cancelSignal = cliServices.CancelSignal;
         Logger = GetCurrentLogger();
     }
 
@@ -81,20 +84,14 @@ internal class TotalsTracker
             LogStyle.Json or LogStyle.Json | LogStyle.Progress => new JsonLogger(this, progress: LogStyle.HasFlag(LogStyle.Progress)),
             LogStyle.Text or LogStyle.Text | LogStyle.Progress => new TextLogger(this, progress: LogStyle.HasFlag(LogStyle.Progress)),
             LogStyle.None or LogStyle.Progress => new NoLogger(this),
-            _ => throw new ArgumentException("Unexpected LogStyle value.", nameof(LogStyle)),
+            _ => throw new ArgumentException(@"Unexpected LogStyle value.", nameof(LogStyle)),
         };
     }
 
     public void AddWorkItem(long count)
     {
-        AddWork(count);
-        ItemsTotal += 1;
-        AssertNoCancel();
-    }
-
-    public void AddWork(long count)
-    {
         TotalWork += count;
+        ItemsTotal += 1;
         AssertNoCancel();
     }
 

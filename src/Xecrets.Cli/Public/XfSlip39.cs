@@ -27,7 +27,7 @@ using System.Text.Json.Serialization;
 
 namespace Xecrets.Cli.Public;
 
-public sealed record XfSlip39
+public abstract record XfSlip39
 {
     public sealed record Prefixes([property: JsonPropertyName("prefixes")] Prefix[] Values);
 

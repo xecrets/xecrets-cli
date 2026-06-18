@@ -25,38 +25,34 @@
 
 using System.Globalization;
 
-using AxCrypt.Core.Crypto;
-using AxCrypt.Core.Crypto.Asymmetric;
-using AxCrypt.Core.Session;
-using AxCrypt.Core.UI;
-
+using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Implementation;
 using Xecrets.Cli.Log;
 using Xecrets.Cli.Public;
 
 namespace Xecrets.Cli.Run;
 
-internal class Parameters(OptionsParser parser) : IDisposable
+internal class Parameters(OptionsParser parser, CliServices cliServices) : IDisposable
 {
-    public bool IsDryRun { get; set; } = true;
+    public bool IsDryRun { get; private set; } = true;
 
-    public bool IsStdoutLog { get; set; } = false;
+    public bool IsStdoutLog { get; set; }
 
-    public bool Overwrite { get; set; } = false;
+    public bool Overwrite { get; set; }
 
     public bool Compress { get; set; } = true;
 
-    public bool AsciiArmor { get; set; } = false;
+    public bool AsciiArmor { get; set; }
 
     public string CrashLogFile { get; set; } = string.Empty;
 
     public CultureInfo Culture { get; set; } = CultureInfo.InvariantCulture;
 
-    public TotalsTracker TotalsTracker { get; } = new TotalsTracker();
+    public TotalsTracker TotalsTracker { get; } = new TotalsTracker(cliServices);
 
     public ILogger Logger => TotalsTracker.Logger;
 
-    public IProgressContext Progress => Logger.Progress;
+    public IProgressContext Progress => Logger.TotalsProgress;
 
     public ParsedOp CurrentOp { get; set; } = new ParsedOp(XfOpCode.None);
 
@@ -72,15 +68,21 @@ internal class Parameters(OptionsParser parser) : IDisposable
 
     public string Arg3 => CurrentOp.Arg3;
 
-    public KnownPublicKeys LoadedPublicKeys { get; } = new KnownPublicKeys();
+    public IList<PublicKey> LoadedPublicKeys { get; } = [];
 
-    public EncryptLikeCredentials? EncryptLikeCredentials { get; set; } = null;
+    public EncryptedWithParameters EncryptedWithParameters { get; set; } = EncryptedWithParameters.Empty;
 
     public OptionsParser Parser { get; } = parser;
 
-    public IList<LogOnIdentity> Identities { get; } = [];
+    public CliServices CliServices { get; } = cliServices;
 
-    public IList<EmailAddress> SharingEmails { get; } = [];
+    public ICoreServices CoreServices => CliServices.CoreServices;
+
+    public IDesktopServices DesktopServices => CliServices.DesktopServices;
+
+    public IList<Identity> Identities { get; } = [];
+
+    public IList<string> SharingEmails { get; } = [];
 
     public IDictionary<string, object> JwtClaims { get; } = new Dictionary<string, object>();
 
@@ -90,15 +92,15 @@ internal class Parameters(OptionsParser parser) : IDisposable
 
     public string JwtPrivateKeyPem { get; set; } = string.Empty;
 
-    public int JwtDaysUntilExpiration { get; set; } = 0;
+    public int JwtDaysUntilExpiration { get; set; }
 
     public Slip39Parameters Slip39 { get; set; } = new();
 
-    public IEnumerable<UserPublicKey> PublicKeys
+    public IEnumerable<PublicKey> PublicKeys
     {
         get
         {
-            return Identities.SelectMany(i => i.PublicKeys).Concat(LoadedPublicKeys.PublicKeys);
+            return Identities.SelectMany(i => i.KeyPairs.Select(k => k.PublicKey)).Concat(LoadedPublicKeys);
         }
     }
 
@@ -121,7 +123,6 @@ internal class Parameters(OptionsParser parser) : IDisposable
     {
         if (!disposing)
         {
-            return;
         }
     }
 }

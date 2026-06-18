@@ -23,14 +23,10 @@
 
 #endregion Copyright and GPL License
 
-using AxCrypt.Abstractions;
-
 using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Run;
 using Xecrets.Licensing.Abstractions;
 using Xecrets.Licensing.Implementation;
-
-using static AxCrypt.Abstractions.TypeResolve;
 
 namespace Xecrets.Cli.Operation;
 
@@ -38,14 +34,14 @@ internal class CliLicenseOperation : IExecutionPhases
 {
     public Task<Status> DryAsync(Parameters parameters)
     {
-        ILicenseCandidates licenseCandidates = New<ILicenseCandidates>();
+        ILicenseCandidates licenseCandidates = parameters.CliServices.LicenseCandidates;
         string candidate = parameters.Arguments[0];
         if (licenseCandidates.ExtractCandidate(candidate).Length == 0)
         {
             return Task.FromResult(new Status(Public.XfStatusCode.InvalidLicenseFormat, "A license must look like a JWT string."));
         }
 
-        ILicense license = New<ILicense>();
+        ILicense license = parameters.CliServices.License;
         license.LoadFromAsync([candidate]);
 
         if (license.Status() == LicenseStatus.Unlicensed)
@@ -55,7 +51,7 @@ internal class CliLicenseOperation : IExecutionPhases
 
         if (license.Subscription().Product is not "cli" and not "sdk")
         {
-            TypeMap.Register.Singleton<ILicenseExpiration>(() => new LicenseExpirationByCurrentTime(New<TimeProvider>()));
+            parameters.CliServices.UseLicenseExpiration(new LicenseExpirationByCurrentTime(parameters.CliServices.TimeProvider));
         }
 
         return Task.FromResult(Status.Success);

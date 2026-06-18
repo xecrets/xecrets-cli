@@ -24,36 +24,35 @@
 #endregion Copyright and GPL License
 
 using System.Text.Json;
-using System.Text.RegularExpressions;
 
-using AxCrypt.Abstractions;
-
-using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
 using Xecrets.Slip39;
 
-using static AxCrypt.Abstractions.TypeResolve;
-
 namespace Xecrets.Cli;
 
-internal static partial class Extensions
+internal static class Extensions
 {
-    public static bool VerifyCanWrite(this IStandardIoDataStore store, Parameters parameters, out Status status)
+    public static string Format(this string format, params object?[] args)
     {
-        if (!New<IFileVerify>().CanWriteToFile(store))
+        return string.Format(format, args);
+    }
+
+    public static bool VerifyCanWrite(this IFile file, Parameters parameters, out Status status)
+    {
+        if (!parameters.DesktopServices.CanWriteToFile(file))
         {
-            status = new Status(XfStatusCode.CannotWrite, "Can't write to '{0}'.".Format(store.Name));
+            status = new Status(XfStatusCode.CannotWrite, "Can't write to '{0}'.".Format(file.Name));
             return false;
         }
 
-        if (store.IsNamedStdIo)
+        if (file.IsNamedStdIo)
         {
             status = new Status(XfStatusCode.InvalidOption, "Writing to a named standard output stream is not supported.");
             return false;
         }
 
-        if (parameters.IsStdoutLog && store.IsStdIo)
+        if (parameters.IsStdoutLog && file.IsStdIo)
         {
             status = new Status(XfStatusCode.NotSupported, "It's not supported to both redirect logs to standard output and a destination.");
             return false;
@@ -63,41 +62,15 @@ internal static partial class Extensions
         return true;
     }
 
-    public static IStandardIoDataStore FindFree(this string fullPath, Parameters parameters)
+    public static IFile FindFreeFile(this string fullPath, Parameters parameters)
     {
-        IStandardIoDataStore store = Free(fullPath, parameters);
-        return store;
-
-        static IStandardIoDataStore Free(string fullPath, Parameters parameters)
-        {
-            IStandardIoDataStore candidateStore = New<IStandardIoDataStore>(fullPath);
-            if (parameters.Overwrite || candidateStore.IsStdout)
-            {
-                return candidateStore;
-            }
-
-            int i = 0;
-            while (candidateStore.IsAvailable)
-            {
-                string path = Path.GetDirectoryName(fullPath) ?? string.Empty;
-                string fileName = Path.GetFileName(fullPath);
-                string extension = Path.GetExtension(fileName);
-                string fileNameWithoutExtension = fileName.Substring(0, fileName.Length - extension.Length);
-                string fileNameWithoutExtensionAndNumber = TrailingNumberInParenthesis().Replace(fileNameWithoutExtension, string.Empty);
-                string candidateFreeFullPath = Path.Combine(path, $"{fileNameWithoutExtensionAndNumber} ({++i}){extension}");
-                candidateStore = New<IStandardIoDataStore>(candidateFreeFullPath);
-            }
-            return candidateStore;
-        }
+        return parameters.DesktopServices.FindFree(fullPath, parameters.Overwrite);
     }
 
-    [GeneratedRegex(@" \([\d]+\)$")]
-    private static partial Regex TrailingNumberInParenthesis();
-
-    public static string ToDisplayName(this IStandardIoDataStore store)
+    public static string ToDisplayName(this IFile file)
     {
-        string displayName = Path.GetRelativePath(Environment.CurrentDirectory, store.FullName);
-        return displayName.StartsWith("..") ? store.FullName : displayName;
+        string displayName = Path.GetRelativePath(Environment.CurrentDirectory, file.FullName);
+        return displayName.StartsWith("..") ? file.FullName : displayName;
     }
 
     public static object ToObject(this JsonElement element)
@@ -112,7 +85,7 @@ internal static partial class Extensions
         };
     }
 
-    public static XfSubStatusCode ToXfSubStatusCode(this ErrorCode errorCode)
+    private static XfSubStatusCode ToXfSubStatusCode(this ErrorCode errorCode)
     {
         XfSubStatusCode subStatus = errorCode switch
         {
@@ -144,5 +117,18 @@ internal static partial class Extensions
     public static string NormalizeDirectorySeparator(this string path)
     {
         return path.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
+    }
+
+    public static void AddOrReplace(this IList<PublicKey> publicKeys, PublicKey publicKey)
+    {
+        for (int i = 0; i < publicKeys.Count; i++)
+        {
+            if (publicKeys[i].Email == publicKey.Email)
+            {
+                publicKeys[i] = publicKey;
+                return;
+            }
+        }
+        publicKeys.Add(publicKey);
     }
 }

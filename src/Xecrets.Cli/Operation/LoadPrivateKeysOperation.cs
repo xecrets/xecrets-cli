@@ -23,18 +23,9 @@
 
 #endregion Copyright and GPL License
 
-using AxCrypt.Abstractions;
-using AxCrypt.Api.Model;
-using AxCrypt.Core.Crypto;
-using AxCrypt.Core.Extensions;
-using AxCrypt.Core.Service;
-using AxCrypt.Core.UI;
-
 using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
-
-using static AxCrypt.Abstractions.TypeResolve;
 
 namespace Xecrets.Cli.Operation;
 
@@ -42,11 +33,11 @@ internal class LoadPrivateKeysOperation : IExecutionPhases
 {
     public Task<Status> DryAsync(Parameters parameters)
     {
-        var fileStore = New<IStandardIoDataStore>(parameters.Arg1);
-        if (!New<IFileVerify>().CanReadFromFile(fileStore))
+        IFile fileStore = parameters.DesktopServices.StandardIoFile(parameters.Arg1);
+        if (!parameters.DesktopServices.CanReadFromFile(fileStore, out string? reason))
         {
             return Task.FromResult(new Status(XfStatusCode.CannotRead, parameters,
-                $"Can't read from file '{fileStore.Name}'."));
+                $"Can't read private keys from file '{fileStore.Name}'. [{reason}]"));
         }
 
         if (parameters.Arg2.Length == 0)
@@ -54,8 +45,8 @@ internal class LoadPrivateKeysOperation : IExecutionPhases
             return Task.FromResult(Status.Success);
         }
 
-        fileStore = New<IStandardIoDataStore>(parameters.Arg2);
-        if (!New<IFileVerify>().CanWriteToFile(fileStore))
+        fileStore = parameters.DesktopServices.StandardIoFile(parameters.Arg2);
+        if (!parameters.DesktopServices.CanWriteToFile(fileStore))
         {
             return Task.FromResult(new Status(XfStatusCode.CannotWrite, parameters,
                 $"Can't write to file '{fileStore.Name}'."));
@@ -70,155 +61,39 @@ internal class LoadPrivateKeysOperation : IExecutionPhases
 
     private static Status RealAsyncInternal(Parameters parameters)
     {
-        var store = New<IStandardIoDataStore>(parameters.Arg1);
-        UserAccounts? userAccounts;
+        IFile store = parameters.DesktopServices.StandardIoFile(parameters.Arg1);
         string json;
         using (StreamReader reader = new StreamReader(store.OpenRead()))
         {
             json = reader.ReadToEnd();
-            try
-            {
-                userAccounts = New<IStringSerializer>().Deserialize<UserAccounts>(json);
-            }
-            catch (Exception ex)
-            {
-                return new Status(XfStatusCode.DeserializeError, parameters,
-                    $"Deserialization error with '{store.Name}'. {ex.Message}");
-            }
         }
 
-        if (userAccounts == null)
+        PrivateKeyImportResult result;
+        try
+        {
+            string? reEncryptPassphrase = parameters.Identities.FirstOrDefault(i => i.Passphrase.Length > 0)?.Passphrase;
+            result = parameters.CoreServices.ImportPrivateKeys(json, new PrivateKeyImportRequest(
+                [.. parameters.Identities.Where(i => i.Passphrase.Length > 0).Select(i => i.Passphrase)],
+                reEncryptPassphrase,
+                null));
+        }
+        catch (Exception ex)
         {
             return new Status(XfStatusCode.DeserializeError, parameters,
-                $"Deserialization error with '{store.Name}'.");
+                $"Deserialization error with '{store.Name}'. {ex.Message}");
         }
 
-        UserAccounts? reEncryptedAccounts = ReEncryptAccounts(parameters, userAccounts);
-        if (reEncryptedAccounts == null)
+        if (result.LoadedKeyPairs.Count != 0)
         {
-            return Status.Success;
+            parameters.Identities.Add(new Identity(string.Empty, result.LoadedKeyPairs));
         }
 
-        store = New<IStandardIoDataStore>(parameters.Arg2);
-
-        using (StreamWriter writer = new StreamWriter(store.OpenWrite()))
+        if (parameters.Arg2.Length > 0 && result.ReEncryptedAccountsJson != null)
         {
-            // Ensure this operation is idempotent
-            if (object.ReferenceEquals(userAccounts, reEncryptedAccounts))
-            {
-                writer.Write(json);
-            }
-            else
-            {
-                reEncryptedAccounts.SerializeTo(writer);
-            }
+            store = parameters.DesktopServices.StandardIoFile(parameters.Arg2);
+            using StreamWriter writer = new(store.OpenWrite());
+            writer.Write(result.ReEncryptedAccountsJson);
         }
         return Status.Success;
-    }
-
-    private static UserAccounts? ReEncryptAccounts(Parameters parameters, UserAccounts userAccounts)
-    {
-        if (userAccounts.Accounts.Count == 0)
-        {
-            return userAccounts;
-        }
-
-        Passphrase reEncryptionPassphrase = parameters.Identities.First(i => i.Passphrase != Passphrase.Empty).Passphrase;
-
-        List<Passphrase> passphrases = [.. parameters.Identities
-            .Where(i => i.Passphrase != Passphrase.Empty && i.Passphrase != reEncryptionPassphrase)
-            .Select(i => i.Passphrase)];
-
-        EmailAddress mainUserEmail = parameters.Identities
-            .FirstOrDefault(i => i.UserEmail != EmailAddress.Empty)?.UserEmail ?? EmailAddress.Empty;
-        string userEmail = mainUserEmail == EmailAddress.Empty
-            ? userAccounts.Accounts.First().UserName : mainUserEmail.Address;
-
-        List<UserKeyPair> decryptedKeyPairs = [];
-        List<AccountKey> nonDecryptableAccountKeys = [];
-        bool statusChanged = userAccounts.Accounts.Where(a => a.UserName != userEmail).Any();
-        foreach (AccountKey key in userAccounts.Accounts.Select(a => a.AccountKeys).SelectMany(a => a))
-        {
-            statusChanged |= key.User != userEmail;
-            if (TryDecryptKey(key, [reEncryptionPassphrase], out UserKeyPair? userKeyPair))
-            {
-                decryptedKeyPairs.Add(userKeyPair!);
-                statusChanged |= key.Status != PrivateKeyStatus.PassphraseKnown;
-                continue;
-            }
-
-            if (TryDecryptKey(key, passphrases, out userKeyPair))
-            {
-                decryptedKeyPairs.Add(userKeyPair!);
-                statusChanged = true;
-                continue;
-            }
-
-            nonDecryptableAccountKeys.Add(key);
-            statusChanged |= key.Status != PrivateKeyStatus.PassphraseUnknown;
-        }
-
-        decryptedKeyPairs = [.. decryptedKeyPairs.OrderByDescending(k => k.Timestamp)];
-        if (decryptedKeyPairs.Count != 0)
-        {
-            parameters.Identities.Add(new LogOnIdentity(decryptedKeyPairs, Passphrase.Empty));
-        }
-
-        if (parameters.Arg2.Length == 0)
-        {
-            return null;
-        }
-        if (!statusChanged)
-        {
-            // Ensure idempotency
-            return userAccounts;
-        }
-
-        UserAccount reEncryptedAccount = new UserAccount(userEmail)
-        {
-            // This turned out to be the easiest way to avoid writing these fields to the JSON file.
-            // Modifying the serialization to exclude empty strings was non-trivial, because of constraints
-            // when using compile-time source generation for trimmer friendly serialization.
-            Tag = null!,
-            Signature = null!,
-        };
-        foreach (UserKeyPair keyPair in decryptedKeyPairs)
-        {
-            reEncryptedAccount.AccountKeys.Add(keyPair.ToAccountKey(reEncryptionPassphrase));
-        }
-        foreach (AccountKey key in nonDecryptableAccountKeys)
-        {
-            key.Status = PrivateKeyStatus.PassphraseUnknown;
-            key.User = userEmail;
-            reEncryptedAccount.AccountKeys.Add(key);
-        }
-        UserAccounts reEncryptedAccounts = new()
-        {
-            Accounts = [reEncryptedAccount],
-        };
-        return reEncryptedAccounts;
-    }
-
-    private static bool TryDecryptKey(AccountKey key, List<Passphrase> passphrases, out UserKeyPair? userKeyPair)
-    {
-        userKeyPair = null;
-        for (int i = 0; i < passphrases.Count; i++)
-        {
-            userKeyPair = key.ToUserKeyPair(passphrases[i]);
-            if (userKeyPair == null)
-            {
-                continue;
-            }
-
-            // Move the good passphrase to the front of the list.
-            if (i > 0)
-            {
-                passphrases.Insert(0, passphrases[i]);
-                passphrases.RemoveAt(i + 1);
-            }
-
-            return true;
-        }
-        return false;
     }
 }

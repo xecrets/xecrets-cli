@@ -23,9 +23,7 @@
 
 #endregion Copyright and GPL License
 
-using AxCrypt.Abstractions;
-using AxCrypt.Core.Crypto.Asymmetric;
-using AxCrypt.Core.UI;
+using System.Net.Mail;
 
 using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Public;
@@ -39,9 +37,9 @@ internal class UsePublicKeyOperation : IExecutionPhases
     {
         foreach (string email in parameters.CurrentOp.Arguments)
         {
-            if (!EmailAddress.TryParse(email, out EmailAddress _))
+            if (!parameters.CoreServices.TryParseEmail(email, out string? _))
             {
-                return Task.FromResult(new Status(XfStatusCode.InvalidEmail, parameters, "'{0}' is not a valid email address.".Format(email)));
+                return Task.FromResult(new Status(XfStatusCode.InvalidEmail, parameters, $"'{email}' is not a valid email address."));
             }
         }
 
@@ -50,17 +48,22 @@ internal class UsePublicKeyOperation : IExecutionPhases
 
     public Task<Status> RealAsync(Parameters parameters)
     {
-        if (!parameters.LoadedPublicKeys.PublicKeys.Any())
+        if (!parameters.LoadedPublicKeys.Any())
         {
             return Task.FromResult(new Status(XfStatusCode.PublicKeyNotFound, "Can't use a public key, no public keys has been provided. See --help for options."));
         }
 
-        foreach (EmailAddress email in parameters.Arguments.Select(p => EmailAddress.Parse(p)))
+        foreach (string arg in parameters.Arguments)
         {
-            UserPublicKey? publicKey = parameters.LoadedPublicKeys.PublicKeys.FirstOrDefault(pk => pk.Email == email);
+            if (!parameters.CoreServices.TryParseEmail(arg, out string? email))
+            {
+                return Task.FromResult(new Status(XfStatusCode.InvalidEmail, parameters, $"'{arg}' is not a valid email address."));
+            }
+
+            PublicKey? publicKey = parameters.LoadedPublicKeys.FirstOrDefault(pk => pk.Email == email);
             if (publicKey == null)
             {
-                return Task.FromResult(new Status(XfStatusCode.PublicKeyNotFound, parameters, "The public key for '{0}' could not be found.".Format(email)));
+                return Task.FromResult(new Status(XfStatusCode.PublicKeyNotFound, parameters, $"The public key for '{email}' could not be found."));
             }
 
             parameters.SharingEmails.Add(publicKey.Email);

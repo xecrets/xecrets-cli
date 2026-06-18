@@ -26,13 +26,17 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
+using Xecrets.Core.Public;
+
+namespace Xecrets.Cli;
+
 /// <summary>
 /// A helper function to immediately crash the application, to verify for example that a crash report is generated.
 /// </summary>
 /// <remarks>
 /// See https://learn.microsoft.com/en-us/windows/win32/wer/collecting-user-mode-dumps
 ///
-/// To setup Windows Error Reporting (WER) to collect crash dumps, you can use the registry settings in the file
+/// To set up Windows Error Reporting (WER) to collect crash dumps, you can use the registry settings in the file
 /// xecrets-cli-wer.reg in the root of the repository. This will create a registry key that will collect crash dumps
 /// in the folder %LOCALAPPDATA%\CrashDumps . The crash dumps are stored in the folder with the name of the application
 /// and the process id of the crashed process, for example "XecretsCli.exe.1234.dmp". They are full memory dumps, so are
@@ -42,17 +46,14 @@ using System.Runtime.InteropServices;
 /// COREHOST_TRACE=1 SET COREHOST_TRACEFILE = trace.txt SET COREHOST_TRACE_VERBOSITY = 4 and then run the application.
 /// The trace.txt file will contain some information about the crash.
 /// </remarks>
-internal static class HardCrash
+internal static partial class HardCrash
 {
-    [DllImport("kernel32.dll")]
-    [SuppressMessage("Interoperability",
-        "SYSLIB1054:Use 'LibraryImportAttribute' instead of 'DllImportAttribute' to generate P/Invoke marshalling code at compile time",
-        Justification = "We don't want this to be pre-compiled.")]
-    static extern void RaiseException(uint dwExceptionCode, uint dwExceptionFlags, uint nNumberOfArguments, IntPtr lpArguments);
+    [LibraryImport("kernel32.dll")]
+    private static partial void RaiseException(uint dwExceptionCode, uint dwExceptionFlags, uint nNumberOfArguments, IntPtr lpArguments);
 
     public static void Immediately()
     {
-        if (OperatingSystem.IsWindows())
+        if (Platform.IsWindows)
         {
             RaiseException(0xC0000005, 0, 0, IntPtr.Zero);
         }

@@ -43,5 +43,5 @@ internal class Slip39Parameters
 
     public string Password { get; set; } = string.Empty;
 
-    public int Exponent { get; set; } = 0;
+    public int Exponent { get; set; }
 }

@@ -28,6 +28,7 @@
     <InvariantGlobalization>true</InvariantGlobalization>
     <SuppressTrimAnalysisWarnings>false</SuppressTrimAnalysisWarnings>
     <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
+    <DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
     <AssemblyName>XecretsCli</AssemblyName>
     <ApplicationIcon>XecretsCli.ico</ApplicationIcon>
   </PropertyGroup>
@@ -50,12 +51,13 @@
     <Content Include="XecretsCli.ico" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.9" />
     <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.19.1" />
     <PackageReference Include="Xecrets.Licensing" Version="2.3.1507" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\xecrets-net\AxCrypt.Core\Xecrets.Net.Core.csproj" />
-    <ProjectReference Include="..\..\..\xecrets-net\AxCrypt.Mono\Xecrets.Net.Implementation.csproj" />
+    <ProjectReference Include="..\..\..\xecrets-net\Xecrets.Core.Desktop\Xecrets.Core.Desktop.csproj" />
+    <ProjectReference Include="..\..\..\xecrets-net\Xecrets.Core\Xecrets.Core.csproj" />
     <ProjectReference Include="..\..\..\xecrets-slip39\src\Xecrets.Slip39\Xecrets.Slip39.csproj" />
   </ItemGroup>
   <ItemGroup>

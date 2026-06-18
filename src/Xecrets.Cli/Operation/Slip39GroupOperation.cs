@@ -49,7 +49,7 @@ internal class Slip39GroupOperation : IExecutionPhases
             return new Status(XfStatusCode.InvalidOption,
                 parameters, $"The number of group shares '{parameters.Arg2}' must be an integer.");
         }
-        if (threshold < 1 || threshold > 16 || threshold > shares || shares < 1)
+        if (threshold < 1 || threshold > 16 || threshold > shares)
         {
             return new Status(XfStatusCode.InvalidOption, parameters,
                 $"The group threshold {threshold} must be between 1 and 16, and <= shares ({shares}) which must be >= 1.");

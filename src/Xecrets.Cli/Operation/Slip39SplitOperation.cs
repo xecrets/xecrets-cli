@@ -27,23 +27,19 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Text.Json;
 
-using AxCrypt.Abstractions;
-
 using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
 using Xecrets.Slip39;
 
-using static AxCrypt.Abstractions.TypeResolve;
-
 namespace Xecrets.Cli.Operation;
 
 internal class Slip39SplitOperation : IExecutionPhases
 {
-    private List<XfOptionKeys> _shareFormats = [];
+    private readonly List<XfOptionKeys> _shareFormats = [];
 
     [AllowNull]
-    private IStandardIoDataStore _toStore;
+    private IFile _toStore;
 
     public Task<Status> DryAsync(Parameters parameters) =>
         Extensions.Slip39Safe(() => SplitOperationInternal(parameters));
@@ -81,7 +77,7 @@ internal class Slip39SplitOperation : IExecutionPhases
                     parameters, $"Invalid secret format '{parameters.Slip39.SecretFormat}'.");
         }
 
-        IShamirsSecretSharing sss = New<IShamirsSecretSharing>();
+        IShamirsSecretSharing sss = parameters.CliServices.ShamirsSecretSharing;
         byte[] masterSecretBytes = parameters.Slip39.Secret.ToSecretBytes(stringEncoding);
         Group[] groups = [.. parameters.Slip39.Groups.Select(g => new Group(g.Threshold, g.Shares))];
 
@@ -161,7 +157,7 @@ internal class Slip39SplitOperation : IExecutionPhases
 
         if (arg.Length == 0)
         {
-            arg = XfOptionKeys.Slip39.ToString();
+            arg = nameof(XfOptionKeys.Slip39);
         }
 
         _shareFormats.Clear();
@@ -176,8 +172,8 @@ internal class Slip39SplitOperation : IExecutionPhases
         }
 
         string toStore = parameters.Arg2.Length > 0 ? parameters.Arg2 : "+";
-        _toStore = New<IStandardIoDataStore>(toStore);
-        if (!New<IFileVerify>().CanWriteToFile(_toStore))
+        _toStore = parameters.DesktopServices.StandardIoFile(toStore);
+        if (!parameters.DesktopServices.CanWriteToFile(_toStore))
         {
             return new Status(XfStatusCode.CannotWrite, parameters,
                 "The file path '{0}' cannot be written to.".Format(_toStore.Name));

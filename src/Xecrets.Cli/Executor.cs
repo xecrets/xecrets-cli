@@ -23,11 +23,8 @@
 
 #endregion Copyright and GPL License
 
-using Xecrets.Cli.Log;
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
-
-using static AxCrypt.Abstractions.TypeResolve;
 
 namespace Xecrets.Cli;
 
@@ -40,7 +37,7 @@ internal class Executor(Parameters parameters) : IDisposable
             Status status = await RunAsync(new DryRunFactory(parameters));
             if ((parameters.Parser.IsQuiet || parameters.Parser.Internal) && status.IsSuccess)
             {
-                New<Splash>().Clear();
+                parameters.CliServices.Splash.Clear();
             }
 
             if (!status.IsSuccess)
@@ -97,7 +94,7 @@ internal class Executor(Parameters parameters) : IDisposable
                 skipLevel = 0;
             }
 
-            // If the operation failed and it's recoverable and we're in a sequence, skip the rest of the sequence,
+            // If the operation failed, and it's recoverable, and we're in a sequence, skip the rest of the sequence,
             // and continue instead of aborting and returning the error.
             if (!status.IsSuccess && parser.OpLevel > 0 && RecoverableInSequence.Contains(status.StatusCode))
             {

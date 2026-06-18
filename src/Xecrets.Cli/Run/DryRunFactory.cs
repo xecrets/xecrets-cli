@@ -24,6 +24,7 @@
 #endregion Copyright and GPL License
 
 using Xecrets.Cli.Public;
+using Xecrets.Core.Public;
 
 namespace Xecrets.Cli.Run;
 
@@ -34,7 +35,7 @@ internal class DryRunFactory : RunFactory
     {
         if (!parameters.IsDryRun)
         {
-            throw new XecretsCliException(new Status(XfStatusCode.NoDryRun, "Internal error, attempt to perform a dry run out of sequence."));
+            throw new CliException(new Status(XfStatusCode.NoDryRun, "Internal error, attempt to perform a dry run out of sequence."));
         }
     }
 }

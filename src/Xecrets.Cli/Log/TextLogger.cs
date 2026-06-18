@@ -23,18 +23,15 @@
 
 #endregion Copyright and GPL License
 
-using AxCrypt.Core.UI;
-
+using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Implementation;
 using Xecrets.Cli.Public;
-
-using static AxCrypt.Abstractions.TypeResolve;
 
 namespace Xecrets.Cli.Log;
 
 internal class TextLogger(TotalsTracker totalsTracker, bool progress) : ILogger
 {
-    public IProgressContext Progress { get; } = new TotalsProgressContext(progress ? new TextProgressContext(totalsTracker) : new NoProgressContext(), totalsTracker);
+    public IProgressContext TotalsProgress { get; } = new TotalsProgressContext(progress ? new TextProgressContext(totalsTracker) : new NoProgressContext(), totalsTracker);
 
     public void Log(Status status)
     {
@@ -58,16 +55,16 @@ internal class TextLogger(TotalsTracker totalsTracker, bool progress) : ILogger
 
         if (message.Length == 0)
         {
-            New<ConsoleOut>().WritePending();
-            New<ConsoleOut>().BlankLinePending = true;
+            totalsTracker.CliServices.ConsoleOut.WritePending();
+            totalsTracker.CliServices.ConsoleOut.BlankLinePending = true;
             return;
         }
 
-        New<ConsoleOut>().WriteLine(message);
+        totalsTracker.CliServices.ConsoleOut.WriteLine(message);
     }
 
     public void FlushPending()
     {
-        New<Splash>().Write(m => { Log(m); New<ConsoleOut>().BlankLinePending = true; });
+        totalsTracker.CliServices.Splash.Write(m => { Log(m); totalsTracker.CliServices.ConsoleOut.BlankLinePending = true; });
     }
 }

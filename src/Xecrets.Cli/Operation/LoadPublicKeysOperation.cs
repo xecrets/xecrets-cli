@@ -23,17 +23,9 @@
 
 #endregion Copyright and GPL License
 
-using System.Text;
-
-using AxCrypt.Abstractions;
-using AxCrypt.Core.Crypto.Asymmetric;
-using AxCrypt.Core.IO;
-
 using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
-
-using static AxCrypt.Abstractions.TypeResolve;
 
 namespace Xecrets.Cli.Operation;
 
@@ -43,10 +35,10 @@ internal class LoadPublicKeysOperation : IExecutionPhases
     {
         foreach (string from in parameters.CurrentOp.Arguments)
         {
-            var fromStore = New<IStandardIoDataStore>(from);
-            if (!New<IFileVerify>().CanReadFromFile(fromStore))
+            IFile fromFile = parameters.DesktopServices.StandardIoFile(from);
+            if (!parameters.DesktopServices.CanReadFromFile(fromFile, out string? reason))
             {
-                return Task.FromResult(new Status(XfStatusCode.CannotRead, parameters, "Can't read from file '{0}'.".Format(fromStore.Name)));
+                return Task.FromResult(new Status(XfStatusCode.CannotRead, parameters, $"Can't read public keys from file '{fromFile.Name}'. [{reason}]"));
             }
         }
         return Task.FromResult(Status.Success);
@@ -56,18 +48,18 @@ internal class LoadPublicKeysOperation : IExecutionPhases
     {
         foreach (string from in parameters.CurrentOp.Arguments)
         {
-            var fromStore = New<IDataStore>(from);
+            IFile fromFile = parameters.DesktopServices.File(from);
             string userPublicKeyJson;
 
-            using (var reader = new StreamReader(fromStore.OpenRead(), Encoding.UTF8))
+            using (StreamReader reader = new(fromFile.OpenRead()))
             {
                 userPublicKeyJson = reader.ReadToEnd();
             }
 
-            UserPublicKey? userPublicKey = New<IStringSerializer>().Deserialize<UserPublicKey>(userPublicKeyJson);
+            PublicKey? userPublicKey = parameters.CoreServices.ImportPublicKey(userPublicKeyJson);
             if (userPublicKey == null)
             {
-                return Task.FromResult(new Status(XfStatusCode.PublicKeyNotFound, parameters, "Can't find a public key in '{0}'.".Format(fromStore.Name)));
+                return Task.FromResult(new Status(XfStatusCode.PublicKeyNotFound, parameters, "Can't find a public key in '{0}'.".Format(fromFile.Name)));
             }
             parameters.LoadedPublicKeys.AddOrReplace(userPublicKey);
             parameters.Logger.Log(new Status(parameters, "Loaded a public key for '{0}' from '{1}'.".Format(userPublicKey.Email, parameters.Arg1)));

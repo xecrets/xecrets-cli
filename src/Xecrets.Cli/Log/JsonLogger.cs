@@ -25,18 +25,15 @@
 
 using System.Text.Json;
 
-using AxCrypt.Core.UI;
-
+using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Implementation;
 using Xecrets.Cli.Public;
-
-using static AxCrypt.Abstractions.TypeResolve;
 
 namespace Xecrets.Cli.Log;
 
 internal class JsonLogger(TotalsTracker totalsTracker, bool progress) : ILogger
 {
-    public IProgressContext Progress { get; } = new TotalsProgressContext(progress ? new JsonProgressContext(totalsTracker) : new NoProgressContext(), totalsTracker);
+    public IProgressContext TotalsProgress { get; } = new TotalsProgressContext(progress ? new JsonProgressContext(totalsTracker) : new NoProgressContext(), totalsTracker);
 
     public void Log(Status status)
     {
@@ -71,13 +68,13 @@ internal class JsonLogger(TotalsTracker totalsTracker, bool progress) : ILogger
             Utc = status.Utc,
         };
 
-        JsonConsoleOut(statusMessage);
+        JsonConsoleOut(statusMessage, totalsTracker.CliServices.ConsoleOut);
     }
 
-    private static void JsonConsoleOut(CliMessage jsonMessage)
+    private static void JsonConsoleOut(CliMessage jsonMessage, ConsoleOut consoleOut)
     {
         var json = JsonSerializer.Serialize(jsonMessage, typeof(CliMessage), SourceGenerationContext.Default);
-        New<ConsoleOut>().WriteLine(json);
+        consoleOut.WriteLine(json);
     }
 
     public void Log(string message)
@@ -87,7 +84,7 @@ internal class JsonLogger(TotalsTracker totalsTracker, bool progress) : ILogger
 
     public void FlushPending()
     {
-        New<Splash>().Write(m => JsonConsoleOut(new CliMessage() { OpCode = (int)XfOpCode.SdkCliSplash, OpCodeName = XfOpCode.SdkCliSplash.ToString(), Message = m, }));
+        totalsTracker.CliServices.Splash.Write(m => JsonConsoleOut(new CliMessage() { OpCode = (int)XfOpCode.SdkCliSplash, OpCodeName = nameof(XfOpCode.SdkCliSplash), Message = m, }, totalsTracker.CliServices.ConsoleOut));
     }
 
     private static string? ToNullIfEmpty(string value)
