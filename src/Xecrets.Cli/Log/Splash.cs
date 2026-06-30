@@ -36,10 +36,17 @@ internal class Splash
 {
     private readonly string _splash;
 
+    private readonly string _buildUtcText;
+
+    private readonly LicenseBlurb _licenseBlurb;
+
     private bool _written;
 
     public Splash(string splash, IBuildUtc buildUtc, LicenseBlurb licenseBlurb)
     {
+        _buildUtcText = buildUtc.BuildUtcText;
+        _licenseBlurb = licenseBlurb;
+
         string runtime;
         string archString = RuntimeInformation.OSArchitecture.ToString().ToLowerInvariant();
         if (Platform.IsMacOS)
@@ -58,13 +65,10 @@ internal class Splash
         {
             runtime = $"unknown-{archString}";
         }
-        string buildUtcText = buildUtc.BuildUtcText;
         _splash = splash
             .Replace("{gpl} ", buildUtc.IsGplBuild ? "GPL " : string.Empty)
             .Replace("{version}", GetType().Assembly.GetName().Version?.ToString() ?? "0.0.0.0")
-            .Replace("{buildutc}", buildUtcText.FromUtc().ToLocal())
-            .Replace("{runtime}", runtime)
-            .Replace("{blurb}", licenseBlurb.ToString());
+            .Replace("{runtime}", runtime);
     }
 
     public void Write(Action<string> splashWriter)
@@ -72,7 +76,10 @@ internal class Splash
         if (!_written)
         {
             _written = true;
-            splashWriter(_splash);
+            string splash = _splash
+                .Replace("{buildutc}", _buildUtcText.FromUtc().ToLocal())
+                .Replace("{blurb}", _licenseBlurb.ToString());
+            splashWriter(splash);
         }
     }
 
