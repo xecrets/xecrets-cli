@@ -88,6 +88,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xecrets.Core", "..\..\xecre
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xecrets.Core.Desktop", "..\..\xecrets-net\Xecrets.Core.Desktop\Xecrets.Core.Desktop.csproj", "{F112ED39-EF19-4856-B468-5E64AFAD3B0B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xecrets-net", "xecrets-net", "{662EA468-07F0-4449-8EC3-67D276639237}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\xecrets-net\global.json = ..\..\xecrets-net\global.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -327,6 +332,7 @@ Global
 		{C83C1962-C02D-487B-A2FA-0196E7B052FC} = {DF5FD404-AA94-44FD-88EC-F96FE14084BF}
 		{A957E117-F0E2-45DC-8563-E87451FA55F5} = {DF5FD404-AA94-44FD-88EC-F96FE14084BF}
 		{097BBAAD-87BE-4736-A4A7-3E252A1EC615} = {24208F1B-710B-40E3-ADDF-496E722F41B9}
+		{662EA468-07F0-4449-8EC3-67D276639237} = {DF5FD404-AA94-44FD-88EC-F96FE14084BF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C14A257F-E01C-475D-92BF-798039A6F4D0}
