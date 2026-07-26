@@ -51,9 +51,9 @@
     <Content Include="XecretsCli.ico" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.9" />
-    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.19.1" />
-    <PackageReference Include="Xecrets.Licensing" Version="2.3.1507" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.10" />
+    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.21.0" />
+    <PackageReference Include="Xecrets.Licensing" Version="2.3.1668" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\xecrets-net\Xecrets.Core.Desktop\Xecrets.Core.Desktop.csproj" />
