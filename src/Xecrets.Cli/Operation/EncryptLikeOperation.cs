@@ -57,8 +57,9 @@ internal class EncryptLikeOperation : IExecutionPhases
     {
         IFile fromStore = parameters.DesktopServices.StandardIoFile(parameters.Arg1);
 
-        using Decryption decryption = await Decryption.CreateAsync(fromStore.OpenRead(), parameters.Identities, new NoProgressContext(), parameters.CoreServices);
-        
+        await using Stream fromStream = fromStore.OpenRead();
+        using Decryption decryption = await Decryption.CreateAsync(fromStream, parameters.Identities, new NoProgressContext(), parameters.CoreServices);
+
         parameters.EncryptedWithParameters = decryption.EncryptedWithParameters;
 
         return Status.Success;

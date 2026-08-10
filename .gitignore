@@ -16,3 +16,6 @@ obj
 .DS_Store
 .idea/
 docs/Axcrypt-*.pdf
+
+# Claude Code personal settings (not shared with the team)
+.claude/settings.local.json
