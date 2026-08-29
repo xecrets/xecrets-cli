@@ -7,7 +7,7 @@
       "type": "process",
       "args": [
         "build",
-        "${workspaceFolder}/src/Xecrets.Cli.sln",
+        "${workspaceFolder}/src/Xecrets.Cli.slnx",
         "/property:GenerateFullPaths=true",
         "/consoleloggerparameters:NoSummary"
       ],
@@ -67,7 +67,7 @@
         "watch",
         "run",
         "--project",
-        "${workspaceFolder}/src/Xecrets.Cli.sln"
+        "${workspaceFolder}/src/Xecrets.Cli.slnx"
       ],
       "problemMatcher": "$msCompile"
     }

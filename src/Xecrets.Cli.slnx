@@ -1,0 +1,71 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/Solution Items/">
+    <File Path="../.editorconfig" />
+    <File Path="../.gitignore" />
+    <File Path="../AGENTS.md" />
+    <File Path="../nix-zip.ps1" />
+    <File Path="../README.md" />
+    <File Path="../SECURITY.md" />
+    <File Path="../win-zip.ps1" />
+    <File Path="../xecrets-cli-wer.reg" />
+    <File Path="../xecrets-cli.code-workspace" />
+    <File Path="global.json" />
+  </Folder>
+  <Folder Name="/Solution Items/docs/">
+    <File Path="../docs/AxCrypt-1-0.4-specification.md" />
+    <File Path="../docs/AxCrypt-2-1.0-specification.md" />
+    <File Path="../docs/AxCrypt-2-1.1-specification.md" />
+    <File Path="../docs/AxCryptVersion1AlgorithmsandFileFormat.pdf" />
+    <File Path="../docs/AxCryptVersion2AlgorithmsandFileFormat.pdf" />
+    <File Path="../docs/index.md" />
+  </Folder>
+  <Folder Name="/Solution Items/sdk-docs/">
+    <File Path="../sdk-docs/index.md" />
+    <File Path="../sdk-docs/Xecrets.Sdk.Abstractions.md" />
+    <File Path="../sdk-docs/Xecrets.Sdk.Cli.CliMessage.md" />
+    <File Path="../sdk-docs/Xecrets.Sdk.Cli.md" />
+    <File Path="../sdk-docs/Xecrets.Sdk.Cli.Models.CliToolInformation.md" />
+    <File Path="../sdk-docs/Xecrets.Sdk.Cli.Models.md" />
+    <File Path="../sdk-docs/Xecrets.Sdk.Implementation.md" />
+    <File Path="../sdk-docs/Xecrets.Sdk.Implementation.StartMe.md" />
+    <File Path="../sdk-docs/Xecrets.Sdk.md" />
+    <File Path="../sdk-docs/Xecrets.Sdk.Models.md" />
+    <File Path="../sdk-docs/Xecrets.Sdk.Models.XfCredentials.md" />
+    <File Path="../sdk-docs/Xecrets.Sdk.Models.XfEncryptedKeyPair.md" />
+    <File Path="../sdk-docs/Xecrets.Sdk.Models.XfFilePair.md" />
+    <File Path="../sdk-docs/Xecrets.Sdk.Models.XfKeyPair.md" />
+    <File Path="../sdk-docs/Xecrets.Sdk.SourceGenerationContext.md" />
+    <File Path="../sdk-docs/Xecrets.Sdk.XfApiFactory.md" />
+    <File Path="../sdk-docs/Xecrets.Sdk.XfException.md" />
+    <File Path="../sdk-docs/Xecrets.Sdk.XfExtensions.md" />
+    <File Path="../sdk-docs/Xecrets.Sdk.XfSdkVersion.md" />
+  </Folder>
+  <Folder Name="/Solution Items/xecrets-net/">
+    <File Path="../../xecrets-net/global.json" />
+  </Folder>
+  <Folder Name="/Test/">
+    <Project Path="../../xecrets-net/AxCrypt.Common.Test/Xecrets.Net.Common.Test.csproj" />
+    <Project Path="../../xecrets-net/AxCrypt.Core.Test/Xecrets.Net.Core.Test.csproj" />
+    <Project Path="../../xecrets-net/AxCrypt.Fake/Xecrets.Net.Fake.csproj" />
+    <Project Path="../../xecrets-net/AxCrypt.Mono.Test/Xecrets.Net.Implementation.Test.csproj" />
+    <Project Path="../../xecrets-slip39/src/Xecrets.Slip39.Test/Xecrets.Slip39.Test.csproj" />
+    <Project Path="Xecrets.Cli.Test/Xecrets.Cli.Test.csproj" />
+  </Folder>
+  <Project Path="../../xecrets-net/AxCrypt.Abstractions/Xecrets.Net.Abstractions.csproj" />
+  <Project Path="../../xecrets-net/AxCrypt.Api/Xecrets.Net.Api.csproj" />
+  <Project Path="../../xecrets-net/AxCrypt.Common/Xecrets.Net.Common.csproj" />
+  <Project Path="../../xecrets-net/AxCrypt.Content/Xecrets.Net.Content.csproj" />
+  <Project Path="../../xecrets-net/AxCrypt.Core/Xecrets.Net.Core.csproj" />
+  <Project Path="../../xecrets-net/AxCrypt.Mono/Xecrets.Net.Implementation.csproj" />
+  <Project Path="../../xecrets-net/BouncyCastle.AxCrypt/Xecrets.Net.BouncyCastle.csproj" />
+  <Project Path="../../xecrets-net/Xecrets.Core.Desktop/Xecrets.Core.Desktop.csproj" />
+  <Project Path="../../xecrets-net/Xecrets.Core/Xecrets.Core.csproj" />
+  <Project Path="../../xecrets-net/Xecrets.Net.Cryptography/Xecrets.Net.Cryptography.csproj" />
+  <Project Path="../../xecrets-slip39/src/Xecrets.Slip39/Xecrets.Slip39.csproj" />
+  <Project Path="Xecrets.Cli/Xecrets.Cli.csproj" />
+</Solution>
