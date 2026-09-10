@@ -36,9 +36,15 @@ internal class WipeOperation : IExecutionPhases
         foreach (string file in parameters.Arguments)
         {
             IFile fileStore = parameters.DesktopServices.StandardIoFile(file);
+            if (!fileStore.IsAvailable)
+            {
+                // Nothing to wipe here, the goal of the file not existing is already achieved.
+                continue;
+            }
+
             if (!await DoWithRetryAsync(() => Task.FromResult(parameters.DesktopServices.CanReadFromFile(fileStore, out string? _))))
             {
-                return StatusWithLockedByCheck(parameters, fileStore, fileStore.IsAvailable ? string.Empty : "File doesn't exist");
+                return StatusWithLockedByCheck(parameters, fileStore);
             }
 
             parameters.TotalsTracker.AddWorkItem(fileStore.Length);
@@ -52,10 +58,15 @@ internal class WipeOperation : IExecutionPhases
         parameters.Progress.Report(Progress.LevelStarted());
         try
         {
-            for (int i = 0; i < parameters.Arguments.Count; ++i)
+            foreach (string file in parameters.Arguments)
             {
-                string file = parameters.Arguments[i];
                 IFile fileStore = parameters.DesktopServices.StandardIoFile(file);
+                if (!fileStore.IsAvailable)
+                {
+                    // Nothing to wipe here, the goal of the file not existing is already achieved.
+                    parameters.Logger.Log(new Status(parameters, $"'{file}' no longer exists, nothing to wipe."));
+                    continue;
+                }
 
                 parameters.Progress.Display = file;
                 parameters.Progress.Report(Progress.TotalAdded(fileStore.Length));
@@ -63,13 +74,10 @@ internal class WipeOperation : IExecutionPhases
                 bool wiped = await DoWithRetryAsync(() => parameters.DesktopServices.WipeAsync(file, parameters.Progress));
                 if (!wiped)
                 {
-                    return StatusWithLockedByCheck(parameters, fileStore, string.Empty);
+                    return StatusWithLockedByCheck(parameters, fileStore);
                 }
 
-                if (i != parameters.Arguments.Count - 1)
-                {
-                    parameters.Logger.Log(new Status(parameters, $"Securely wiped '{file}'."));
-                }
+                parameters.Logger.Log(new Status(parameters, $"Securely wiped '{file}'."));
             }
         }
         finally
@@ -77,19 +85,16 @@ internal class WipeOperation : IExecutionPhases
             parameters.Progress.Report(Progress.LevelFinished());
         }
 
-        parameters.Logger.Log(new Status(parameters, $"Securely wiped '{parameters.Arguments.Last()}'."));
-
         return Status.Success;
     }
 
-    private static Status StatusWithLockedByCheck(Parameters parameters, IFile fileStore, string reason)
+    private static Status StatusWithLockedByCheck(Parameters parameters, IFile fileStore)
     {
         string lockedBy = parameters.CliServices.InUseBy.Path(fileStore.FullName);
         string because = lockedBy.Length > 0
             ? $"because it is locked by '{lockedBy}'"
             : "for unknown reasons";
-        reason = reason.Length > 0 ? $" [{reason}]" : string.Empty;
-        string msg = $"Can't delete '{fileStore.Name}' {because}.{reason}";
+        string msg = $"Can't delete '{fileStore.Name}' {because}.";
         return new Status(XfStatusCode.CannotDelete, parameters, msg);
     }
 
