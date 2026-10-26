@@ -3,9 +3,9 @@
 ## Repository Shape
 
 - The solution references sibling repositories under `/Users/svante/Documents/xecrets`, especially `xecrets-net` and `xecrets-slip39`. Build and test commands can read and write outside the current `xecrets-cli/src` workspace sandbox.
-- `Xecrets.Cli` is the executable layer. Keep it on `Xecrets.Core`, `Xecrets.Core.Cli`, `Xecrets.Core.Desktop`, and `Xecrets.Slip39`; do not reference `AxCrypt.*` types directly here.
-- `Xecrets.Core` and `Xecrets.Core.Cli` are thin adapter layers and may bridge to AxCrypt code.
-- Put non-filesystem-backed adapters in `Xecrets.Core`; put filesystem/stdin/stdout/wipe/CLI platform adapters in `Xecrets.Core.Cli`.
+- `Xecrets.Cli` is the executable layer. Keep it on `Xecrets.Core`, `Xecrets.Core.Desktop`, and `Xecrets.Slip39`; do not reference `AxCrypt.*` types directly here.
+- `Xecrets.Core` and `Xecrets.Core.Desktop` are thin adapter layers and may bridge to AxCrypt code.
+- Put non-filesystem-backed adapters in `Xecrets.Core`; put filesystem/stdin/stdout/wipe/CLI platform adapters in `Xecrets.Core.Desktop`.
 - Do not modify old AxCrypt code for adapter work unless explicitly asked.
 
 ## Editing Rules

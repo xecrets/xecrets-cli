@@ -23,11 +23,13 @@
 
 #endregion Copyright and GPL License
 
+using System.Diagnostics.CodeAnalysis;
+
 using Xecrets.Cli.Abstractions;
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
-using Xecrets.Licensing.Abstractions;
 using Xecrets.Core.Public;
+using Xecrets.Licensing.Abstractions;
 
 namespace Xecrets.Cli.Operation;
 
@@ -118,27 +120,74 @@ internal class EncryptToOperation : IExecutionPhases
         parameters.Progress.Display = parameters.Arg1;
         parameters.Progress.Report(Progress.TotalAdded(fromStore.Length));
 
+        if (!TryCreateTempStore(toFreeStore, parameters, out IFile? toStore))
+        {
+            toStore = toFreeStore;
+        }
+
         try
         {
             using var encryption = await Encryption.CreateAsync(fromStore, parameters);
-            
+
             string originalName = parameters.Arg3.Length > 0 ? parameters.Arg3 : fromStore.AliasName;
+
             await using Stream toStream = parameters.AsciiArmor
-                ? new AsciiArmorStream(toFreeStore.OpenWrite())
-                : toFreeStore.OpenWrite();
+                ? new AsciiArmorStream(toStore.OpenWrite())
+                : toStore.OpenWrite();
             await encryption.EncryptToAsync(toStream, originalName, parameters.Compress);
         }
         catch
         {
-            if (toFreeStore is { IsStdIo: false, IsAvailable: true })
+            if (toStore is { IsStdIo: false, IsAvailable: true })
             {
-                toFreeStore.DeleteIfAvailable();
+                toStore.DeleteIfAvailable();
             }
             throw;
+        }
+
+        if (toStore != toFreeStore)
+        {
+            try
+            {
+                parameters.DesktopServices.Replace(toStore, toFreeStore);
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                toStore.DeleteIfAvailable();
+                return new Status(XfStatusCode.CannotWrite, parameters, "Can't replace '{0}'. [{1}]".Format(toFreeStore.Name, ex.Message));
+            }
         }
 
         string freeTo = Path.Combine(Path.GetDirectoryName(parameters.Arg2) ?? string.Empty, toFreeStore.Name);
         parameters.Logger.Log(new Status(parameters, "Encrypted '{0}' to '{1}'.".Format(parameters.Arg1, freeTo)));
         return Status.Success;
+    }
+
+    /// <summary>
+    /// When overwriting an existing file, try to create a temporary sibling to encrypt to instead, so the original is kept
+    /// if anything fails. Returns false if the existing file should be overwritten directly.
+    /// </summary>
+    private static bool TryCreateTempStore(IFile toStore, Parameters parameters, [NotNullWhen(true)] out IFile? tempStore)
+    {
+        tempStore = null;
+
+        if (!parameters.Overwrite || toStore is not { IsStdIo: false, IsAvailable: true, IsSymbolicLink: false })
+        {
+            return false;
+        }
+
+        try
+        {
+            IFile freeTempStore = parameters.DesktopServices.FindFree(toStore.FullName + ".tmp", overwrite: false);
+
+            using Stream tempStream = freeTempStore.OpenWrite();
+            tempStore = freeTempStore;
+
+            return true;
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            return false;
+        }
     }
 }
