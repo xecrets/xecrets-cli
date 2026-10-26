@@ -129,6 +129,52 @@ The stream to which the decrypted data is written.
 [System.Threading.Tasks.Task&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task-1 'System.Threading.Tasks.Task`1')[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task-1 'System.Threading.Tasks.Task`1')  
 The original file name, or an empty string when the credentials are invalid.
 
+<a name='Xecrets.Sdk.XfExtensions.DecryptForOpenAsync(thisXecrets.Sdk.Abstractions.IXfApi,Xecrets.Sdk.Models.XfCredentials,System.IO.FileInfo,System.IO.DirectoryInfo,System.Action_Xecrets.Sdk.Models.XfMessage_)'></a>
+
+## XfExtensions.DecryptForOpenAsync(this IXfApi, XfCredentials, FileInfo, DirectoryInfo, Action<XfMessage>) Method
+
+Decrypt a file using the provided credentials, to a specified directory, returning the resulting original
+filename and decrypted file represented by a [System.IO.FileInfo](https://learn.microsoft.com/en-us/dotnet/api/system.io.fileinfo 'System.IO.FileInfo') instance.
+
+```csharp
+public static System.Threading.Tasks.Task<Xecrets.Sdk.Models.XfFileResult[]> DecryptForOpenAsync(this Xecrets.Sdk.Abstractions.IXfApi xfApi, Xecrets.Sdk.Models.XfCredentials credentials, System.IO.FileInfo file, System.IO.DirectoryInfo directory, System.Action<Xecrets.Sdk.Models.XfMessage> progress);
+```
+#### Parameters
+
+<a name='Xecrets.Sdk.XfExtensions.DecryptForOpenAsync(thisXecrets.Sdk.Abstractions.IXfApi,Xecrets.Sdk.Models.XfCredentials,System.IO.FileInfo,System.IO.DirectoryInfo,System.Action_Xecrets.Sdk.Models.XfMessage_).xfApi'></a>
+
+`xfApi` [IXfApi](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfApi 'Xecrets.Sdk.Abstractions.IXfApi')
+
+The [IXfApi](Xecrets.Sdk.Abstractions.md#Xecrets.Sdk.Abstractions.IXfApi 'Xecrets.Sdk.Abstractions.IXfApi') instance to use.
+
+<a name='Xecrets.Sdk.XfExtensions.DecryptForOpenAsync(thisXecrets.Sdk.Abstractions.IXfApi,Xecrets.Sdk.Models.XfCredentials,System.IO.FileInfo,System.IO.DirectoryInfo,System.Action_Xecrets.Sdk.Models.XfMessage_).credentials'></a>
+
+`credentials` [XfCredentials](Xecrets.Sdk.Models.XfCredentials.md 'Xecrets.Sdk.Models.XfCredentials')
+
+One or more passwords to decrypt with.
+
+<a name='Xecrets.Sdk.XfExtensions.DecryptForOpenAsync(thisXecrets.Sdk.Abstractions.IXfApi,Xecrets.Sdk.Models.XfCredentials,System.IO.FileInfo,System.IO.DirectoryInfo,System.Action_Xecrets.Sdk.Models.XfMessage_).file'></a>
+
+`file` [System.IO.FileInfo](https://learn.microsoft.com/en-us/dotnet/api/system.io.fileinfo 'System.IO.FileInfo')
+
+The file to decrypt.
+
+<a name='Xecrets.Sdk.XfExtensions.DecryptForOpenAsync(thisXecrets.Sdk.Abstractions.IXfApi,Xecrets.Sdk.Models.XfCredentials,System.IO.FileInfo,System.IO.DirectoryInfo,System.Action_Xecrets.Sdk.Models.XfMessage_).directory'></a>
+
+`directory` [System.IO.DirectoryInfo](https://learn.microsoft.com/en-us/dotnet/api/system.io.directoryinfo 'System.IO.DirectoryInfo')
+
+The location to decrypt to.
+
+<a name='Xecrets.Sdk.XfExtensions.DecryptForOpenAsync(thisXecrets.Sdk.Abstractions.IXfApi,Xecrets.Sdk.Models.XfCredentials,System.IO.FileInfo,System.IO.DirectoryInfo,System.Action_Xecrets.Sdk.Models.XfMessage_).progress'></a>
+
+`progress` [System.Action&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.action-1 'System.Action`1')[XfMessage](Xecrets.Sdk.Models.XfMessage.md 'Xecrets.Sdk.Models.XfMessage')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.action-1 'System.Action`1')
+
+An [System.Action](https://learn.microsoft.com/en-us/dotnet/api/system.action 'System.Action') delegate called with progress.
+
+#### Returns
+[System.Threading.Tasks.Task&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task-1 'System.Threading.Tasks.Task`1')[XfFileResult](Xecrets.Sdk.Models.XfFileResult.md 'Xecrets.Sdk.Models.XfFileResult')[[]](https://learn.microsoft.com/en-us/dotnet/api/system.array 'System.Array')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task-1 'System.Threading.Tasks.Task`1')  
+An array of results, with exactly 1 element.
+
 <a name='Xecrets.Sdk.XfExtensions.EncryptFileAsync(thisXecrets.Sdk.Abstractions.IXfApi,Xecrets.Sdk.Models.XfCredentials,string,byte[],string)'></a>
 
 ## XfExtensions.EncryptFileAsync(this IXfApi, XfCredentials, string, byte[], string) Method

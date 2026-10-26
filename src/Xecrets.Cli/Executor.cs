@@ -69,6 +69,8 @@ internal class Executor(Parameters parameters) : IDisposable
     {
         parameters.TotalsTracker.ResetLogger(parameters);
         parameters.Overwrite = false;
+        parameters.InMemory.Clear();
+        parameters.StdoutClaimed = false;
         parameters.Compress = true;
         parameters.Slip39 = new();
     }

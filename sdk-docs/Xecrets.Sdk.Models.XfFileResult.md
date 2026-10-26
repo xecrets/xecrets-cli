@@ -61,6 +61,19 @@ public string FileName { get; }
 #### Property Value
 [System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
+<a name='Xecrets.Sdk.Models.XfFileResult.InMemoryType'></a>
+
+## XfFileResult.InMemoryType Property
+
+The type of the content in [Value](Xecrets.Sdk.Models.XfFileResult.md#Xecrets.Sdk.Models.XfFileResult.Value 'Xecrets.Sdk.Models.XfFileResult.Value'), if the file was decrypted to memory instead of to a file.
+
+```csharp
+public System.Nullable<Xecrets.Sdk.Models.XfInMemoryType> InMemoryType { get; init; }
+```
+
+#### Property Value
+[System.Nullable&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.nullable-1 'System.Nullable`1')[XfInMemoryType](Xecrets.Sdk.Models.XfInMemoryType.md 'Xecrets.Sdk.Models.XfInMemoryType')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.nullable-1 'System.Nullable`1')
+
 <a name='Xecrets.Sdk.Models.XfFileResult.OriginalFileName'></a>
 
 ## XfFileResult.OriginalFileName Property

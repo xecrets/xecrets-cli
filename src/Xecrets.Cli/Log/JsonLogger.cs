@@ -61,6 +61,7 @@ internal class JsonLogger(TotalsTracker totalsTracker, bool progress) : ILogger
             Platform = ToNullIfEmpty(status.Platform),
             OriginalFileName = ToNullIfEmpty(status.OriginalFileName),
             Result = ToNullIfEmpty(status.Result),
+            InMemoryType = ToNullIfEmpty(status.InMemoryType),
             Status = (int)status.StatusCode,
             StatusName = status.StatusCode != 0 ? status.StatusCode.ToString() : null,
             SubStatus = (int)status.SubStatusCode,

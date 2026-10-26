@@ -143,6 +143,7 @@ internal class OptionsParser
         optionSet.Add("date-pattern=", XfOpCode.DatePattern, "{culture}:?Set the display date pattern, e.g. 'M/d/yyyy h:mm tt'.", (ora, op, culture) => ora.Add(op, culture));
         optionSet.Add("crash=", XfOpCode.Crash, "{parse|dry|real}:?Crash during parse, dry run or real run.", (ora, _, arg) => { if (arg == "parse") HardCrash.Immediately(); else ora.Add(XfOpCode.Crash, arg); });
         optionSet.Add("end", XfOpCode.End, ":?End a sequence of operations.", (ora, op, _) => ora.Add(op));
+        optionSet.Add("in-memory=", XfOpCode.InMemory, "{type:size}:?Decrypt to stdout if is [text|image|pdf|binary] and <= size, e.g. text:100000.", (ora, op, spec) => ora.Add(op, spec));
         optionSet.Add("internal", XfOpCode.Internal, ":?Display internal use help and disable splash (global).", (_, _, @internal) => Internal = @internal != null);
         optionSet.Add("jwt-audience=", XfOpCode.JwtAudience, "{audience}:?Set audience string or URI for JWT.", (ora, op, audience) => ora.Add(op, audience));
         optionSet.Add("jwt-claims={}", XfOpCode.JwtClaims, "{expiration} {claims}:?Set days until expiration and claims JSON.", (ora, op, days, claims) => ora.Add(op, days, claims));

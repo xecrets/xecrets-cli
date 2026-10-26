@@ -24,3 +24,4 @@ must be updated to reflect the updated compatibility.
 | Enums | |
 | :--- | :--- |
 | [XfEncryptedKeys.PrivateKeyPassword](Xecrets.Sdk.Models.XfEncryptedKeys.PrivateKeyPassword.md 'Xecrets.Sdk.Models.XfEncryptedKeys.PrivateKeyPassword') | Records wether the private key password is known or unknown. |
+| [XfInMemoryType](Xecrets.Sdk.Models.XfInMemoryType.md 'Xecrets.Sdk.Models.XfInMemoryType') | The types of content that can be decrypted to memory instead of to a file. |

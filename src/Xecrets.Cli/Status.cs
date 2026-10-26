@@ -56,6 +56,8 @@ internal class Status(XfStatusCode code, string message)
 
     public string Result { get; init; } = string.Empty;
 
+    public string InMemoryType { get; init; } = string.Empty;
+
     public DateTime Utc { get; init; }
 
     public bool IsSuccess { get { return StatusCode == XfStatusCode.Success; } }

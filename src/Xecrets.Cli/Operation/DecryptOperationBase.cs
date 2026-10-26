@@ -34,6 +34,8 @@ internal abstract class DecryptOperationBase : IExecutionPhases
 {
     protected abstract (Status, IFile) ToStore(Parameters parameters, string originalFileName);
 
+    protected virtual bool SupportsInMemory => false;
+
     public Task<Status> DryAsync(Parameters parameters)
     {
         if (!parameters.Identities.Any())
@@ -56,6 +58,19 @@ internal abstract class DecryptOperationBase : IExecutionPhases
         if (!toStore.IsStdout && !parameters.DesktopServices.CanWriteToFolder(toStore.ParentFolder))
         {
             return Task.FromResult(new Status(XfStatusCode.CannotWrite, parameters, "Can't write to '{0}'".Format(toStore.ParentFolder.Name)));
+        }
+
+        if (parameters.InMemory.Count > 0)
+        {
+            if (!SupportsInMemory)
+            {
+                return Task.FromResult(new Status(XfStatusCode.NotSupported, parameters, "In-memory decryption is not supported for this operation."));
+            }
+            if (parameters.StdoutClaimed)
+            {
+                return Task.FromResult(new Status(XfStatusCode.NotSupported, parameters, "Only one output to stdout is supported per run."));
+            }
+            parameters.StdoutClaimed = true;
         }
 
         parameters.TotalsTracker.AddWorkItem(fromStore.Length);
@@ -86,7 +101,7 @@ internal abstract class DecryptOperationBase : IExecutionPhases
             return status;
         }
 
-        await decryption.DecryptToAsync(toStore, parameters.DesktopServices);
+        (InMemoryType? inMemoryType, toStore) = await decryption.DecryptToAsync(toStore, parameters.InMemory, parameters.DesktopServices);
 
         string sourceDisplayName = fromStore.ToDisplayName();
         string destinationDisplayName = toStore.ToDisplayName();
@@ -95,6 +110,7 @@ internal abstract class DecryptOperationBase : IExecutionPhases
         {
             OriginalFileName = decryption.OriginalFileName,
             Result = toStore.FullName,
+            InMemoryType = inMemoryType?.ToString().ToLowerInvariant() ?? string.Empty,
         });
 
         return Status.Success;

@@ -72,6 +72,7 @@ public enum XfOpCode
     GplLicense = 1220,
     Help = 1230,
     Id = 1240,
+    InMemory = 1245,
     Internal = 1250,
     JwtAudience = 1260,
     JwtClaims = 1270,

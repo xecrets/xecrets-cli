@@ -60,6 +60,7 @@ internal abstract partial class RunFactory(Parameters parameters)
         { XfOpCode.OptionsFromFile, () => new FileOptionsOperation() },
         { XfOpCode.GplLicense, () => new GplLicenseOperation() },
         { XfOpCode.Help, () => new HelpOperation() },
+        { XfOpCode.InMemory, () => new InMemoryOperation() },
         { XfOpCode.Id, () => new IdOperation() },
         { XfOpCode.SdkJsonLog, () => new SdkJsonLogOperation() },
         { XfOpCode.JwtAudience, () => new JwtAudienceOperation() },

@@ -30,6 +30,8 @@ namespace Xecrets.Cli.Operation;
 
 internal class DecryptToFolderOperation : DecryptOperationBase
 {
+    protected override bool SupportsInMemory => true;
+
     protected override (Status, IFile) ToStore(Parameters parameters, string originalFileName)
     {
         Status status;

@@ -52,6 +52,7 @@ public static class XfExportVersion
     /// 6.0 -> 2025-01-16 Add operating system status return codes
     /// 6.1 -> 2025-05-23 Extend/change support for Slip39
     /// 6.2 -> 2025-07-29 Add --encrypt-like option to re-encrypt files with existing passphrase and/or recipients
+    /// 6.3 -> 2026-10-26 Add --in-memory option to decrypt small files of a given type to standard output
     /// </remarks>
-    public static Version CliVersion => new(6, 2);
+    public static Version CliVersion => new(6, 3);
 }

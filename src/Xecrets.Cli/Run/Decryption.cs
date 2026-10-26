@@ -45,21 +45,37 @@ internal sealed class Decryption : IDisposable
         return new Decryption(session);
     }
 
-    public async Task DecryptToAsync(IFile toFile, IDesktopServices desktopServices)
+    /// <summary>
+    /// Decrypt to the file, or to standard output if the data is of a type in <paramref name="inMemory"/> and within
+    /// its size limit. Text written to standard output is converted to UTF-8.
+    /// </summary>
+    /// <returns>The in-memory type, or null if the data was written to the file, and the store written to.</returns>
+    public async Task<(InMemoryType? Type, IFile ToStore)> DecryptToAsync(IFile toFile, IDictionary<InMemoryType, long> inMemory, IDesktopServices desktopServices)
     {
         try
         {
-            await using Stream toStream = toFile.OpenWrite();
-            await _session.DecryptAsync(toStream);
-            if (!_session.IsDecryptable)
+            InMemoryOrFileStream toStream = new(OriginalFileName, toFile, inMemory);
+            await using (toStream)
             {
-                return;
+                await _session.DecryptAsync(toStream);
+                toStream.Commit();
+            }
+
+            if (toStream.InMemoryType != null)
+            {
+                IFile stdout = desktopServices.StandardIoFile("+");
+
+                using Stream stdoutStream = stdout.OpenWrite();
+                stdoutStream.Write(toStream.Data.Span);
+
+                return (toStream.InMemoryType, stdout);
             }
 
             if (!toFile.IsStdIo)
             {
                 toFile.SetFileTimes(_session.CreationTimeUtc, _session.LastAccessTimeUtc, _session.LastWriteTimeUtc);
             }
+            return (null, toFile);
         }
         catch (Exception)
         {

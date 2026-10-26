@@ -77,6 +77,19 @@ public string? Id { get; set; }
 #### Property Value
 [System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
 
+<a name='Xecrets.Sdk.Models.XfMessage.InMemoryType'></a>
+
+## XfMessage.InMemoryType Property
+
+The type of the data written to standard output instead of to a file, if any. See [XfInMemoryType](Xecrets.Sdk.Models.XfInMemoryType.md 'Xecrets.Sdk.Models.XfInMemoryType').
+
+```csharp
+public string? InMemoryType { get; set; }
+```
+
+#### Property Value
+[System.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System.String')
+
 <a name='Xecrets.Sdk.Models.XfMessage.Message'></a>
 
 ## XfMessage.Message Property

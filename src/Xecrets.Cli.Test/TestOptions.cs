@@ -64,6 +64,22 @@ internal class TestOptions
     }
 
     [Test]
+    public void TestInMemoryOption()
+    {
+        var parser = new OptionsParser("XecretsCli --in-memory=text:100 --decrypt-file-to-folder from.axx folder");
+        Assert.That(parser.ParseStatus.IsSuccess);
+
+        ParsedOp[] allParsed = parser.ParsedOps.ToArray();
+
+        Assert.That(allParsed.Length, Is.EqualTo(2));
+
+        Assert.That(allParsed[0].OpCode, Is.EqualTo(XfOpCode.InMemory));
+        Assert.That(allParsed[0].Arguments, Is.EqualTo(new[] { "text:100" }));
+
+        Assert.That(allParsed[1].OpCode, Is.EqualTo(XfOpCode.DecryptToFolder));
+    }
+
+    [Test]
     public void TestUnknownArgumentTreatedAsExtra()
     {
         var parser = new OptionsParser("XecretsCli --unknown blabla");

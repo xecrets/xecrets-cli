@@ -69,6 +69,10 @@ internal class CliMessage
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public string? Result { get; set; }
 
+    [JsonPropertyName("inMemoryType")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public string? InMemoryType { get; set; }
+
     [JsonPropertyName("percent")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public int Percent { get; set; }
