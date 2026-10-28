@@ -40,7 +40,7 @@ internal class UseKeyPairOperation : IExecutionPhases
         IFile fromFile = parameters.DesktopServices.StandardIoFile(parameters.Arg1);
         if (!parameters.DesktopServices.CanReadFromFile(fromFile, out string? reason))
         {
-            return Task.FromResult(new Status(XfStatusCode.CannotRead, $"Can't read key pair from file '{fromFile.Name}'. [{reason}]"));
+            return Task.FromResult(new Status(XfStatusCode.CannotRead, $"Can't read key pair from '{fromFile.Name}'. {reason}"));
         }
         return Task.FromResult(Status.Success);
     }

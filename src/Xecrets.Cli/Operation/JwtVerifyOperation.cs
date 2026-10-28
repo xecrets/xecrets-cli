@@ -47,13 +47,13 @@ internal class JwtVerifyOperation : IExecutionPhases
         IFile publicPemFile = parameters.DesktopServices.StandardIoFile(parameters.Arguments[0]);
         if (!parameters.DesktopServices.CanReadFromFile(publicPemFile, out string? reason))
         {
-            return Task.FromResult(new Status(XfStatusCode.CannotRead, $"Can't read public pem from file '{publicPemFile.Name}'. [{reason}]"));
+            return Task.FromResult(new Status(XfStatusCode.CannotRead, $"Can't read public pem from '{publicPemFile.Name}'. {reason}"));
         }
 
         IFile signedTokenFile = parameters.DesktopServices.StandardIoFile(parameters.Arguments[1]);
         if (!parameters.DesktopServices.CanReadFromFile(signedTokenFile, out reason))
         {
-            return Task.FromResult(new Status(XfStatusCode.CannotRead, $"Can't read signed token from file '{signedTokenFile.Name}'. [{reason}]"));
+            return Task.FromResult(new Status(XfStatusCode.CannotRead, $"Can't read signed token from '{signedTokenFile.Name}'. {reason}"));
         }
 
         return Task.FromResult(Status.Success);

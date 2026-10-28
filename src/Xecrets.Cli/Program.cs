@@ -94,7 +94,7 @@ try
 }
 catch (Exception ex)
 {
-    status = new Status(XfStatusCode.UnhandledRunException, ex.ToString());
+    status = new Status(XfStatusCode.UnhandledRunException, ex.Message) { Details = ex.ToString() };
     parameters.Logger.Log(XfOpCode.SdkCliError, status);
 }
 
@@ -107,7 +107,10 @@ if (status != Status.Success && parameters.CrashLogFile.Length > 0)
                                                (status.Arg2.Length == 0
                                                    ? string.Empty
                                                    : $"{Environment.NewLine}Arg2 = '{status.Arg2}'") +
-                                               Environment.NewLine + Environment.NewLine + status.Message);
+                                               Environment.NewLine + Environment.NewLine + status.Message +
+                                               (status.Details.Length == 0
+                                                   ? string.Empty
+                                                   : Environment.NewLine + Environment.NewLine + status.Details));
 }
 
 await WaitForKeyPressedOrTimeoutWhenStartedWithoutArguments(args, status);

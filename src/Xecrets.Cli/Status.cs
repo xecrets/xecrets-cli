@@ -38,6 +38,8 @@ internal class Status(XfStatusCode code, string message)
 
     public string Message { get; } = message ?? throw new ArgumentNullException(nameof(message));
 
+    public string Details { get; init; } = string.Empty;
+
     public XfOpCode OpCode { get; set; } = XfOpCode.None;
 
     public string Id { get; init; } = string.Empty;

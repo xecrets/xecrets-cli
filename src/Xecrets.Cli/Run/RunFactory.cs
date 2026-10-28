@@ -121,21 +121,33 @@ internal abstract partial class RunFactory(Parameters parameters)
                     ErrorCode.Success => XfSubStatusCode.Success,
                     ErrorCode.ZeroLengthFile => XfSubStatusCode.ZeroLengthFile,
                     ErrorCode.MagicGuidMissing => XfSubStatusCode.InvalidMagicGuid,
+                    ErrorCode.FileFormatError => XfSubStatusCode.FileFormatError,
+                    ErrorCode.HmacValidationError => XfSubStatusCode.HmacValidationError,
+                    ErrorCode.DataError => XfSubStatusCode.DataError,
+                    ErrorCode.CryptographicError => XfSubStatusCode.CryptographicError,
+                    ErrorCode.TooNewFileFormatVersion => XfSubStatusCode.TooNewFileFormatVersion,
+                    ErrorCode.TooOldFileFormatVersion => XfSubStatusCode.TooOldFileFormatVersion,
+                    ErrorCode.UnexpectedEndOfFile => XfSubStatusCode.UnexpectedEndOfFile,
+                    ErrorCode.EndOfStream => XfSubStatusCode.EndOfStream,
+                    ErrorCode.InvalidBlockLength => XfSubStatusCode.InvalidBlockLength,
+                    ErrorCode.UnexpectedHeaderBlockType => XfSubStatusCode.UnexpectedHeaderBlockType,
                     _ => XfSubStatusCode.Unknown,
                 };
-                status = new Status(XfStatusCode.AxCryptException, subStatus, xcex.ToString())
+                status = new Status(XfStatusCode.AxCryptException, subStatus, xcex.Message)
                 {
                     Id = factory.Parameters.TotalsTracker.Id,
                     Arg1 = factory.Parameters.Arg1,
                     Arg2 = factory.Parameters.Arg2,
+                    Details = xcex.ToString(),
                 };
             }
             catch (FileNotFoundException fnfex)
             {
-                status = new Status(XfStatusCode.FileUnavailable, fnfex.ToString())
+                status = new Status(XfStatusCode.FileUnavailable, fnfex.Message)
                 {
                     Id = factory.Parameters.TotalsTracker.Id,
                     Arg1 = fnfex.FileName ?? (factory.Parameters.Arg1),
+                    Details = fnfex.ToString(),
                 };
             }
             catch (OperationCanceledException)
@@ -151,23 +163,34 @@ internal abstract partial class RunFactory(Parameters parameters)
                 {
                     lockedBy = factory.Parameters.CliServices.InUseBy.Path(path);
                 }
-                string msg = lockedBy.Length > 0 ? $"Locked by '{lockedBy}'" : "Locked by unknown process";
-                msg += Environment.NewLine;
-                
-                status = new Status(XfStatusCode.UnhandledOperationException, msg + ioex)
+                string msg = lockedBy.Length > 0 ? $"{ioex.Message} Locked by '{lockedBy}'." : ioex.Message;
+
+                status = new Status(XfStatusCode.LockedInUse, msg)
+                {
+                    Id = factory.Parameters.TotalsTracker.Id,
+                    Arg1 = path.Length > 0 ? path : factory.Parameters.Arg1,
+                    Arg2 = factory.Parameters.Arg2,
+                    Details = ioex.ToString(),
+                };
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                status = new Status(XfStatusCode.FileUnavailable, ex.Message)
                 {
                     Id = factory.Parameters.TotalsTracker.Id,
                     Arg1 = factory.Parameters.Arg1,
                     Arg2 = factory.Parameters.Arg2,
+                    Details = ex.ToString(),
                 };
             }
             catch (Exception ex)
             {
-                status = new Status(XfStatusCode.UnhandledOperationException, ex.ToString())
+                status = new Status(XfStatusCode.UnhandledOperationException, ex.Message)
                 {
                     Id = factory.Parameters.TotalsTracker.Id,
                     Arg1 = factory.Parameters.Arg1,
                     Arg2 = factory.Parameters.Arg2,
+                    Details = ex.ToString(),
                 };
             }
 

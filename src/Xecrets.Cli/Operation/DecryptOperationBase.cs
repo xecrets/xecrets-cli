@@ -46,7 +46,7 @@ internal abstract class DecryptOperationBase : IExecutionPhases
         IFile fromStore = parameters.DesktopServices.StandardIoFile(parameters.Arg1);
         if (!parameters.DesktopServices.CanReadFromFile(fromStore, out string? reason))
         {
-            return Task.FromResult(new Status(XfStatusCode.CannotRead, parameters, $"Can't read from '{fromStore.Name}'. [{reason}]"));
+            return Task.FromResult(new Status(XfStatusCode.CannotRead, parameters, $"Can't read from '{fromStore.Name}'. {reason}"));
         }
 
         (Status status, IFile toStore) = ToStore(parameters, "placeholder.tmp");
@@ -55,9 +55,9 @@ internal abstract class DecryptOperationBase : IExecutionPhases
             return Task.FromResult(status);
         }
 
-        if (!toStore.IsStdout && !parameters.DesktopServices.CanWriteToFolder(toStore.ParentFolder))
+        if (!toStore.IsStdout && !parameters.DesktopServices.CanWriteToFolder(toStore.ParentFolder, out reason))
         {
-            return Task.FromResult(new Status(XfStatusCode.CannotWrite, parameters, "Can't write to '{0}'".Format(toStore.ParentFolder.Name)));
+            return Task.FromResult(new Status(XfStatusCode.CannotWrite, parameters, $"Can't write to '{toStore.ParentFolder.Name}'. {reason}"));
         }
 
         if (parameters.InMemory.Count > 0)

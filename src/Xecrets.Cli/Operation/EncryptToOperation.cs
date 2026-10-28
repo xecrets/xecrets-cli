@@ -58,7 +58,7 @@ internal class EncryptToOperation : IExecutionPhases
         if (!parameters.DesktopServices.CanReadFromFile(fromStore, out string? reason))
         {
             return Task.FromResult(new Status(XfStatusCode.CannotRead,
-                $"Can't read from '{fromStore.Name}'. [{reason}]"));
+                $"Can't read from '{fromStore.Name}'. {reason}"));
         }
         if (!fromStore.IsEncryptable)
         {
@@ -154,7 +154,7 @@ internal class EncryptToOperation : IExecutionPhases
             catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
             {
                 toStore.DeleteIfAvailable();
-                return new Status(XfStatusCode.CannotWrite, parameters, "Can't replace '{0}'. [{1}]".Format(toFreeStore.Name, ex.Message));
+                return new Status(XfStatusCode.CannotWrite, parameters, $"Can't replace '{toFreeStore.Name}'. {ex.Message}");
             }
         }
 

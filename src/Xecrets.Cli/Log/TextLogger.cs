@@ -47,6 +47,10 @@ internal class TextLogger(TotalsTracker totalsTracker, bool progress) : ILogger
         }
 
         Log(status.ToString());
+        if (status.Details.Length > 0)
+        {
+            Log(status.Details);
+        }
     }
 
     public void Log(string message)

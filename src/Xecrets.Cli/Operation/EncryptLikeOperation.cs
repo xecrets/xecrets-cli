@@ -47,7 +47,7 @@ internal class EncryptLikeOperation : IExecutionPhases
         }
         if (!parameters.DesktopServices.CanReadFromFile(fromStore, out string? reason))
         {
-            return Task.FromResult(new Status(XfStatusCode.CannotRead, parameters, $"Can't read from '{fromStore.Name}'. [{reason}]"));
+            return Task.FromResult(new Status(XfStatusCode.CannotRead, parameters, $"Can't read from '{fromStore.Name}'. {reason}"));
         }
 
         return Task.FromResult(Status.Success);

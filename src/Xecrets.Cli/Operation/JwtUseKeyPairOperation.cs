@@ -41,7 +41,7 @@ internal class JwtUseKeyPairOperation : IExecutionPhases
         IFile privatePemFile = parameters.DesktopServices.StandardIoFile(parameters.Arg1);
         if (!parameters.DesktopServices.CanReadFromFile(privatePemFile, out string? reason))
         {
-            return Task.FromResult(new Status(XfStatusCode.CannotRead, $"Can't read private pem from file '{privatePemFile.Name}'. [{reason}]"));
+            return Task.FromResult(new Status(XfStatusCode.CannotRead, $"Can't read private pem from '{privatePemFile.Name}'. {reason}"));
         }
 
         return Task.FromResult(Status.Success);

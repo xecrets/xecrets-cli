@@ -37,7 +37,7 @@ internal class LoadPrivateKeysOperation : IExecutionPhases
         if (!parameters.DesktopServices.CanReadFromFile(fileStore, out string? reason))
         {
             return Task.FromResult(new Status(XfStatusCode.CannotRead, parameters,
-                $"Can't read private keys from file '{fileStore.Name}'. [{reason}]"));
+                $"Can't read private keys from '{fileStore.Name}'. {reason}"));
         }
 
         if (parameters.Arg2.Length == 0)
@@ -46,10 +46,10 @@ internal class LoadPrivateKeysOperation : IExecutionPhases
         }
 
         fileStore = parameters.DesktopServices.StandardIoFile(parameters.Arg2);
-        if (!parameters.DesktopServices.CanWriteToFile(fileStore))
+        if (!parameters.DesktopServices.CanWriteToFile(fileStore, out reason))
         {
             return Task.FromResult(new Status(XfStatusCode.CannotWrite, parameters,
-                $"Can't write to file '{fileStore.Name}'."));
+                $"Can't write to '{fileStore.Name}'. {reason}"));
         }
         return Task.FromResult(Status.Success);
     }

@@ -38,7 +38,7 @@ internal class LoadPublicKeysOperation : IExecutionPhases
             IFile fromFile = parameters.DesktopServices.StandardIoFile(from);
             if (!parameters.DesktopServices.CanReadFromFile(fromFile, out string? reason))
             {
-                return Task.FromResult(new Status(XfStatusCode.CannotRead, parameters, $"Can't read public keys from file '{fromFile.Name}'. [{reason}]"));
+                return Task.FromResult(new Status(XfStatusCode.CannotRead, parameters, $"Can't read public keys from '{fromFile.Name}'. {reason}"));
             }
         }
         return Task.FromResult(Status.Success);

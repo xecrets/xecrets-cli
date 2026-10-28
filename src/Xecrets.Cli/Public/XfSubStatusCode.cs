@@ -79,4 +79,54 @@ internal enum XfSubStatusCode
     /// A file to decrypt does not have the correct magic GUID. This probably means it's not an encrypted file.
     /// </summary>
     InvalidMagicGuid = 1080,
+
+    /// <summary>
+    /// A file to decrypt is not correctly formatted. Check the exception message for details.
+    /// </summary>
+    FileFormatError = 1090,
+
+    /// <summary>
+    /// A file to decrypt failed the HMAC validation. This probably means it's damaged or has been tampered with.
+    /// </summary>
+    HmacValidationError = 1100,
+
+    /// <summary>
+    /// A file to decrypt contains invalid data. Check the exception message for details.
+    /// </summary>
+    DataError = 1110,
+
+    /// <summary>
+    /// A cryptographic operation failed. Check the exception message for details.
+    /// </summary>
+    CryptographicError = 1120,
+
+    /// <summary>
+    /// A file to decrypt has a file format version that is too new for this version.
+    /// </summary>
+    TooNewFileFormatVersion = 1130,
+
+    /// <summary>
+    /// A file to decrypt has a file format version that is too old to be supported.
+    /// </summary>
+    TooOldFileFormatVersion = 1140,
+
+    /// <summary>
+    /// A file to decrypt ended unexpectedly. This probably means it's truncated.
+    /// </summary>
+    UnexpectedEndOfFile = 1150,
+
+    /// <summary>
+    /// A stream ended unexpectedly. This probably means a file is truncated.
+    /// </summary>
+    EndOfStream = 1160,
+
+    /// <summary>
+    /// A file to decrypt has a block with an invalid length.
+    /// </summary>
+    InvalidBlockLength = 1170,
+
+    /// <summary>
+    /// A file to decrypt has a header block of an unexpected type.
+    /// </summary>
+    UnexpectedHeaderBlockType = 1180,
 }
