@@ -40,9 +40,9 @@ internal static class Extensions
 
     public static bool VerifyCanWrite(this IFile file, Parameters parameters, out Status status)
     {
-        if (!parameters.DesktopServices.CanWriteToFile(file))
+        if (!parameters.DesktopServices.CanWriteToFile(file, out string? reason))
         {
-            status = new Status(XfStatusCode.CannotWrite, "Can't write to '{0}'.".Format(file.Name));
+            status = new Status(XfStatusCode.CannotWrite, parameters, "Can't write to '{0}'. [{1}]".Format(file.Name, reason));
             return false;
         }
 

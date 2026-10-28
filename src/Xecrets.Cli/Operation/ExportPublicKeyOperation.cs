@@ -38,9 +38,9 @@ internal class ExportPublicKeyOperation : IExecutionPhases
             return Task.FromResult(new Status(XfStatusCode.InvalidEmail, "'{0}' is not a valid email.".Format(parameters.CurrentOp.Arg1)));
         }
         IFile toFile = parameters.DesktopServices.StandardIoFile(parameters.Arg2);
-        if (!parameters.DesktopServices.CanWriteToFile(toFile))
+        if (!parameters.DesktopServices.CanWriteToFile(toFile, out string? reason))
         {
-            return Task.FromResult(new Status(XfStatusCode.CannotWrite, parameters, "Can't write to file '{0}'.".Format(toFile.Name)));
+            return Task.FromResult(new Status(XfStatusCode.CannotWrite, parameters, "Can't write to file '{0}'. [{1}]".Format(toFile.Name, reason)));
         }
         return Task.FromResult(Status.Success);
     }

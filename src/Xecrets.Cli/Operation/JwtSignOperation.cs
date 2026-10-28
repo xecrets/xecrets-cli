@@ -44,9 +44,9 @@ internal class JwtSignOperation : IExecutionPhases
     public Task<Status> DryAsync(Parameters parameters)
     {
         IFile signedTokenFile = parameters.DesktopServices.StandardIoFile(parameters.Arg1);
-        if (!parameters.DesktopServices.CanWriteToFile(signedTokenFile))
+        if (!parameters.DesktopServices.CanWriteToFile(signedTokenFile, out string? reason))
         {
-            return Task.FromResult(new Status(XfStatusCode.CannotWrite, parameters, "Can't write to '{0}'.".Format(signedTokenFile.Name)));
+            return Task.FromResult(new Status(XfStatusCode.CannotWrite, parameters, "Can't write to '{0}'. [{1}]".Format(signedTokenFile.Name, reason)));
         }
 
         return Task.FromResult(Status.Success);

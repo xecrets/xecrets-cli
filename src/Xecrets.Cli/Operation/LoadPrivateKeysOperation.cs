@@ -46,10 +46,10 @@ internal class LoadPrivateKeysOperation : IExecutionPhases
         }
 
         fileStore = parameters.DesktopServices.StandardIoFile(parameters.Arg2);
-        if (!parameters.DesktopServices.CanWriteToFile(fileStore))
+        if (!parameters.DesktopServices.CanWriteToFile(fileStore, out reason))
         {
             return Task.FromResult(new Status(XfStatusCode.CannotWrite, parameters,
-                $"Can't write to file '{fileStore.Name}'."));
+                $"Can't write to file '{fileStore.Name}'. [{reason}]"));
         }
         return Task.FromResult(Status.Success);
     }

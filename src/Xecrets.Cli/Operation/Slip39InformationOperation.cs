@@ -113,10 +113,10 @@ internal class Slip39InformationOperation : IExecutionPhases
 
         string toStore = parameters.Arg1.Length > 0 ? parameters.Arg1 : "+";
         _toStore = parameters.DesktopServices.StandardIoFile(toStore);
-        if (!parameters.DesktopServices.CanWriteToFile(_toStore))
+        if (!parameters.DesktopServices.CanWriteToFile(_toStore, out string? reason))
         {
             return new Status(XfStatusCode.CannotWrite, parameters,
-                "The file path '{0}' cannot be written to.".Format(_toStore.Name));
+                "The file path '{0}' cannot be written to. [{1}]".Format(_toStore.Name, reason));
         }
 
         return Status.Success;

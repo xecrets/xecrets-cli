@@ -44,9 +44,9 @@ internal class CreateKeyPairOperation : IExecutionPhases
         }
 
         IFile toFile = parameters.DesktopServices.StandardIoFile(parameters.Arg2);
-        if (!parameters.DesktopServices.CanWriteToFile(toFile))
+        if (!parameters.DesktopServices.CanWriteToFile(toFile, out string? reason))
         {
-            return Task.FromResult(new Status(XfStatusCode.CannotWrite, parameters, "The file path '{0}' cannot be written to.".Format(toFile.Name)));
+            return Task.FromResult(new Status(XfStatusCode.CannotWrite, parameters, "The file path '{0}' cannot be written to. [{1}]".Format(toFile.Name, reason)));
         }
 
         return Task.FromResult(Status.Success);
