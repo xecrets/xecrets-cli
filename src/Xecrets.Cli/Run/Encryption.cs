@@ -54,11 +54,14 @@ internal sealed class Encryption : IDisposable
         else
         {
             EncryptedWithParameters encryptedWith = parameters.EncryptedWithParameters;
-            passphrase = encryptedWith.Passphrase.Length > 0
-                ? encryptedWith.Passphrase
-                : parameters.Identities.First(id => id.Passphrase.Length > 0).Passphrase;
-            recipients = [.. encryptedWith.Recipients.Concat(parameters.PublicKeys.Where(pk => parameters.SharingEmails.Contains(pk.Email)))];
-            masterKeys = encryptedWith.MasterKeys;
+            EncryptedWithParameters reEncryptWith = encryptedWith.ReEncryptWith(
+                encryptedWith.Passphrase.Length > 0
+                    ? encryptedWith.Passphrase
+                    : parameters.Identities.First(id => id.Passphrase.Length > 0).Passphrase,
+                parameters.PublicKeys.Where(pk => parameters.SharingEmails.Contains(pk.Email)));
+            passphrase = reEncryptWith.Passphrase;
+            recipients = reEncryptWith.Recipients;
+            masterKeys = reEncryptWith.MasterKeys;
             parameters.EncryptedWithParameters = EncryptedWithParameters.Empty;
         }
 
