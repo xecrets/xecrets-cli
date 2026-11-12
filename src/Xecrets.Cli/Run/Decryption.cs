@@ -23,6 +23,10 @@
 
 #endregion Copyright and GPL License
 
+using System.Text;
+
+using Xecrets.Core.Public;
+
 namespace Xecrets.Cli.Run;
 
 internal sealed class Decryption : IDisposable
@@ -49,26 +53,26 @@ internal sealed class Decryption : IDisposable
     /// Decrypt to the file, or to standard output if the data is of a type in <paramref name="inMemory"/> and within
     /// its size limit. Text written to standard output is converted to UTF-8.
     /// </summary>
-    /// <returns>The in-memory type, or null if the data was written to the file, and the store written to.</returns>
-    public async Task<(InMemoryType? Type, IFile ToStore)> DecryptToAsync(IFile toFile, IDictionary<InMemoryType, long> inMemory, IDesktopServices desktopServices)
+    /// <returns>The in-memory category, or null if the data was written to the file, and the store written to.</returns>
+    public async Task<(FileCategory? Category, IFile ToStore)> DecryptToAsync(IFile toFile, IReadOnlyDictionary<FileCategory, long> inMemory, IDesktopServices desktopServices)
     {
         try
         {
-            InMemoryOrFileStream toStream = new(OriginalFileName, toFile, inMemory);
+            InMemoryOrFileStream toStream = new(OriginalFileName, inMemory, toFile.OpenWrite);
             await using (toStream)
             {
                 await _session.DecryptAsync(toStream);
                 toStream.Commit();
             }
 
-            if (toStream.InMemoryType != null)
+            if (toStream.InMemoryCategory is { } category)
             {
                 IFile stdout = desktopServices.StandardIoFile("+");
 
                 using Stream stdoutStream = stdout.OpenWrite();
-                stdoutStream.Write(toStream.Data.Span);
+                stdoutStream.Write(category == FileCategory.Text ? ToUtf8(toStream.Data) : toStream.Data.Span);
 
-                return (toStream.InMemoryType, stdout);
+                return (category, stdout);
             }
 
             if (!toFile.IsStdIo)
@@ -88,6 +92,15 @@ internal sealed class Decryption : IDisposable
     }
 
     public EncryptedWithParameters EncryptedWithParameters => _session.EncryptedWithParameters;
+
+    /// <summary>
+    /// Convert text in the encoding of its byte order mark, or otherwise in UTF-8, to UTF-8 without a byte order mark.
+    /// </summary>
+    internal static byte[] ToUtf8(ReadOnlyMemory<byte> text)
+    {
+        using StreamReader reader = new(new MemoryStream(text.ToArray()), new UTF8Encoding(false), detectEncodingFromByteOrderMarks: true);
+        return Encoding.UTF8.GetBytes(reader.ReadToEnd());
+    }
 
     public void Dispose()
     {

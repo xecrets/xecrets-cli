@@ -44,7 +44,7 @@ internal class Parameters(OptionsParser parser, CliServices cliServices) : IDisp
 
     public bool AsciiArmor { get; set; }
 
-    public IDictionary<InMemoryType, long> InMemory { get; } = new Dictionary<InMemoryType, long>();
+    public Dictionary<FileCategory, long> InMemory { get; } = [];
 
     public bool StdoutClaimed { get; set; }
 

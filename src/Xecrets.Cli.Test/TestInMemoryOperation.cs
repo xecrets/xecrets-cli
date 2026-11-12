@@ -34,6 +34,7 @@ using Xecrets.Cli.Log;
 using Xecrets.Cli.Operation;
 using Xecrets.Cli.Public;
 using Xecrets.Cli.Run;
+using Xecrets.Core.Models;
 
 namespace Xecrets.Cli.Test;
 
@@ -50,7 +51,7 @@ internal class TestInMemoryOperation
     public async Task ValidOptionsAreAdded()
     {
         using CancelSignal cancelSignal = new();
-        using Parameters parameters = CreateParameters("XecretsCli --in-memory=text:100 --in-memory=binary:200", cancelSignal);
+        using Parameters parameters = CreateParameters("XecretsCli --in-memory=text:100 --in-memory=other:200", cancelSignal);
         InMemoryOperation operation = new();
 
         foreach (ParsedOp op in parameters.Parser.ParsedOps)
@@ -59,7 +60,7 @@ internal class TestInMemoryOperation
             Assert.That((await operation.DryAsync(parameters)).IsSuccess);
         }
 
-        Assert.That(parameters.InMemory, Is.EquivalentTo(new Dictionary<InMemoryType, long> { { InMemoryType.Text, 100 }, { InMemoryType.Binary, 200 } }));
+        Assert.That(parameters.InMemory, Is.EquivalentTo(new Dictionary<FileCategory, long> { { FileCategory.Text, 100 }, { FileCategory.Other, 200 } }));
     }
 
     [TestCase("text")]

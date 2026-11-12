@@ -46,18 +46,18 @@ internal class InMemoryOperation : IExecutionPhases
     private static Status AddInMemory(Parameters parameters)
     {
         string[] parts = parameters.Arg1.Split(':');
-        InMemoryType? type = parts[0] switch
+        FileCategory? type = parts[0] switch
         {
-            "text" => InMemoryType.Text,
-            "image" => InMemoryType.Image,
-            "pdf" => InMemoryType.Pdf,
-            "binary" => InMemoryType.Binary,
+            "text" => FileCategory.Text,
+            "image" => FileCategory.Image,
+            "pdf" => FileCategory.Pdf,
+            "other" => FileCategory.Other,
             _ => null,
         };
 
         if (parts.Length != 2 || type == null || !long.TryParse(parts[1], NumberStyles.None, CultureInfo.InvariantCulture, out long maxBytes))
         {
-            return new Status(XfStatusCode.InvalidOption, parameters, "'{0}' is not a valid in-memory option, use {{text|image|pdf|binary}}:{{bytes}}.".Format(parameters.Arg1));
+            return new Status(XfStatusCode.InvalidOption, parameters, "'{0}' is not a valid in-memory option, use {{text|image|pdf|other}}:{{bytes}}.".Format(parameters.Arg1));
         }
 
         parameters.InMemory[type.Value] = maxBytes;

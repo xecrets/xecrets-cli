@@ -22,58 +22,29 @@
 */
 
 #endregion Copyright and GPL License
+using System.Text;
 
-using Xecrets.Core.Desktop.Abstractions;
+using NUnit.Framework;
+
+using Xecrets.Cli.Run;
 
 namespace Xecrets.Cli.Test;
 
-internal sealed class FakeWriteFile : IFile
+[TestFixture]
+internal class TestDecryption
 {
-    public MemoryStream Written { get; } = new();
-
-    public bool IsOpened { get; private set; }
-
-    public bool IsStdout => false;
-
-    public bool IsStdin => false;
-
-    public bool IsStdIo => false;
-
-    public bool IsNamedStdIo => false;
-
-    public bool IsEncryptable => false;
-
-    public bool IsAvailable => IsOpened;
-
-    public bool IsSymbolicLink => false;
-
-    public string AliasName => Name;
-
-    public string Name => "fake.txt";
-
-    public string FullName => Name;
-
-    public DateTime CreationTimeUtc => throw new NotSupportedException();
-
-    public DateTime LastAccessTimeUtc => throw new NotSupportedException();
-
-    public DateTime LastWriteTimeUtc => throw new NotSupportedException();
-
-    public IFolder ParentFolder => throw new NotSupportedException();
-
-    public long Length => Written.Length;
-
-    public Stream OpenRead() => throw new NotSupportedException();
-
-    public Stream OpenWrite()
+    [TestCase("utf-16")]
+    [TestCase("utf-16BE")]
+    [TestCase("utf-32")]
+    [TestCase("utf-32BE")]
+    [TestCase("utf-8")]
+    public void TextIsConvertedToUtf8WithoutByteOrderMark(string encodingName)
     {
-        IsOpened = true;
-        return Written;
+        Encoding encoding = Encoding.GetEncoding(encodingName);
+        const string text = "Räksmörgås – 日本語";
+
+        byte[] utf8 = Decryption.ToUtf8((byte[])[.. encoding.Preamble, .. encoding.GetBytes(text)]);
+
+        Assert.That(utf8, Is.EqualTo(new UTF8Encoding(false).GetBytes(text)));
     }
-
-    public void SetFileTimes(DateTime creationTimeUtc, DateTime lastAccessTimeUtc, DateTime lastWriteTimeUtc) => throw new NotSupportedException();
-
-    public void DeleteIfAvailable() => throw new NotSupportedException();
-
-    public byte[] ReadAllBytes() => Written.ToArray();
 }

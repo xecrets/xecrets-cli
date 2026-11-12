@@ -101,7 +101,7 @@ internal abstract class DecryptOperationBase : IExecutionPhases
             return status;
         }
 
-        (InMemoryType? inMemoryType, toStore) = await decryption.DecryptToAsync(toStore, parameters.InMemory, parameters.DesktopServices);
+        (FileCategory? inMemoryCategory, toStore) = await decryption.DecryptToAsync(toStore, parameters.InMemory, parameters.DesktopServices);
 
         string sourceDisplayName = fromStore.ToDisplayName();
         string destinationDisplayName = toStore.ToDisplayName();
@@ -110,7 +110,7 @@ internal abstract class DecryptOperationBase : IExecutionPhases
         {
             OriginalFileName = decryption.OriginalFileName,
             Result = toStore.FullName,
-            InMemoryType = inMemoryType?.ToString().ToLowerInvariant() ?? string.Empty,
+            InMemoryType = inMemoryCategory?.ToString().ToLowerInvariant() ?? string.Empty,
         });
 
         return Status.Success;
