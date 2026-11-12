@@ -28,8 +28,8 @@ An image.
 
 A PDF document.
 
-<a name='Xecrets.Sdk.Models.XfInMemoryType.Binary'></a>
+<a name='Xecrets.Sdk.Models.XfInMemoryType.Other'></a>
 
-`Binary` 3
+`Other` 3
 
-Any content.
+Content of any type not otherwise requested, returned as is.
