@@ -68,14 +68,23 @@ internal class LoadPrivateKeysOperation : IExecutionPhases
             json = reader.ReadToEnd();
         }
 
+        // Without a passphrase, no private key can be decrypted, and there is nothing to re-encrypt them with.
+        string? reEncryptPassphrase = parameters.Identities.FirstOrDefault(i => i.Passphrase.Length > 0)?.Passphrase;
+        if (reEncryptPassphrase is null)
+        {
+            return Status.Success;
+        }
+
         PrivateKeyImportResult result;
         try
         {
-            string? reEncryptPassphrase = parameters.Identities.FirstOrDefault(i => i.Passphrase.Length > 0)?.Passphrase;
+            // The key pairs of identities with a passphrase are the ones loaded with it, such as the signed-in user's,
+            // and are stored too, so that they can still be used if that passphrase is changed or lost.
             result = parameters.CoreServices.ImportPrivateKeys(json, new PrivateKeyImportRequest(
                 [.. parameters.Identities.Where(i => i.Passphrase.Length > 0).Select(i => i.Passphrase)],
                 reEncryptPassphrase,
-                null));
+                null,
+                [.. parameters.Identities.Where(i => i.Passphrase.Length > 0).SelectMany(i => i.KeyPairs)]));
         }
         catch (Exception ex)
         {
@@ -88,7 +97,7 @@ internal class LoadPrivateKeysOperation : IExecutionPhases
             parameters.Identities.Add(new Identity(string.Empty, result.LoadedKeyPairs));
         }
 
-        if (parameters.Arg2.Length > 0 && result.ReEncryptedAccountsJson != null)
+        if (parameters.Arg2.Length > 0)
         {
             store = parameters.DesktopServices.StandardIoFile(parameters.Arg2);
             using StreamWriter writer = new(store.OpenWrite());
