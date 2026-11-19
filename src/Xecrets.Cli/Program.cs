@@ -43,6 +43,11 @@ using Xecrets.Slip39;
 
 [assembly: InternalsVisibleTo("Xecrets.Cli.Test")]
 
+if (Platform.IsWindows && WindowsVersionCheck.BlockIfUnsupported())
+{
+    return (int)XfStatusCode.NotSupported;
+}
+
 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
 OptionsParser parser = new(Environment.CommandLine);
